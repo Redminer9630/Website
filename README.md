@@ -23,7 +23,7 @@ Dieses Repository enthält Dateien, die für den Betrieb der Website notwendig s
 
 ## ⚙️ Lizenz
 
-Dieses Projekt wird unter der [MIT-Lizenz](LICENSE) bereitgestellt.
+Dieses Projekt wird unter der MIT-Lizenz bereitgestellt.
 
 ## 📬 Kontakt
 
