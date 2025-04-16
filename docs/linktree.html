@@ -6,51 +6,49 @@
     <title>Redminer9630 Linktree</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { width: 800px; height: 200px; position: relative; overflow: hidden; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
-
-        .slide { position: absolute; display: flex; align-items: center; width: 100%; height: 100%; transition: transform 1s ease; opacity: 0; pointer-events: none; }
-        .slide.active { opacity: 1; pointer-events: auto; }
-
-        .link { flex-shrink: 0; text-decoration: none; color: #fff; background-color: #007bff; padding: 20px 40px; font-size: 1.5em; border-radius: 10px; margin: 20px; z-index: 2; }
-
-        .image { flex-grow: 1; height: 120px; background-size: cover; background-position: center; border-radius: 10px; margin: 20px; }
-
-        .right { flex-direction: row; }
-        .left { flex-direction: row-reverse; }
+        .container { display: flex; gap: 20px; }
+        .link-box { display: flex; align-items: center; background-color: #ffffff; border-radius: 10px; padding: 15px 20px; width: 250px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; transition: transform 1s ease, opacity 1s ease; }
+        .link-box .link { text-decoration: none; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; white-space: nowrap; }
+        .link-box .image { width: 80px; height: 80px; margin-left: 15px; border-radius: 5px; background-size: cover; background-position: center; }
+        .active-slide-left { transform: translateX(-20px); z-index: 2; }
+        .active-slide-right { transform: translateX(20px); z-index: 2; }
+        .dimmed { opacity: 0.5; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="slide right active">
+        <div class="link-box" data-direction="R">
             <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
             <div class="image" style="background-image: url('https://i.imgur.com/kt3aM5x.png');"></div>
         </div>
-
-        <div class="slide left">
+        <div class="link-box" data-direction="L">
             <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
             <div class="image" style="background-image: url('https://i.imgur.com/NOEMNsb.png');"></div>
         </div>
-
-        <div class="slide right">
+        <div class="link-box" data-direction="R">
             <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
             <div class="image" style="background-image: url('https://i.imgur.com/nUq1tLv.png');"></div>
         </div>
-
-        <div class="slide left">
+        <div class="link-box" data-direction="L">
             <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
             <div class="image" style="background-image: url('https://i.imgur.com/kEfHzxe.png');"></div>
         </div>
     </div>
-
     <script>
-        const slides = document.querySelectorAll('.slide');
-        let current = 0;
-
-        setInterval(() => {
-            slides[current].classList.remove('active');
-            current = (current + 1) % slides.length;
-            slides[current].classList.add('active');
-        }, 5000);
+        const boxes = document.querySelectorAll('.link-box'); let index = 0;
+        function updateSlide() {
+            boxes.forEach((box, i) => {
+                box.classList.remove('active-slide-left', 'active-slide-right', 'dimmed');
+                if (i === index) {
+                    const direction = box.dataset.direction;
+                    box.classList.add(direction === "L" ? "active-slide-left" : "active-slide-right");
+                } else {
+                    box.classList.add('dimmed');
+                }
+            });
+            index = (index + 1) % boxes.length;
+        }
+        updateSlide(); setInterval(updateSlide, 5000);
     </script>
 </body>
 </html>
