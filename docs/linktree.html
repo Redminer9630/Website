@@ -6,49 +6,55 @@
     <title>Redminer9630 Linktree</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { display: flex; gap: 20px; }
-        .link-box { display: flex; align-items: center; background-color: #ffffff; border-radius: 10px; padding: 15px 20px; width: 250px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); position: relative; transition: transform 1s ease, opacity 1s ease; }
-        .link-box .link { text-decoration: none; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; white-space: nowrap; }
-        .link-box .image { width: 80px; height: 80px; margin-left: 15px; border-radius: 5px; background-size: cover; background-position: center; }
-        .active-slide-left { transform: translateX(-20px); z-index: 2; }
-        .active-slide-right { transform: translateX(20px); z-index: 2; }
-        .dimmed { opacity: 0.5; }
+        .container { background-color: #ffffff; border-radius: 8px; padding: 20px; width: 320px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; overflow: hidden; position: relative; }
+        h1 { font-size: 2em; color: #333; margin-bottom: 20px; }
+        .slide-wrapper { position: relative; height: 120px; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(100%); transition: all 0.8s ease; display: flex; align-items: center; justify-content: space-between; background-color: #e0e0e0; border-radius: 10px; padding: 10px 15px; box-sizing: border-box; }
+        .slide.active-L { opacity: 1; transform: translateX(0); }
+        .slide.active-R { opacity: 1; transform: translateX(0); }
+        .slide img { width: 64px; height: 64px; border-radius: 8px; }
+        .link { text-decoration: none; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; transition: background-color 0.3s; }
+        .link:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="link-box" data-direction="R">
-            <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
-            <div class="image" style="background-image: url('https://i.imgur.com/kt3aM5x.png');"></div>
-        </div>
-        <div class="link-box" data-direction="L">
-            <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
-            <div class="image" style="background-image: url('https://i.imgur.com/NOEMNsb.png');"></div>
-        </div>
-        <div class="link-box" data-direction="R">
-            <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
-            <div class="image" style="background-image: url('https://i.imgur.com/nUq1tLv.png');"></div>
-        </div>
-        <div class="link-box" data-direction="L">
-            <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
-            <div class="image" style="background-image: url('https://i.imgur.com/kEfHzxe.png');"></div>
+        <h1>Redminer9360 Linktree</h1>
+        <div class="slide-wrapper">
+            <div class="slide" data-direction="R">
+                <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
+                <img src="https://i.imgur.com/kt3aM5x.png" alt="YouTube">
+            </div>
+            <div class="slide" data-direction="L">
+                <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
+                <img src="https://i.imgur.com/NOEMNsb.png" alt="Twitch">
+            </div>
+            <div class="slide" data-direction="R">
+                <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
+                <img src="https://i.imgur.com/nUq1tLv.png" alt="GitHub">
+            </div>
+            <div class="slide" data-direction="L">
+                <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
+                <img src="https://i.imgur.com/kEfHzxe.png" alt="Discord">
+            </div>
         </div>
     </div>
     <script>
-        const boxes = document.querySelectorAll('.link-box'); let index = 0;
-        function updateSlide() {
-            boxes.forEach((box, i) => {
-                box.classList.remove('active-slide-left', 'active-slide-right', 'dimmed');
-                if (i === index) {
-                    const direction = box.dataset.direction;
-                    box.classList.add(direction === "L" ? "active-slide-left" : "active-slide-right");
-                } else {
-                    box.classList.add('dimmed');
-                }
+        const slides = document.querySelectorAll('.slide'); 
+        let i = 0;
+
+        function showSlide() {
+            slides.forEach((s, j) => {
+                s.classList.remove('active-L', 'active-R');
+                s.style.zIndex = 0;
+
+                if (j === i) { s.classList.add('active-' + s.dataset.direction); s.style.zIndex = 1; }
             });
-            index = (index + 1) % boxes.length;
+            i = (i + 1) % slides.length;
         }
-        updateSlide(); setInterval(updateSlide, 5000);
+
+        showSlide(); 
+        setInterval(showSlide, 5000);
     </script>
 </body>
 </html>
