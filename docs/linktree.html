@@ -6,19 +6,51 @@
     <title>Redminer9630 Linktree</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background-color: #ffffff; border-radius: 8px; padding: 20px; width: 300px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
-        h1 { font-size: 2em; color: #333; margin-bottom: 20px; }
-        .link { display: block; text-decoration: none; color: #ffffff; background-color: #007bff; margin: 10px 0; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; transition: background-color 0.3s; }
-        .link:hover { background-color: #0056b3; }
+        .container { width: 800px; height: 200px; position: relative; overflow: hidden; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; }
+
+        .slide { position: absolute; display: flex; align-items: center; width: 100%; height: 100%; transition: transform 1s ease; opacity: 0; pointer-events: none; }
+        .slide.active { opacity: 1; pointer-events: auto; }
+
+        .link { flex-shrink: 0; text-decoration: none; color: #fff; background-color: #007bff; padding: 20px 40px; font-size: 1.5em; border-radius: 10px; margin: 20px; z-index: 2; }
+
+        .image { flex-grow: 1; height: 120px; background-size: cover; background-position: center; border-radius: 10px; margin: 20px; }
+
+        .right { flex-direction: row; }
+        .left { flex-direction: row-reverse; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Redminer9360 Linktree</h1>
-        <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
-        <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
-        <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
-        <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
+        <div class="slide right active">
+            <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
+            <div class="image" style="background-image: url('https://i.imgur.com/kt3aM5x.png');"></div>
+        </div>
+
+        <div class="slide left">
+            <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
+            <div class="image" style="background-image: url('https://i.imgur.com/NOEMNsb.png');"></div>
+        </div>
+
+        <div class="slide right">
+            <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
+            <div class="image" style="background-image: url('https://i.imgur.com/nUq1tLv.png');"></div>
+        </div>
+
+        <div class="slide left">
+            <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
+            <div class="image" style="background-image: url('https://i.imgur.com/kEfHzxe.png');"></div>
+        </div>
     </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let current = 0;
+
+        setInterval(() => {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }, 5000);
+    </script>
 </body>
 </html>
