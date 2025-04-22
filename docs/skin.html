@@ -1,78 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Skin Flibidi</title>
-    <style>
-        @font-face { font-family: 'MinecraftFont'; src: url('https://redminer9630de.github.io/minecraft_font.ttf') format('truetype'), url('https://redminer9630de.github.io/minecraft_font.woff') format('woff'); }
-        body { font-family: 'MinecraftFont', sans-serif; text-align: center; padding: 20px; transition: background-color 0.3s, color 0.3; }
-        h1 { font-size: 36px; margin-bottom: 20px; }
-        .header-link { font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 8px; position: absolute; top: 20px; right: 20px; font-family: 'MinecraftFont', sans-serif; background-color: #f44336; color: white; }
-        .skin-container { display: inline-block; margin: 10px; text-align: center; }
-        .skin-image { width: 150px; height: 300px; background-color: #f0f0f0; border-radius: 10px; }
-        .skin-title { margin-top: 10px; font-size: 18px; }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            font-family: 'Minecraft', sans-serif;
-        }
-    </style>
+  <title>Skin Editor</title>
+  <style>
+    @font-face { font-family: 'MinecraftFont'; src: url('https://redminer9630de.github.io/minecraft_font.ttf') format('truetype'), url('https://redminer9630de.github.io/minecraft_font.woff') format('woff'); }
+    body { font-family: 'MinecraftFont', sans-serif; text-align: center; padding: 10px; font-size: 12px; background: #fff; color: #000; transition: .3s; }
+    .dark { background: #111; color: #eee; }
+    .button { margin: 5px auto; padding: 6px 12px; background: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 90%; font-family: 'MinecraftFont', sans-serif; font-size: 12px; }
+    input[type="file"], input[type="text"] { margin: 5px auto; display: block; font-size: 12px; padding: 4px; width: 90%; }
+    #downloadLink { display: none; font-size: 12px; margin-top: 10px; display: inline-block; }
+    #dropzone { border: 2px dashed #999; padding: 20px; margin: 10px; border-radius: 8px; font-size: 12px; color: #666; }
+    .dark #dropzone { border-color: #bbb; color: #ccc; }
+  </style>
 </head>
 <body>
-  <input type="file" id="skinInput" accept="image/png">
-  <button onclick="processSkin()">Skin verarbeiten</button>
-  <br><br>
+  <input type="file" id="skinInput" accept="image/png" class="button">
+  <div id="dropzone">Oder Skin hierhin ziehen</div>
+  <input type="text" id="usernameInput" placeholder="Minecraft-Name eingeben" class="button">
+  <button class="button" onclick="loadAndProcessUsername()">Skin von Name flippen</button>
+  <button class="button" onclick="processSkin()">Skin von Datei flippen</button>
   <canvas id="canvas" width="64" height="64" style="display:none;"></canvas>
   <a id="downloadLink" download="skin_cheatlook.png">Download</a>
 
   <script>
-    let img = new Image();
-    let canvas = document.getElementById('canvas');
-    let ctx = canvas.getContext('2d');
+    let img = new Image(), canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
+    const skinInput = document.getElementById('skinInput');
+    const dropzone = document.getElementById('dropzone');
 
-    document.getElementById('skinInput').onchange = e => {
-      let reader = new FileReader();
-      reader.onload = () => {
-        img.onload = () => ctx.drawImage(img, 0, 0);
-        img.src = reader.result;
-      };
-      reader.readAsDataURL(e.target.files[0]);
+    skinInput.onchange = e => loadFile(e.target.files[0]);
+
+    dropzone.ondragover = e => { e.preventDefault(); dropzone.style.borderColor = '#4CAF50'; };
+    dropzone.ondragleave = () => dropzone.style.borderColor = '#999';
+    dropzone.ondrop = e => {
+      e.preventDefault(); dropzone.style.borderColor = '#999';
+      if (e.dataTransfer.files.length) loadFile(e.dataTransfer.files[0]);
     };
 
+    function loadFile(file) {
+      let reader = new FileReader();
+      reader.onload = () => { img.onload = () => ctx.drawImage(img, 0, 0); img.src = reader.result; };
+      reader.readAsDataURL(file);
+    }
+
+    function loadAndProcessUsername() {
+      let name = document.getElementById('usernameInput').value.trim();
+      if (!name) return alert("Name eingeben!");
+      img.crossOrigin = "Anonymous";
+      img.onload = () => { ctx.drawImage(img, 0, 0); processSkin(); };
+      img.src = `https://crafatar.com/skins/${name}`;
+    }
+
     function flipSection(x, y) {
-      let imageData = ctx.getImageData(x, y, 8, 8);
-      let flipped = ctx.createImageData(8, 8);
-      for (let y0 = 0; y0 < 8; y0++) {
-        for (let x0 = 0; x0 < 8; x0++) {
-          let src = (y0 * 8 + x0) * 4;
-          let dest = (y0 * 8 + (7 - x0)) * 4;
-          for (let i = 0; i < 4; i++) flipped.data[dest + i] = imageData.data[src + i];
-        }
+      let i = ctx.getImageData(x, y, 8, 8), f = ctx.createImageData(8, 8);
+      for (let y0 = 0; y0 < 8; y0++) for (let x0 = 0; x0 < 8; x0++) {
+        let s = (y0 * 8 + x0) * 4, d = (y0 * 8 + (7 - x0)) * 4;
+        for (let i0 = 0; i0 < 4; i0++) f.data[d + i0] = i.data[s + i0];
       }
-      return flipped;
+      return f;
     }
 
     function processSkin() {
-      let front = flipSection(24, 8);
-      let back = flipSection(8, 8);
-      let hatFront = flipSection(56, 8);
-      let hatBack = flipSection(40, 8);
-
-      ctx.putImageData(front, 8, 8);
-      ctx.putImageData(back, 24, 8);
-      ctx.putImageData(hatFront, 40, 8);
-      ctx.putImageData(hatBack, 56, 8);
-
+      ctx.putImageData(flipSection(24, 8), 8, 8);
+      ctx.putImageData(flipSection(8, 8), 24, 8);
+      ctx.putImageData(flipSection(56, 8), 40, 8);
+      ctx.putImageData(flipSection(40, 8), 56, 8);
       let link = document.getElementById('downloadLink');
-      link.href = canvas.toDataURL();
-      link.style.display = 'inline';
+      link.href = canvas.toDataURL(); link.style.display = 'inline';
     }
+
+    function applyTSPS9630() {
+      let dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.body.classList.toggle('dark', dark);
+    }
+
+    applyTSPS9630();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTSPS9630);
   </script>
 </body>
 </html>
