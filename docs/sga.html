@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>SGA Übersetzer</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 2em; }
+    textarea { width: 90%; height: 150px; margin: 1em 0; font-size: 1.2em; }
+    label { font-weight: bold; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <textarea id="inputText" placeholder="Input"></textarea>
+  <textarea id="outputText" placeholder="Output" readonly></textarea>
+  <script>
+    const input = document.getElementById("inputText");
+    const output = document.getElementById("outputText");
+
+    const sgaMap = {
+      A: "ᔑ", B: "ʖ", C: "ᓵ", D: "↸", E: "ᒷ", F: "⎓", G: "⊣", H: "⍑", I: "╎", J: "⋮",
+      K: "ꖌ", L: "ꖎ", M: "ᒲ", N: "リ", O: "𝙹", P: "!¡", Q: "ᑑ", R: "∷", S: "ᓭ",
+      T: "ℸ", U: "⚍", V: "⍊", W: "∴", X: "̇/", Y: "||", Z: "⨅"
+    };
+
+    input.addEventListener("input", () => {
+      const text = input.value.toUpperCase();
+      const translated = text.split("").map(c => sgaMap[c] || c).join("");
+      output.value = translated;
+    });
+  </script>
+</body>
+</html>
