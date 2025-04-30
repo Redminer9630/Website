@@ -5,26 +5,35 @@
   <title>SGA Übersetzer</title>
   <style>
     body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 2em; }
-    textarea { width: 90%; height: 150px; margin: 1em 0; font-size: 1.2em; }
-    label { font-weight: bold; margin-top: 1em; }
-    button { margin: 1em; padding: 0.5em 1em; font-size: 1em; }
+    .row { width: 90%; display: flex; align-items: center; gap: 0.5em; }
+    textarea { width: 100%; height: 150px; font-size: 1.2em; }
+    label { font-weight: bold; margin-top: 1em; align-self: flex-start; }
+    button { padding: 0.4em 0.8em; font-size: 1.1em; cursor: pointer; }
   </style>
 </head>
 <body>
   <h1>Standard Galactic Alphabet Übersetzer</h1>
 
   <label for="inputText" id="inputLabel">Klartext</label>
-  <textarea id="inputText" placeholder="Input"></textarea>
+  <div class="row">
+    <textarea id="inputText" placeholder="Input"></textarea>
+    <button id="pasteBtn" title="Aus Zwischenablage einfügen">📋</button>
+  </div>
 
-  <button id="swapBtn">⇄ Sprachen tauschen</button>
+  <button id="swapBtn" title="Sprache wechseln">⇄</button>
 
   <label for="outputText" id="outputLabel">SGA</label>
-  <textarea id="outputText" placeholder="Output" readonly></textarea>
+  <div class="row">
+    <textarea id="outputText" placeholder="Output" readonly></textarea>
+    <button id="copyBtn" title="In Zwischenablage kopieren">📤</button>
+  </div>
 
   <script>
     const input = document.getElementById("inputText")
     const output = document.getElementById("outputText")
     const swapBtn = document.getElementById("swapBtn")
+    const pasteBtn = document.getElementById("pasteBtn")
+    const copyBtn = document.getElementById("copyBtn")
     const inputLabel = document.getElementById("inputLabel")
     const outputLabel = document.getElementById("outputLabel")
 
@@ -36,6 +45,7 @@
 
     const reverseMap = {}; for (let k in sgaMap) reverseMap[sgaMap[k]] = k
     let direction = "toSGA"
+
     function translate(t) {
       if (direction === "toSGA") return t.toUpperCase().split('').map(c => sgaMap[c] || c).join('')
       return t.split(/(?=.)/u).map(c => reverseMap[c] || c).join('')
@@ -53,7 +63,16 @@
       outputLabel.textContent = direction === "toSGA" ? "SGA" : "Klartext"
       update()
     })
+
+    pasteBtn.addEventListener("click", async () => {
+      try { input.value = await navigator.clipboard.readText(); update() }
+      catch (e) { alert("Zugriff auf Zwischenablage verweigert.") }
+    })
+
+    copyBtn.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(output.value) }
+      catch (e) { alert("Konnte nicht kopieren.") }
+    })
   </script>
 </body>
 </html>
-
