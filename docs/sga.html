@@ -5,27 +5,33 @@
   <title>SGA Übersetzer</title>
   <style>
     body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 2em; }
-    .row { width: 90%; display: flex; align-items: center; gap: 0.5em; }
-    textarea { width: 100%; height: 150px; font-size: 1.2em; }
-    label { font-weight: bold; margin-top: 1em; align-self: flex-start; }
+    .block { width: 90%; display: flex; flex-direction: column; align-items: stretch; margin: 1em 0; }
+    .row { display: flex; align-items: center; gap: 0.5em; }
+    textarea { flex: 1; height: 150px; font-size: 1.2em; }
+    label { font-weight: bold; margin-bottom: 0.3em; }
     button { padding: 0.4em 0.8em; font-size: 1.1em; cursor: pointer; }
+    #swapBtn { margin: 1em 0; }
   </style>
 </head>
 <body>
   <h1>Standard Galactic Alphabet Übersetzer</h1>
 
-  <label for="inputText" id="inputLabel">Klartext</label>
-  <div class="row">
-    <textarea id="inputText" placeholder="Input"></textarea>
-    <button id="pasteBtn" title="Aus Zwischenablage einfügen">📋</button>
+  <div class="block">
+    <label for="inputText" id="inputLabel">Klartext</label>
+    <div class="row">
+      <textarea id="inputText" placeholder="Input"></textarea>
+      <button id="pasteBtn" title="Aus Zwischenablage einfügen">📋</button>
+    </div>
   </div>
 
   <button id="swapBtn" title="Sprache wechseln">⇄</button>
 
-  <label for="outputText" id="outputLabel">SGA</label>
-  <div class="row">
-    <textarea id="outputText" placeholder="Output" readonly></textarea>
-    <button id="copyBtn" title="In Zwischenablage kopieren">📤</button>
+  <div class="block">
+    <label for="outputText" id="outputLabel">SGA</label>
+    <div class="row">
+      <textarea id="outputText" placeholder="Output" readonly></textarea>
+      <button id="copyBtn" title="In Zwischenablage kopieren">📤</button>
+    </div>
   </div>
 
   <script>
@@ -66,7 +72,7 @@
 
     pasteBtn.addEventListener("click", async () => {
       try { input.value = await navigator.clipboard.readText(); update() }
-      catch (e) { alert("Zugriff auf Zwischenablage verweigert.") }
+      catch (e) { alert("Zugriff auf Zwischenablage verweigert.\nNutze HTTPS oder einen lokalen Server.") }
     })
 
     copyBtn.addEventListener("click", async () => {
