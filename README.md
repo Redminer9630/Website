@@ -27,6 +27,6 @@ Dieses Projekt wird unter der MIT-Lizenz bereitgestellt.
 
 ## 📬 Kontakt
 
-Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](https://discord.com/invite/uRNX47tYrX) erreichen.
+Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](https://redminer9630.ddns.net/blanklink?l="https://discord.com/invite/uRNX47tYrX") erreichen.
 
 ### Redminer9630 App Repo [Hier Klicken](https://github.com/Redminer9630de/app9630)
