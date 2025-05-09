@@ -1,3 +1,3 @@
 User-agent: *
-Disallow: /
+Disallow: /.github
 Sitemap: https://redminer9630de.github.io/sitemap.xml
