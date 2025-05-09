@@ -177,28 +177,6 @@ input:checked + .slider:before { transform: translateX(22px); }
                     document.getElementById('liveStreamLink').style.display = 'none';
                 });
         }
-        
-    document.addEventListener('DOMContentLoaded', showLatestLog);
-        window.onload = checkLiveStreamStatus; 
-        document.getElementById('hamburger').addEventListener('click', function(event) {
-            event.stopPropagation();
-            var navMenu = document.getElementById('navMenu');
-            navMenu.classList.toggle('active');
-            if (navMenu.classList.contains('active')) { window.history.replaceState({}, '', '?menu=out'); } else { window.history.replaceState({}, '', window.location.pathname); }
-        });
-        document.getElementById('moreInfoBtn').addEventListener('click', function(event) {
-            event.stopPropagation();
-            var mibic = document.getElementById('moreInfo');
-            mibic.classList.toggle('active');
-        });
-        const menuurlparam = document.getElementById('hamburger').get('active');
-        const urlparams = {
-            menu: menuurlparam,
-            search: searchInput
-        }
-        const baseUrl = window.location.origin + window.location.pathname;
-        const newUrl = `${baseUrl}?${params.toString()}`;    
-        history.pushState({page: ""}, "", newUrl);
     </script>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
