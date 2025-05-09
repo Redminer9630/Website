@@ -243,289 +243,34 @@
                 console.log("Neueste Snapshot-Version:", snapshotVersion);
             })
             .catch(error => { console.error("Fehler:", error); });
-        function showHomePage() {
-            document.getElementById('categories').style.display = 'block';
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/home";
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <h1>Willkommen zur Wiki-Startseite</h1>
-                <p>Hier sind die noch in Bearbeitung befindlichen Wikiseiten:</p>
-                <ul id="pending-list"></ul>
-            `;
-            const pendingList = document.getElementById('pending-list');
-            pending.forEach(page => {
-                const listItem = document.createElement('li');
-                listItem.textContent = page;
-                pendingList.appendChild(listItem);
-            });
-        }
-        showHomePage()
+        function loadWikiPage(page) {
+                categoriesVisible = (page === 'home');
+                document.getElementById('categories').style.display = categoriesVisible ? 'block' : 'none';
+                document.getElementById('urlInput').value = `redminer9630.de/wiki/${page}`;
         
-        function showTrading() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/trading";
-            fetch('learnhour/wiki/trading.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Es gab ein Problem mit dem Fetch von trading.html:', error);
-                });
+                if (page === 'home') {
+                        const content = document.getElementById('content');
+                        content.innerHTML = `
+                                <h1>Willkommen zur Wiki-Startseite</h1>
+                                <p>Hier sind die noch in Bearbeitung befindlichen Wikiseiten:</p>
+                                <ul id="pending-list"></ul>
+                        `;
+                        const pendingList = document.getElementById('pending-list');
+                        pending.forEach(page => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = page;
+                                pendingList.appendChild(listItem);
+                        });
+                } else {
+                        fetch(`learnhour/wiki/${page}.html`)
+                                .then(response => {
+                                        if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok.');
+                                        return response.text();
+                                })
+                                .then(data => { document.getElementById('content').innerHTML = data; }).catch(error => {console.error(`Es gab ein Problem mit dem Fetch von ${page}.html:`, error);});
+                }
         }
 
-        function showCommands() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/commands"; // URL aktualisieren
-            fetch('learnhour/wiki/commands.html')
-                .then(response => {
-                    if (!response.ok) {    
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Es gab ein Problem mit dem Fetch von commands.html:', error);
-                });
-        }
-
-        function showBrewing() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/brewing"; // URL aktualisieren
-            fetch('learnhour/wiki/brewing.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von brewing.html:', error);
-                });
-        }
-        
-        function showEnchanting() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/enchanting"; // URL aktualisieren
-            fetch('learnhour/wiki/enchanting.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von enchanting.html:', error);
-                });
-        }
-        
-        function showMobs() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/mobs"; // URL aktualisieren
-            fetch('learnhour/wiki/mobs.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von mobs.html:', error);
-                });
-        }
-        
-        function showBlocks() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/blocks"; // URL aktualisieren
-            fetch('learnhour/wiki/blocks.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von blocks.html:', error);
-                });
-        }
-        
-        function showItems() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/items"; // URL aktualisieren
-            fetch('learnhour/wiki/items.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von items.html:', error);
-                });
-        }
-        
-        function showBiomes() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/biomes"; // URL aktualisieren
-            fetch('learnhour/wiki/biomes.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von biomes.html:', error);
-                });
-        }
-        
-        function showEffects() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/effects"; // URL aktualisieren
-            fetch('learnhour/wiki/effects.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von effects.html:', error);
-                });
-        }
-        
-        function showCrafting() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/crafting"; // URL aktualisieren
-            fetch('learnhour/wiki/crafting.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von crafting.html:', error);
-                });
-        }
-        
-        function showSmelting() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/smelting"; // URL aktualisieren
-            fetch('learnhour/wiki/smelting.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von smelting.html:', error);
-                });
-        }
-        
-        function showStructures() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/structures"; // URL aktualisieren
-            fetch('learnhour/wiki/structures.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von structures.html:', error);
-                });
-        }
-        
-        function showRedstone() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/redstone"; // URL aktualisieren
-            fetch('learnhour/wiki/redstone.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von redstone.html:', error);
-                });
-        }
-        
-        function showArchaeology() {
-            categoriesVisible = false;
-            document.getElementById('categories').style.display = 'none'; // Kategorien ausblenden
-            document.getElementById('urlInput').value = "redminer9630.de/wiki/archaeology"; // URL aktualisieren
-            fetch('learnhour/wiki/archaeology.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Netzwerk-Antwort war nicht ok.');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                })
-                .catch(error => {
-                            console.error('Es gab ein Problem mit dem Fetch von archaeology.html:', error);
-                });
-        }
 
         function toggleInfo(infoId) {
             const infoElement = document.getElementById(infoId);
