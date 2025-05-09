@@ -54,12 +54,24 @@
             font-size: 18px;
             transition: background-color 0.3s;
         }
+        .shortcut-mod {
+            font-family: 'MinecraftFont', sans-serif;
+            display: inline-block;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
         @media (prefers-color-scheme: dark) {
             body { background-color: #282c34; color: white; }
             .header-link { background-color: #f44336; color: white; }
             .header-link:hover { background-color: #e53935; }
             .shortcut-button { font-family: 'MinecraftFont', sans-serif; background-color: #4CAF50; color: white; }
             .shortcut-nonview { font-family: 'MinecraftFont', sans-serif; background-color: red; color: white; }
+            .shortcut-mod { font-family: 'MinecraftFont', sans-serif; background-color: orange; color: white; }
             .shortcut-button:hover, .info-button:hover, .brewing-button:hover { background-color: #45a049; transform: scale(1.2); }
             .shortcut-button:active { background-color: #5CAFA1; transform: scale(0.8); }
             #content { border: 1px solid #ddd; }  
@@ -72,6 +84,7 @@
             .header-link:hover { background-color: #e53935; }
             .shortcut-button, .info-button, .brewing-button { font-family: 'MinecraftFont', sans-serif; background-color: #4CAF50; color: white; }
             .shortcut-nonview{ font-family: 'MinecraftFont', sans-serif; background-color: red; color: white; }
+            .shortcut-nonview{ font-family: 'MinecraftFont', sans-serif; background-color: orange; color: white; }
             .shortcut-button:hover, .info-button:hover, .brewing-button:hover { font-family: 'MinecraftFont', sans-serif; background-color: #45a049; }
             #content { border: 1px solid #aaa; } 
             .url-bar { background-color: #f0f0f0 !important; }
@@ -209,6 +222,7 @@
         <button class="shortcut-button" tabindex="16" onclick="showStructures()">Strukturen</button>
         <button class="shortcut-nonview" tabindex="17" onclick="showRedstone()">Redstone</button>
         <button class="shortcut-nonview" tabindex="18" onclick="showArchaeology()">Archeology</button>
+        <button class="shortcut-mod" tabindex="19" onclick="showUltimatum()">Ultimatum</button>
     </div>   
     <div id="content"></div>
     <script onload="showHomePage()">
