@@ -24,4 +24,4 @@ Disallow: /update.html
 Disallow: /learnhour/
 Disallow: /sitemaps.xml
 Disallow: /robots.txt
-Sitemap: https://redminer9630de.github.io/sitemaps.xml
+Sitemap: https://redminer9630.ddns.net/sitemaps.xml
