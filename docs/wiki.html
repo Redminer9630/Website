@@ -16,7 +16,6 @@
             src: url('minecraft_font.woff') format('woff'),
                  url('minecraft_font.tff') format('truetype');
         }
-        
         body {
             font-family: 'MinecraftFont', sans-serif;
             text-align: center;        
@@ -44,11 +43,23 @@
             font-size: 18px;
             transition: background-color 0.3s;
         }
+        .shortcut-nonview {
+            font-family: 'MinecraftFont', sans-serif;
+            display: inline-block;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
         @media (prefers-color-scheme: dark) {
             body { background-color: #282c34; color: white; }
             .header-link { background-color: #f44336; color: white; }
             .header-link:hover { background-color: #e53935; }
             .shortcut-button { font-family: 'MinecraftFont', sans-serif; background-color: #4CAF50; color: white; }
+            .shortcut-nonview { font-family: 'MinecraftFont', sans-serif; background-color: red; color: white; }
             .shortcut-button:hover, .info-button:hover, .brewing-button:hover { background-color: #45a049; transform: scale(1.2); }
             .shortcut-button:active { background-color: #5CAFA1; transform: scale(0.8); }
             #content { border: 1px solid #ddd; }  
@@ -56,25 +67,12 @@
             .url-input { background-color: #3B4048; color: white; }
         }
         @media (prefers-color-scheme: light) {
-            body {
-                background-color: #f0f0f0;
-                color: black;
-            }
-
-            .header-link {
-                background-color: #f44336;
-                color: white;
-            }    
+            body { background-color: #f0f0f0; color: black; }
+            .header-link { background-color: #f44336; color: white; }    
             .header-link:hover { background-color: #e53935; }
-            .shortcut-button, .info-button, .brewing-button {
-                font-family: 'MinecraftFont', sans-serif;
-                background-color: #4CAF50;
-                color: white;
-            }
-            .shortcut-button:hover, .info-button:hover, .brewing-button:hover {
-                font-family: 'MinecraftFont', sans-serif;
-                background-color: #45a049;
-            }
+            .shortcut-button, .info-button, .brewing-button { font-family: 'MinecraftFont', sans-serif; background-color: #4CAF50; color: white; }
+            .shortcut-nonview{ font-family: 'MinecraftFont', sans-serif; background-color: red; color: white; }
+            .shortcut-button:hover, .info-button:hover, .brewing-button:hover { font-family: 'MinecraftFont', sans-serif; background-color: #45a049; }
             #content { border: 1px solid #aaa; } 
             .url-bar { background-color: #f0f0f0 !important; }
             .url-input { background-color: #e0e0e0; color: black; }
@@ -98,25 +96,10 @@
             padding: 10px;
             box-sizing: border-box;
         }
-
-        .key-image {
-            width: 268px;
-            height: 104px;
-            margin: 5px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
+        .key-image { width: 268px; height: 104px; margin: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         table, th, td { border: 1px solid white; }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
+        th, td { padding: 8px; text-align: left; }
         th { cursor: pointer; }
         .info-content {
             margin-top: 15px;
@@ -129,41 +112,21 @@
             box-sizing: border-box;
         }
 
-        .url-bar {
-            background-color: #282c34;
-            padding: 10px; /* Innenabstand */
-            border-radius: 6px; /* Abgerundete Ecken */
-            display: flex; /* Flex-Layout für Elemente */
-            flex-direction: row; /* Elemente in einer Spalte anordnen */
-            margin-bottom: 20px; /* Abstand nach unten */
-        }
-
-        .url-bar span {
-            margin: 5px 0; /* Abstand zwischen den Zeilen */
-            font-size: 16px; /* Schriftgröße */
-        }
-
-        .url-bar a {
-            color: #007BFF; /* Linkfarbe */
-            text-decoration: none; /* Unterstreichung entfernen */
-        }
-
-        .url-bar a:hover {
-            text-decoration: bold; /* Unterstreichung beim Hover */
-        }
-
-        .url-label {
-            margin-top: 4px;
+        .url-bar { background-color: #282c34; padding: 10px; border-radius: 6px; display: flex; flex-direction: row; margin-bottom: 20px; }
+        .url-bar span { margin: 5px 0; font-size: 16px; }
+        .url-bar { color: #007BFF; text-decoration: none; }
+        .url-bar a:hover { text-decoration: bold; }
+        .url-label { margin-top: 4px;}
         
         .url-input {
             font-family: 'MinecraftFont', sans-serif;
             font-size: 12px;
-            background-color: #3B4048; /* Gleiche Farbe wie der Rest */
-            color: white; /* Textfarbe */
+            background-color: #3B4048;
+            color: white;
             padding: 10px;
             border: none;
             border-radius: 5px;
-            width: 300px; /* Breite des Eingabefelds */
+            width: 300px;
             margin-bottom: 10px;
             text-decoration: bold;
         }
@@ -175,22 +138,14 @@
             height: 20px !important;
             background-color: #282c34 !important;
             color: blue !important;
-            cursor: pointer !important; /* Korrigiert von 'mouse' auf 'cursor' */
+            cursor: pointer !important;
             text-align: center;
             line-height: 20px;
             border: none !important;
             border-radius: 0px;
         }
-        
-        .history-forward:active, .history-back:active {
-            color: orange !important;
-        }
-        
-        .history-forward:disabled, .history-back:disabled {
-            cursor: not-allowed !important; /* Deaktivierter Zustand */
-            color: grey !important; /* Deaktivierte Farbe */
-        }
-                    
+        .history-forward:active, .history-back:active { color: orange !important; }
+        .history-forward:disabled, .history-back:disabled { cursor: not-allowed !important; color: grey !important; }            
         .custom-alert {
             position: fixed;
             top: 30%;
@@ -224,20 +179,13 @@
             text-align: middle;
             display: none;
         }
-
-        .clean-button img {
-            display: block;
-        }
-            
+        .clean-button img { display: block; }    
         @keyframes squeeze {
             0% { transform: scale(1); }
             50% { transform: scale(0.9); }
             100% { transform: scale(1); }
         }
-
-        .button-category {
-            animation: squeeze 0.4s ease;
-        }
+        .button-category { animation: squeeze 0.4s ease; }
     </style>
 </head>
 <body onload="showHomePage()">
@@ -251,16 +199,16 @@
         <button class="shortcut-button" tabindex="6" onclick="showTrading()">Handeln</button>
         <button class="shortcut-button" tabindex="7" onclick="showBrewing()">Brauen</button>
         <button class="shortcut-button" tabindex="8" onclick="showEnchanting()">Verzaubern</button>    
-  <!--      <button class="shortcut-button" tabindex="9" onclick="showMobs()">Mobs</button>
-        <button class="shortcut-button" tabindex="10" onclick="showBlocks()">Bloecke</button>
-        <button class="shortcut-button" tabindex="11" onclick="showItems()">Items</button>
-        <button class="shortcut-button" tabindex="12" onclick="showBiomes()">Biome</button>
-        <button class="shortcut-button" tabindex="13" onclick="showEffects()">Effekte</button>
-        <button class="shortcut-button" tabindex="14" onclick="showCrafting()">Crafting</button>    
-        <button class="shortcut-button" tabindex="15" onclick="showSmelting()">Schmelzen</button> 
-  -->      <button class="shortcut-button" tabindex="16" onclick="showStructures()">Strukturen</button> <!--
-        <button class="shortcut-button" tabindex="17" onclick="showRedstone()">Redstone</button>
-        <button class="shortcut-button" tabindex="18" onclick="showArchaeology()">Archeology</button> -->
+        <button class="shortcut-nonview" tabindex="9" onclick="showMobs()">Mobs</button>
+        <button class="shortcut-nonview" tabindex="10" onclick="showBlocks()">Bloecke</button>
+        <button class="shortcut-nonview" tabindex="11" onclick="showItems()">Items</button>
+        <button class="shortcut-nonview" tabindex="12" onclick="showBiomes()">Biome</button>
+        <button class="shortcut-nonview" tabindex="13" onclick="showEffects()">Effekte</button>
+        <button class="shortcut-nonview" tabindex="14" onclick="showCrafting()">Crafting</button>    
+        <button class="shortcut-nonview" tabindex="15" onclick="showSmelting()">Schmelzen</button> 
+        <button class="shortcut-button" tabindex="16" onclick="showStructures()">Strukturen</button>
+        <button class="shortcut-nonview" tabindex="17" onclick="showRedstone()">Redstone</button>
+        <button class="shortcut-nonview" tabindex="18" onclick="showArchaeology()">Archeology</button>
     </div>   
     <div id="content"></div>
     <script onload="showHomePage()">
