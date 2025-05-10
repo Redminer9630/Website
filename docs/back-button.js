@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const style = document.createElement('style');
     style.textContent = `
+        @font-face { font-family: 'MinecraftFont'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.tff') format('truetype'); }  
         .header-link {
+            font-family: 'MinecraftFont';
             font-size: 16px;
             text-decoration: none;
             padding: 10px 20px;
