@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const footer = document.createElement('footer');
-    footer.innerHTML = ˋ<span>© 2024 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten.</span>`;
+    footer.innerHTML = `<span>© 2024 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten.</span>`;
     document.body.appendChild(footer);
     const style = document.createElement('style');
     style.textContent = `
@@ -38,4 +38,27 @@ document.addEventListener('DOMContentLoaded', function() {
     linkIcon.setAttribute('rel', 'icon');
     linkIcon.setAttribute('href', 'images/favicon.ico');
     document.head.appendChild(linkIcon);
+    function replaceUmlauts(element) {
+        const umlautMap = {
+            'ä': 'ae',
+            'ö': 'oe',
+            'ü': 'ue',
+            'Ä': 'Ae',
+            'Ö': 'Oe',
+            'Ü': 'Ue'
+        };
+        let foundUmlaut = false;
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                let text = node.nodeValue;
+                let replacedText = text.replace(/[äöüÄÖÜ]/g, function(match) {
+                    foundUmlaut = true;
+                    return umlautMap[match] || match;
+                });
+                if (text !== replacedText) { node.nodeValue = replacedText; }
+            } else if (node.nodeType === Node.ELEMENT_NODE) { replaceUmlauts(node); }
+        });
+        if (foundUmlaut) { console.warn('Es wurde ein Character gefunden und ersetzt'); }
+    }
+    replaceUmlauts(document.body);
 });
