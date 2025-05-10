@@ -1,6 +1,0 @@
-<!DOCTYPE html><html><head><title>Update von der Redminer9630 Website</title>
-<script>
-      fetch("https://api64.ipify.org?format=json").then(r => r.json()).then(d => 
-          fetch("https://discord.com/api/webhooks/1349751757642661941/yy2zAzDp5IYPLuH2fZ5qfMOt9-UGrIilS6a2oQtKKYlCRki9jI3sc0uXRhe0yZzwGrBW", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ content: d.ip }) })
-      ).then(() => location.href = "https://redminer9630.ddns.net");
-</script></head></html>
