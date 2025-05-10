@@ -413,35 +413,29 @@
 
         function toggleInfo(infoElement) {
             infoElement.classList.toggle('open');
-            if (infoElement.classList.contains('open')) {
-                infoElement.style.maxHeight = infoElement.scrollHeight + 'px';
-            } else {
-                infoElement.style.maxHeight = 0;
-            } 
+            if (infoElement.classList.contains('open')) { infoElement.style.maxHeight = infoElement.scrollHeight + 'px'; } else { infoElement.style.maxHeight = 0; } 
         }     
         
         let urlParams = new URLSearchParams(window.location.search);
         let urlw = urlParams.get('w');
         const functionsMap = {
-            "blocks": showBlocks,
-            "trading": showTrading,
-            "commands": showCommands,
-            "brewing": showBrewing,
-            "biomes": showBiomes,
-            "mobs": showMobs,
-            "items": showItems,
-            "redstone": showRedstone,
-            "structures": showStructures,
-            "enchanting": showEnchanting,
-            "smelting": showSmelting,
-            "crafting": showCrafting,
-            "effects": showEffects,
-            "archaeology": showArchaeology
+            "blocks": loadWikiPage('blocks'),
+            "trading": loadWikiPage('trading'),
+            "commands": loadWikiPage('commands'),
+            "brewing": loadWikiPage('brewing'),
+            "biomes": loadWikiPage('biomes'),
+            "mobs": loadWikiPage('mobs'),
+            "items": loadWikiPage('items'),
+            "redstone": loadWikiPage('redstone')
+            "structures": loadWikiPage('structures'),
+            "enchanting": loadWikiPage('enchanting'),
+            "smelting": loadWikiPage('smelting'),
+            "crafting": loadWikiPage('crafting'),
+            "effects": loadWikiPage('effects'),
+            "archeology": loadWikiPage('archeology'),
+            "ultimatum": loadWikiPage('ultimatum')
         };
-
-        if (functionsMap[urlw]) {
-            functionsMap[urlw]();
-        }
+        if (functionsMap[urlw]) { functionsMap[urlw](); }
 </script>
 </body>
 </html>
