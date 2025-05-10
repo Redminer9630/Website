@@ -17,6 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const backButton = document.createElement('a');
     backButton.setAttribute('href', 'https://redminer9630.ddns.net');
     backButton.setAttribute('class', 'header-link');
-    backButton.textContent = 'Zurück';
+    backButton.textContent = 'Zurueck';
     document.body.appendChild(backButton);
 });
