@@ -8,7 +8,7 @@
     <link rel="icon" href="images/android-chrome-192x192.png" sizes="192x192" type="image/png">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png" type="image/png">
     <link rel="icon" href="images/favicon-32x32.png" sizes="32x32" type="image/png">
-    <script src="learnhour/wiki/wiki_id.js" defer></script>
+    <script src="wiki/wiki_id.js" defer></script>
     <script src="pending_wikis.js"></script>
     <style>
         @font-face {
@@ -207,21 +207,21 @@
     <div class="url-bar"><label for="urlInput">URL: </label><input class="url-input" type="text" tabindex="2" id="urlInput" inputmode="url" value="redminer9630.de/wiki/home" autocomplete="off" spellcheck="false" style="width: 265px; margin-left: 10px; " /></div>   
     <header><img src="images/wiki_title.png" alt="Minecraft Java Wiki" style="height: 65px;" onclick="showHomePage()"></header>
     <div id="categories">
-        <button class="shortcut-button" tabindex="5" onclick="showCommands()">Befehle</button>
-        <button class="shortcut-button" tabindex="6" onclick="showTrading()">Handeln</button>
-        <button class="shortcut-button" tabindex="7" onclick="showBrewing()">Brauen</button>
-        <button class="shortcut-button" tabindex="8" onclick="showEnchanting()">Verzaubern</button>    
-        <button class="shortcut-nonview" tabindex="9" onclick="showMobs()">Mobs</button>
-        <button class="shortcut-nonview" tabindex="10" onclick="showBlocks()">Bloecke</button>
-        <button class="shortcut-nonview" tabindex="11" onclick="showItems()">Items</button>
-        <button class="shortcut-nonview" tabindex="12" onclick="showBiomes()">Biome</button>
-        <button class="shortcut-nonview" tabindex="13" onclick="showEffects()">Effekte</button>
-        <button class="shortcut-nonview" tabindex="14" onclick="showCrafting()">Crafting</button>    
-        <button class="shortcut-nonview" tabindex="15" onclick="showSmelting()">Schmelzen</button> 
-        <button class="shortcut-button" tabindex="16" onclick="showStructures()">Strukturen</button>
-        <button class="shortcut-nonview" tabindex="17" onclick="showRedstone()">Redstone</button>
-        <button class="shortcut-nonview" tabindex="18" onclick="showArchaeology()">Archeology</button>
-        <button class="shortcut-mod" tabindex="19" onclick="showUltimatum()">Ultimatum</button>
+        <button class="shortcut-button" tabindex="5" onclick="loadWikiPage('commands')">Befehle</button>
+        <button class="shortcut-button" tabindex="6" onclick="loadWikiPage('trading')">Handeln</button>
+        <button class="shortcut-button" tabindex="7" onclick="loadWikiPage('brewing')">Brauen</button>
+        <button class="shortcut-button" tabindex="8" onclick="loadWikiPage('enchanting')">Verzaubern</button>    
+        <button class="shortcut-nonview" tabindex="9" onclick="loadWikiPage('mobs')">Mobs</button>
+        <button class="shortcut-nonview" tabindex="10" onclick="loadWikiPage('blocks')">Bloecke</button>
+        <button class="shortcut-nonview" tabindex="11" onclick="loadWikiPage('items')">Items</button>
+        <button class="shortcut-nonview" tabindex="12" onclick="loadWikiPage('biomes')">Biome</button>
+        <button class="shortcut-nonview" tabindex="13" onclick="loadWikiPage('effects')">Effekte</button>
+        <button class="shortcut-nonview" tabindex="14" onclick="loadWikiPage('crafting')">Crafting</button>
+        <button class="shortcut-nonview" tabindex="15" onclick="loadWikiPage('smelting')">Smelzen</button> 
+        <button class="shortcut-button" tabindex="16" onclick="loadWikiPage('structures')">Strukturen</button>
+        <button class="shortcut-nonview" tabindex="17" onclick="loadWikiPage('redstone')">Redstone</button>
+        <button class="shortcut-nonview" tabindex="18" onclick="loadWikiPage('archeology')">Archeology</button>
+        <button class="shortcut-mod" tabindex="19" onclick="loadWikiPage('ultimatum')">Ultimatum</button>
     </div>   
     <div id="content"></div>
     <script onload="showHomePage()">
@@ -245,7 +245,7 @@
         function loadWikiPage(page) {
                 categoriesVisible = (page === 'home');
                 document.getElementById('categories').style.display = categoriesVisible ? 'block' : 'none';
-                document.getElementById('urlInput').value = `redminer9630.de/wiki/${page}`;
+                document.getElementById('urlInput').value = `redminer9630.ddns.net/wiki/${page}`;
         
                 if (page === 'home') {
                         const content = document.getElementById('content');
@@ -261,7 +261,7 @@
                                 pendingList.appendChild(listItem);
                         });
                 } else {
-                        fetch(`learnhour/wiki/${page}.html`)
+                        fetch(`wiki/${page}.html`)
                                 .then(response => {
                                         if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok.');
                                         return response.text();
@@ -269,7 +269,6 @@
                                 .then(data => { document.getElementById('content').innerHTML = data; }).catch(error => {console.error(`Es gab ein Problem mit dem Fetch von ${page}.html:`, error);});
                 }
         }
-
 
         function toggleInfo(infoId) {
             const infoElement = document.getElementById(infoId);
