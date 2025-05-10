@@ -15,12 +15,13 @@
       li:hover { background:var(--accent); color:var(--bg); }
       a.button { display:inline-block; margin-top:10px; background:var(--accent); color:var(--bg); padding:8px 12px; border-radius:4px; text-decoration:none; }
     </style>
+    <script src="common.js"></script>
+    <script src="back-button.js"></script>
   </head>
   <body>
     <h1>Newsletter</h1>
     <input type="text" id="search" placeholder="Suche nach Titel oder Beschreibung...">
     <ul id="posts"></ul>
-
     <script>
       const theme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
       document.documentElement.setAttribute('data-theme',theme);
