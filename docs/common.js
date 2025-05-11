@@ -51,14 +51,19 @@ document.addEventListener('DOMContentLoaded', function() {
         element.childNodes.forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
                 let text = node.nodeValue;
-                let replacedText = text.replace(/[äöüÄÖÜ]/g, function(match) {
-                    foundUmlaut = true;
-                    return umlautMap[match] || match;
-                });
+                let replacedText = text.replace(/[äöüÄÖÜ]/g, function(match) { foundUmlaut = true; return umlautMap[match] || match; });
                 if (text !== replacedText) { node.nodeValue = replacedText; }
             } else if (node.nodeType === Node.ELEMENT_NODE) { replaceUmlauts(node); }
         });
         if (foundUmlaut) { console.warn('Es wurde ein Character gefunden und ersetzt'); }
     }
     replaceUmlauts(document.body);
+});
+
+document.querySelectorAll('[class^="element"]').forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        toggle.classList.toggle('open');
+        const submenu = toggle.nextElementSibling;
+        submenu.classList.toggle('show'); 
+    });
 });
