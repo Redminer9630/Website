@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
             position: absolute;
             top: 20px;
             right: 20px;
+            background-color: #f44336;
+            color: white;
         }
+        .header-link:hover { background-color: ; }
     `;
     document.head.appendChild(style);
     const backButton = document.createElement('a');
