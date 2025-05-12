@@ -14,7 +14,7 @@
     <script src="common.js"></script>
     <script src="back-button.js"></script>
 </head>
-<body onload="loadWikiPage('home')">
+<body>
     <div class="url-bar"><label for="urlInput">URL: </label><input class="url-input" type="text" tabindex="2" id="urlInput" inputmode="url" value="redminer9630.de/wiki/home" autocomplete="off" spellcheck="false" style="width: 265px; margin-left: 10px; " /></div>   
     <header><img src="images/wiki_title.png" alt="Minecraft Java Wiki" style="height: 65px;" onclick="showHomePage()"></header>
     <div id="categories">
@@ -247,6 +247,7 @@
             "ultimatum": loadWikiPage('ultimatum')
         };
         if (functionsMap[urlw]) { functionsMap[urlw](); }
+        window.addEventListener('load', () => { loadWikiPage('home'); });
 </script>
 </body>
 </html>
