@@ -6,11 +6,10 @@
     <title>Redminer9630 Linktree</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background-color: #ffffff; border-radius: 8px; padding: 20px; width: 320px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; overflow: hidden; position: relative; }
+        .container { background-color: #ffffff; border-radius: 8px; padding: 20px; width: 320px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
         h1 { font-size: 2em; color: #333; margin-bottom: 20px; }
-        .slide-wrapper { position: relative; height: 120px; }
-        .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(100%); transition: all 0.8s ease; display: flex; align-items: center; justify-content: space-between; background-color: #e0e0e0; border-radius: 10px; padding: 10px 15px; box-sizing: border-box; }
-        .slide.active-L, .slide.active-R { opacity: 1; transform: translateX(0); }
+        .slide-wrapper { display: flex; flex-direction: column; gap: 10px; }
+        .slide { display: flex; align-items: center; justify-content: space-between; background-color: #e0e0e0; border-radius: 10px; padding: 10px 15px; box-sizing: border-box; }
         .slide img { width: 64px; height: 64px; border-radius: 8px; }
         .link { text-decoration: none; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; transition: background-color 0.3s; }
         .link:hover { background-color: #0056b3; }
@@ -33,9 +32,7 @@
             },
             unknown: {
                 title: "Unknown",
-                links: [
-                    
-                ]
+                links: []
             },
             theanonym: {
                 title: "TheAnonym",
@@ -59,34 +56,15 @@
         document.getElementById("linktree-title").textContent = users[selectedUser].title + " Linktree";
 
         const slideWrapper = document.getElementById("slide-wrapper");
-        users[selectedUser].links.forEach((link, index) => {
+        users[selectedUser].links.forEach(link => {
             const slide = document.createElement("div");
             slide.className = "slide";
-            slide.dataset.direction = index % 2 === 0 ? "L" : "R";
             slide.innerHTML = `
                 <a href="${link.url}" class="link" target="_blank">${link.name}</a>
                 <img src="${link.img}" alt="${link.name}">
             `;
             slideWrapper.appendChild(slide);
         });
-
-        const slides = document.querySelectorAll(".slide");
-        let i = 0;
-
-        function showSlide() {
-            slides.forEach((s, j) => {
-                s.classList.remove("active-L", "active-R");
-                s.style.zIndex = 0;
-                if (j === i) {
-                    s.classList.add("active-" + s.dataset.direction);
-                    s.style.zIndex = 1;
-                }
-            });
-            i = (i + 1) % slides.length;
-        }
-
-        showSlide();
-        setInterval(showSlide, 5000);
     </script>
 </body>
 </html>
