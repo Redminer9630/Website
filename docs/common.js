@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     style.textContent = `
         @font-face { font-family: 'Minecraft', Arial; src: url('minecraft_font.woff'), format('.woff'), url('minecraft_font.ttf'), format('truetype'); }
         footer {
-            font-family: "Minecraft";
+            font-family: 'Minecraft';
             background-color: #2c3e50;
             color: white;
             text-align: center;
