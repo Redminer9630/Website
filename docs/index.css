@@ -27,7 +27,7 @@ footer { background-color: #2c3e50; color: white; text-align: center; padding: 1
 .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
 input:checked + .slider { background-color: #2ecc71; }
 input:checked + .slider:before { transform: translateX(22px); }
-.linkbox { gap: 10px; align-items: center; }
+.linkbox { gap: 10px; align-items: center; display: block; overflow-x: auto; white-space: nowrap; padding: 10px; }
 .linkimg { width: 50px; height: 50px; margin-right: 5px; }
 .invert { filter: invert(1); }
 header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; box-sizing: border-box; }
@@ -35,3 +35,4 @@ header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; 
 .icon-right { display: flex; gap: 10px; align-items: center; }
 .nav-icon, .account-icon { width: 30px; height: 30px; cursor: pointer; transition: transform 0.2s ease; }
 .nav-icon:hover, .account-icon:hover { transform: scale(1.2); }
+.linkbox .linkimg { display: inline-block; }
