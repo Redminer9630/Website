@@ -25,7 +25,7 @@
     <script>
         const users = {
             redminer9630: {
-                title: "Redminer9630",
+                title: "Redminer9630 ",
                 links: [
                     { name: "YouTube", url: "https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ", img: "images/youtube.png" },
                     { name: "Twitch", url: "https://www.twitch.tv/redminer9360", img: "images/twitch.png" },
@@ -33,18 +33,22 @@
                 ]
             },
             unknown: {
-                title: "Unknown",
-                links: []
+                title: "",
+                links: [
+                    { name: "Redminer9630", url: "?redminer9630", img: "images/tree.png" },
+                    { name: "vanilla_cookies", url: "?vanilla_cookies", img: "images/tree.png" },
+                    { name: "TheAnonym3000", url: "?theanonym", img: "images/tree.png" }
+                ]
             },
             theanonym: {
-                title: "TheAnonym",
+                title: "TheAnonym3000 ",
                 links: [
                     { name: "GitHub", url: "https://github.com/TheAnonym3000", img: "images/github.png" },
                     { name: "Twitch", url: "https://twitch.tv/therealanonym3000", img: "images/twitch.png" }
                 ]
             },
             vanilla_cookies: {
-                title: "Vanilla Cookies",
+                title: "Vanilla Cookies ",
                 links: [
                     { name: "Twitch", url: "#", img: "images/twitch.png" },
                     { name: "YouTube", url: "#", img: "images/youtube.png" }
@@ -55,7 +59,7 @@
         const params = new URLSearchParams(window.location.search);
         const selectedUser = Object.keys(users).find(u => params.has(u)) || "unknown";
 
-        document.getElementById("linktree-title").textContent = users[selectedUser].title + " Linktree";
+        document.getElementById("linktree-title").textContent = users[selectedUser].title + "Linktree";
 
         const slideWrapper = document.getElementById("slide-wrapper");
         users[selectedUser].links.forEach(link => {
