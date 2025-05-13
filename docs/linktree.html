@@ -10,52 +10,82 @@
         h1 { font-size: 2em; color: #333; margin-bottom: 20px; }
         .slide-wrapper { position: relative; height: 120px; }
         .slide { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(100%); transition: all 0.8s ease; display: flex; align-items: center; justify-content: space-between; background-color: #e0e0e0; border-radius: 10px; padding: 10px 15px; box-sizing: border-box; }
-        .slide.active-L { opacity: 1; transform: translateX(0); }
-        .slide.active-R { opacity: 1; transform: translateX(0); }
+        .slide.active-L, .slide.active-R { opacity: 1; transform: translateX(0); }
         .slide img { width: 64px; height: 64px; border-radius: 8px; }
         .link { text-decoration: none; color: #fff; background-color: #007bff; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; transition: background-color 0.3s; }
         .link:hover { background-color: #0056b3; }
     </style>
-    <script src="common.js"></script>
-    <script src="back-button.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Redminer9360 Linktree</h1>
-        <div class="slide-wrapper">
-            <div class="slide" data-direction="R">
-                <a href="https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ" class="link" target="_blank">YouTube</a>
-                <img src="https://i.imgur.com/kt3aM5x.png" alt="YouTube">
-            </div>
-            <div class="slide" data-direction="L">
-                <a href="https://www.twitch.tv/redminer9360" class="link" target="_blank">Twitch</a>
-                <img src="https://i.imgur.com/NOEMNsb.png" alt="Twitch">
-            </div>
-            <div class="slide" data-direction="R">
-                <a href="https://github.com/Redminer9360de" class="link" target="_blank">GitHub</a>
-                <img src="https://i.imgur.com/nUq1tLv.png" alt="GitHub">
-            </div>
-            <div class="slide" data-direction="L">
-                <a href="https://discord.gg/uRNX47tYrX" class="link" target="_blank">Discord</a>
-                <img src="https://i.imgur.com/kEfHzxe.png" alt="Discord">
-            </div>
-        </div>
+        <h1 id="linktree-title">Linktree</h1>
+        <div class="slide-wrapper" id="slide-wrapper"></div>
     </div>
     <script>
-        const slides = document.querySelectorAll('.slide'); 
+        const users = {
+            redminer9630: {
+                title: "Redminer9630",
+                links: [
+                    { name: "YouTube", url: "https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ", img: "images/youtube.png" },
+                    { name: "Twitch", url: "https://www.twitch.tv/redminer9360", img: "images/twitch.png" },
+                    { name: "GitHub", url: "https://github.com/Redminer9360de", img: "images/github.png" }
+                ]
+            },
+            unknown: {
+                title: "Unknown",
+                links: [
+                    
+                ]
+            },
+            theanonym: {
+                title: "TheAnonym",
+                links: [
+                    { name: "GitHub", url: "https://github.com/TheAnonym3000", img: "images/github.png" },
+                    { name: "Youtube", url: "#", img: "images/youtube.png" }
+                ]
+            },
+            vanilla_cookies: {
+                title: "Vanilla Cookies",
+                links: [
+                    { name: "Twitch", url: "#", img: "images/twitch.png" },
+                    { name: "YouTube", url: "#", img: "images/youtube.png" }
+                ]
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedUser = Object.keys(users).find(u => params.has(u)) || "unknown";
+
+        document.getElementById("linktree-title").textContent = users[selectedUser].title + " Linktree";
+
+        const slideWrapper = document.getElementById("slide-wrapper");
+        users[selectedUser].links.forEach((link, index) => {
+            const slide = document.createElement("div");
+            slide.className = "slide";
+            slide.dataset.direction = index % 2 === 0 ? "L" : "R";
+            slide.innerHTML = `
+                <a href="${link.url}" class="link" target="_blank">${link.name}</a>
+                <img src="${link.img}" alt="${link.name}">
+            `;
+            slideWrapper.appendChild(slide);
+        });
+
+        const slides = document.querySelectorAll(".slide");
         let i = 0;
 
         function showSlide() {
             slides.forEach((s, j) => {
-                s.classList.remove('active-L', 'active-R');
+                s.classList.remove("active-L", "active-R");
                 s.style.zIndex = 0;
-
-                if (j === i) { s.classList.add('active-' + s.dataset.direction); s.style.zIndex = 1; }
+                if (j === i) {
+                    s.classList.add("active-" + s.dataset.direction);
+                    s.style.zIndex = 1;
+                }
             });
             i = (i + 1) % slides.length;
         }
 
-        showSlide(); 
+        showSlide();
         setInterval(showSlide, 5000);
     </script>
 </body>
