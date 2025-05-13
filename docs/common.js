@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const footer = document.createElement('footer');
-    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten.</span>`;
+    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. v1.4.2 Indev</span>`;
     document.body.appendChild(footer);
     const style = document.createElement('style');
     style.textContent = `
