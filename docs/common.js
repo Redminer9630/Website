@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const linkIcon = document.createElement('link');
     linkIcon.setAttribute('rel', 'icon');
-    linkIcon.setAttribute('href', 'images/favicon.ico');
+    linkIcon.setAttribute('href', 'images/main.png');
     document.head.appendChild(linkIcon);
     function replaceUmlauts(element) {
         const umlautMap = {
