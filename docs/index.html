@@ -65,14 +65,14 @@
     const analytics = getAnalytics(app); 
     function img(page) {
         const links = [
-            "/settings",
-            "/wiki",
-            "/downloads",
-            "/generators",
-            "/tools",
-            "/server",
-            "/feedback",
-            "/account"
+            "settings",
+            "wiki",
+            "downloads",
+            "generators",
+            "tools",
+            "server",
+            "feedback",
+            "account"
         ];
         if (page >= 0 && page < links.length) location.href = links[page];
     }
