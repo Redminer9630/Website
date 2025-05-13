@@ -21,25 +21,26 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
-    const metaDescription = document.createElement('meta');
-    metaDescription.setAttribute('name', 'description');
-    metaDescription.setAttribute('content', 'Offizielle Website von Redminer9630.');
-    document.head.appendChild(metaDescription);
+const metaDescription = document.createElement('meta');
+metaDescription.name = 'description';
+metaDescription.content = 'Offizielle Website von Redminer9630';
+document.head.appendChild(metaDescription);
 
-    const metaKeywords = document.createElement('meta');
-    metaKeywords.setAttribute('name', 'keywords');
-    metaKeywords.setAttribute('content', 'Minecraft, Redminer9630');
-    document.head.appendChild(metaKeywords);
+const metaKeywords = document.createElement('meta');
+metaKeywords.name = 'keywords';
+metaKeywords.content = 'Minecraft Java Edition, Redminer9630, Minecraft';
+document.head.appendChild(metaKeywords);
 
-    const metaVerification = document.createElement('meta');
-    metaVerification.setAttribute('name', 'google-site-verification');
-    metaVerification.setAttribute('content', 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA');
-    document.head.appendChild(metaVerification);
+const metaVerification = document.createElement('meta');
+metaVerification.name = 'google-site-verification';
+metaVerification.content = 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA';
+document.head.appendChild(metaVerification);
 
-    const linkIcon = document.createElement('link');
-    linkIcon.setAttribute('rel', 'icon');
-    linkIcon.setAttribute('href', 'images/main.png');
-    document.head.appendChild(linkIcon);
+const linkIcon = document.createElement('link');
+linkIcon.rel = 'icon';
+linkIcon.href = 'images/main.png';
+document.head.appendChild(linkIcon);
+    
     function replaceUmlauts(element) {
         const umlautMap = {
             'ä': 'ae',
