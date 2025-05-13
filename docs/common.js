@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(footer);
     const style = document.createElement('style');
     style.textContent = `
-        @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff'), format('.woff'), url('minecraft_font.ttf'), format('truetype'); }
+        @font-face { font-family: 'Minecraft', Arial; src: url('minecraft_font.woff'), format('.woff'), url('minecraft_font.ttf'), format('truetype'); }
         footer {
             font-family: "Minecraft";
             background-color: #2c3e50;
