@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const style = document.createElement('style');
     style.textContent = `
         footer {
+            font-family: "Minecraft";
             background-color: #2c3e50;
             color: white;
             text-align: center;
