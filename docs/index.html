@@ -16,16 +16,16 @@
 <body>
 <header>
   <div class="icon-left">
-    <img onclick="img(0)" src="images/main.png" class="nav-icon" />
-    <img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki" />
-    <img src="images/icons/downloads.png" class="nav-icon" alt="Download" />
-    <img src="images/icons/generators.png" class="nav-icon" alt="Generators" /> 
-    <img src="images/icons/tools.png" class="nav-icon" alt="Tools" /> 
-    <img src="images/icons/team.png" class="nav-icon" alt="Server" />
+    <img src="images/main.png" class="nav-icon" />
+    <img onclick="img(1)" src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki" />
+    <img onclick="img(2)" src="images/icons/downloads.png" class="nav-icon" alt="Download" />
+    <img onclick="img(3)" src="images/icons/generators.png" class="nav-icon" alt="Generators" />
+    <img onclick="img(4)" src="images/icons/tools.png" class="nav-icon" alt="Tools" />
+    <img onclick="img(5)" src="images/icons/team.png" class="nav-icon" alt="Server" />
   </div>
   <div class="icon-right">
-      <img src="images/icons/feedback.png" class="account-icon" alt="Feedback" />
-      <img src="images/icons/settings.gif" class="account-icon" alt="Einstellungen" />
+      <img onclick="img(6) src="images/icons/feedback.png" class="account-icon" alt="Feedback" />
+      <img onclick="img(0) src="images/icons/settings.gif" class="account-icon" alt="Einstellungen" />
   </div>
 </header>
         <!-- <div class="linkbox">
@@ -67,8 +67,18 @@
     };
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app); 
-    function img(page): {
-        location.href="/${link}";
+    function img(page) {
+        const links = [
+            "/settings",
+            "/wiki",
+            "/downloads",
+            "/generators",
+            "/tools",
+            "/server",
+            "/feedback",
+            "/account"
+        ];
+        if (page >= 0 && page < links.length) location.href = links[page];
     }
     onload=()=>+new URLSearchParams(location.search).get("l")==1&&(location.href="https://youtu.be/dQw4w9WgXcQ")
 </script>
