@@ -31,6 +31,7 @@
             font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 8px;
             position: absolute; top: 20px; right: 20px; background-color: #f44336; color: white;
         }
+        .honeypot { display: none; }
         @media (prefers-color-scheme: dark) {
             body { background-color: #121212; color: #f5f5f5; }
             .container { background-color: #1e1e1e; border-color: #333; }
@@ -67,34 +68,83 @@
             </select>
             <label for="feedback">Feedback:</label>
             <textarea id="feedback" name="feedback" placeholder="Feedback..." required></textarea>
+            <!-- Honeypot -->
+            <input type="text" name="websiteField" class="honeypot" autocomplete="off">
             <button class="g-recaptcha" data-sitekey="6LeXyrEqAAAAAM6Qfnwx_skzMwIP7oxCfZSWn-5E" data-callback="onSubmit" data-action="submit">Feedback senden</button>
         </form>
     </div>
-    <script>
-        function onSubmit(token) {
-            const email = document.getElementById('email').value;
-            const website = document.getElementById('website').value || "Nicht angegeben";
-            const feedback = document.getElementById('feedback').value;
-            const webhookUrl = "https://discord.com/api/webhooks/1296903270702514289/zGu17OTxNO_mQ13j4-QkonuoDeECvdqTqCzeRq6rMxJSEMW0V9xnpRU8DjSuE7wnsiDf";
-            const payload = { content: `Neues Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Feedback:**\n${feedback}` };
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('email').value = localStorage.getItem('email') || '';
+        document.getElementById('feedback').value = localStorage.getItem('feedback') || '';
+    });
 
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(res => {
-                if (res.ok) {
-                    alert('Dein Feedback wurde erfolgreich gesendet!');
-                    document.getElementById('feedbackForm').reset();
-                } else {
-                    alert('Fehler beim Senden. Bitte versuche es später erneut.');
-                }
-            })
-            .catch(err => {
-                alert('Es gab einen Fehler: ' + err.message + '\nFalls dieser Fehler erneut erscheint, bitte kontaktiere unseren Discord.');
-            });
+    function onSubmit(token) {
+        const email = document.getElementById('email').value;
+        const website = document.getElementById('website').value || "Nicht angegeben";
+        const feedback = document.getElementById('feedback').value;
+        const honeypot = document.querySelector('input[name="websiteField"]').value;
+
+        // Daten speichern
+        localStorage.setItem('email', email);
+        localStorage.setItem('feedback', feedback);
+
+        // Bot check
+        if (honeypot !== '') {
+            alert('Bot-Verdacht erkannt. Feedback wurde blockiert.');
+            return;
         }
-    </script>
+
+        // Anti-Spam-Schutz
+        const now = Date.now();
+        const lastSubmit = parseInt(localStorage.getItem('lastSubmit')) || 0;
+        const feedbacksToday = JSON.parse(localStorage.getItem('feedbacksToday') || '[]');
+
+        // 1. Cooldown: 30 Sekunden
+        if (now - lastSubmit < 30000) {
+            alert('Du kannst nur alle 30 Sekunden Feedback senden.');
+            return;
+        }
+
+        // 2. Tageslimit: max 5 Feedbacks/Tag
+        const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+        const todayEntries = feedbacksToday.filter(entry => entry.date === today);
+
+        if (todayEntries.length >= 5) {
+            alert('Du hast heute bereits 5 Feedbacks gesendet. Bitte versuche es morgen erneut.');
+            return;
+        }
+
+        // Feedback an Discord senden
+        const webhookUrl = "https://discord.com/api/webhooks/1296903270702514289/zGu17OTxNO_mQ13j4-QkonuoDeECvdqTqCzeRq6rMxJSEMW0V9xnpRU8DjSuE7wnsiDf";
+        const payload = {
+            content: `Neues Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Feedback:**\n${feedback}`
+        };
+
+        fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            if (res.ok) {
+                alert('Dein Feedback wurde erfolgreich gesendet!');
+                document.getElementById('feedbackForm').reset();
+                localStorage.removeItem('feedback');
+
+                // Zeit und Datum speichern
+                localStorage.setItem('lastSubmit', now.toString());
+
+                feedbacksToday.push({ date: today });
+                localStorage.setItem('feedbacksToday', JSON.stringify(feedbacksToday));
+            } else {
+                alert('Fehler beim Senden. Bitte versuche es später erneut.');
+            }
+        })
+        .catch(err => {
+            alert('Es gab einen Fehler: ' + err.message + '\nFalls dieser Fehler erneut erscheint, bitte kontaktiere unseren Discord.');
+        });
+    }
+</script>
 </body>
 </html>
