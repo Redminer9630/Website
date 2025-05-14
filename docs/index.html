@@ -10,7 +10,6 @@
     <meta name="description" content="Offiziele Website von Redminer9630.">
     <meta name="keywords" content="Minecraft, Redminer9630">
 <link rel="stylesheet" href="index.css">
-<script src="index.js"></script>
 <script src="common.js"></script>
 <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async=""></script></head>
 <body>
@@ -94,16 +93,19 @@
         if (page >= 0 && page < links.length) location.href = links[page];
     }
     
-let navLabels = document.querySelectorAll('.nav-label');
-let currentLabel = 0;
-
-function cycleLabels() {
-  navLabels.forEach((label, index) => { label.style.display = index === currentLabel ? 'inline' : 'none'; });
-  currentLabel = (currentLabel + 1) % navLabels.length;
-}
-cycleLabels();
-setInterval(cycleLabels, 7000);
-
+    let navLabels = document.querySelectorAll('.nav-label');
+    let currentLabel = 0;
+    function cycleLabels() {
+        navLabels.forEach((label, index) => { label.style.display = index === currentLabel ? 'inline' : 'none'; });
+        currentLabel = (currentLabel + 1) % navLabels.length;
+    }
+    cycleLabels();
+    setInterval(cycleLabels, 7000)
+    
+    document.getElementById('moreInfoBtn').addEventListener('click', function() {
+        var moreInfo = document.getElementById('moreInfo');
+        moreInfo.style.display = moreInfo.style.display === 'none' ? 'block' : 'none';
+    }
     onload=()=>+new URLSearchParams(location.search).get("l")==1&&(location.href="https://youtu.be/dQw4w9WgXcQ")
 </script>
 </body>
