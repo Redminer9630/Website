@@ -93,6 +93,17 @@
         ];
         if (page >= 0 && page < links.length) location.href = links[page];
     }
+    
+let navLabels = document.querySelectorAll('.nav-label');
+let currentLabel = 0;
+
+function cycleLabels() {
+  navLabels.forEach((label, index) => { label.style.display = index === currentLabel ? 'inline' : 'none'; });
+  currentLabel = (currentLabel + 1) % navLabels.length;
+}
+cycleLabels();
+setInterval(cycleLabels, 7000);
+
     onload=()=>+new URLSearchParams(location.search).get("l")==1&&(location.href="https://youtu.be/dQw4w9WgXcQ")
 </script>
 </body>
