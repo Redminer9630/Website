@@ -15,12 +15,12 @@
     <script src="back-button.js"></script>
 </head>
 <body>
-    <div id="search-bar">
-    <input type="text" id="wikiSearch" placeholder="Wiki durchsuchen..." oninput="searchWiki()" onfocus="showRecents()" onblur="hideRecentsTimeout()" autocomplete="off">
-    <div id="recents"></div>
+    <div class="search-container">
+        <img src="logo.png" alt="Logo" class="logo">
+        <input type="text" id="searchInput" placeholder="Suche..." class="search-bar">
+        <div id="searchResults"></div>
     </div>
-    <header><img src="images/wiki_title.png" alt="Minecraft Java Wiki" style="height: 65px;" onclick="showHomePage()"></header>
-    <div id="categories">
+    <!-- <div id="categories">
         <button class="shortcut-button" tabindex="5" onclick="loadWikiPage('commands')">Befehle</button>
         <button class="shortcut-button" tabindex="6" onclick="loadWikiPage('trading')">Handeln</button>
         <button class="shortcut-button" tabindex="7" onclick="loadWikiPage('brewing')">Brauen</button>
@@ -36,8 +36,7 @@
         <button class="shortcut-nonview" tabindex="17" onclick="loadWikiPage('redstone')">Redstone</button>
         <button class="shortcut-nonview" tabindex="18" onclick="loadWikiPage('archeology')">Archeology</button>
         <button class="shortcut-mod" tabindex="19" onclick="loadWikiPage('ultimatum')">Ultimatum</button>
-    </div>   
-    <div id="content"></div>
+    </div>   -->
     <script onload="showHomePage()">
         let categoriesVisible = true;
         let urlHistory = [];
