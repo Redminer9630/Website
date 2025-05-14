@@ -15,7 +15,10 @@
     <script src="back-button.js"></script>
 </head>
 <body>
-    <div class="url-bar"><label for="urlInput">URL: </label><input class="url-input" type="text" tabindex="2" id="urlInput" inputmode="url" value="redminer9630.de/wiki/home" autocomplete="off" spellcheck="false" style="width: 265px; margin-left: 10px; " /></div>   
+    <div id="search-bar">
+    <input type="text" id="wikiSearch" placeholder="Wiki durchsuchen..." oninput="searchWiki()" onfocus="showRecents()" onblur="hideRecentsTimeout()" autocomplete="off">
+    <div id="recents"></div>
+    </div>
     <header><img src="images/wiki_title.png" alt="Minecraft Java Wiki" style="height: 65px;" onclick="showHomePage()"></header>
     <div id="categories">
         <button class="shortcut-button" tabindex="5" onclick="loadWikiPage('commands')">Befehle</button>
@@ -226,7 +229,58 @@
             infoElement.classList.toggle('open');
             if (infoElement.classList.contains('open')) { infoElement.style.maxHeight = infoElement.scrollHeight + 'px'; } else { infoElement.style.maxHeight = 0; } 
         }     
-        
+const allPages = [
+    "home", "commands", "trading", "brewing", "enchanting", "mobs", "blocks", "items",
+    "biomes", "effects", "crafting", "smelting", "structures", "redstone", "archeology", "ultimatum"
+];
+
+function searchWiki() {
+    const input = document.getElementById("wikiSearch").value.toLowerCase();
+    const matches = allPages.filter(p => p.includes(input));
+    const recentsDiv = document.getElementById("recents");
+    recentsDiv.innerHTML = "";
+    matches.forEach(page => {
+        const entry = document.createElement("div");
+        entry.textContent = page;
+        entry.onclick = () => {
+            loadWikiPage(page);
+            saveToRecents(page);
+            recentsDiv.style.display = "none";
+        };
+        recentsDiv.appendChild(entry);
+    });
+    recentsDiv.style.display = matches.length ? "block" : "none";
+}
+
+function saveToRecents(page) {
+    let recents = JSON.parse(localStorage.getItem("wikiRecents") || "[]");
+    recents = recents.filter(p => p !== page);
+    recents.unshift(page);
+    if (recents.length > 5) recents.pop();
+    localStorage.setItem("wikiRecents", JSON.stringify(recents));
+}
+
+function showRecents() {
+    const recents = JSON.parse(localStorage.getItem("wikiRecents") || "[]");
+    const recentsDiv = document.getElementById("recents");
+    recentsDiv.innerHTML = "";
+    recents.forEach(page => {
+        const entry = document.createElement("div");
+        entry.textContent = page;
+        entry.onclick = () => {
+            loadWikiPage(page);
+            saveToRecents(page);
+            recentsDiv.style.display = "none";
+        };
+        recentsDiv.appendChild(entry);
+    });
+    if (recents.length > 0) recentsDiv.style.display = "block";
+}
+
+function hideRecentsTimeout() {
+    setTimeout(() => { document.getElementById("recents").style.display = "none"; }, 150);
+}
+
         let urlParams = new URLSearchParams(window.location.search);
         let urlw = urlParams.get('w');
         const functionsMap = {
