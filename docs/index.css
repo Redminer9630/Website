@@ -51,5 +51,7 @@ header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; 
   color: white;
   white-space: nowrap;
 }
-.nav-label { transition: opacity 0.5s ease; }
-.nav-label[style*="none"] { opacity: 0; }
+.label-wrapper { overflow: hidden; width: 100px; display: inline-block; }
+.nav-label { display: inline-block; transform: translateX(100%); opacity: 0; transition: transform 0.6s ease, opacity 0.6s ease; white-space: nowrap; }
+.nav-label.active { transform: translateX(0); opacity: 1; }
+.nav-label.out { transform: translateX(-100%); opacity: 0; }
