@@ -277,9 +277,8 @@ function showRecents() {
     if (recents.length > 0) recentsDiv.style.display = "block";
 }
 
-function hideRecentsTimeout() {
-    setTimeout(() => { document.getElementById("recents").style.display = "none"; }, 150);
-}
+function hideRecentsTimeout() { setTimeout(() => { document.getElementById("recents").style.display = "none"; }, 150); }
+document.getElementById("wikiSearch").addEventListener("input", e => { searchWiki(e.target.value); });
 
         let urlParams = new URLSearchParams(window.location.search);
         let urlw = urlParams.get('w');
