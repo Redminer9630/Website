@@ -7,90 +7,50 @@
     <style>
         @font-face {
             font-family: 'Minecraft';
-            src: url('minecraft_font.woff'), format('.woff'),
-                 url('minecraft_font.ttf'), format('truetype');
+            src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
         }
-        body {
-            font-family: 'Minecraft', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+        body { font-family: 'Minecraft', sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
         h1 { text-align: center; }
         label { display: block; margin-top: 15px; font-weight: bold; }
-        input[type="text"], input[type="email"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
+        input[type="text"], input[type="email"], textarea {
+            width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd; box-sizing: border-box;
         }
         select {
-            font-family: 'Minecraft', sans-serif;
-            background-color: #4CAF50;
-            color: #fff;
-            padding-left: 10px;
-            padding-top: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: block;
+            font-family: 'Minecraft', sans-serif; background-color: #4CAF50; color: #fff;
+            padding: 10px; border: none; border-radius: 4px; cursor: pointer; display: block; margin-top: 5px; width: 100%;
         }
         select:hover { background-color: #45a049; }
         textarea { resize: vertical; min-height: 400px; }
         button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            font-family: 'Minecraft', sans-serif;
+            margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: #fff;
+            border: none; border-radius: 4px; cursor: pointer; width: 100%; font-family: 'Minecraft', sans-serif;
         }
-        button:hover { background-color: #45a049; }        
+        button:hover { background-color: #45a049; }
         .header-link {
-            font-size: 16px;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            position: absolute;
-            top: 20px;
-            right: 20px;    
-            background-color: #f44336;
-            color: white;
+            font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 8px;
+            position: absolute; top: 20px; right: 20px; background-color: #f44336; color: white;
         }
         @media (prefers-color-scheme: dark) {
             body { background-color: #121212; color: #f5f5f5; }
             .container { background-color: #1e1e1e; border-color: #333; }
             input, textarea { background-color: #2c2c2c; color: #e5e5e5; border-color: #444; }
             button { background-color: #3b82f6; color: #f5f5f5; }
-            h1, label, p, .note{ color: #fff; }
+            h1, label, p, .note { color: #fff; }
         }
     </style>
     <script src="common.js"></script>
     <script src="back-button.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
-<body>    
+<body>
     <div class="container">
         <h1>Feedback geben</h1>
         <form id="feedbackForm">
-            <label title="Deine E-Mail wird nicht weitergegeben und nur für die erreichbarkeit verwendet" for="email">E-Mail:</label>
+            <label for="email" title="Deine E-Mail wird nicht weitergegeben und nur für die Erreichbarkeit verwendet">E-Mail:</label>
             <input type="email" id="email" name="email" placeholder="Deine E-Mail-Adresse" required>
-            <label for="website">Website-Part:</label><select type="text" id="website" name="website">
-                <h1>Wähle einen Website Part</h1>
+            <label for="website">Website-Part:</label>
+            <select id="website" name="website">
                 <option value="index">Home-Page</option>
                 <option value="Social Media">Social Media Links</option>
                 <option value="Twitch Live Stream">Twitch Live Stream</option>
@@ -105,59 +65,36 @@
                 <option value="Team">Team</option>
                 <option value="Feedback">Feedback Seite</option>
             </select>
+            <label for="feedback">Feedback:</label>
             <textarea id="feedback" name="feedback" placeholder="Feedback..." required></textarea>
-            <button class="g-recaptcha" type="submit"  data-sitekey="6LeXyrEqAAAAAM6Qfnwx_skzMwIP7oxCfZSWn-5E" data-callback='onSubmit' data-action='submit'>Feedback senden</button>
+            <button class="g-recaptcha" data-sitekey="6LeXyrEqAAAAAM6Qfnwx_skzMwIP7oxCfZSWn-5E" data-callback="onSubmit" data-action="submit">Feedback senden</button>
         </form>
     </div>
     <script>
-        document.getElementById('feedbackForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
+        function onSubmit(token) {
             const email = document.getElementById('email').value;
             const website = document.getElementById('website').value || "Nicht angegeben";
             const feedback = document.getElementById('feedback').value;
             const webhookUrl = "https://discord.com/api/webhooks/1296903270702514289/zGu17OTxNO_mQ13j4-QkonuoDeECvdqTqCzeRq6rMxJSEMW0V9xnpRU8DjSuE7wnsiDf";
-            const payload = {
-                content: `Neues Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Feedback:**\n${feedback}`
-            };
+            const payload = { content: `Neues Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Feedback:**\n${feedback}` };
 
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
-            .then(response => {
-                if (response.ok) { alert('Dein Feedback wurde erfolgreich gesendet!'); document.getElementById('feedbackForm').reset();
-                } else { alert('Fehler beim Senden des Feedbacks. Bitte versuche es spaeter erneut.'); }
+            .then(res => {
+                if (res.ok) {
+                    alert('Dein Feedback wurde erfolgreich gesendet!');
+                    document.getElementById('feedbackForm').reset();
+                } else {
+                    alert('Fehler beim Senden. Bitte versuche es später erneut.');
+                }
             })
-            .catch(error => {
-                alert('Es gab einen Fehler: ' + error.message + 'Falls dieser Fehler erneut erscheint, bitte Kontaktiere unseren Discord');
-            });
-        });
-        function onSubmit(token) {
-            document.getElementById("demo-form").submit() 
-
-            const email = document.getElementById('email').value;
-            const website = document.getElementById('website').value;
-            const feedback = document.getElementById('feedback').value || "Nicht angegeben";
-            const webhookUrl = "https://discord.com/api/webhooks/1296903270702514289/zGu17OTxNO_mQ13j4-QkonuoDeECvdqTqCzeRq6rMxJSEMW0V9xnpRU8DjSuE7wnsiDf";
-            const payload = {
-                content: `Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Feedback:**\n${feedback}`
-            };
-
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (!response.ok) { alert('Fehler beim Senden des Feedbacks. Bitte versuche es spaeter erneut.');
-            })
-            .catch(error => {
-                alert('Es gab einen Fehler: ' + error.message + 'Falls dieser Fehler erneut erscheint, bitte Kontaktiere unseren Discord');
+            .catch(err => {
+                alert('Es gab einen Fehler: ' + err.message + '\nFalls dieser Fehler erneut erscheint, bitte kontaktiere unseren Discord.');
             });
         }
     </script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
 </body>
 </html>
