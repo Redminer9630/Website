@@ -187,3 +187,29 @@
             100% { transform: scale(1); }
         }
         .button-category { animation: squeeze 0.4s ease; }
+#search-bar {
+    position: relative;
+    margin: 10px;
+}
+#wikiSearch {
+    width: 280px;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+#recents {
+    display: none;
+    position: absolute;
+    top: 32px;
+    background: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    z-index: 10;
+}
+#recents div {
+    padding: 5px;
+    cursor: pointer;
+}
+#recents div:hover {
+    background-color: #f0f0f0;
+}
