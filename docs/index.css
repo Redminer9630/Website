@@ -51,3 +51,5 @@ header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; 
   color: white;
   white-space: nowrap;
 }
+.nav-label { transition: opacity 0.5s ease; }
+.nav-label[style*="none"] { opacity: 0; }
