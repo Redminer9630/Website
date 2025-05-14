@@ -1,3 +1,4 @@
+@font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff'), format('.woff'), url('minecraft_font.ttf'), format('truetype'); }
 body { font-family: 'Minecraft', sans-serif; background-color: #eaeaea; margin: 0; padding: 0; color: #333; display: flex; flex-direction: column; min-height: 100vh; box-sizing: border-box; }
 h1 { margin: 0; display: flex; align-items: center; width: auto; white-space: nowrap; }
 .logo-container { display: flex; align-items: center; position: relative; }
