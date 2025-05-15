@@ -83,3 +83,10 @@ th { cursor: pointer; }
     border-radius: 8px;
     background: white;
 }
+.no-results {
+    font-family: 'MinecraftFont', sans-serif;
+    font-size: 18px;
+    padding: 20px;
+    color: #888;
+    text-align: center;
+}
