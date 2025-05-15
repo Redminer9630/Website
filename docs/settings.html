@@ -63,49 +63,49 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">Settings</div>
+        <div class="header">Einstellungen</div>
         <div class="settings-group">
-            <h2>Profile</h2>
+            <h2>Profil</h2>
             <div class="settings-item">
-                <label id="username_i" for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username">
+                <label id="username_i" for="username">Benutzername</label>
+                <input type="text" id="username" placeholder="Neuen Nutzernamen eingeben">
             </div>
             <div class="settings-item">
                 <label for="email">E-Mail</label>
-                <input type="email" id="email" placeholder="Enter your email">
+                <input type="email" id="email" placeholder="Neue E-Mail eingeben">
             </div>
         </div>
         <div class="settings-group">
             <h2>Preferences</h2>
             <div class="settings-item">
-                <label for="language">Language/Sprache</label>
+                <label for="language">Sprache(noch nicht funktionel)</label>
                 <select id="language" name="language">
-                  <option id="german" value="german">German</option>
-                  <option id="english" value="english">English</option>
+                  <option id="german" class="langop" value="german">Deutsch</option>
+                  <option id="english" class="langop" value="english">Englisch</option>
                 </select>
             </div>
             <div class="settings-item">
-                <label for="theme">Theme</label>
-                <input type="checkbox" id="theme"><label>White</label>
+                <label for="theme">Theme(noch nicht funktionel)</label>
+                <input type="checkbox" id="theme"><label>Weiß</label>
             </div>
         </div>
-        <button onclick="updateLanguageText()" class="save-button">Save Changes</button>
+        <button onclick="updateLanguageText()" class="save-button">Speichern(noch nicht funktionel)</button>
     </div>
     <script>
         function updateLanguageText() {
-          const germanSelected = document.getElementById("german").checked;
-          if (germanSelected) {
+          const Selected = document.getElementByClass("langop");
+          if (Selected === "german") {
             document.getElementById("german").textContent = "Deutsch";
             document.getElementById("english").textContent = "Englisch";
-            document.getElementById("username").placeholder = "Gib deinen Nutzernamen ein";
-            document.getElementById("email").placeholder = "Gib deine Email ein";
+            document.getElementById("username").placeholder = "Neuen Nutzernamen eingeben";
+            document.getElementById("email").placeholder = "Neue E-Mail eingeben";
             document.getElementById("username_i").textContent = "Nutzername";
             document.getElementById("email_i").textContent = "E-Mail";
-          } else {
+          } elif (Selected === "englisch") {
             document.getElementById("german").textContent = "German";
             document.getElementById("english").textContent = "English";
-            document.getElementById("username").placeholder = "Enter your username";
-            document.getElementById("email").placeholder = "Enter your email";
+            document.getElementById("username").placeholder = "Enter a new username";
+            document.getElementById("email").placeholder = "Enter a new email";
             document.getElementById("usernmae_i").textContent = "Username";
             document.getElementById("email_i").textContent = "E-Mail";
           }
