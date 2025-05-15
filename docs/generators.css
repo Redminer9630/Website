@@ -75,6 +75,7 @@
             border: 1px solid white;
         }
         th {
+            font-family: 'MinecraftFont', 'Minecraft';
             padding: 8px;
             text-align: left;
             cursor: pointer;
@@ -133,6 +134,7 @@
     }
 
     table, th, td {
+        font-family: 'MinecraftFont', 'Minecraft';
         border: 1px solid #555;
     }
     th { background-color: #333; color: #eee; }
