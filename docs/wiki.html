@@ -280,6 +280,25 @@ function showRecents() {
 function hideRecentsTimeout() { setTimeout(() => { document.getElementById("recents").style.display = "none"; }, 150); }
 document.getElementById("wikiSearch").addEventListener("input", e => { searchWiki(e.target.value); });
 
+function searchWiki(term) {
+    const results = index.filter(page => page.title.toLowerCase().includes(term.toLowerCase()));
+    const container = document.getElementById("wiki-results");
+
+    container.innerHTML = ""; // vorherige Ergebnisse leeren
+
+    if (results.length === 0) {
+        container.innerHTML = "<div class='no-results'>Kein Ergebnis gefunden</div>";
+        return;
+    }
+
+    results.forEach(page => {
+        const entry = document.createElement("div");
+        entry.className = "wiki-entry";
+        entry.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+        container.appendChild(entry);
+    });
+}
+
         let urlParams = new URLSearchParams(window.location.search);
         let urlw = urlParams.get('w');
         const functionsMap = {
