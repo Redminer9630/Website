@@ -16,14 +16,16 @@
     <script src="back-button.js"></script>
 </head>
 <body>
-    <div class="search-container">
-        <img src="images/wiki_title.png" alt="Logo" class="logo"><br>
-        <div class="wiki-search-bar">
-            <input id="wikiSearch" placeholder="Seite durchsuchen..." autocomplete="off" />
-            <div id="wikiResults" class="wiki-results"></div>
-            <div id="wikiRecent" class="wiki-recent"></div>
-        </div>
+<div class="search-container">
+    <img src="images/wiki_title.png" alt="Logo" class="logo"><br>
+    <div class="wiki-search-bar">
+        <img src="images/icons/search.png" alt="Suche" class="search-icon">
+        <input id="wikiSearch" placeholder="Wiki durchsuchen..." autocomplete="off" />
+        <div id="wikiResults" class="wiki-results"></div>
+        <div id="wikiRecent" class="wiki-recent"></div>
     </div>
+</div>
+
 <script>
 let categoriesVisible = true;
 let releaseVersion = "", snapshotVersion = "";
