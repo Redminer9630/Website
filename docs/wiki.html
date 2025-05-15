@@ -24,242 +24,67 @@
             <div id="wikiRecent" class="wiki-recent"></div>
         </div>
     </div>
-    <!-- <div id="categories">
-        <button class="shortcut-button" tabindex="5" onclick="loadWikiPage('commands')">Befehle</button>
-        <button class="shortcut-button" tabindex="6" onclick="loadWikiPage('trading')">Handeln</button>
-        <button class="shortcut-button" tabindex="7" onclick="loadWikiPage('brewing')">Brauen</button>
-        <button class="shortcut-button" tabindex="8" onclick="loadWikiPage('enchanting')">Verzaubern</button>    
-        <button class="shortcut-nonview" tabindex="9" onclick="loadWikiPage('mobs')">Mobs</button>
-        <button class="shortcut-nonview" tabindex="10" onclick="loadWikiPage('blocks')">Bloecke</button>
-        <button class="shortcut-nonview" tabindex="11" onclick="loadWikiPage('items')">Items</button>
-        <button class="shortcut-nonview" tabindex="12" onclick="loadWikiPage('biomes')">Biome</button>
-        <button class="shortcut-nonview" tabindex="13" onclick="loadWikiPage('effects')">Effekte</button>
-        <button class="shortcut-nonview" tabindex="14" onclick="loadWikiPage('crafting')">Crafting</button>
-        <button class="shortcut-nonview" tabindex="15" onclick="loadWikiPage('smelting')">Smelzen</button> 
-        <button class="shortcut-button" tabindex="16" onclick="loadWikiPage('structures')">Strukturen</button>
-        <button class="shortcut-nonview" tabindex="17" onclick="loadWikiPage('redstone')">Redstone</button>
-        <button class="shortcut-nonview" tabindex="18" onclick="loadWikiPage('archeology')">Archeology</button>
-        <button class="shortcut-mod" tabindex="19" onclick="loadWikiPage('ultimatum')">Ultimatum</button>
-    </div>   -->
-    <script onload="showHomePage()">
-        let categoriesVisible = true;
-        let urlHistory = [];
-        let historyIndex = -1;
-        let releaseVersion = "";
-        let snapshotVersion = "";
-        fetch("https://piston-meta.mojang.com/mc/game/version_manifest.json")
-            .then(response => {
-                if (!response.ok) { throw new Error("Fehler beim Abrufen der Minecraft-Versionen."); }
-                return response.json();
-            })
-            .then(data => {
-                let releaseVersion = data.latest.release;
-                let snapshotVersion = data.latest.snapshot;
-                console.log("Neueste Release-Version:", releaseVersion);
-                console.log("Neueste Snapshot-Version:", snapshotVersion);
-            })
-            .catch(error => { console.error("Fehler:", error); });
-        function loadWikiPage(page) {
-                categoriesVisible = (page === 'home');
-                document.getElementById('categories').style.display = categoriesVisible ? 'block' : 'none';
-                document.getElementById('urlInput').value = `redminer9630.ddns.net/wiki/${page}`;
-        
-                if (page === 'home') {
-                        const content = document.getElementById('content');
-                        content.innerHTML = `
-                                <h1>Willkommen zur Wiki-Startseite</h1>
-                                <p>Hier sind die noch in Bearbeitung befindlichen Wikiseiten:</p>
-                                <ul id="pending-list"></ul>
-                        `;
-                        const pendingList = document.getElementById('pending-list');
-                        pending.forEach(page => {
-                                const listItem = document.createElement('li');
-                                listItem.textContent = page;
-                                pendingList.appendChild(listItem);
-                        });
-                } else {
-                        fetch(`wiki/${page}.html`)
-                                .then(response => {
-                                        if (!response.ok) throw new Error('Netzwerk-Antwort war nicht ok.');
-                                        return response.text();
-                                })
-                                .then(data => { document.getElementById('content').innerHTML = data; }).catch(error => {console.error(`Es gab ein Problem mit dem Fetch von ${page}.html:`, error);});
-                }
-        }
-
-        function toggleInfo(infoId) {
-            const infoElement = document.getElementById(infoId);
-            const isVisible = infoElement.style.display === "block";
-            infoElement.style.display = isVisible ? "none" : "block";
-        }
-
-        function sortTable(columnIndex) {
-            const table = document.getElementById("commandTable");
-            const tbody = table.querySelector("tbody");
-            const rows = Array.from(tbody.rows);
-
-            const ascending = !table.dataset.sortDirection || table.dataset.sortDirection === 'descending';
-            table.dataset.sortDirection = ascending ? 'ascending' : 'descending';
-
-            rows.sort((a, b) => {
-                const aText = a.cells[columnIndex].textContent.trim();
-                const bText = b.cells[columnIndex].textContent.trim();
-
-                if (ascending) {
-                    return aText.localeCompare(bText);
-                } else {
-                    return bText.localeCompare(aText);
-                }
-            });
-
-            rows.forEach(row => tbody.appendChild(row));
-        }
-
-        function navigateToPage(pageName) {
-            loadWikiContent(`learnhour/wiki/${pageName}.html`);
-            
-            if (pending.includes(pageName)) {
-                customAlert(`Die Seite "${pageName}" ist noch in Bearbeitung.`, "Hinweis");
-                showHomePage()
-            } else {
-                customAlert(`Die Seite "${pageName}" konnte nicht gefunden werden.`, "Fehler");
-                showHomePage()
-            }
-        }
-
-        window.addEventListener('load', () => {
-            const urlPath = window.location.pathname;
-            const wikiPathMatch = urlPath.match(/\/wiki\/(.+)/);
-
-            if (wikiPathMatch) {
-                const pagePath = wikiPathMatch[1];
-                loadWikiContent(`learnhour/wiki/${pagePath}.html`);
-            } else {
-                showHomePage();
-            }
-        });
-
-        function loadWikiContent(filePath) {
-            fetch(filePath)
-                .then(response => {
-                    if (!response.ok) throw new Error('Seite konnte nicht geladen werden');
-                    return response.text();
-                })
-                .then(data => document.getElementById('content').innerHTML = data)
-                .catch(error => {
-                    customAlert('Fehler beim Laden der Wiki-Seite: ' + error.message, 'Fehler')
-                    showHomePage()
-                    });
-        }
-        
-        document.querySelector('.url-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                navigateToPage();
-                document.querySelector('.url-input').blur();
-            }
-        });
-            
-        function customAlert(message, title) {
-            const alertBox = document.createElement('div');
-            alertBox.classList.add('custom-alert');
-            alertBox.innerHTML = `<h2>${title}</h2><p>${message}</p><button onclick="this.parentElement.remove()">OK</button>`;
-            document.body.appendChild(alertBox);
-        }
-        
-        customElements.define('wiki-gui', class extends HTMLElement {
-            constructor() {
-                super();
-                const type = this.getAttribute('type');
-                if (type === 'crafting') {
-                    this.loadCraftingImage();
-                    this.loadCraftingData();
-                }
-            }
-
-            async loadCraftingImage() {
-                const img = document.createElement('img');
-                img.src = 'learnhour/wiki/img/crafting.png';
-                img.alt = 'Crafting Recipe';
-                this.appendChild(img);
-            }
-
-            async loadCraftingData() {
-                try {
-                    const response = await fetch('learnhour/wiki/img/crafting.json');
-                    if (!response.ok) throw new Error('Fehler beim Laden der Crafting-Daten');
-                    const data = await response.json();
-
-                    console.log(data); // Geladene Daten in der Konsole anzeigen
-                    this.renderCraftingGrid(data);
-                } catch (error) {
-                    console.error('Fehler beim Laden der Daten:', error);
-                }
-            }
-
-            renderCraftingGrid(data) {
-                const grid = document.createElement('div');
-                grid.className = 'crafting-grid';
-                const rows = [data.row1, data.row2, data.row3];
-
-                rows.forEach(row => {
-                    const rowDiv = document.createElement('div');
-                    rowDiv.className = 'grid-row';
-                    row.forEach(item => {
-                        const itemDiv = document.createElement('div');
-                        itemDiv.className = 'grid-item';
-                        itemDiv.style.backgroundImage = `url(textures/items/${item.name}.png)`;
-                        rowDiv.appendChild(itemDiv);
-                    });
-                    grid.appendChild(rowDiv);
-                });
-
-                this.appendChild(grid);
-            }
-        });
-
-        function loadTexture(itemName) {
-            const url = `https://mcasset.cloud/${latestmcassetversion}/textures/items/${itemName}.png`;
-            return fetch(url)
-                .then(response => response.blob())
-                .then(blob => {
-                    const objectURL = URL.createObjectURL(blob);
-                    localStorage.setItem(itemName, objectURL); // optional
-                    return objectURL;
-               });
-        }
-
-        function toggleInfo(infoElement) {
-            infoElement.classList.toggle('open');
-            if (infoElement.classList.contains('open')) { infoElement.style.maxHeight = infoElement.scrollHeight + 'px'; } else { infoElement.style.maxHeight = 0; } 
-        }     
+<script>
+let categoriesVisible = true;
+let releaseVersion = "", snapshotVersion = "";
 const allPages = [
     "home", "commands", "trading", "brewing", "enchanting", "mobs", "blocks", "items",
     "biomes", "effects", "crafting", "smelting", "structures", "redstone", "archeology", "ultimatum"
 ];
 
-function searchWiki() {
-    const input = document.getElementById("wikiSearch").value.toLowerCase();
-    const matches = allPages.filter(p => p.includes(input));
-    const recentsDiv = document.getElementById("recents");
-    recentsDiv.innerHTML = "";
-    matches.forEach(page => {
-        const entry = document.createElement("div");
-        entry.textContent = page;
-        entry.onclick = () => {
-            loadWikiPage(page);
+fetch("https://piston-meta.mojang.com/mc/game/version_manifest.json")
+    .then(r => r.json())
+    .then(d => {
+        releaseVersion = d.latest.release;
+        snapshotVersion = d.latest.snapshot;
+        alert("Neueste Release:", releaseVersion, "Snapshot:", snapshotVersion);
+    }).catch(e => console.error("Fehler:", e));
+
+function loadWikiPage(page) {
+    categoriesVisible = page === "home";
+    document.getElementById("categories").style.display = categoriesVisible ? "block" : "none";
+    document.getElementById("urlInput").value = `redminer9630.ddns.net/wiki/${page}`;
+    if (page === "home") {
+        document.getElementById("content").innerHTML = `
+            <h1>Willkommen zur Wiki-Startseite</h1>
+            <p>Hier sind die noch in Bearbeitung befindlichen Wikiseiten:</p>
+            <ul id="pending-list"></ul>`;
+        const pendingList = document.getElementById("pending-list");
+        pending.forEach(p => {
+            const li = document.createElement("li");
+            li.textContent = p;
+            pendingList.appendChild(li);
+        });
+    } else {
+        fetch(`wiki/${page}.html`).then(r => {
+            if (!r.ok) throw new Error("Fehler beim Laden");
+            return r.text();
+        }).then(data => {
+            document.getElementById("content").innerHTML = data;
             saveToRecents(page);
-            recentsDiv.style.display = "none";
-        };
-        recentsDiv.appendChild(entry);
+        }).catch(e => {
+            console.error(e);
+            customAlert(`Fehler beim Laden der Seite ${page}`, "Fehler");
+        });
+    }
+}
+
+function searchWiki(term) {
+    const container = document.getElementById("wiki-results");
+    const results = index.filter(p => p.title.toLowerCase().includes(term.toLowerCase()));
+    container.innerHTML = results.length ? "" : "<div class='no-results'>Kein Ergebnis</div>";
+    results.forEach(p => {
+        const entry = document.createElement("div");
+        entry.className = "wiki-entry";
+        entry.innerHTML = `<a href="${p.url}">${p.title}</a>`;
+        container.appendChild(entry);
     });
-    recentsDiv.style.display = matches.length ? "block" : "none";
 }
 
 function saveToRecents(page) {
     let recents = JSON.parse(localStorage.getItem("wikiRecents") || "[]");
-    recents = recents.filter(p => p !== page);
-    recents.unshift(page);
-    if (recents.length > 5) recents.pop();
+    recents = [page, ...recents.filter(p => p !== page)];
+    if (recents.length > 5) recents = recents.slice(0, 5);
     localStorage.setItem("wikiRecents", JSON.stringify(recents));
 }
 
@@ -268,61 +93,109 @@ function showRecents() {
     const recentsDiv = document.getElementById("recents");
     recentsDiv.innerHTML = "";
     recents.forEach(page => {
-        const entry = document.createElement("div");
-        entry.textContent = page;
-        entry.onclick = () => {
+        const div = document.createElement("div");
+        div.textContent = page;
+        div.onclick = () => {
+            loadWikiPage(page);
+            recentsDiv.style.display = "none";
+        };
+        recentsDiv.appendChild(div);
+    });
+    recentsDiv.style.display = recents.length ? "block" : "none";
+}
+
+function hideRecentsTimeout() {
+    setTimeout(() => document.getElementById("recents").style.display = "none", 150);
+}
+
+function customAlert(msg, title = "Hinweis") {
+    const box = document.createElement("div");
+    box.className = "custom-alert";
+    box.innerHTML = `<h2>${title}</h2><p>${msg}</p><button onclick="this.parentElement.remove()">OK</button>`;
+    document.body.appendChild(box);
+}
+
+function toggleInfo(info) {
+    info.classList.toggle("open");
+    info.style.maxHeight = info.classList.contains("open") ? info.scrollHeight + "px" : "0";
+}
+
+document.querySelector(".url-input").addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+        const val = e.target.value.split("/wiki/")[1];
+        loadWikiPage(val);
+        e.target.blur();
+    }
+});
+
+document.getElementById("wikiSearch").addEventListener("input", e => {
+    const input = e.target.value.toLowerCase();
+    const matches = allPages.filter(p => p.includes(input));
+    const recentsDiv = document.getElementById("recents");
+    recentsDiv.innerHTML = "";
+    matches.forEach(page => {
+        const div = document.createElement("div");
+        div.textContent = page;
+        div.onclick = () => {
             loadWikiPage(page);
             saveToRecents(page);
             recentsDiv.style.display = "none";
         };
-        recentsDiv.appendChild(entry);
+        recentsDiv.appendChild(div);
     });
-    if (recents.length > 0) recentsDiv.style.display = "block";
-}
+    recentsDiv.style.display = matches.length ? "block" : "none";
+});
 
-function hideRecentsTimeout() { setTimeout(() => { document.getElementById("recents").style.display = "none"; }, 150); }
-document.getElementById("wikiSearch").addEventListener("input", e => { searchWiki(e.target.value); });
-
-function searchWiki(term) {
-    const results = index.filter(page => page.title.toLowerCase().includes(term.toLowerCase()));
-    const container = document.getElementById("wiki-results");
-
-    container.innerHTML = ""; // vorherige Ergebnisse leeren
-
-    if (results.length === 0) {
-        container.innerHTML = "<div class='no-results'>Kein Ergebnis gefunden</div>";
-        return;
+customElements.define("wiki-gui", class extends HTMLElement {
+    constructor() {
+        super();
+        const type = this.getAttribute("type");
+        if (type === "crafting") {
+            this.loadCraftingImage();
+            this.loadCraftingData();
+        }
     }
 
-    results.forEach(page => {
-        const entry = document.createElement("div");
-        entry.className = "wiki-entry";
-        entry.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-        container.appendChild(entry);
-    });
-}
+    loadCraftingImage() {
+        const img = document.createElement("img");
+        img.src = "learnhour/wiki/img/crafting.png";
+        img.alt = "Crafting Recipe";
+        this.appendChild(img);
+    }
 
-        let urlParams = new URLSearchParams(window.location.search);
-        let urlw = urlParams.get('w');
-        const functionsMap = {
-            "blocks": loadWikiPage('blocks'),
-            "trading": loadWikiPage('trading'),
-            "commands": loadWikiPage('commands'),
-            "brewing": loadWikiPage('brewing'),
-            "biomes": loadWikiPage('biomes'),
-            "mobs": loadWikiPage('mobs'),
-            "items": loadWikiPage('items'),
-            "redstone": loadWikiPage('redstone'),
-            "structures": loadWikiPage('structures'),
-            "enchanting": loadWikiPage('enchanting'),
-            "smelting": loadWikiPage('smelting'),
-            "crafting": loadWikiPage('crafting'),
-            "effects": loadWikiPage('effects'),
-            "archeology": loadWikiPage('archeology'),
-            "ultimatum": loadWikiPage('ultimatum')
-        };
-        if (functionsMap[urlw]) { functionsMap[urlw](); }
-        window.addEventListener('load', () => { loadWikiPage('home'); });
+    async loadCraftingData() {
+        try {
+            const r = await fetch("learnhour/wiki/img/crafting.json");
+            if (!r.ok) throw new Error("Fehler beim Laden der Daten");
+            const data = await r.json();
+            this.renderCraftingGrid(data);
+        } catch (e) {
+            console.error("Fehler:", e);
+        }
+    }
+
+    renderCraftingGrid(data) {
+        const grid = document.createElement("div");
+        grid.className = "crafting-grid";
+        [data.row1, data.row2, data.row3].forEach(row => {
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "grid-row";
+            row.forEach(item => {
+                const itemDiv = document.createElement("div");
+                itemDiv.className = "grid-item";
+                itemDiv.style.backgroundImage = `url(textures/items/${item.name}.png)`;
+                rowDiv.appendChild(itemDiv);
+            });
+            grid.appendChild(rowDiv);
+        });
+        this.appendChild(grid);
+    }
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const urlw = urlParams.get("w");
+if (urlw && allPages.includes(urlw)) loadWikiPage(urlw);
+else window.addEventListener("load", () => loadWikiPage("home"));
 </script>
 </body>
 </html>
