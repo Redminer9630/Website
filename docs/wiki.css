@@ -88,9 +88,21 @@ th { cursor: pointer; }
   width: 100%; max-height: 300px; overflow-y: auto;
   border: 1px solid #aaa; border-top: none;
 }
-.wiki-results div, .wiki-recent div {
-  padding: 5px; cursor: pointer;
+.wiki-results div, .wiki-recent div { padding: 5px; cursor: pointer; }
+.wiki-results div:hover, .wiki-recent div:hover { background: #f0f0f0; }
+.logo { width: calc(100px * 2.4); max-width: 100%; height: auto; margin-bottom: 10px; }
+.wiki-search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right, #333, #555);
+    border-radius: 12px;
+    padding: 8px 12px;
+    width: 90%;
+    max-width: 500px;
+    margin: 0 auto 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
-.wiki-results div:hover, .wiki-recent div:hover {
-  background: #f0f0f0;
-}
+.search-icon { width: 20px; height: 20px; margin-right: 10px; filter: invert(100%); }
+#wikiSearch { flex: 1; padding: 10px 14px; border: none; border-radius: 8px; font-family: 'MinecraftFont', sans-serif; font-size: 16px; outline: none; background-color: #f0f0f0; transition: background-color 0.3s, box-shadow 0.3s; }
+#wikiSearch:focus { background-color: white; box-shadow: 0 0 0 2px #888; }
