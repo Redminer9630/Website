@@ -37,7 +37,7 @@ fetch("https://piston-meta.mojang.com/mc/game/version_manifest.json")
     .then(d => {
         releaseVersion = d.latest.release;
         snapshotVersion = d.latest.snapshot;
-        alert("Neueste Release:", releaseVersion, "Snapshot:", snapshotVersion);
+        consle.log("Neueste Release:", releaseVersion, "Snapshot:", snapshotVersion);
     }).catch(e => console.error("Fehler:", e));
 
 function loadWikiPage(page) {
