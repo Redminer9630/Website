@@ -13,8 +13,6 @@ body { background-color: #282c34; color: white; }
 .shortcut-button:hover, .info-button:hover, .brewing-button:hover { background-color: #45a049; transform: scale(1.2); }
 .shortcut-button:active { background-color: #5CAFA1; transform: scale(0.8); }
 #content { border: 1px solid #ddd; }
-.url-bar { background-color: #282c34 !important; }
-.url-input { background-color: #3B4048; color: white; }
 }
 @media (prefers-color-scheme: light) {
 body { background-color: #f0f0f0; color: black; }
@@ -25,8 +23,6 @@ body { background-color: #f0f0f0; color: black; }
 .shortcut-mod { background-color: orange; color: white; font-family: 'MinecraftFont', sans-serif; }
 .shortcut-button:hover, .info-button:hover, .brewing-button:hover { background-color: #45a049; font-family: 'MinecraftFont', sans-serif; }
 #content { border: 1px solid #aaa; }
-.url-bar { background-color: #f0f0f0 !important; }
-.url-input { background-color: #e0e0e0; color: black; }
 }
 .trading-one { color: #616161; }
 .trading-two { color: #d8af93; }
@@ -44,11 +40,6 @@ table, th, td { border: 1px solid white; }
 th, td { padding: 8px; text-align: left; }
 th { cursor: pointer; }
 .info-content { margin-top: 15px; text-align: left; display: none; max-height: 375px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; box-sizing: border-box; }
-.url-bar { background-color: #282c34; padding: 10px; border-radius: 6px; display: flex; flex-direction: row; margin-bottom: 20px; color: #007BFF; text-decoration: none; }
-.url-bar span { margin: 5px 0; font-size: 16px; }
-.url-bar a:hover { text-decoration: bold; }
-.url-label { margin-top: 4px; }
-.url-input { font-family: 'MinecraftFont', sans-serif; font-size: 12px; background-color: #3B4048; color: white; padding: 10px; border: none; border-radius: 5px; width: 300px; margin-bottom: 10px; text-decoration: bold; }
 .history-forward, .history-back { display: block !important; position: relative; width: 20px !important; height: 20px !important; background-color: #282c34 !important; color: blue !important; cursor: pointer !important; text-align: center; line-height: 20px; border: none !important; border-radius: 0px; }
 .history-forward:active, .history-back:active { color: orange !important; }
 .history-forward:disabled, .history-back:disabled { cursor: not-allowed !important; color: grey !important; }
@@ -89,4 +80,17 @@ th { cursor: pointer; }
     padding: 20px;
     color: #888;
     text-align: center;
+}
+.wiki-search-bar { position: relative; }
+.wiki-search-bar input { width: 100%; padding: 5px; }
+.wiki-results, .wiki-recent {
+  position: absolute; background: #fff; z-index: 100;
+  width: 100%; max-height: 300px; overflow-y: auto;
+  border: 1px solid #aaa; border-top: none;
+}
+.wiki-results div, .wiki-recent div {
+  padding: 5px; cursor: pointer;
+}
+.wiki-results div:hover, .wiki-recent div:hover {
+  background: #f0f0f0;
 }
