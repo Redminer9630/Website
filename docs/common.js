@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(footer);
     document.getElementById('version-link').addEventListener('click', function(e) {
         e.preventDefault();
-        window.location.href = '/versionen.html?v=' + version;
+        window.location.href = '/version.html?v=' + version;
     });
 
     const style = document.createElement('style');
