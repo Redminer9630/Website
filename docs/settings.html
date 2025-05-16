@@ -111,6 +111,28 @@
     }
 
     document.addEventListener("DOMContentLoaded", applySettings);
+  let isDirty = false;
+
+  document.getElementById("username").addEventListener("input", () => isDirty = true);
+  document.getElementById("email").addEventListener("input", () => isDirty = true);
+  document.getElementById("language").addEventListener("change", () => isDirty = true);
+  document.getElementById("theme").addEventListener("change", () => isDirty = true);
+
+  window.addEventListener("beforeunload", function(e) {
+    if (isDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  function saveSettings() {
+    const lang = document.getElementById("language").value;
+    const theme = document.getElementById("theme").value;
+    localStorage.setItem("lang9630", lang);
+    localStorage.setItem("theme9630", theme);
+    applySettings();
+    isDirty = false; // Nach dem Speichern gilt die Seite als „nicht verändert“
+  }
   </script>
 </body>
 </html>
