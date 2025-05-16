@@ -43,10 +43,15 @@ metaVerification.name = 'google-site-verification';
 metaVerification.content = 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA';
 document.head.appendChild(metaVerification);
 
+const existingIcons = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]');
+existingIcons.forEach(icon => icon.remove());
+
 const linkIcon = document.createElement('link');
 linkIcon.rel = 'icon';
-linkIcon.href = 'images/main.png';
+linkIcon.type = 'image/png';
+linkIcon.href = 'images/main.png?v=' + new Date().getTime();
 document.head.appendChild(linkIcon);
+
     
     function replaceUmlauts(element) {
         const umlautMap = {
