@@ -1,7 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     const footer = document.createElement('footer');
-    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. v1.6.5 Beta 16.5.25 10:06</span>`;
+    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">v1.6.5 Beta 16.5.25 10:06</a></span>`;
     document.body.appendChild(footer);
+    document.getElementById('version-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        const version = 'v1.6.5'; // oder dynamisch generieren, falls nötig
+        window.location.href = '/versionen.html?v=' + version;
+    });
+
     const style = document.createElement('style');
     style.textContent = `
         @font-face {
@@ -25,6 +31,12 @@ document.addEventListener('DOMContentLoaded', function() {
             z-index: 998;
             position: fixed;
         }
+        footer a {
+            color: #00ffff;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        footer a:hover { color: #00ccff; }
     `;
     document.head.appendChild(style);
     
