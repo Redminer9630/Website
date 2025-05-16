@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const version = 'v1.6.6';
+    const versiondate = '16.5.25';
+    const versiontime = '14:08';
     const footer = document.createElement('footer');
-    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">v1.6.5 Beta 16.5.25 10:06</a></span>`;
+    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>`;
     document.body.appendChild(footer);
     document.getElementById('version-link').addEventListener('click', function(e) {
         e.preventDefault();
-        const version = 'v1.6.5'; // oder dynamisch generieren, falls nötig
         window.location.href = '/versionen.html?v=' + version;
     });
 
@@ -25,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
             text-align: center;
             padding: 10px 0;
             width: 100%;
-            height: 20px;
+            height: 24px;
+            line-height: 24px;
             bottom: 0;
             left: 0;
             z-index: 998;
