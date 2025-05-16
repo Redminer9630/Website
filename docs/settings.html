@@ -7,18 +7,19 @@
   <style>
     :root[data-theme="white"] { --bg: #f4f4f4; --text: #000; --box: #fff; }
     :root[data-theme="dark"] { --bg: #121212; --text: #fff; --box: #1e1e1e; }
-    body { font-family: 'Minecraft', Arial, sans-serif; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
-    .container { font-family: 'Minecraft', Arial, sans-serif; max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
+    body { font-family: 'Minecraft', monospace; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
+    .container { max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
     .header { font-size: 2rem; font-weight: bold; margin-bottom: 20px; }
     .settings-group { margin-bottom: 30px; }
     .settings-group h2 { font-size: 1.25rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
     .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
     .settings-item label { font-size: 1rem; }
-    .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); }
-    .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Minecraft', monospace; }
+    .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Minecraft'; }
     .save-button:hover { background-color: #0056b3; }
-    button { font-family: 'Minecraft'; }
   </style>
+<script src="common.js"></script>
+    <script src="back-button.js"></script>
 </head>
 <body>
   <div class="container">
@@ -57,48 +58,31 @@
   <script>
     const translations = {
       german: {
-        title: "Einstellungen",
-        profile: "Profil",
-        pref: "Einstellungen",
-        username: "Benutzername",
-        usernamePH: "Neuen Nutzernamen eingeben",
-        email: "E-Mail",
-        emailPH: "Neue E-Mail eingeben",
-        lang: "Sprache",
-        theme: "Theme",
-        save: "Speichern",
-        white: "Weiß",
-        dark: "Dunkel",
-        sys: "System",
-        german: "Deutsch",
-        english: "Englisch"
+        title: "Einstellungen", profile: "Profil", pref: "Einstellungen", username: "Benutzername",
+        usernamePH: "Neuen Nutzernamen eingeben", email: "E-Mail", emailPH: "Neue E-Mail eingeben",
+        lang: "Sprache", theme: "Theme", save: "Speichern", white: "Weiß", dark: "Dunkel", sys: "System",
+        german: "Deutsch", english: "Englisch"
       },
       english: {
-        title: "Settings",
-        profile: "Profile",
-        pref: "Preferences",
-        username: "Username",
-        usernamePH: "Enter a new username",
-        email: "Email",
-        emailPH: "Enter a new email",
-        lang: "Language",
-        theme: "Theme",
-        save: "Save",
-        white: "White",
-        dark: "Dark",
-        sys: "System",
-        german: "German",
-        english: "English"
+        title: "Settings", profile: "Profile", pref: "Preferences", username: "Username",
+        usernamePH: "Enter a new username", email: "Email", emailPH: "Enter a new email",
+        lang: "Language", theme: "Theme", save: "Save", white: "White", dark: "Dark", sys: "System",
+        german: "German", english: "English"
       }
     };
 
     function applySettings() {
       let lang = localStorage.getItem("lang9630") || "german";
       let theme = localStorage.getItem("theme9630") || "sys";
-      if (theme === "sys") { theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "white"; }
-      document.documentElement.dataset.theme = theme;
 
-      let t = translations[lang];
+      if (theme === "sys") {
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const applySystemTheme = () => document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white";
+        applySystemTheme();
+        mediaQuery.addEventListener("change", applySystemTheme);
+      } else { document.documentElement.dataset.theme = theme; }
+
+      const t = translations[lang];
       document.getElementById("title_i").textContent = t.title;
       document.getElementById("profile_i").textContent = t.profile;
       document.getElementById("pref_i").textContent = t.pref;
@@ -114,7 +98,7 @@
       document.getElementById("sys").textContent = t.sys;
       document.getElementById("german").textContent = t.german;
       document.getElementById("english").textContent = t.english;
-      document.getElementById("language").value = localStorage.getItem("lang9630") || "german";
+      document.getElementById("language").value = lang;
       document.getElementById("theme").value = localStorage.getItem("theme9630") || "sys";
     }
 
