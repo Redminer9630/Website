@@ -47,7 +47,7 @@
       <div class="settings-item">
         <label for="theme" id="theme_i">Theme</label>
         <select id="theme">
-          <option id="white" value="white">Weis</option>
+          <option id="white" value="white">Weiß</option>
           <option id="dark" value="dark">Dunkel</option>
           <option id="sys" value="sys">System</option>
         </select>
@@ -55,6 +55,7 @@
     </div>
     <button onclick="saveSettings()" class="save-button" id="savebtn_i">Speichern</button>
   </div>
+
   <script>
     const translations = {
       german: {
@@ -75,13 +76,16 @@
       let lang = localStorage.getItem("lang9630") || "german";
       let theme = localStorage.getItem("theme9630") || "sys";
       let username = localStorage.getItem("username") || "";
+      let email = localStorage.getItem("email") || "";
 
       if (theme === "sys") {
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
         const applySystemTheme = () => document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white";
         applySystemTheme();
         mediaQuery.addEventListener("change", applySystemTheme);
-      } else { document.documentElement.dataset.theme = theme; }
+      } else {
+        document.documentElement.dataset.theme = theme;
+      }
 
       const t = translations[lang];
       document.getElementById("title_i").textContent = t.title;
@@ -89,8 +93,10 @@
       document.getElementById("pref_i").textContent = t.pref;
       document.getElementById("username_i").textContent = t.username;
       document.getElementById("username").placeholder = t.usernamePH;
+      document.getElementById("username").value = username;
       document.getElementById("email_i").textContent = t.email;
       document.getElementById("email").placeholder = t.emailPH;
+      document.getElementById("email").value = email;
       document.getElementById("lang_i").textContent = t.lang;
       document.getElementById("theme_i").textContent = t.theme;
       document.getElementById("savebtn_i").textContent = t.save;
@@ -100,48 +106,38 @@
       document.getElementById("german").textContent = t.german;
       document.getElementById("english").textContent = t.english;
       document.getElementById("language").value = lang;
-      document.getElementById("theme").value = localStorage.getItem("theme9630") || "sys";
+      document.getElementById("theme").value = theme;
     }
+
+    let isDirty = false;
+    document.addEventListener("DOMContentLoaded", () => {
+      applySettings();
+
+      document.getElementById("username").addEventListener("input", () => isDirty = true);
+      document.getElementById("email").addEventListener("input", () => isDirty = true);
+      document.getElementById("language").addEventListener("change", () => isDirty = true);
+      document.getElementById("theme").addEventListener("change", () => isDirty = true);
+    });
+
+    window.addEventListener("beforeunload", function(e) {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
 
     function saveSettings() {
-        const lang = document.getElementById("language").value;
-        const theme = document.getElementById("theme").value;
-        const username = document.getElementById("username_i").value;
-        const email = document.getElemtentById("email_1").value;
-        localStorage.setItem("lang9630", lang);
-        localStorage.setItem("theme9630", theme);
-        localStorage.setItem("username", username);
-        localStorage.setItem("email", email_1);
-        applySettings();
+      const lang = document.getElementById("language").value;
+      const theme = document.getElementById("theme").value;
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      localStorage.setItem("lang9630", lang);
+      localStorage.setItem("theme9630", theme);
+      localStorage.setItem("username", username);
+      localStorage.setItem("email", email);
+      applySettings();
+      isDirty = false;
     }
-
-    document.addEventListener("DOMContentLoaded", applySettings);
-  let isDirty = false;
-
-  document.getElementById("username").addEventListener("input", () => isDirty = true);
-  document.getElementById("email").addEventListener("input", () => isDirty = true);
-  document.getElementById("language").addEventListener("change", () => isDirty = true);
-  document.getElementById("theme").addEventListener("change", () => isDirty = true);
-
-  window.addEventListener("beforeunload", function(e) {
-    if (isDirty) {
-      e.preventDefault();
-      e.returnValue = '';
-    }
-  });
-
-  function saveSettings() {
-    const lang = document.getElementById("language").value;
-    const theme = document.getElementById("theme").value;
-    const username = document.getElementById("username_i").value;
-    const email = document.getElemtentById("email_1").value;
-    localStorage.setItem("lang9630", lang);
-    localStorage.setItem("theme9630", theme);
-    localStorage.setItem("username", username);
-    localStorage.setItem("email", email_1);
-    applySettings();
-    isDirty = false;
-  }
   </script>
 </body>
 </html>
