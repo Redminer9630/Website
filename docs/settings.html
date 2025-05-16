@@ -18,8 +18,8 @@
     .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Minecraft'; }
     .save-button:hover { background-color: #0056b3; }
   </style>
-<script src="common.js"></script>
-    <script src="back-button.js"></script>
+  <script src="common.js"></script>
+  <script src="back-button.js"></script>
 </head>
 <body>
   <div class="container">
@@ -47,7 +47,7 @@
       <div class="settings-item">
         <label for="theme" id="theme_i">Theme</label>
         <select id="theme">
-          <option id="white" value="white">Weiß</option>
+          <option id="white" value="white">Weis</option>
           <option id="dark" value="dark">Dunkel</option>
           <option id="sys" value="sys">System</option>
         </select>
@@ -74,6 +74,7 @@
     function applySettings() {
       let lang = localStorage.getItem("lang9630") || "german";
       let theme = localStorage.getItem("theme9630") || "sys";
+      let username = localStorage.getItem("username") || "";
 
       if (theme === "sys") {
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -103,11 +104,15 @@
     }
 
     function saveSettings() {
-      const lang = document.getElementById("language").value;
-      const theme = document.getElementById("theme").value;
-      localStorage.setItem("lang9630", lang);
-      localStorage.setItem("theme9630", theme);
-      applySettings();
+        const lang = document.getElementById("language").value;
+        const theme = document.getElementById("theme").value;
+        const username = document.getElementById("username_i").value;
+        const email = document.getElemtentById("email_1").value;
+        localStorage.setItem("lang9630", lang);
+        localStorage.setItem("theme9630", theme);
+        localStorage.setItem("username", username);
+        localStorage.setItem("email", email_1);
+        applySettings();
     }
 
     document.addEventListener("DOMContentLoaded", applySettings);
@@ -128,10 +133,14 @@
   function saveSettings() {
     const lang = document.getElementById("language").value;
     const theme = document.getElementById("theme").value;
+    const username = document.getElementById("username_i").value;
+    const email = document.getElemtentById("email_1").value;
     localStorage.setItem("lang9630", lang);
     localStorage.setItem("theme9630", theme);
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email_1);
     applySettings();
-    isDirty = false; // Nach dem Speichern gilt die Seite als „nicht verändert“
+    isDirty = false;
   }
   </script>
 </body>
