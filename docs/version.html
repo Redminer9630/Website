@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website-Versionen</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; color: #333; margin: 0; padding: 20px; }
+    .version-list { list-style: none; padding: 0; }
+    .version-list li { margin: 10px 0; }
+    .version-list a {
+      text-decoration: none;
+      color: #007bff;
+      background: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+    .version-list a:hover { background: #eaeaea; }
+    #content { margin-top: 30px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <h1>Veröffentlichte Website Versionen</h1>
+  <ul class="version-list" id="versionList">
+  </ul>
+
+  <div id="content">Wähle eine Version, um Details zu sehen.</div>
+  
+  <p>Website Version Datan werden erst ab Vollversionen freigegeben</p>
+
+  <script>
+    function getParameterByName(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+
+    function loadVersion(version) {
+      const content = document.getElementById("content");
+      if (!version) return;
+      fetch(`/versionsdata/${version}.json`)
+        .then(res => {
+          if (!res.ok) throw new Error("Version nicht gefunden.");
+          return res.json();
+        })
+        .then(data => {
+          content.innerHTML = `
+            <h2>Version: ${data.version}</h2>
+            <p><strong>Veröffentlicht:</strong> ${data.date}</p>
+            <h3>Änderungen:</h3>
+            <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
+          `;
+        })
+        .catch(err => {
+          content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`;
+        });
+    }
+
+    const version = getParameterByName("v");
+    if (version) loadVersion(version);
+  </script>
+</body>
+</html>
