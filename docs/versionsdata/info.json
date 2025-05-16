@@ -1,0 +1,8 @@
+{
+  "version": "info",
+  "date": "0000-00-00",
+  "changes": [
+    "Versions Daten werden erst ab den Pre Releases veröffentlicht",
+    "Versionen Zeitstrahl: <span style="color: grey;">Indev v1.8.4 </span>|<span style="color:grey;"> Alpha v1.4.2 </span>| <span style="color: yellow;">Beta </span>| Pre Release[Pre] | Release[R]"
+  ]
+}
