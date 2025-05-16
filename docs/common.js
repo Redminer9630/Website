@@ -45,7 +45,7 @@ document.head.appendChild(metaVerification);
 
 const linkIcon = document.createElement('link');
 linkIcon.rel = 'icon';
-linkIcon.href = 'images/main.png';
+linkIcon.href = 'images/main.jpeg';
 document.head.appendChild(linkIcon);
     
     function replaceUmlauts(element) {
