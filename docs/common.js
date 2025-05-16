@@ -43,16 +43,24 @@ metaVerification.name = 'google-site-verification';
 metaVerification.content = 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA';
 document.head.appendChild(metaVerification);
 
-const existingIcons = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"]');
+const existingIcons = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]');
 existingIcons.forEach(icon => icon.remove());
 
-const linkIcon = document.createElement('link');
-linkIcon.rel = 'icon';
-linkIcon.type = 'image/png';
-linkIcon.href = 'images/main.png?v=' + new Date().getTime();
-document.head.appendChild(linkIcon);
+const timestamp = new Date().getTime();
 
-    
+const icons = [
+    { rel: 'apple-touch-icon', sizes: '180x180', href: 'images/apple-touch-icon.png?v=' + timestamp },
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: 'images/favicon-32x32.png?v=' + timestamp },
+    { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'images/favicon-16x16.png?v=' + timestamp },
+    { rel: 'manifest', href: '/site.webmanifest?v=' + timestamp }
+];
+
+icons.forEach(data => {
+    const link = document.createElement('link');
+    Object.entries(data).forEach(([key, value]) => link.setAttribute(key, value));
+    document.head.appendChild(link);
+});
+ 
     function replaceUmlauts(element) {
         const umlautMap = {
             'ä': 'ae',
