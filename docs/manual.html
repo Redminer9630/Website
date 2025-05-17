@@ -44,7 +44,7 @@
             const pages = document.querySelectorAll(".wpage");
             const content = document.querySelector(".content");
 
-            pages.forEach(page => {
+pages.forEach(page => {
 document.addEventListener("DOMContentLoaded", () => 
   document.querySelectorAll(".toggle").forEach(el => {
     el.addEventListener("click", () => {
@@ -65,24 +65,22 @@ document.addEventListener("DOMContentLoaded", () =>
     });
   }
 });
-
-            });
-
-            const initial = new URLSearchParams(location.search).get("q");
-            if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smooth" });
-        });
-    </script>
+});
+const initial = new URLSearchParams(location.search).get("q");
+if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smooth" });
+});
+</script>
 </head>
 <body>
 <div class="sidebar">
     <div class="nav-group">
-        <div class="element2 toggle">> Allgemeines</div>
+        <div class="element2 toggle"> Allgemeines</div>
         <ul class="submenu">
             <li class="wpage" data-target="impressum">Impressum</li>
             <li class="wpage" data-target="about">Mehr über mich</li>
             <li class="wpage" data-target="fehler">Fehler</li>
         </ul>
-        <div class="element2 toggle">> Redeem</div>
+        <div class="element2 toggle"> Redeem</div>
         <ul class="submenu">
             <li class="wpage" data-target="rdmcd">Code Redeem</li>
             <li class="wpage" data-target="rdmml">Redeem Mail</li>
