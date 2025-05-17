@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () =>
   });
 
   const pages = document.querySelectorAll(".wpage");
-  const activeId = new URLSearchParams(location.search).get("more");
+  const activeId = new URLSearchParams(location.search).get("q");
 
   if (activeId) {
     const section = document.getElementById(activeId);
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () =>
 
             });
 
-            const initial = new URLSearchParams(location.search).get("more");
+            const initial = new URLSearchParams(location.search).get("q");
             if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smooth" });
         });
     </script>
