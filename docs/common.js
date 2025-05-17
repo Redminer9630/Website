@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const versiondate = '16.5.25';
     const versiontime = '14:08';
     const footer = document.createElement('footer');
-    footer.innerHTML = `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>`;
+    const isMobile = window.innerWidth <= 768;
+    footer.innerHTML = isMobile
+        ? `<span>Offizielle Website von Redminer9630 ${version}</span>`
+        : `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>`;
     document.body.appendChild(footer);
     document.getElementById('version-link').addEventListener('click', function(e) {
         e.preventDefault();
