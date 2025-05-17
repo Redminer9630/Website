@@ -3,6 +3,6 @@
   "date": "0000-00-00",
   "changes": [
     "Versions Daten werden erst ab den Pre Releases veröffentlicht",
-    "Versionen Zeitstrahl: <span style="color: grey;">Indev[Indec] v1.8.4 </span>|<span style="color:grey;"> Alpha[Alpha] v1.4.2 </span>| <span style="color: grey;">Beta[Beta] v1.6.7</span>| <span style="color: yellow;">Pre Release[Pre] </span>| Release[]"
+    'Versionen Zeitstrahl: <span style="color: grey;">Indev[Indec] v1.8.4 </span>|<span style="color:grey;"> Alpha[Alpha] v1.4.2 </span>| <span style="color: grey;">Beta[Beta] v1.6.7</span>| <span style="color: yellow;">Pre Release[Pre] </span>| Release[]'
   ]
 }
