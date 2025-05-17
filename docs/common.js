@@ -28,26 +28,41 @@ function appendFonts() {
 }
 
 function appendFooter(version, date, time, desc) {
+    const year = new Date().getFullYear();
     const footer = document.createElement('footer');
     footer.innerHTML = `
-        <span class="short">${desc} Pre ${version}</span>
-        <span class="full">© 2025 ${desc} – Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Pre ${date} ${time}</a></span>
+        <span class="footer-text">
+            © ${year} ${desc} – Alle Rechte vorbehalten. 
+            <a id="version-link" href="#">${version} Pre ${date} ${time}</a>
+        </span>
     `;
     footer.style = `
         font-family: 'Minecraft';
         background-color: #2c3e50;
         color: white;
         text-align: center;
-        padding: 10px 0;
+        padding: 10px 10px;
         width: 100%;
-        height: auto;
-        line-height: 24px;
+        box-sizing: border-box;
+        line-height: 1.5;
         bottom: 0;
         left: 0;
         z-index: 998;
         position: fixed;
     `;
     document.body.appendChild(footer);
+
+    const responsiveStyle = document.createElement('style');
+    responsiveStyle.textContent = `
+        footer .footer-text {
+            font-size: 14px;
+            display: block;
+            padding: 0 10px;
+            word-wrap: break-word;
+        }
+        @media (max-width: 480px) { footer .footer-text { font-size: 11px; } }
+    `;
+    document.head.appendChild(responsiveStyle);
 
     document.getElementById('version-link').addEventListener('click', function (e) {
         e.preventDefault();
