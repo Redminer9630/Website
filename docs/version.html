@@ -30,8 +30,8 @@
 const versionListHTML = `
   <h2>Website-Versionen</h2>
   <ul class="version-list" id="versionList">
-    <li><a href="?info">Info</a></li>
-    <li><a href="?v1.0.0">Pre v1.0.0</a></li>
+    <li><a href="?=info">Info</a></li>
+    <li><a href="?=v1.0.0">Pre v1.0.0</a></li>
   </ul>
 `;
 
@@ -66,9 +66,7 @@ function loadVersion(version) {
       };
       content.appendChild(backButton);
     })
-    .catch(err => {
-      content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`;
-    });
+    .catch(err => { content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; });
 }
 
 const version = getParameterByName("v");
