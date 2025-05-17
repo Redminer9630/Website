@@ -48,6 +48,7 @@ function loadVersion(version) {
         <h3>Änderungen:</h3>
         <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
       `;
+      initCommonFeatures(document.getElementById("content"));
 
       const backButton = document.createElement('a');
       backButton.href = '#';
