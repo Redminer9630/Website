@@ -38,7 +38,7 @@ fetch("https://piston-meta.mojang.com/mc/game/version_manifest.json")
     .then(d => {
         releaseVersion = d.latest.release;
         snapshotVersion = d.latest.snapshot;
-        consle.log("Neueste Release:", releaseVersion, "Snapshot:", snapshotVersion);
+        console.log("Neueste Release:", releaseVersion, "Snapshot:", snapshotVersion);
     }).catch(e => console.error("Fehler:", e));
 
 function loadWikiPage(page) {
@@ -71,9 +71,24 @@ function loadWikiPage(page) {
 }
 
 function searchWiki(term) {
-    const container = document.getElementById("wiki-results");
+    const container = document.getElementById("wikiResults");
+    container.innerHTML = "";
+
     const results = index.filter(p => p.title.toLowerCase().includes(term.toLowerCase()));
-    container.innerHTML = results.length ? "" : "<div class='no-results'>Kein Ergebnis</div>";
+
+    if (results.length === 0) {
+        container.innerHTML = `
+            <div class="no-results">
+                <p>Suchbegriff nicht gefunden</p>
+                <p>Suche auf der Minecraft Wiki 
+                    <a href="https://minecraft.wiki/?search=${encodeURIComponent(term)}" target="_blank">
+                        <img src="images/icons/share.png" alt="Minecraft Wiki durchsuchen" style="height: 1em; vertical-align: middle;">
+                    </a>
+                </p>
+            </div>`;
+        return;
+    }
+
     results.forEach(p => {
         const entry = document.createElement("div");
         entry.className = "wiki-entry";
@@ -81,6 +96,7 @@ function searchWiki(term) {
         container.appendChild(entry);
     });
 }
+
 
 function saveToRecents(page) {
     let recents = JSON.parse(localStorage.getItem("wikiRecents") || "[]");
