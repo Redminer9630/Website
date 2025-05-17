@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (versionLink) {
         versionLink.addEventListener('click', function (e) {
             e.preventDefault();
-            window.location.href = '/versionen.html?v=' + version;
+            window.location.href = '/version.html?v=' + version;
         });
     }
 
