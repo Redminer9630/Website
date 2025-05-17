@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     footer.innerHTML = isMobile
         ? `<span>Offizielle Website von Redminer9630 ${version}</span>`
         : `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>`;
+    const versionLink = document.getElementById('version-link');
+    if (versionLink) {
+        versionLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/versionen.html?v=' + version;
+        });
+    }
+
     document.body.appendChild(footer);
     document.getElementById('version-link').addEventListener('click', function(e) {
         e.preventDefault();
