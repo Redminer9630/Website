@@ -1,25 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const version = 'v1.6.7';
-    const versiondate = '17.5.25';
-    const versiontime = '10:40';
-    const footer = document.createElement('footer');
-    const isMobile = window.innerWidth <= 768;
-    footer.innerHTML = isMobile
-        ? `<span>Offizielle Website von Redminer9630 ${version}</span>`
-        : `<span>© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>`;
-    const versionLink = document.getElementById('version-link');
-    if (versionLink) {
-        versionLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.href = '/versionen.html?v=' + version;
-        });
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    const version = 'v1.6.6';
+    const versiondate = '16.5.25';
+    const versiontime = '14:08';
 
+    const footer = document.createElement('footer');
     document.body.appendChild(footer);
-    document.getElementById('version-link').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.location.href = '/version.html?v=' + version;
-    });
 
     const style = document.createElement('style');
     style.textContent = `
@@ -38,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             text-align: center;
             padding: 10px 0;
             width: 100%;
-            height: 24px;
+            height: auto;
             line-height: 24px;
             bottom: 0;
             left: 0;
@@ -50,9 +35,32 @@ document.addEventListener('DOMContentLoaded', function() {
             text-decoration: underline;
             cursor: pointer;
         }
-        footer a:hover { color: #00ccff; }
+        footer a:hover {
+            color: #00ccff;
+        }
+
+        @media (max-width: 768px) {
+            footer span.full { display: none; }
+        }
+
+        @media (min-width: 769px) {
+            footer span.short { display: none; }
+        }
     `;
     document.head.appendChild(style);
+
+    footer.innerHTML = `
+        <span class="short">Offizielle Website von Redminer9630 ${version}</span>
+        <span class="full">© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>
+    `;
+
+    const versionLink = document.getElementById('version-link');
+    if (versionLink) {
+        versionLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.location.href = '/versionen.html?v=' + version;
+        });
+    }
     
 const metaDescription = document.createElement('meta');
 metaDescription.name = 'description';
