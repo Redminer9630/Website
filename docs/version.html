@@ -25,42 +25,61 @@
     <script src="back-button.js"></script>
 </head>
 <body>
-  <h1>Veröffentlichte Website Versionen</h1>
-  <div id="content">Wähle eine Version, um Details zu sehen.
-  <ul class="version-list" id="versionList">
-      <li><a href="?info">Info</a></li>
-  </ul></div>
-  <p style="color: #ff1f01;">Website Version Daten werden erst ab Vollversionen freigegeben</p>
-
+<div id="content"></div>
   <script>
-    function getParameterByName(name) {
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
-    }
+const versionListHTML = `
+  <h2>Website-Versionen</h2>
+  <ul class="version-list" id="versionList">
+    <li><a href="?v=v1.6.6">v1.6.6</a></li>
+    <li><a href="?v=v1.6.5">v1.6.5</a></li>
+    <li><a href="?v=v1.6.4">v1.6.4</a></li>
+    <li><a href="?info">Info</a></li>
+  </ul>
+  <p style="color: #ff1f01;">Website Version Daten werden erst ab Vollversionen freigegeben</p>
+`;
 
-    function loadVersion(version) {
-      const content = document.getElementById("content");
-      if (!version) return;
-      fetch(`/versionsdata/${version}.json`)
-        .then(res => {
-          if (!res.ok) throw new Error("Version nicht gefunden.");
-          return res.json();
-        })
-        .then(data => {
-          content.innerHTML = `
-            <h2>Version: ${data.version}</h2>
-            <p><strong>Veröffentlicht:</strong> ${data.date}</p>
-            <h3>Änderungen:</h3>
-            <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
-          `;
-        })
-        .catch(err => {
-          content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`;
-        });
-    }
+function getParameterByName(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
 
-    const version = getParameterByName("v");
-    if (version) loadVersion(version);
+function loadVersion(version) {
+  const content = document.getElementById("content");
+  if (!version) return;
+  fetch(`/versionsdata/${version}.json`)
+    .then(res => {
+      if (!res.ok) throw new Error("Version nicht gefunden.");
+      return res.json();
+    })
+    .then(data => {
+      content.innerHTML = `
+        <h2>Version: ${data.version}</h2>
+        <p><strong>Veröffentlicht:</strong> ${data.date}</p>
+        <h3>Änderungen:</h3>
+        <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
+      `;
+
+      const backButton = document.createElement('button');
+      backButton.textContent = 'Zurück zu allen Versionen';
+      backButton.style.marginTop = '20px';
+      backButton.style.padding = '10px 20px';
+      backButton.style.fontFamily = 'Minecraft';
+      backButton.onclick = () => {
+        document.getElementById("content").innerHTML = versionListHTML;
+      };
+      content.appendChild(backButton);
+    })
+    .catch(err => {
+      content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`;
+    });
+}
+
+const version = getParameterByName("v");
+if (version && version !== 'info') {
+  loadVersion(version);
+} else {
+  document.getElementById("content").innerHTML = versionListHTML;
+}
   </script>
 </body>
 </html>
