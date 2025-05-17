@@ -8,28 +8,29 @@
     <script src="common.js"></script>
     <script src="back-button.js"></script>
     <style>
-        body { font-family: 'Minecraft'; display: flex; margin: 0; font-family: Arial, sans-serif; }
-        .sidebar { width: 30%; height: 100vh; background-color: #f4f4f4; border-right: 1px solid #ddd; padding: 20px; box-sizing: border-box; overflow-y: auto; }
-        .sidebar ul { list-style: none; padding: 0; }
-        .sidebar li { margin: 10px 0; }
-        .sidebar a { text-decoration: none; color: #333; font-weight: bold; }
-        .sidebar a:hover { color: #007BFF; }
-        .content { font-family: 'Minecraft'; width: 70%; padding: 20px; box-sizing: border-box; }
-        section { margin-bottom: 40px; }        
-        [class^="element"] { font-weight: bold; cursor: pointer; padding: 5px 10px; user-select: none; display: flex; align-items: center; transition: background-color 0.2s; }
-        [class^="element"]::before { content: "➤"; display: inline-block; margin-right: 5px; transform: rotate(0deg); transition: transform 0.2s ease; }
-        [class^="element"].open::before { transform: rotate(90deg); }
-        .element1 { font-size: 1.5em; }
-        .element2 { font-size: 1.4em; padding-left: 10px; }
-        .element3 { font-size: 1.3em; padding-left: 20px; }
-        .element4 { font-size: 1.2em; padding-left: 30px; }
-        .element5 { font-size: 1.1em; padding-left: 40px; }
-        .element6 { font-size: 1em; padding-left: 50px; }
-        .submenu { display: none; padding-left: 15px; list-style: none; }
-        .submenu.show { display: block; animation: slideDown 0.3s ease; }
-        .wpage { cursor: pointer; padding: 5px 10px; border-radius: 8px; }
-        .wpage.active { background-color: #007BFF; color: white; }
-        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
+        html,body{height:100%;margin:0;font-family:'Minecraft';}
+        body{display:flex;}
+        .sidebar{width:30%;height:100vh;background-color:#f4f4f4;border-right:1px solid #ddd;padding:20px;box-sizing:border-box;overflow-y:auto;}
+        .sidebar ul{list-style:none;padding:0;}
+        .sidebar li{margin:10px 0;}
+        .sidebar a{color:#333;text-decoration:none;font-weight:bold;font-family:'Minecraft';}
+        .sidebar a:hover{color:#007BFF;}
+        .content{width:70%;padding:20px;box-sizing:border-box;font-family:'Minecraft';}
+        section{margin-bottom:40px;}
+        [class^="element"]{font-weight:bold;cursor:pointer;padding:5px 10px;user-select:none;display:flex;align-items:center;transition:background-color 0.2s;font-family:'Minecraft';}
+        [class^="element"]::before{content:"➤";display:inline-block;margin-right:5px;transform:rotate(0deg);transition:transform 0.2s ease;}
+        [class^="element"].open::before{transform:rotate(90deg);}
+        .element1{font-size:1.5em;}
+        .element2{font-size:1.4em;padding-left:10px;}
+        .element3{font-size:1.3em;padding-left:20px;}
+        .element4{font-size:1.2em;padding-left:30px;}
+        .element5{font-size:1.1em;padding-left:40px;}
+        .element6{font-size:1em;padding-left:50px;}
+        .submenu{display:none;padding-left:15px;list-style:none;}
+        .submenu.show{display:block;animation:slideDown 0.3s ease;}
+        .wpage{cursor:pointer;padding:5px 10px;border-radius:8px;font-family:'Minecraft';}
+        .wpage.active{background-color:#007BFF;color:white;}
+        @keyframes slideDown{from{opacity:0;max-height:0;}to{opacity:1;max-height:500px;}}
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -42,51 +43,47 @@
             });
 
             const pages = document.querySelectorAll(".wpage");
-            const content = document.querySelector(".content");
+            const activeId = new URLSearchParams(location.search).get("q");
 
-pages.forEach(page => {
-document.addEventListener("DOMContentLoaded", () => 
-  document.querySelectorAll(".toggle").forEach(el => {
-    el.addEventListener("click", () => {
-      el.classList.toggle("open");
-      el.nextElementSibling?.classList.toggle("show");
-    });
-  });
+            if (activeId) {
+                const section = document.getElementById(activeId);
+                section?.scrollIntoView({ behavior: "smooth" });
+                pages.forEach(p => {
+                    if (p.getAttribute("data-target") === activeId) p.classList.add("active");
+                    else p.classList.remove("active");
+                });
+            }
 
-  const pages = document.querySelectorAll(".wpage");
-  const activeId = new URLSearchParams(location.search).get("q");
-
-  if (activeId) {
-    const section = document.getElementById(activeId);
-    section?.scrollIntoView({ behavior: "smooth" });
-    pages.forEach(p => {
-      if (p.getAttribute("href")?.includes(activeId)) p.classList.add("active");
-      else p.classList.remove("active");
-    });
-  }
-});
-});
-const initial = new URLSearchParams(location.search).get("q");
-if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smooth" });
-});
-</script>
+            pages.forEach(page => {
+                page.addEventListener("click", () => {
+                    const target = page.getAttribute("data-target");
+                    if (target) {
+                        history.replaceState(null, "", `?q=${target}`);
+                        document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+                        pages.forEach(p => p.classList.remove("active"));
+                        page.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-<div class="sidebar">
-    <div class="nav-group">
-        <div class="element2 toggle"> Allgemeines</div>
-        <ul class="submenu">
-            <li class="wpage" data-target="impressum">Impressum</li>
-            <li class="wpage" data-target="about">Mehr über mich</li>
-            <li class="wpage" data-target="fehler">Fehler</li>
-        </ul>
-        <div class="element2 toggle"> Redeem</div>
-        <ul class="submenu">
-            <li class="wpage" data-target="rdmcd">Code Redeem</li>
-            <li class="wpage" data-target="rdmml">Redeem Mail</li>
-        </ul>
+    <div class="sidebar">
+        <div class="nav-group">
+            <div class="element2 toggle">Allgemeines</div>
+            <ul class="submenu">
+                <li class="wpage" data-target="impressum">Impressum</li>
+                <li class="wpage" data-target="about">Mehr über mich</li>
+                <li class="wpage" data-target="fehler">Fehler</li>
+            </ul>
+            <div class="element2 toggle">Redeem</div>
+            <ul class="submenu">
+                <li class="wpage" data-target="rdmcd">Code Redeem</li>
+                <li class="wpage" data-target="rdmml">Redeem Mail</li>
+            </ul>
+        </div>
     </div>
-</div>
     <div class="content">
         <h1>Infos</h1>
         <section id="impressum">
@@ -103,7 +100,6 @@ if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smoot
             <p>404 - Seite nicht gefunden</p>
             <p>Dieser Fehler kann auftauchen, wenn die URL nicht existiert oder nicht gefunden wurde.</p>
         </section>
-        <section id="rdm"><h2>Code Redeem</h2></section>
         <section id="rdmcd">
             <h3>Redeem Code</h3>
             <p>Du kannst diesen Code von einem Discord oder Minecraft Server Giveaway bekommen.</p>
@@ -114,18 +110,18 @@ if (initial) document.getElementById(initial)?.scrollIntoView({ behavior: "smoot
         </section>
         <section id="imgcrdt">
             <h2>Image Credits</h2>  
-        <a href="https://www.flaticon.com/free-icons/user-generated-content" title="user generated content icons">User generated content icons created by Uniconlabs - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/file" title="file icons">File icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/tools" title="tools icons">Tools icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/webinar" title="webinar icons">Webinar icons created by Corner Pixel - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/server" title="server icons">Server icons created by juicy_fish - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/satisfaction" title="satisfaction icons">Satisfaction icons created by Ilham Fitrotul Hayat - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/game-development" title="game development icons">Game development icons created by Pixelmeetup - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-animated-icons/configuration" title="configuration animated icons">Configuration animated icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-animated-icons/folder" title="folder animated icons">Folder animated icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-animated-icons/html" title="html animated icons">Html animated icons created by Freepik - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-icons/download" title="download icons">Download icons created by Uniconlabs - Flaticon</a><br>
-        <a href="https://www.flaticon.com/free-animated-icons/magnifying-glass" title="magnifying glass animated icons">Magnifying glass animated icons created by Freepik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/user-generated-content" title="user generated content icons">User generated content icons created by Uniconlabs - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/file" title="file icons">File icons created by Freepik - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/tools" title="tools icons">Tools icons created by Freepik - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/webinar" title="webinar icons">Webinar icons created by Corner Pixel - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/server" title="server icons">Server icons created by juicy_fish - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/satisfaction" title="satisfaction icons">Satisfaction icons created by Ilham Fitrotul Hayat - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/game-development" title="game development icons">Game development icons created by Pixelmeetup - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-animated-icons/configuration" title="configuration animated icons">Configuration animated icons created by Freepik - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-animated-icons/folder" title="folder animated icons">Folder animated icons created by Freepik - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-animated-icons/html" title="html animated icons">Html animated icons created by Freepik - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-icons/download" title="download icons">Download icons created by Uniconlabs - Flaticon</a><br>
+            <a href="https://www.flaticon.com/free-animated-icons/magnifying-glass" title="magnifying glass animated icons">Magnifying glass animated icons created by Freepik - Flaticon</a>
         </section>
     </div>
 </body>
