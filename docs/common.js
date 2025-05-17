@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const version = 'v1.6.7';
+    const version = 'v1.0.0';
     const versiondate = '17.5.25';
-    const versiontime = '17:40';
+    const versiontime = '18:45';
+    const wdesc = 'Offizielle Website von Redminer9630';
 
     const footer = document.createElement('footer');
     document.body.appendChild(footer);
@@ -50,8 +51,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.head.appendChild(style);
 
     footer.innerHTML = `
-        <span class="short">Offizielle Website von Redminer9630 ${version}</span>
-        <span class="full">© 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>
+        <span class="short">${wdesc} Pre ${version}</span>
+        <span class="full">© 2025 ${wdesc} – Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Pre ${versiondate} ${versiontime}</a></span>
     `;
 
     const versionLink = document.getElementById('version-link');
@@ -64,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const metaDescription = document.createElement('meta');
     metaDescription.name = 'description';
-    metaDescription.content = 'Offizielle Website von Redminer9630';
+    metaDescription.content = '${wdesc}';
     document.head.appendChild(metaDescription);
 
     const metaKeywords = document.createElement('meta');
     metaKeywords.name = 'keywords';
-    metaKeywords.content = 'Minecraft Java Edition, Redminer9630, Minecraft';
+    metaKeywords.content = 'Redminer9630, Gaming, Community, Minecraft';
     document.head.appendChild(metaKeywords);
 
     const metaVerification = document.createElement('meta');
@@ -97,7 +98,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function replaceUmlauts(element) {
         const umlautMap = {
             'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
-            'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue'
+            'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue',
+            'ß': 's'
         };
         let foundUmlaut = false;
         element.childNodes.forEach(node => {
