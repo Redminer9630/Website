@@ -160,6 +160,8 @@ document.getElementById("wikiSearch").addEventListener("input", e => {
         recentsDiv.appendChild(div);
     });
     recentsDiv.style.display = matches.length ? "block" : "none";
+    const term = e.target.value.trim();
+    searchWiki(term);
 });
 
 customElements.define("wiki-gui", class extends HTMLElement {
