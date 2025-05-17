@@ -61,67 +61,63 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/versionen.html?v=' + version;
         });
     }
-});
 
-const metaDescription = document.createElement('meta');
-metaDescription.name = 'description';
-metaDescription.content = 'Offizielle Website von Redminer9630';
-document.head.appendChild(metaDescription);
+    const metaDescription = document.createElement('meta');
+    metaDescription.name = 'description';
+    metaDescription.content = 'Offizielle Website von Redminer9630';
+    document.head.appendChild(metaDescription);
 
-const metaKeywords = document.createElement('meta');
-metaKeywords.name = 'keywords';
-metaKeywords.content = 'Minecraft Java Edition, Redminer9630, Minecraft';
-document.head.appendChild(metaKeywords);
+    const metaKeywords = document.createElement('meta');
+    metaKeywords.name = 'keywords';
+    metaKeywords.content = 'Minecraft Java Edition, Redminer9630, Minecraft';
+    document.head.appendChild(metaKeywords);
 
-const metaVerification = document.createElement('meta');
-metaVerification.name = 'google-site-verification';
-metaVerification.content = 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA';
-document.head.appendChild(metaVerification);
+    const metaVerification = document.createElement('meta');
+    metaVerification.name = 'google-site-verification';
+    metaVerification.content = 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA';
+    document.head.appendChild(metaVerification);
 
-const existingIcons = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]');
-existingIcons.forEach(icon => icon.remove());
+    const existingIcons = document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]');
+    existingIcons.forEach(icon => icon.remove());
 
-const timestamp = new Date().getTime();
+    const timestamp = new Date().getTime();
+    const icons = [
+        { rel: 'apple-touch-icon', sizes: '180x180', href: 'favicon/apple-touch-icon.png?v=' + timestamp },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: 'favicon/favicon-32x32.png?v=' + timestamp },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'favicon/favicon-16x16.png?v=' + timestamp },
+        { rel: 'manifest', href: 'favicon/site.webmanifest?v=' + timestamp }
+    ];
 
-const icons = [
-    { rel: 'apple-touch-icon', sizes: '180x180', href: 'favicon/apple-touch-icon.png?v=' + timestamp },
-    { rel: 'icon', type: 'image/png', sizes: '32x32', href: 'favicon/favicon-32x32.png?v=' + timestamp },
-    { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'favicon/favicon-16x16.png?v=' + timestamp },
-    { rel: 'manifest', href: 'favicon/site.webmanifest?v=' + timestamp }
-];
+    icons.forEach(data => {
+        const link = document.createElement('link');
+        Object.entries(data).forEach(([key, value]) => link.setAttribute(key, value));
+        document.head.appendChild(link);
+    });
 
-icons.forEach(data => {
-    const link = document.createElement('link');
-    Object.entries(data).forEach(([key, value]) => link.setAttribute(key, value));
-    document.head.appendChild(link);
-});
- 
     function replaceUmlauts(element) {
         const umlautMap = {
-            'ä': 'ae',
-            'ö': 'oe',
-            'ü': 'ue',
-            'Ä': 'Ae',
-            'Ö': 'Oe',
-            'Ü': 'Ue'
+            'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
+            'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue'
         };
         let foundUmlaut = false;
         element.childNodes.forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
                 let text = node.nodeValue;
-                let replacedText = text.replace(/[äöüÄÖÜ]/g, function(match) { foundUmlaut = true; return umlautMap[match] || match; });
-                if (text !== replacedText) { node.nodeValue = replacedText; }
-            } else if (node.nodeType === Node.ELEMENT_NODE) { replaceUmlauts(node); }
+                let replacedText = text.replace(/[äöüÄÖÜ]/g, match => { foundUmlaut = true; return umlautMap[match] || match; });
+                if (text !== replacedText) node.nodeValue = replacedText;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                replaceUmlauts(node);
+            }
         });
-        if (foundUmlaut) { console.warn('Es wurde ein Character gefunden und ersetzt'); }
+        if (foundUmlaut) console.warn('Es wurde ein Character gefunden und ersetzt');
     }
     replaceUmlauts(document.body);
-});
 
-document.querySelectorAll('[class^="element"]').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-        toggle.classList.toggle('open');
-        const submenu = toggle.nextElementSibling;
-        submenu.classList.toggle('show'); 
+    document.querySelectorAll('[class^="element"]').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            toggle.classList.toggle('open');
+            const submenu = toggle.nextElementSibling;
+            submenu.classList.toggle('show');
+        });
     });
 });
