@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const version = 'v1.0.0';
+    const version = 'v1.0.0b';
     const versiondate = '17.5.25';
     const versiontime = '18:45';
     const wdesc = 'Offizielle Website von Redminer9630';
