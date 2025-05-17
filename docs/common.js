@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const version = 'v1.6.6';
-    const versiondate = '16.5.25';
-    const versiontime = '14:08';
+    const version = 'v1.6.7';
+    const versiondate = '17.5.25';
+    const versiontime = '17:40';
 
     const footer = document.createElement('footer');
     document.body.appendChild(footer);
