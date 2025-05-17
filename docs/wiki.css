@@ -106,3 +106,8 @@ th { cursor: pointer; }
 .search-icon { width: 20px; height: 20px; margin-right: 10px; filter: invert(100%); }
 #wikiSearch { flex: 1; padding: 10px 14px; border: none; border-radius: 8px; font-family: 'MinecraftFont', sans-serif; font-size: 16px; outline: none; background-color: #f0f0f0; transition: background-color 0.3s, box-shadow 0.3s; }
 #wikiSearch:focus { background-color: white; box-shadow: 0 0 0 2px #888; }
+#wikiRecent:empty {
+    display: none;
+    height: 0;
+    border: none;
+}
