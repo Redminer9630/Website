@@ -113,8 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         if (foundUmlaut) console.warn('Es wurde ein Char gefunden und ersetzt');
     }
-    replaceUmlauts(document.body);
-
+    replaceUmlauts();
     document.querySelectorAll('[class^="element"]').forEach(toggle => {
         toggle.addEventListener('click', () => {
             toggle.classList.toggle('open');
