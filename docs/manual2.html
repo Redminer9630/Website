@@ -9,7 +9,7 @@
     <script src="back-button.js"></script>
     <style>
         body { display: flex; margin: 0; font-family: Arial, sans-serif; }
-        .sidebar { width: 30%; height: 100%; background-color: #f4f4f4; border-right: 1px solid #ddd; padding: 20px; box-sizing: border-box; }
+        .sidebar { width: 30%; height: 100vh; background-color: #f4f4f4; border-right: 1px solid #ddd; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         .sidebar ul { list-style: none; padding: 0; }
         .sidebar li { margin: 10px 0; }
         .sidebar a { text-decoration: none; color: #333; font-weight: bold; }
@@ -45,19 +45,27 @@
             const content = document.querySelector(".content");
 
             pages.forEach(page => {
-                page.addEventListener("click", () => {
-                    const targetId = page.getAttribute("data-target");
-                    const section = document.getElementById(targetId);
-                    if (section) {
-                        pages.forEach(p => p.classList.remove("active"));
-                        page.classList.add("active");
-                        content.style.opacity = 0.3;
-                        setTimeout(() => {
-                            section.scrollIntoView({ behavior: "smooth" });
-                            content.style.opacity = 1;
-                        }, 200);
-                    }
-                });
+document.addEventListener("DOMContentLoaded", () => 
+  document.querySelectorAll(".toggle").forEach(el => {
+    el.addEventListener("click", () => {
+      el.classList.toggle("open");
+      el.nextElementSibling?.classList.toggle("show");
+    });
+  });
+
+  const pages = document.querySelectorAll(".wpage");
+  const activeId = new URLSearchParams(location.search).get("more");
+
+  if (activeId) {
+    const section = document.getElementById(activeId);
+    section?.scrollIntoView({ behavior: "smooth" });
+    pages.forEach(p => {
+      if (p.getAttribute("href")?.includes(activeId)) p.classList.add("active");
+      else p.classList.remove("active");
+    });
+  }
+});
+
             });
 
             const initial = new URLSearchParams(location.search).get("more");
