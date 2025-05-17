@@ -103,13 +103,13 @@ document.addEventListener('DOMContentLoaded', function () {
         element.childNodes.forEach(node => {
             if (node.nodeType === Node.TEXT_NODE) {
                 let text = node.nodeValue;
-                let replacedText = text.replace(/[äöüÄÖÜ]/g, match => { foundUmlaut = true; return umlautMap[match] || match; });
+                let replacedText = text.replace(/[äöüÄÖÜß]/g, match => { foundUmlaut = true; return umlautMap[match] || match; });
                 if (text !== replacedText) node.nodeValue = replacedText;
             } else if (node.nodeType === Node.ELEMENT_NODE) {
                 replaceUmlauts(node);
             }
         });
-        if (foundUmlaut) console.warn('Es wurde ein Character gefunden und ersetzt');
+        if (foundUmlaut) console.warn('Es wurde ein Char gefunden und ersetzt');
     }
     replaceUmlauts(document.body);
 
