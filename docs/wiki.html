@@ -25,6 +25,13 @@
 </div>
 
 <script>
+let index = [];
+
+fetch("wiki/index.json")
+    .then(res => res.json())
+    .then(data => index = data)
+    .catch(e => console.error("Index konnte nicht geladen werden:", e));
+
 let categoriesVisible = true;
 let releaseVersion = "", snapshotVersion = "";
 const allPages = [
