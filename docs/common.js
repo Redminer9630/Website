@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     footer.innerHTML = `
         <span class="short">Offizielle Website von Redminer9630 ${version}</span>
-        <span class="full">© 2025 Offizielle Website von Redminer9630 - Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>
+        <span class="full">© 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a id="version-link" href="#">${version} Beta ${versiondate} ${versiontime}</a></span>
     `;
 
     const versionLink = document.getElementById('version-link');
@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/versionen.html?v=' + version;
         });
     }
-    
+});
+
 const metaDescription = document.createElement('meta');
 metaDescription.name = 'description';
 metaDescription.content = 'Offizielle Website von Redminer9630';
