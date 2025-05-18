@@ -15,8 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function appendFonts() {
     const style = document.createElement('style');
     style.textContent = `
-        @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
-        @font-face { font-family: 'MinecraftFont'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'MinecraftFont';
+            src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
+        }
     `;
     document.head.appendChild(style);
 }
@@ -36,7 +42,7 @@ function appendFooter(version, date, time, desc) {
         color: white;
         text-align: center;
         padding: 10px 10px;
-        width: 100%
+        width: 100%;
         box-sizing: border-box;
         line-height: 1.5;
         bottom: 0;
@@ -44,7 +50,6 @@ function appendFooter(version, date, time, desc) {
         z-index: 998;
         position: fixed;
     `;
-    document.body.style.paddingBottom = '50px';
     document.body.appendChild(footer);
 
     const responsiveStyle = document.createElement('style');
@@ -56,14 +61,6 @@ function appendFooter(version, date, time, desc) {
             word-wrap: break-word;
         }
         @media (max-width: 480px) { footer .footer-text { font-size: 11px; } }
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-        }
-        body > main { flex: 1; }
     `;
     document.head.appendChild(responsiveStyle);
 
