@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const versiondate = '18.5.25';
     const versiontime = '11:03';
 
+    appendThemeSupport();
     appendFonts();
     appendMetaTags();
     appendFaviconLinks();
     appendFooter(version, versiondate, versiontime);
+    appendCanonicalLink();
 
     initCommonFeatures(document.body);
 });
@@ -22,6 +24,8 @@ function appendFonts() {
             font-family: 'MinecraftFont';
             src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
         }
+        :root[data-theme='dark'] body { background-color: #1a1a1a; color: #f5f5f5; }
+        :root[data-theme='light'] body { background-color: #eaeaea; color: #333; }
     `;
     document.head.appendChild(style);
 }
@@ -89,19 +93,25 @@ function appendFaviconLinks() {
 }
 
 function replaceUmlauts(element) {
-    const umlautMap = {
-        'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
-        'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue',
-        'ß': 's'
-    };
-    element.childNodes.forEach(node => {
+    const umlautMap = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss' };
+    if (!element) return;
+    [...element.childNodes].forEach(node => {
         if (node.nodeType === Node.TEXT_NODE) {
-            const replaced = node.nodeValue.replace(/[äöüÄÖÜß]/g, match => umlautMap[match] || match);
-            if (node.nodeValue !== replaced) node.nodeValue = replaced;
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            replaceUmlauts(node);
-        }
+            node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m);
+        } else if (node.nodeType === Node.ELEMENT_NODE) replaceUmlauts(node);
     });
+}
+
+function appendThemeSupport() {
+    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+}
+
+function appendCanonicalLink() {
+    const canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    canonical.setAttribute('href', window.location.href.split('?')[0]);
+    document.head.appendChild(canonical);
 }
 
 function initCommonFeatures(scope = document) {
