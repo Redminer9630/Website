@@ -72,7 +72,7 @@ function appendFooter(version, date, time) {
 
 function appendMetaTags() {
     const metaTags = [
-        { name: 'description', content: Offizielle Website von Redminer9630 },
+        { name: 'description', content: 'Offizielle Website von Redminer9630' },
         { name: 'keywords', content: 'Redminer9630, Gaming, Community, Minecraft' },
         { name: 'google-site-verification', content: 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA' }
     ];
