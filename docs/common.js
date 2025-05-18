@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const version = 'v1.0.0';
-    const versiondate = '17.5.25';
-    const versiontime = '18:45';
+    const version = 'v1.0.1';
+    const versiondate = '18.5.25';
+    const versiontime = '11:03';
 
     appendFonts();
     appendMetaTags();
