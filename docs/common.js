@@ -50,6 +50,7 @@ function appendFooter(version, date, time, desc) {
         z-index: 998;
         position: fixed;
     `;
+    document.body.style.paddingBottom = '50px';
     document.body.appendChild(footer);
 
     const responsiveStyle = document.createElement('style');
