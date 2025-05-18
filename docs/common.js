@@ -2,12 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const version = 'v1.0.0';
     const versiondate = '17.5.25';
     const versiontime = '18:45';
-    const wdesc = 'Offizielle Website von Redminer9630';
 
     appendFonts();
-    appendMetaTags(wdesc);
+    appendMetaTags();
     appendFaviconLinks();
-    appendFooter(version, versiondate, versiontime, wdesc);
+    appendFooter(version, versiondate, versiontime);
 
     initCommonFeatures(document.body);
 });
@@ -27,12 +26,12 @@ function appendFonts() {
     document.head.appendChild(style);
 }
 
-function appendFooter(version, date, time, desc) {
+function appendFooter(version, date, time) {
     const year = new Date().getFullYear();
     const footer = document.createElement('footer');
     footer.innerHTML = `
         <span class="footer-text">
-            © ${year} ${desc} – Alle Rechte vorbehalten. 
+            © ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. 
             <a id="version-link" href="#">${version} Pre ${date} ${time}</a>
         </span>
     `;
@@ -71,9 +70,9 @@ function appendFooter(version, date, time, desc) {
     });
 }
 
-function appendMetaTags(desc) {
+function appendMetaTags() {
     const metaTags = [
-        { name: 'description', content: desc },
+        { name: 'description', content: Offizielle Website von Redminer9630 },
         { name: 'keywords', content: 'Redminer9630, Gaming, Community, Minecraft' },
         { name: 'google-site-verification', content: 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA' }
     ];
