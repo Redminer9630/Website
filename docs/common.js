@@ -49,7 +49,8 @@ function appendFooter(version, date, time) {
         z-index: 998;
         position: fixed;
     `;
-    document.body.style.paddingBottom = '50px';
+    document.body.style.paddingBottom = '60px';
+    footer.classList.add('fixed-footer');
     document.body.appendChild(footer);
 
     const responsiveStyle = document.createElement('style');
