@@ -35,20 +35,7 @@ function appendFooter(version, date, time) {
             <a id="version-link" href="#">${version} Pre ${date} ${time}</a>
         </span>
     `;
-    footer.style = `
-        font-family: 'Minecraft';
-        background-color: #2c3e50;
-        color: white;
-        text-align: center;
-        padding: 10px 10px;
-        width: 100%;
-        box-sizing: border-box;
-        line-height: 1.5;
-        bottom: 0;
-        left: 0;
-        z-index: 998;
-        position: fixed;
-    `;
+    footer.style = ``;
     document.body.style.paddingBottom = '60px';
     footer.classList.add('fixed-footer');
     document.body.appendChild(footer);
