@@ -36,10 +36,15 @@ function appendFooter(version, date, time, desc) {
         color: white;
         text-align: center;
         padding: 10px 10px;
-        width: 100%;
+        width: 100%
         box-sizing: border-box;
         line-height: 1.5;
+        bottom: 0;
+        left: 0;
+        z-index: 998;
+        position: fixed;
     `;
+    document.body.style.paddingBottom = '50px';
     document.body.appendChild(footer);
 
     const responsiveStyle = document.createElement('style');
