@@ -124,3 +124,23 @@ function initCommonFeatures(scope = document) {
         });
     });
 }
+document.addEventListener("DOMContentLoaded", () => {
+    const footerVersion = document.getElementById("footer-version");
+    if (footerVersion) {
+        footerVersion.addEventListener("click", e => {
+            e.preventDefault();
+            Modal.open("modal-version", {
+                content: `
+                    <h2>Systemversion</h2>
+                    <p>Version von <code>modal.js</code>:</p>
+                    <div style="font-weight:bold;font-size:1.2em">${Modal.version}</div>
+                `,
+                type: "info",
+                width: "300px",
+                height: "160px",
+                focus: true,
+                draggable: true
+            });
+        });
+    }
+});
