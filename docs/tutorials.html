@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutorials und Anleitungen - Redminer9630</title>
     <style>
-    @font-face {
-        font-family: 'MinecraftFont';
-        src: url('minecraft_font.woff') format('woff'),
-             url('minecraft_font.tff') format('truetype');
-    }
         body {
             font-family: 'MinecraftFont', sans-serif;
             background-color: #f0f0f0;
@@ -37,11 +32,7 @@
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
-        .video-container h3 {
-            margin: 10px 0;
-        }
-      
+        .video-container h3 { margin: 10px 0; }
         .header-link {
             color: white;
             font-size: 16px;
@@ -53,25 +44,8 @@
             top: 20px;
             right: 20px;
         }
-
-        .header-link:hover {
-            background-color: #e53935;
-        }
-
-        @font-face {
-            font-family: 'MinecraftFont';
-            src: url('https://redminer9630de.github.io/minecraft_font.ttf') format('truetype'),
-                 url('https://redminer9630de.github.io/minecraft_font.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #121212;
-                color: #f5f5f5;
-            }
-            h1, h3{ color: #fff; }
-        }
+        .header-link:hover { background-color: #e53935; }
+        @media (prefers-color-scheme: dark) { body { background-color: #121212; color: #f5f5f5; } h1, h3{ color: #fff; } }
     </style>
 </head>
 <body>
@@ -95,19 +69,11 @@
         <button id="datadownloadButton" style="display: none;" onclick="window.location.href='templatedownload.html?id=data';">Datapack Template</button>
     </div>
     <script>
-        document.getElementById('packcreation').addEventListener('play', function() {
-            this.addEventListener('timeupdate', function() {
-                // Überprüfe, ob das Video eine bestimmte Zeit erreicht hat (z.B. 0:10 für 10 Sekunden)
-                if (this.currentTime >= 10) { // Ändere die Zeit entsprechend
-                    document.getElementById('datadownloadButton').style.display = 'block';
-                }
-            });
-        });
+        document.getElementById('packcreation').addEventListener('play', function() { this.addEventListener('timeupdate', function() { if (this.currentTime >= 10) { document.getElementById('datadownloadButton').style.display = 'block'; } }); });
         
         document.getElementById('packcreation').addEventListener('play', function() {
             this.addEventListener('timeupdate', function() {
-                // Überprüfe, ob das Video eine bestimmte Zeit erreicht hat (z.B. 0:10 für 10 Sekunden)
-                if (this.currentTime >= 20) { // Ändere die Zeit entsprechend
+                if (this.currentTime >= 20) {
                     document.getElementById('datadownloadbutton').style.display = 'none';
                     document.getElementById('sourcedownloadButton').style.display = 'block';
                 }
