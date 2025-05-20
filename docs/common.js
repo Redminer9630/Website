@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     appendFonts();
     appendMetaTags();
     appendFaviconLinks();
-    appendFooter(version, versiondate, versiontime);
+    appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time);
     appendCanonicalLink();
 
     initCommonFeatures(document.body);
