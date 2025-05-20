@@ -43,8 +43,9 @@ function appendFooter(version, date, time) {
             <a id="footer-version" href="#">${version} Pre ${date} ${time}</a>
         </span>
     `;
-    document.body.style.paddingBottom = '60px';
-    footer.classList.add('fixed-footer');
+    const isIndex = location.pathname.endsWith("/") || location.pathname.endsWith("/index") || location.pathname.endsWith("/index.html");
+    if (isIndex) { footer.classList.add("index-footer"); document.body.style.paddingBottom = "100px"; } else { footer.classList.add("fixed-footer"); document.body.style.paddingBottom = "60px"; }
+
     document.body.appendChild(footer);
 
     const responsiveStyle = document.createElement('style');
@@ -56,6 +57,22 @@ function appendFooter(version, date, time) {
             word-wrap: break-word;
         }
         @media (max-width: 480px) { footer .footer-text { font-size: 11px; } }
+        footer.fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #222;
+            color: #fff;
+            text-align: center;
+        }
+        footer.index-footer {
+            position: relative;
+            margin-top: 40px;
+            background: #222;
+            color: #fff;
+            text-align: center;
+        }
     `;
     document.head.appendChild(responsiveStyle);
 
@@ -68,7 +85,7 @@ function appendFooter(version, date, time) {
                     <h2>Systemversion</h2>
                     <p>Version von <code>modal.js</code>:</p>
                     <div style="font-weight:bold;font-size:1.2em">${Modal.version}</div>
-                    <p><a href="/version/${version}.html" target="_blank">Versions-Webseite öffnen</a></p>
+                    <p><a href="/versionsdata/${version}.json" target="_blank">Versions-Webseite öffnen</a></p>
                 `,
                 type: "info",
                 width: "350px",
@@ -76,7 +93,7 @@ function appendFooter(version, date, time) {
                 focus: true,
                 draggable: true
             });
-        } else { window.location.href = `/versionsdata/${version}.html`; }
+        } else { window.location.href = \`/versionsdata/\${version}.json\`; }
     });
 }
 
@@ -113,11 +130,7 @@ function appendFaviconLinks() {
 function replaceUmlauts(element) {
     const umlautMap = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss' };
     if (!element) return;
-    [...element.childNodes].forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m);
-        } else if (node.nodeType === Node.ELEMENT_NODE) replaceUmlauts(node);
-    });
+    [...element.childNodes].forEach(node => { if (node.nodeType === Node.TEXT_NODE) { node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m); } else if (node.nodeType === Node.ELEMENT_NODE) replaceUmlauts(node); });
 }
 
 function appendThemeSupport() {
