@@ -1,8 +1,9 @@
+window.CommonVersion = {
+    version: 'v1.0.0',
+    date: '18.5.25',
+    time: '11:03'
+};
 document.addEventListener('DOMContentLoaded', () => {
-    const version = 'v1.0.0';
-    const versiondate = '18.5.25';
-    const versiontime = '11:03';
-
     appendThemeSupport();
     appendFonts();
     appendMetaTags();
@@ -143,18 +144,20 @@ function initCommonFeatures(scope = document) {
 }
 document.addEventListener("DOMContentLoaded", () => {
     const footerVersion = document.getElementById("footer-version");
-    if (footerVersion) {
+    if (footerVersion && window.Modal) {
         footerVersion.addEventListener("click", e => {
             e.preventDefault();
             Modal.open("modal-version", {
                 content: `
                     <h2>Systemversion</h2>
-                    <p>Version von <code>modal.js</code>:</p>
-                    <div style="font-weight:bold;font-size:1.2em">${Modal.version}</div>
+                    <p><b>common.js</b>: ${window.CommonVersion.version}</p>
+                    <p><b>Datum</b>: ${window.CommonVersion.date}</p>
+                    <p><b>Uhrzeit</b>: ${window.CommonVersion.time}</p>
+                    <p><b>modal.js</b>: ${Modal.version}</p>
                 `,
                 type: "info",
-                width: "300px",
-                height: "160px",
+                width: "360px",
+                height: "180px",
                 focus: true,
                 draggable: true
             });
