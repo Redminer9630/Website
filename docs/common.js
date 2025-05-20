@@ -31,15 +31,17 @@ function appendFonts() {
 }
 
 function appendFooter(version, date, time) {
+    if (document.getElementById("main-footer")) return;
+
     const year = new Date().getFullYear();
     const footer = document.createElement('footer');
+    footer.id = "main-footer";
     footer.innerHTML = `
         <span class="footer-text">
             © ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. 
-            <a id="version-link" href="#">${version} Pre ${date} ${time}</a>
+            <a id="footer-version" href="#">${version} Pre ${date} ${time}</a>
         </span>
     `;
-    footer.style = ``;
     document.body.style.paddingBottom = '60px';
     footer.classList.add('fixed-footer');
     document.body.appendChild(footer);
@@ -56,9 +58,24 @@ function appendFooter(version, date, time) {
     `;
     document.head.appendChild(responsiveStyle);
 
-    document.getElementById('version-link').addEventListener('click', function (e) {
+    const versionLink = footer.querySelector("#footer-version");
+    versionLink.addEventListener('click', e => {
         e.preventDefault();
-        window.location.href = '/version.html?v=' + version;
+        if (typeof Modal !== "undefined" && Modal.open) {
+            Modal.open("modal-version", {
+                content: `
+                    <h2>Systemversion</h2>
+                    <p>Version von <code>modal.js</code>:</p>
+                    <div style="font-weight:bold;font-size:1.2em">${Modal.version}</div>
+                    <p><a href="/version/${version}.html" target="_blank">Versions-Webseite öffnen</a></p>
+                `,
+                type: "info",
+                width: "350px",
+                height: "200px",
+                focus: true,
+                draggable: true
+            });
+        } else { window.location.href = `/versionsdata/${version}.html`; }
     });
 }
 
