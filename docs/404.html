@@ -39,9 +39,22 @@
     <div id="extraInfo">Lade Geräteinformationen...</div>
 
     <script>
+    const countdownElement = document.getElementById('countdown');
+    const infoElement = document.getElementById('info');
+
+    if (window.location.pathname.endsWith('404')) {
+        infoElement.textContent = '';
+    } else {
         let timeLeft = 5;
-        const countdownElement = document.getElementById('countdown');
-        const countdownInterval = setInterval(() => { timeLeft--; countdownElement.textContent = timeLeft; if (timeLeft <= 0) { clearInterval(countdownInterval); window.location.href = 'https://redminer9630.ddns.net'; } }, 1000);
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            countdownElement.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                window.location.href = 'https://redminer9630.ddns.net';
+            }
+        }, 1000);
+    }
 
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
