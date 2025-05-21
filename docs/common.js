@@ -12,12 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     appendCanonicalLink();
 
     initCommonFeatures(document.body);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    alert("CommonVersion:", CommonVersion);
-    if (!CommonVersion) alert("CommonVersion nicht definiert!");
-});
 
 function appendFonts() {
     const style = document.createElement('style');
@@ -160,7 +154,7 @@ function initCommonFeatures(scope = document) {
         });
     });
 }
-document.addEventListener("DOMContentLoaded", () => {
+
     const footerVersion = document.getElementById("footer-version");
     if (footerVersion && window.Modal) {
         footerVersion.addEventListener("click", e => {
