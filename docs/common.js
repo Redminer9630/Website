@@ -12,18 +12,8 @@ function appendThemeSupport() {
 function appendFonts() {
     const style = document.createElement('style');
     style.textContent = `
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('/fonts/minecraft_font.woff2') format('woff2'),
-                 url('/fonts/minecraft_font.woff') format('woff'),
-                 url('/fonts/minecraft_font.ttf') format('truetype');
-        }
-        @font-face {
-            font-family: 'MinecraftFont';
-            src: url('/fonts/minecraft_font.woff2') format('woff2'),
-                 url('/fonts/minecraft_font.woff') format('woff'),
-                 url('/fonts/minecraft_font.ttf') format('truetype');
-        }
+        @font-face { font-family: 'Minecraft'; src: url('/fonts/minecraft_font.woff') format('woff'), url('/fonts/minecraft_font.ttf') format('truetype'); }
+        @font-face { font-family: 'MinecraftFont'; src: url('/fonts/minecraft_font.woff') format('woff'), url('/fonts/minecraft_font.ttf') format('truetype'); }
         :root[data-theme='dark'] body { background-color: #1a1a1a; color: #f5f5f5; }
         :root[data-theme='light'] body { background-color: #eaeaea; color: #333; }
     `;
