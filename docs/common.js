@@ -3,33 +3,32 @@ window.CommonVersion = {
     date: '18.5.25',
     time: '11:03'
 };
-document.addEventListener('DOMContentLoaded', () => {
-    appendThemeSupport();
-    appendFonts();
-    appendMetaTags();
-    appendFaviconLinks();
-    appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time);
-    appendCanonicalLink();
 
-    initCommonFeatures(document.body);
+function appendThemeSupport() {
+    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+}
 
 function appendFonts() {
     const style = document.createElement('style');
     style.textContent = `
         @font-face {
             font-family: 'Minecraft';
-            src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
+            src: url('/fonts/minecraft_font.woff2') format('woff2'),
+                 url('/fonts/minecraft_font.woff') format('woff'),
+                 url('/fonts/minecraft_font.ttf') format('truetype');
         }
         @font-face {
             font-family: 'MinecraftFont';
-            src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype');
+            src: url('/fonts/minecraft_font.woff2') format('woff2'),
+                 url('/fonts/minecraft_font.woff') format('woff'),
+                 url('/fonts/minecraft_font.ttf') format('truetype');
         }
         :root[data-theme='dark'] body { background-color: #1a1a1a; color: #f5f5f5; }
         :root[data-theme='light'] body { background-color: #eaeaea; color: #333; }
     `;
     document.head.appendChild(style);
 }
-
 function appendFooter(version, date, time) {
     if (document.getElementById("main-footer")) return;
 
@@ -42,8 +41,10 @@ function appendFooter(version, date, time) {
             <a id="footer-version" href="#">${version} Pre ${date} ${time}</a>
         </span>
     `;
+
     const isIndex = location.pathname.endsWith("/") || location.pathname.endsWith("/index") || location.pathname.endsWith("/index.html");
-    if (isIndex) { footer.classList.add("index-footer"); document.body.style.paddingBottom = "100px"; } else { footer.classList.add("fixed-footer"); document.body.style.paddingBottom = "60px"; }
+    footer.classList.add(isIndex ? "index-footer" : "fixed-footer");
+    document.body.style.paddingBottom = isIndex ? "100px" : "60px";
 
     document.body.appendChild(footer);
 
@@ -92,7 +93,9 @@ function appendFooter(version, date, time) {
                 focus: true,
                 draggable: true
             });
-        } else { window.location.href = \`/versionsdata/\${version}.json\`; }
+        } else {
+            window.location.href = \`/versionsdata/\${version}.json\`;
+        }
     });
 }
 
@@ -126,22 +129,23 @@ function appendFaviconLinks() {
     });
 }
 
-function replaceUmlauts(element) {
-    const umlautMap = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss' };
-    if (!element) return;
-    [...element.childNodes].forEach(node => { if (node.nodeType === Node.TEXT_NODE) { node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m); } else if (node.nodeType === Node.ELEMENT_NODE) replaceUmlauts(node); });
-}
-
-function appendThemeSupport() {
-    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-}
-
 function appendCanonicalLink() {
     const canonical = document.createElement('link');
     canonical.setAttribute('rel', 'canonical');
     canonical.setAttribute('href', window.location.href.split('?')[0]);
     document.head.appendChild(canonical);
+}
+
+function replaceUmlauts(element) {
+    const umlautMap = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss' };
+    if (!element) return;
+    [...element.childNodes].forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            replaceUmlauts(node);
+        }
+    });
 }
 
 function initCommonFeatures(scope = document) {
@@ -155,24 +159,12 @@ function initCommonFeatures(scope = document) {
     });
 }
 
-    const footerVersion = document.getElementById("footer-version");
-    if (footerVersion && window.Modal) {
-        footerVersion.addEventListener("click", e => {
-            e.preventDefault();
-            Modal.open("modal-version", {
-                content: `
-                    <h2>Systemversion</h2>
-                    <p><b>common.js</b>: ${window.CommonVersion.version}</p>
-                    <p><b>Datum</b>: ${window.CommonVersion.date}</p>
-                    <p><b>Uhrzeit</b>: ${window.CommonVersion.time}</p>
-                    <p><b>modal.js</b>: ${Modal.version}</p>
-                `,
-                type: "info",
-                width: "360px",
-                height: "180px",
-                focus: true,
-                draggable: true
-            });
-        });
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    appendThemeSupport();
+    appendFonts();
+    appendMetaTags();
+    appendFaviconLinks();
+    appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time);
+    appendCanonicalLink();
+    initCommonFeatures(document.body);
 });
