@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
     initCommonFeatures(document.body);
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    alert("CommonVersion:", CommonVersion);
+    if (!CommonVersion) alert("CommonVersion nicht definiert!");
+});
+
 function appendFonts() {
     const style = document.createElement('style');
     style.textContent = `
