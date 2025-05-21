@@ -43,7 +43,7 @@
     const infoElement = document.getElementById('info');
 
     if (window.location.pathname.endsWith('404')) {
-        infoElement.textContent = '';
+        infoElement.textContent = 'Countdown gestopt';
     } else {
         let timeLeft = 5;
         const countdownInterval = setInterval(() => {
@@ -68,7 +68,6 @@
                     <strong>Stadt:</strong> ${data.city}<br>
                     <strong>Provider:</strong> ${data.org}<br>
                     <strong>Betriebssystem:</strong> ${os}<br>
-                    <strong>Browser:</strong> ${browser}
                 `;
                 document.getElementById('extraInfo').innerHTML = infoText;
             })
