@@ -61,26 +61,6 @@
         ];
         if (page >= 0 && page < links.length) location.href = links[page];
     }
-    
-let labels = document.querySelectorAll('.nav-label');
-let index = 0;
-
-function switchLabel() {
-  labels.forEach((l, i) => {
-    l.classList.remove('active', 'out');
-    if (i === index) l.classList.add('active');
-    else if (i === (index - 1 + labels.length) % labels.length) l.classList.add('out');
-  });
-  index = (index + 1) % labels.length;
-}
-
-switchLabel();
-setInterval(switchLabel, 7000);
-
-    document.getElementById('moreInfoBtn').addEventListener('click', function() {
-        var moreInfo = document.getElementById('moreInfo');
-        moreInfo.style.display = moreInfo.style.display === 'none' ? 'block' : 'none';
-    }
     window.onload = function() { Modal.toast("Hallo Welt!"); }
 </script>
 </body>
