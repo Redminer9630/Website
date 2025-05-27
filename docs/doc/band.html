@@ -4,30 +4,11 @@
     <meta charset="UTF-8">
     <title>…come over, Fatty</title>
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: white;
-            background: url('comeover.png') no-repeat center center fixed;
-            background-size: cover;
-            text-shadow: 1px 1px 4px black;
-        }
-        .content {
-            background-color: rgba(0, 0, 0, 0.5);
-            padding: 40px;
-            max-width: 800px;
-            margin: auto;
-        }
+        body { margin: 0; font-family: Arial, sans-serif; color: white; background: url('comeover.png') no-repeat center center fixed; background-size: cover; text-shadow: 1px 1px 4px black; }
+        .content { background-color: rgba(0, 0, 0, 0.5); padding: 40px; max-width: 800px; margin: auto; }
         h1 { margin-top: 0; }
-        ul { list-style-type: disc; padding-left: 20px; }
-        a { color: #90cdf4; text-decoration: none; }
         a:hover { text-decoration: underline; }
-        iframe {
-            margin-top: 30px;
-            border: none;
-            width: 100%;
-            height: 352px;
-        }
+        iframe { margin-top: 30px; border: none; width: 100%; height: 852px; }
         .controls { margin-top: 20px; }
         .controls button { background-color: #444; color: white; border: none; padding: 10px 20px; margin-right: 10px; cursor: pointer; }
     </style>
@@ -35,24 +16,10 @@
 <body>
     <div class="content">
         <h1>…come over, Fatty – Songliste</h1>
-        <ul>
-            <li><a href="https://open.spotify.com/track/2Y3zFfTslOEHKCr8CEq1Lk" target="_blank">bang bang I'm dead</a></li>
-            <li><a href="https://open.spotify.com/track/4nGkBgE5h6STX6b01vo2Fj" target="_blank">tired</a></li>
-            <li><a href="https://open.spotify.com/track/4t7T4K5GxlTWQ9PP1cVRBp" target="_blank">schizophrenic sick</a></li>
-            <li><a href="https://open.spotify.com/track/0kDL8M3dx4DOXzhmYfMYEU" target="_blank">no refund</a></li>
-            <li><a href="https://open.spotify.com/track/0BLcgJYJQkwemh9Mw1ZrUK" target="_blank">blue hotel</a></li>
-            <li><a href="https://open.spotify.com/track/7Ay6WjAXxZPhZMgU7Tln7r" target="_blank">Sunday</a></li>
-            <li><a href="https://open.spotify.com/track/0H03sI9ICkntovIoPy1zgj" target="_blank">floating</a></li>
-            <li><a href="https://open.spotify.com/track/3eO6KkagUr9mvM4fPrYyB3" target="_blank">bye bye</a></li>
-            <li><a href="https://open.spotify.com/track/1Su2rLhXkVnlFr9fWlGgSU" target="_blank">bazzar of wonders</a></li>
-            <li><a href="https://open.spotify.com/track/3kLO9AsStXN6BSNqjG97Tx" target="_blank">walking in sleep</a></li>
-        </ul>
-
         <div class="controls">
             <button onclick="document.getElementById('spotify-player').style.display='block'">▶️ Player anzeigen</button>
             <button onclick="document.getElementById('spotify-player').style.display='none'">⏸️ Player verstecken</button>
         </div>
-
         <iframe id="spotify-player" style="border-radius:12px; display:block;" src="https://open.spotify.com/embed/album/1IHI9aivNyEqElcmYNT6qu?utm_source=generator&theme=0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
     </div>
 </body>
