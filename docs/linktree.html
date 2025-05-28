@@ -7,7 +7,8 @@
     <style>
         body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
         .container { background-color: #ffffff; border-radius: 8px; padding: 20px; width: 320px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
-        h1 { font-size: 2em; color: #333; margin-bottom: 20px; }
+        h1 { font-size: 2em; color: #333; margin-bottom: 10px; }
+        .role { font-size: 1em; color: #777; margin-bottom: 20px; }
         .slide-wrapper { display: flex; flex-direction: column; gap: 10px; }
         .slide { display: flex; align-items: center; justify-content: space-between; background-color: #e0e0e0; border-radius: 10px; padding: 10px 15px; box-sizing: border-box; }
         .slide img { width: 64px; height: 64px; border-radius: 8px; }
@@ -20,16 +21,34 @@
 <body>
     <div class="container">
         <h1 id="linktree-title">Linktree</h1>
+        <div class="role" id="linktree-role"></div>
         <div class="slide-wrapper" id="slide-wrapper"></div>
     </div>
     <script>
         const users = {
             redminer9630: {
-                title: "Redminer9630 ",
+                title: "Redminer9630",
+                role: "Leiter, Programmierer",
                 links: [
                     { name: "YouTube", url: "https://youtube.com/channel/UCdpkm8rpRnIi88zWSuubbOQ", img: "images/youtube.png" },
                     { name: "Twitch", url: "https://www.twitch.tv/redminer9360", img: "images/twitch.png" },
                     { name: "GitHub", url: "https://github.com/Redminer9360de", img: "images/github.png" }
+                ]
+            },
+            theanonym: {
+                title: "TheAnonym3000",
+                role: "Twitch Mod, Programmierer",
+                links: [
+                    { name: "GitHub", url: "https://github.com/TheAnonym3000", img: "images/github.png" },
+                    { name: "Twitch", url: "https://twitch.tv/therealanonym3000", img: "images/twitch.png" }
+                ]
+            },
+            vanilla_cookies: {
+                title: "vanilla_cookies",
+                role: "Twitch Mod",
+                links: [
+                    { name: "Twitch", url: "#", img: "images/twitch.png" },
+                    { name: "YouTube", url: "#", img: "images/youtube.png" }
                 ]
             },
             unknown: {
@@ -39,30 +58,19 @@
                     { name: "vanilla_cookies", url: "?vanilla_cookies", img: "images/tree.png", sameTab: true },
                     { name: "TheAnonym3000", url: "?theanonym", img: "images/tree.png", sameTab: true }
                 ]
-            },
-            theanonym: {
-                title: "TheAnonym3000 ",
-                links: [
-                    { name: "GitHub", url: "https://github.com/TheAnonym3000", img: "images/github.png" },
-                    { name: "Twitch", url: "https://twitch.tv/therealanonym3000", img: "images/twitch.png" }
-                ]
-            },
-            vanilla_cookies: {
-                title: "Vanilla Cookies ",
-                links: [
-                    { name: "Twitch", url: "#", img: "images/twitch.png" },
-                    { name: "YouTube", url: "#", img: "images/youtube.png" }
-                ]
             }
         };
 
         const params = new URLSearchParams(window.location.search);
         const selectedUser = Object.keys(users).find(u => params.has(u)) || "unknown";
+        const user = users[selectedUser];
 
-        document.getElementById("linktree-title").textContent = users[selectedUser].title + "Linktree";
+        document.getElementById("linktree-title").textContent = user.title ? user.title + " Linktree" : "Linktree";
+        document.getElementById("linktree-role").textContent = user.role || "";
 
         const slideWrapper = document.getElementById("slide-wrapper");
-        users[selectedUser].links.forEach(link => {
+
+        user.links.forEach(link => {
             const slide = document.createElement("div");
             slide.className = "slide";
             slide.innerHTML = `
@@ -71,6 +79,16 @@
             `;
             slideWrapper.appendChild(slide);
         });
+
+        if (selectedUser !== "unknown") {
+            const backSlide = document.createElement("div");
+            backSlide.className = "slide";
+            backSlide.innerHTML = `
+                <a href="?" class="link">Zurück zur Übersicht</a>
+                <img src="images/back.png" alt="Back">
+            `;
+            slideWrapper.appendChild(backSlide);
+        }
     </script>
 </body>
 </html>
