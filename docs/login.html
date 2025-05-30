@@ -1,190 +1,24 @@
- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Minecraft', Arial, sans-serif;
-            background-color: #f4f4f4;
-            overflow: hidden;
-        }
-        button { font-family: 'Minecraft', Arial, sans-serif; }
-        .container {
-            position: relative;
-            width: 400px;
-            height: 690px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            background: #ffffff;
-        }
-        .container.sign-up-mode .forms {
-            transform: translateX(-50%);
-            transition: transform 0.5s ease-in-out;
-        }
-        .forms {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transform: translateX(0);
-            transition: transform 0.5s ease-in-out;
-        }
-        .form {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .form h1 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-        .form label {
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-        .form input {
-            margin: 5px 0;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .form button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 1rem;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .form button:hover { background-color: #0056b3; }
-        #login { font-family: 'Minecraft'; background-color: #007bff; color: white; }
-        #login:hover { background-color: #0056b3; }
-        .toggle {
-            text-align: center;
-            margin-top: 10px;
-            cursor: pointer;
-            color: #007bff;
-        }
-        .toggle:hover { text-decoration: underline; }
-    </style>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-    <script src="common.js"></script>
-    <script src="back-button.js"></script>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="login.js" defer></script>
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="forms">
-            <div id="loginForm" class="form">
-                <h1>Login</h1>
-                <br>
-                <label>Username or E-Mail</label>
-                <input type="text" id="loginEmail">
-                <label>Password</label>
-                <input type="password" id="loginPassword">
-                <br>
-                <button id="loginBtn" onclick="login()">Login</button>
-                <br>
-                <br>
-                <label>Login with</label>
-                <button id="googleLoginBtn" onclick="googleLogin()">Google</button>
-                <button id="githubLoginBtn" onclick="githubLogin()">GitHub</button>
-                <br>
-                <br>
-                <button class="toggle"><a href="https://redminer9630.ddns.net/signup">Don't have an Account?</a></button>
-            </div>
-        </div>
-    </div>
-    <script>
-        const firebaseConfig = {
-            apiKey: "${{ secrets.googleapikey }}",
-            authDomain: "redminer9630web.firebaseapp.com",
-            databaseURL: "https://redminer9630web-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "redminer9630web",
-            storageBucket: "redminer9630web.firebasestorage.app",
-            messagingSenderId: "796701483690",
-            appId: "1:796701483690:web:1262163b86375c6d8926d3"
-        };
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        document.getElementById("loginEmail").addEventListener("input", checkLoginInputs);
-        document.getElementById("loginPassword").addEventListener("input", checkLoginInputs);
+  <div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" name="email" required>
 
-        function checkLoginInputs() {
-            const email = document.getElementById("loginEmail").value.trim();
-            const password = document.getElementById("loginPassword").value.trim();
-            const loginButton = document.getElementById("loginBtn");
-            if (email && password) { loginButton.disabled = false; } else { loginButton.disabled = true; }
-        }
-        
-        function login() {
-          const email = document.getElementById("loginEmail").value;
-          const password = document.getElementById("loginPassword").value;
+      <label for="password">Passwort</label>
+      <input type="password" id="password" name="password" required>
 
-          document.getElementById("loginBtn").disabled = true;
-          document.getElementById("loginBtn").textContent = "Loading...";
-
-          auth.signInWithEmailAndPassword(email, password)
-            .then(userCredential => {
-              const user = userCredential.user;
-              console.log("Logged in:", user);
-              window.href = "https://redminer9630.ddns.net";
-            })
-            .catch(error => {
-              console.error("Error:", error.message);
-              alert("Login failed: " + error.message);
-            })
-            .finally(() => {
-              document.getElementById("loginBtn").disabled = false;
-              document.getElementById("loginBtn").textContent = "Login";
-            });
-        }
-        
-        function googleLogin() {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth.signInWithPopup(provider)
-            .then(result => {
-              const user = result.user;
-              console.log("Logged in with Google:", user);
-            })
-            .catch(error => {
-              console.error("Error logging in with Google:", error.message);
-            });
-        }
-
-        function githubLogin() {
-          const provider = new firebase.auth.GithubAuthProvider();
-          auth.signInWithPopup(provider)
-            .then(result => {    
-              const user = result.user;
-              console.log("Logged in with GitHub:", user);
-            })
-            .catch(error => {
-              console.error("Error logging in with GitHub:", error.message);
-            });
-        }
-        
-        function saveUserSettings(uid, settings) {
-            db.collection("users").doc(uid).set(settings)
-                .then(() => console.log("Settings saved!"))
-                .catch(error => console.error("Error saving settings:", error));
-        }
-        const container = document.getElementById('container');
-    </script>
+      <button type="submit">Einloggen</button>
+    </form>
+    <p>Noch kein Konto? <a href="signup.html">Registrieren</a></p>
+  </div>
 </body>
 </html>
