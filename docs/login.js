@@ -13,8 +13,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   if (result.success) {
     localStorage.setItem("uid", result.uid);
-    window.location.href = "/dashboard.html"; // Zielseite nach erfolgreichem Login
+    window.location.href = "/settings.html";
   } else {
-    alert(result.message || "Login fehlgeschlagen.");
+    Modal.toast(result.message || "Login fehlgeschlagen.");
   }
 });
