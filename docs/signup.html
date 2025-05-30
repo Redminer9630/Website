@@ -1,222 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Minecraft', Arial, sans-serif;
-            background-color: #f4f4f4;
-            overflow: hidden;
-        }
-        button { font-family: 'Minecraft', Arial, sans-serif; }
-        .container {
-            position: relative;
-            width: 400px;
-            height: 690px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            background: #ffffff;
-        }
-
-        .container.sign-up-mode .forms {
-            transform: translateX(-50%);
-            transition: transform 0.5s ease-in-out;
-        }
-        .forms {
-            display: flex;
-            width: 100%;
-            height: 100%;
-            transform: translateX(0);
-            transition: transform 0.5s ease-in-out;
-        }
-        .form {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .form h1 {
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-        .form label {
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-        .form input {
-            margin: 5px 0;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .form button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 1rem;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .form button:hover { background-color: #0056b3; }
-        #login { font-family: 'Minecraft'; background-color: #007bff; color: white; }
-        #login:hover { background-color: #0056b3; }
-        .toggle {
-            text-align: center;
-            margin-top: 10px;
-            cursor: pointer;
-            color: #007bff;
-        }
-        .toggle:hover { text-decoration: underline; }
-    </style>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js"></script>
-    <script src="common.js"></script>
-    <script src="back-button.js"></script>
+  <meta charset="UTF-8">
+  <title>Registrieren</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="signup.js" defer></script>
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="forms">
-            <div id="signUpForm" class="form">
-                <h1>Sign Up</h1>
-                <br>
-                <label>Username</label>
-                <input type="text" id="signUpUsername">
-                <label>E-Mail</label>
-                <input type="email" id="signUpEmail">
-                <label>Password</label>
-                <input type="password" id="signUpPassword">
-                <label>Confirm Password</label>
-                <input type="password" id="signUpConfirmPassword">
-                <br>
-                <label>Sign Up with</label>
-                <button id="googleSignUpBtn" onclick="googleSignUp()">Google</button>
-                <button id="githubSignUpBtn" onclick="githubSignUp()">GitHub</button>
-                <br>
-                <br>
-                <button class="toggle"><a class="toggle "href="https://redminer9630.ddns.net/login">You have an Account?</a></button>
-            </div>
-        </div>
-    </div>
-    <script>
-        const firebaseConfig = {
-            apiKey: "${{ secrets.googleapikey }}",
-            authDomain: "redminer9630web.firebaseapp.com",
-            databaseURL: "https://redminer9630web-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "redminer9630web",
-            storageBucket: "redminer9630web.firebasestorage.app",
-            messagingSenderId: "796701483690",
-            appId: "1:796701483690:web:1262163b86375c6d8926d3"
-        };
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-async function checkIfExists(field, value) {
-    const querySnapshot = await db.collection("users")
-        .where(field, "==", value)
-        .get();
-    return !querySnapshot.empty;
-}
-async function signUp() {
-    const email = document.getElementById("signUpEmail").value.trim();
-    const username = document.getElementById("signUpUsername").value.trim();
-    const password = document.getElementById("signUpPassword").value.trim();
-    const confirmPassword = document.getElementById("signUpConfirmPassword").value.trim();
+  <div class="container">
+    <h2>Registrieren</h2>
+    <form id="signupForm">
+      <label for="email">E-Mail</label>
+      <input type="email" id="email" name="email" required>
 
-    if (password !== confirmPassword) {
-        alert("Passwords don't match!");
-        return;
-    }
+      <label for="password">Passwort</label>
+      <input type="password" id="password" name="password" required>
 
-    // Überprüfe, ob Benutzername oder E-Mail bereits existieren
-    const isEmailTaken = await checkIfExists("email", email);
-    const isUsernameTaken = await checkIfExists("username", username);
+      <label for="confirmPassword">Passwort bestätigen</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
 
-    if (isEmailTaken) {
-        alert("This email is already in use!");
-        return;
-    }
-
-    if (isUsernameTaken) {
-        alert("This username is already in use!");
-        return;
-    }
-
-    // Wenn keine Duplikate gefunden, registriere Benutzer
-    auth.createUserWithEmailAndPassword(email, password)
-        .then(userCredential => {
-            const user = userCredential.user;
-            const userId = user.uid;
-
-            // Benutzerinformationen in Firestore speichern
-            const userData = {
-                email: email,
-                username: username,
-                password: password, // In der Realität solltest du Passwörter nicht in Firestore speichern
-                language: true,
-                theme: true,
-                priority: 0
-            };
-
-            db.collection("users").doc(userId).set(userData)
-                .then(() => {
-                    console.log("User data saved!");
-                    alert("Sign-up successful!");
-                    window.location.href = "https://redminer9630.ddns.net";
-                })
-                .catch(error => {
-                    console.error("Error saving user data:", error);
-                });
-        })
-        .catch(error => {
-            console.error("Sign-up error:", error.message);
-            alert("Sign-up failed: " + error.message);
-        });
-}
-
-        function googleSignUp() {
-          const provider = new firebase.auth.GoogleAuthProvider();
-          auth.signInWithPopup(provider)
-            .then(result => {
-              const user = result.user;
-              console.log("Signed up with Google:", user);
-            })
-            .catch(error => {
-              console.error("Error signing up with Google:", error.message);
-            });
-        }
-
-        function githubSignUp() {
-          const provider = new firebase.auth.GithubAuthProvider();
-          auth.signInWithPopup(provider)
-            .then(result => {
-              const user = result.user;
-              console.log("Signed up with GitHub:", user);
-            })
-            .catch(error => {
-              console.error("Error signing up with GitHub:", error.message);
-            });
-        }
-        
-        function saveUserSettings(uid, settings) {
-            db.collection("users").doc(uid).set(settings)
-                .then(() => console.log("Settings saved!"))
-                .catch(error => console.error("Error saving settings:", error));
-        }
-        const container = document.getElementById('container');
-    </script>
+      <button type="submit">Registrieren</button>
+    </form>
+    <p>Schon ein Konto? <a href="login.html">Einloggen</a></p>
+  </div>
 </body>
 </html>
