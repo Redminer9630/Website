@@ -1,55 +1,20 @@
 @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
 body { font-family: 'Minecraft', sans-serif; background-color: #eaeaea; margin: 0; padding: 0; color: #333; display: flex; flex-direction: column; min-height: 100vh; box-sizing: border-box; }
 h1 { margin: 0; display: flex; align-items: center; width: auto; white-space: nowrap; }
-.logo-container { display: flex; align-items: center; position: relative; }
-.logo { width: 225px; display: flex; align-items: center; height: auto; border-radius: 4px; position: relative; }
 main { flex: 1; padding: 20px; margin-top: 0; }
 section { margin-bottom: 20px; }
-h2 { color: #2ecc71; }
-button { background-color: #2ecc71; color: white; padding: 10px 20px; border: none; cursor: pointer; font-family: 'Minecraft'; z-index: 9999; }
-button:hover { background-color: #2ecc87; }
 footer { background-color: #2c3e50; color: white; text-align: center; padding: 10px 0; width: 100%; height: 20px; bottom: 0; left: 0; z-index: 998; position: fixed; }
-@media (prefers-color-scheme: dark) { body { background-color: #1a1a1a; color: #f5f5f5; } header, footer { background-color: #1c2a34; } h2 { color: #27ae60; } button { background-color: #27ae60; } button:hover { background-color: #2ecc71; } }
-@media (max-width: 768px) and (orientation: portrait) { header { flex-direction: column; align-items: center; justify-content: center; } .logo-container { display: flex; flex-direction: column; align-items: center; } .logo { width: 180px; } .hiddenItem { visibility: hidden; color: gray; background-color: gray; } footer { padding: 20px; font-size: 14px; } }
-@media (max-width: 768px) and (orientation: landscape) { header { flex-direction: row; justify-content: space-between; padding: 10px; } .logo { width: 150px; } main { padding: 15px; } footer { padding: 15px; } }
-#changelog { margin: 20px; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; }
-#changelog h2, #changelog h3 { margin-bottom: 10px; }
-#view-more { display: inline-block; margin-top: 15px; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; }
-#view-more:hover { background-color: #0056b3; }
-.light-dark-icon, .account-icon { width: 30px; height: 30px; cursor: pointer; transition: transform 0.2s ease; }
-.account-icon { display: flex; align-items: center; gap: 10px; }
-.light-dark-icon:hover, .account-icon:hover { transform: scale(1.2); }
-.theme-toggle-container { display: flex; align-items: center; justify-content: center; margin: 10px; }
-.theme-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-.theme-switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: 0.4s; border-radius: 28px; }
-.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
-input:checked + .slider { background-color: #2ecc71; }
-input:checked + .slider:before { transform: translateX(22px); }
-.linkbox { gap: 10px; align-items: center; display: block; overflow-x: auto; white-space: nowrap; padding: 10px; }
-.linkimg { width: 50px; height: 50px; margin-right: 5px; }
-.invert { filter: invert(1); }
+@media (prefers-color-scheme: dark) { body { background-color: #1a1a1a; color: #f5f5f5; } footer { background-color: #1c2a34; } }
 header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; box-sizing: border-box; }
-.icon-left, .icon-right { display: flex; gap: 10px; align-items: center; }
+.logo { width: 225px; display: flex; align-items: center; height: auto; border-radius: 4px; }
+.logo-container { display: flex; align-items: center; position: relative; }
 .nav-icon, .account-icon { width: 30px; height: 30px; cursor: pointer; transition: transform 0.2s ease; filter: brightness(0) invert(1); }
 .nav-icon:hover, .account-icon:hover { transform: scale(1.2); }
-.linkbox .linkimg { display: inline-block; }
+.linkbox { display: block; overflow-x: auto; white-space: nowrap; padding: 10px; gap: 10px; align-items: center; }
+.linkimg { width: 50px; height: 50px; margin-right: 5px; }
 .linkbox::-webkit-scrollbar { height: 8px; }
 .linkbox::-webkit-scrollbar-thumb { background-color: #888; border-radius: 4px; }
 .linkbox::-webkit-scrollbar-track { background-color: #f1f1f1; }
-.logo-static { width: 30px; height: 30px; cursor: default; }
-.nav-item { display: flex; align-items: center; cursor: pointer; }
-.fixed-footer {
-    font-family: 'Minecraft';
-    background-color: #2c3e50;
-    color: white;
-    text-align: center;
-    padding: 10px 10px;
-    width: 100%;
-    box-sizing: border-box;
-    line-height: 1.5;
-    bottom: 0;
-    left: 0;
-    z-index: 998;
-    position: fixed;
-}
+.fixed-footer { font-family: 'Minecraft'; background-color: #2c3e50; color: white; text-align: center; padding: 10px; width: 100%; box-sizing: border-box; line-height: 1.5; bottom: 0; left: 0; z-index: 998; position: fixed; }
+@media (max-width: 768px) and (orientation: portrait) { header { flex-direction: column; align-items: center; } .logo { width: 180px; } footer { padding: 20px; font-size: 14px; } }
+@media (max-width: 768px) and (orientation: landscape) { header { flex-direction: row; justify-content: space-between; padding: 10px; } .logo { width: 150px; } main { padding: 15px; } footer { padding: 15px; } }
