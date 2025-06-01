@@ -11,5 +11,20 @@ export default {
   },
   index_band: {
     button: "Jetzt die Bandseite angucken"
-  }
+  },
+  settings_title: "Einstellungen",
+  settings_profile: "Profil",
+  settings_pref: "Einstellungen",
+  settings_username: "Benutzername",
+  settings_username_ph: "Neuen Nutzernamen eingeben",
+  settings_email: "E-Mail",
+  settings_email_ph: "Neue E-Mail eingeben",
+  settings_lang: "Sprache",
+  settings_theme: "Theme",
+  settings_save: "Speichern",
+  settings_theme_white: "Weiß",
+  settings_theme_dark: "Dunkel",
+  settings_theme_sys: "System",
+  settings_lang_de: "Deutsch",
+  settings_lang_en: "Englisch"
 };
