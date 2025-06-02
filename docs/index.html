@@ -72,42 +72,51 @@
     }
     window.onload = function() { Modal.toast("Hallo Welt!"); }
 </script>
-    <script>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
     const settingsModal = document.createElement('div');
     settingsModal.id = 'mini-settings-modal';
     settingsModal.style.cssText = `
         display: none; position: fixed; top: 50%; left: 50%;
-        transform: translate(-50%, -50%); background: #fff; padding: 20px;
-        border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.3); z-index: 10000;
-        max-width: 300px; width: 100%;
+        transform: translate(-50%, -50%); background: #fff;
+        padding: 20px; border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3); z-index: 10000;
+        max-width: 300px; width: 100%; font-family: sans-serif;
     `;
+
     settingsModal.innerHTML = `
-        <h3 langid="index_fastsettings.title">Kurz Einstellungen</h3>
-        <label for="theme-select" langid="index_fastsettings.design">Design:</label>
-        <select id="theme-select">
+        <h3 langid="index_fastsettings.title">Kurz-Einstellungen</h3>
+
+        <label for="theme-select" langid="index_fastsettings.design">Design:</label><br>
+        <select id="theme-select" style="width: 100%;">
             <option value="system" langid="index_fastsettings.sys">System</option>
             <option value="light" langid="index_fastsettings.light">Hell</option>
             <option value="dark" langid="index_fastsettings.dark">Dunkel</option>
         </select><br><br>
 
-        <label for="lang-select" langid="index_fastsettings.lang">Sprache:</label>
-        <select id="lang-select">
+        <label for="lang-select" langid="index_fastsettings.lang">Sprache:</label><br>
+        <select id="lang-select" style="width: 100%;">
             <option value="de" langid="index_fastsettings.german">Deutsch</option>
-            <option value="en" langid="index_fastsettings.english>English</option>
+            <option value="en" langid="index_fastsettings.english">English</option>
         </select><br><br>
 
-        <button id="more-settings-btn" langid="index_fastsettings.moresettings>Mehr Einstellungen</button>
+        <button id="more-settings-btn" langid="index_fastsettings.moresettings">Mehr Einstellungen</button>
         <button id="close-settings-btn" style="float: right;">❌</button>
     `;
+
     document.body.appendChild(settingsModal);
 
     document.getElementById('open-settings-modal').addEventListener('click', () => {
         settingsModal.style.display = 'block';
     });
 
-    document.getElementById('close-settings-btn').addEventListener('click', () => {
-        settingsModal.style.display = 'none';
+    document.body.addEventListener('click', (e) => {
+        if (e.target.id === 'close-settings-btn') {
+            settingsModal.style.display = 'none';
+        }
+        if (e.target.id === 'more-settings-btn') {
+            location.href = 'settings.html';
+        }
     });
 
     document.getElementById('theme-select').addEventListener('change', e => {
@@ -125,10 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem("lang", lang);
         location.reload();
     });
+
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme && savedTheme !== "system") {
         document.documentElement.setAttribute('data-theme', savedTheme);
     }
+
     const savedLang = localStorage.getItem("lang");
     if (savedLang) document.getElementById('lang-select').value = savedLang;
 });
