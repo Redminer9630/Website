@@ -1,11 +1,15 @@
 Promise.all([
-  import('/lang.js'),
-  import('/elements.js'),
-  import('/embed.js")
-]).then(([lang]) => {
-  document.querySelectorAll('[lang]').forEach(el => {
-    const key = el.getAttribute('lang');
-    const value = lang.default?.[key] || `[[${key}]]`;
-    el.innerText = value;
-  });
+  import('/docs/lang.js'),
+  import('/docs/elements.js'),
+  import('/docs/embed.js')
+]).then(([langModule]) => {
+  const lang = langModule.default || {};
+
+  document.querySelectorAll('[lang]').forEach(el => { const key = el.getAttribute('lang'); el.innerText = lang[key] || `[[${key}]]`; });
+
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme && savedTheme !== "system") { document.documentElement.setAttribute("data-theme", savedTheme);  } else { document.documentElement.removeAttribute("data-theme"); }
+
+  const savedLang = localStorage.getItem("lang");
+  if (savedLang && savedLang !== "de") { location.reload(); }
 });
