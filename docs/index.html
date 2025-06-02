@@ -83,21 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
         max-width: 300px; width: 100%;
     `;
     settingsModal.innerHTML = `
-        <h3>Kurz Einstellungen</h3>
-        <label for="theme-select">Design:</label>
+        <h3 langid="index_fastsettings.title">Kurz Einstellungen</h3>
+        <label for="theme-select" langid="index_fastsettings.design">Design:</label>
         <select id="theme-select">
-            <option value="system">System</option>
-            <option value="light">Hell</option>
-            <option value="dark">Dunkel</option>
+            <option value="system" langid="index_fastsettings.sys">System</option>
+            <option value="light" langid="index_fastsettings.light">Hell</option>
+            <option value="dark" langid="index_fastsettings.dark">Dunkel</option>
         </select><br><br>
 
-        <label for="lang-select">Sprache:</label>
+        <label for="lang-select" langid="index_fastsettings.lang">Sprache:</label>
         <select id="lang-select">
-            <option value="de">Deutsch</option>
-            <option value="en">English</option>
+            <option value="de" langid="index_fastsettings.german">Deutsch</option>
+            <option value="en" langid="index_fastsettings.english>English</option>
         </select><br><br>
 
-        <button id="more-settings-btn">🔧 Erweiterte Einstellungen</button>
+        <button id="more-settings-btn" langid="index_fastsettings.moresettings>Mehr Einstellungen</button>
         <button id="close-settings-btn" style="float: right;">❌</button>
     `;
     document.body.appendChild(settingsModal);
