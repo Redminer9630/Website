@@ -26,5 +26,13 @@ export default {
   settings_theme_dark: "Dunkel",
   settings_theme_sys: "System",
   settings_lang_de: "Deutsch",
-  settings_lang_en: "Englisch"
+  settings_lang_en: "Englisch",
+  index_fastsettings.moresettings: "Mehr Einstellugen",
+  index_fastsettings.english: "Englisch",
+  index_fastsettings.german: "Deutsch",
+  index_fastsettings.lang: "Sprache:",
+  index_fastsettings.design: "Design:",
+  index_fastsettings.light: "Hell",
+  index_fastsettings.dark: "Dunkel",
+  index_fastsettings.title: "Kurz Einstellugen"
 };
