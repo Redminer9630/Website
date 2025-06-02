@@ -1,149 +1,138 @@
-<html lang="de"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redminer9630.ddns.net</title>    
-    <meta name="google-site-verification" content="gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA" />
-    <meta name="description" content="Offiziele Website von Redminer9630.">
-    <meta name="keywords" content="Minecraft, Redminer9630">
-<link rel="stylesheet" href="index.css">
-<script type="module" src="common.js"></script>
-<script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async=""></script></head>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redminer9630 – Offizielle Minecraft-Webseite</title>
+  <meta name="google-site-verification" content="gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA" />
+  <meta name="description" content="Offizielle Website von Redminer9630.">
+  <meta name="keywords" content="Minecraft, Redminer9630">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="index.css">
+  <script type="module" src="common.js"></script>
+  <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async></script>
+</head>
 <body>
-<header>
-<div class="icon-left">
-  <div><img src="images/main.png" class="logo-static" /></div>
-  <div class="nav-item" onclick="location.href='wiki'"><img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki" /></div>
-  <div class="nav-item" onclick="location.href='downloads'"><img src="images/icons/downloads.png" class="nav-icon" alt="Download" /></div>
-  <div class="nav-item" onclick="location.href='generators'"><img src="images/icons/generators.png" class="nav-icon" alt="Generators" /></div>
-  <div class="nav-item" onclick="location.href='tools'"><img src="images/icons/tools.png" class="nav-icon active" alt="Tools" /></div>
-  <div class="nav-item" onclick="location.href='server'"><img src="images/icons/team.png" class="nav-icon active" alt="Server" /></div>
-</div>
+  <header>
+    <div class="icon-left">
+      <div><img src="images/main.png" class="logo-static" alt="Redminer9630 Logo" /></div>
+      <div class="nav-item" onclick="location.href='wiki'"><img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki" /></div>
+      <div class="nav-item" onclick="location.href='downloads'"><img src="images/icons/downloads.png" class="nav-icon" alt="Download" /></div>
+      <div class="nav-item" onclick="location.href='generators'"><img src="images/icons/generators.png" class="nav-icon" alt="Generators" /></div>
+      <div class="nav-item" onclick="location.href='tools'"><img src="images/icons/tools.png" class="nav-icon" alt="Tools" /></div>
+      <div class="nav-item" onclick="location.href='server'"><img src="images/icons/team.png" class="nav-icon" alt="Server" /></div>
+    </div>
+    <div class="icon-right">
+      <img onclick="location.href='manual'" src="images/icons/about.png" class="account-icon" alt="Benutzerhandbuch öffnen" />
+      <img onclick="location.href='feedback'" src="images/icons/feedback.png" class="account-icon" alt="Feedback geben" />
+      <img id="open-settings-modal" src="images/icons/settings.png" class="account-icon" style="width: auto;" alt="Einstellungen öffnen" />
+    </div>
+  </header>
 
-  <div class="icon-right">
-      <img onclick="location.href='manual'" src="images/icons/about.png" class="account-icon" alt="Benutzerhandbuch" />
-      <img onclick="location.href='feedback'" src="images/icons/feedback.png" class="account-icon" alt="Feedback" />
-      <img id="open-settings-modal" src="images/icons/settings.png" class="account-icon" style="width: auto;" alt="Einstellungen" />
-  </div>
-</header>
-    <main>
-        <br>
-        <section id="about">
-            <section-title langid="index_ueber.title">Ueber Redminer9630</section-title>
-            <section-p langid="index_ueber.p">Ich bin ein neuer Minecraft-YouTuber und Streamer, ich habe meinen Kanal vor Kurzem gestartet. Mein Kanal ist noch im Aufbau, und bisher wurden keine Videos veroeffentlicht. Trotzdem werde ich schon in naher Zukunft spannende Inhalte erstellen, und es lohnt sich von Anfang an dabei zu sein.</section-p>
-            <section-button onclick="location.href='manual?q=about'" langid="index_ueber.button">Mehr ueber mich erfahren</section-button>
-        </section><br>
-        <section>
-            <section-title langid="index_mcff.title">Schreck um Mitternacht - Minecraft Freunde Fanstory</section-title>
-            <section-p langid="index_mcff.p">Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</section-p>
-            <secion-button langid="index_mcff,button" onclick="location.href='doc/mcfreundefanstory'">Geschichte Lesen</section-button>
-        </section>
-        <section>
-            <section-title>fatness4...the greedies</section-title>
-            <section-button onclick="location.href='https://fatness4thegreedies.github.io'" langid="index_band.button">Jetzt die Bandseite angucken</section-button>
-        </section>
-    </main>
-<script type="module">
+  <main>
+    <br>
+    <section id="about">
+      <div class="section-title" langid="index_ueber.title">Über Redminer9630</div>
+      <div class="section-text" langid="index_ueber.p">
+        Ich bin ein neuer Minecraft-YouTuber und Streamer, ich habe meinen Kanal vor Kurzem gestartet. Mein Kanal ist noch im Aufbau, und bisher wurden keine Videos veröffentlicht. Trotzdem werde ich schon in naher Zukunft spannende Inhalte erstellen, und es lohnt sich von Anfang an dabei zu sein.
+      </div>
+      <button class="section-button" onclick="location.href='manual?q=about'" langid="index_ueber.button">Mehr über mich erfahren</button>
+    </section>
+    <br>
+    <section>
+      <div class="section-title" langid="index_mcff.title">Schreck um Mitternacht – Minecraft Freunde Fanstory</div>
+      <div class="section-text" langid="index_mcff.p">
+        Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.
+      </div>
+      <button class="section-button" onclick="location.href='doc/mcfreundefanstory'" langid="index_mcff.button">Geschichte lesen</button>
+    </section>
+    <section>
+      <div class="section-title">fatness4...the greedies</div>
+      <button class="section-button" onclick="location.href='https://fatness4thegreedies.github.io'" langid="index_band.button">Jetzt die Bandseite angucken</button>
+    </section>
+  </main>
+
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
     const firebaseConfig = {
-        apiKey: "AIzaSyCWzMK-zv449Y2N9TTqtIihybccXw3i-HI",
-        authDomain: "redminer9630web.firebaseapp.com",
-        databaseURL: "https://redminer9630web-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "redminer9630web",
-        storageBucket: "redminer9630web.firebasestorage.app",
-        messagingSenderId: "796701483690",
-        appId: "1:796701483690:web:1262163b86375c6d8926d3",
-        measurementId: "G-98DDEG10MK"
+      apiKey: "AIzaSyCWzMK-zv449Y2N9TTqtIihybccXw3i-HI",
+      authDomain: "redminer9630web.firebaseapp.com",
+      databaseURL: "https://redminer9630web-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "redminer9630web",
+      storageBucket: "redminer9630web.appspot.com",
+      messagingSenderId: "796701483690",
+      appId: "1:796701483690:web:1262163b86375c6d8926d3",
+      measurementId: "G-98DDEG10MK"
     };
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app); 
+    const analytics = getAnalytics(app);
+
     function img(page) {
-        const links = [
-            "settings",
-            "wiki",
-            "downloads",
-            "generators",
-            "tools",
-            "server",
-            "feedback",
-            "account"
-        ];
-        if (page >= 0 && page < links.length) location.href = links[page];
+      const links = ["settings", "wiki", "downloads", "generators", "tools", "server", "feedback", "account"];
+      if (page >= 0 && page < links.length) location.href = links[page];
     }
-    window.onload = function() { Modal.toast("Hallo Welt!"); }
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const settingsModal = document.createElement('div');
-    settingsModal.id = 'mini-settings-modal';
-    settingsModal.style.cssText = `
+    window.onload = () => Modal.toast("Hallo Welt!");
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const settingsModal = document.createElement('div');
+      settingsModal.id = 'mini-settings-modal';
+      settingsModal.style.cssText = `
         display: none; position: fixed; top: 50%; left: 50%;
         transform: translate(-50%, -50%); background: #fff;
         padding: 20px; border-radius: 8px;
         box-shadow: 0 0 15px rgba(0,0,0,0.3); z-index: 10000;
         max-width: 300px; width: 100%; font-family: sans-serif;
-    `;
+      `;
 
-    settingsModal.innerHTML = `
+      settingsModal.innerHTML = `
         <h3 langid="index_fastsettings.title">Kurz-Einstellungen</h3>
-
         <label for="theme-select" langid="index_fastsettings.design">Design:</label><br>
         <select id="theme-select" style="width: 100%;">
-            <option value="system" langid="index_fastsettings.sys">System</option>
-            <option value="light" langid="index_fastsettings.light">Hell</option>
-            <option value="dark" langid="index_fastsettings.dark">Dunkel</option>
+          <option value="system" langid="index_fastsettings.sys">System</option>
+          <option value="light" langid="index_fastsettings.light">Hell</option>
+          <option value="dark" langid="index_fastsettings.dark">Dunkel</option>
         </select><br><br>
-
         <label for="lang-select" langid="index_fastsettings.lang">Sprache:</label><br>
         <select id="lang-select" style="width: 100%;">
-            <option value="de" langid="index_fastsettings.german">Deutsch</option>
-            <option value="en" langid="index_fastsettings.english">English</option>
+          <option value="de" langid="index_fastsettings.german">Deutsch</option>
+          <option value="en" langid="index_fastsettings.english">English</option>
         </select><br><br>
-
         <button id="more-settings-btn" langid="index_fastsettings.moresettings">Mehr Einstellungen</button>
-        <button id="close-settings-btn" style="float: right;">❌</button>
-    `;
+        <button id="close-settings-btn" aria-label="Einstellungen schließen" style="float: right;">❌</button>
+      `;
 
-    document.body.appendChild(settingsModal);
+      document.body.appendChild(settingsModal);
 
-    document.getElementById('open-settings-modal').addEventListener('click', () => {
-        settingsModal.style.display = 'block';
-    });
+      document.getElementById('open-settings-modal').addEventListener('click', () => { settingsModal.style.display = 'block'; });
 
-    document.body.addEventListener('click', (e) => {
-        if (e.target.id === 'close-settings-btn') {
-            settingsModal.style.display = 'none';
-        }
-        if (e.target.id === 'more-settings-btn') {
-            location.href = 'settings.html';
-        }
-    });
+      document.body.addEventListener('click', (e) => {
+        if (e.target.id === 'close-settings-btn') settingsModal.style.display = 'none';
+        if (e.target.id === 'more-settings-btn') location.href = 'settings.html';
+      });
 
-    document.getElementById('theme-select').addEventListener('change', e => {
+      const themeSelect = document.getElementById('theme-select');
+      themeSelect.addEventListener('change', e => {
         const theme = e.target.value;
-        if (theme === "system") {
-            document.documentElement.removeAttribute('data-theme');
-        } else {
-            document.documentElement.setAttribute('data-theme', theme);
-        }
+        if (theme === "system") document.documentElement.removeAttribute('data-theme');
+        else document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem("theme", theme);
-    });
+      });
 
-    document.getElementById('lang-select').addEventListener('change', e => {
+      const langSelect = document.getElementById('lang-select');
+      langSelect.addEventListener('change', e => {
         const lang = e.target.value;
         localStorage.setItem("lang", lang);
         location.reload();
+      });
+
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme && savedTheme !== "system") document.documentElement.setAttribute('data-theme', savedTheme);
+      const savedLang = localStorage.getItem("lang");
+      if (savedLang) langSelect.value = savedLang;
     });
-
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme && savedTheme !== "system") {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    const savedLang = localStorage.getItem("lang");
-    if (savedLang) document.getElementById('lang-select').value = savedLang;
-});
-</script>
-
+  </script>
 </body>
 </html>
