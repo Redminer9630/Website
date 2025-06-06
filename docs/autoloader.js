@@ -1,7 +1,8 @@
 Promise.all([
   import('/docs/lang.js'),
   import('/docs/elements.js'),
-  import('/docs/embed.js')
+  import('/docs/embed.js'),
+  import('/docs/tooltip.js')
 ]).then(([langModule]) => {
   const lang = langModule.default || {};
 
