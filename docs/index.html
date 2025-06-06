@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-html lang="de">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +11,12 @@ html lang="de">
   <link rel="stylesheet" href="index.css">
   <script type="module" src="firebase.js"></script>
   <script type="module" src="common.js"></script>
-  <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async=""></script>
+  <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async></script>
 </head>
 <body>
   <header>
     <div class="icon-left">
-      <div><img src="images/main.png" class="logo-static" alt="Redminer9630 Logo"></div>
+      <div><img src="images/main.png" class="logo-static" alt="Logo"></div>
       <div class="nav-item" onclick="location.href='wiki'"><img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki"></div>
       <div class="nav-item" onclick="location.href='downloads'"><img src="images/icons/downloads.png" class="nav-icon" alt="Download"></div>
       <div class="nav-item" onclick="location.href='generators'"><img src="images/icons/generators.png" class="nav-icon" alt="Generators"></div>
@@ -38,7 +38,7 @@ html lang="de">
     </section><br>
     <section>
       <div class="section-title" langid="index_mcff.title"><h2>Schreck um Mitternacht – Minecraft Freunde Fanstory</h2></div>
-      <div="" class="section-text" langid="index_mcff.p">Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</div><br>
+      <div class="section-text" langid="index_mcff.p">Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</div><br>
       <br><button class="section-button" onclick="location.href='doc/mcfreundefanstory'" langid="index_mcff.button">Geschichte lesen</button>
     </section><br>
     <section>
@@ -47,12 +47,6 @@ html lang="de">
     </section>
   </main>
 
-  <script>
-    function img(page) {
-      const links = ["settings", "wiki", "downloads", "generators", "tools", "server", "feedback", "account"];
-      if (page >= 0 && page < links.length) location.href = links[page];
-    }
-    window.onload = () => Modal.toast("Hallo Welt!");
-  </script>
+  <script>window.onload = () => Modal.toast("Hallo Welt!");</script>
 </body>
 </html>
