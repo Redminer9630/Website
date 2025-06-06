@@ -135,3 +135,4 @@ const Modal = (() => {
     document.head.appendChild(style);
     return Modal;
 })();
+window.Modal = Modal;
