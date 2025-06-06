@@ -17,16 +17,16 @@
   <header>
     <div class="icon-left">
       <div><img src="images/main.png" class="logo-static" alt="Logo"></div>
-      <div class="nav-item" onclick="location.href='wiki'"><img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki"></div>
-      <div class="nav-item" onclick="location.href='downloads'"><img src="images/icons/downloads.png" class="nav-icon" alt="Download"></div>
-      <div class="nav-item" onclick="location.href='generators'"><img src="images/icons/generators.png" class="nav-icon" alt="Generators"></div>
-      <div class="nav-item" onclick="location.href='tools'"><img src="images/icons/tools.png" class="nav-icon" alt="Tools"></div>
-      <div class="nav-item" onclick="location.href='server'"><img src="images/icons/team.png" class="nav-icon" alt="Server"></div>
+      <div class="nav-item" onclick="location.href='wiki'" unstable><img src="images/icons/mcjewiki.png" class="nav-icon" alt="Wiki"></div>
+      <div class="nav-item" onclick="location.href='downloads'" unstable><img src="images/icons/downloads.png" class="nav-icon" alt="Download"></div>
+      <div class="nav-item" onclick="location.href='generators'" unstable><img src="images/icons/generators.png" class="nav-icon" alt="Generators"></div>
+      <div class="nav-item" onclick="location.href='tools'" unstable><img src="images/icons/tools.png" class="nav-icon" alt="Tools"></div>
+      <div class="nav-item" onclick="location.href='server'" unstable><img src="images/icons/team.png" class="nav-icon" alt="Server"></div>
     </div>
     <div class="icon-right">
-      <img onclick="location.href='manual'" src="images/icons/about.png" class="account-icon" alt="Benutzerhandbuch öffnen">
-      <img onclick="location.href='feedback'" src="images/icons/feedback.png" class="account-icon" alt="Feedback geben">
-      <img onclick="location.href='settings'" src="images/icons/settings.png" class="account-icon" style="width: auto;" alt="Einstellungen öffnen">
+      <img onclick="location.href='manual'" unstable src="images/icons/about.png" class="account-icon" alt="Benutzerhandbuch öffnen">
+      <img onclick="location.href='feedback'" unstable src="images/icons/feedback.png" class="account-icon" alt="Feedback geben">
+      <img onclick="location.href='settings'" unstable src="images/icons/settings.png" class="account-icon" style="width: auto;" alt="Einstellungen öffnen">
     </div>
   </header>
 
@@ -34,7 +34,7 @@
     <section id="about">
       <div class="section-title" langid="index_ueber.title"><h2>Ueber Redminer9630</h2></div>
       <div class="section-text" langid="index_ueber.p">Ich bin ein neuer Minecraft-YouTuber und Streamer, ich habe meinen Kanal vor Kurzem gestartet. Mein Kanal ist noch im Aufbau, und bisher wurden keine Videos veroeffentlicht. Trotzdem werde ich schon in naher Zukunft spannende Inhalte erstellen, und es lohnt sich von Anfang an dabei zu sein.</div>
-      <br><button class="section-button" onclick="location.href='manual?q=about'" langid="index_ueber.button">Mehr ueber mich erfahren</button>
+      <br><button class="section-button" onclick="location.href='manual?q=about'" unstable langid="index_ueber.button">Mehr ueber mich erfahren</button>
     </section><br>
     <section>
       <div class="section-title" langid="index_mcff.title"><h2>Schreck um Mitternacht – Minecraft Freunde Fanstory</h2></div>
@@ -47,6 +47,9 @@
     </section>
   </main>
 
-  <script>window.onload = () => Modal.toast("Hallo Welt!");</script>
+  <script>
+      window.onload = () => Modal.toast("Hallo Welt!");
+      document.querySelectorAll('a[unstable]').forEach(a => { a.addEventListener('click', e => { if (!confirm("Du verlässt jetzt den stabilen Bereich dieser Website.\nDiese Seite kann Fehler enthalten oder nicht richtig funktionieren.\nMöchtest du wirklich fortfahren?")) { e.preventDefault(); } }); });
+  </script>
 </body>
 </html>
