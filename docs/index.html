@@ -47,9 +47,6 @@
     </section>
   </main>
 
-  <script>
-      window.onload = () => Modal.toast("Hallo Welt!");
-      document.addEventListener("click",e=>{let t=e.target.closest("[unstable]");if(!t)return;let u=t.getAttribute("href")||t.dataset.href;if(u){e.preventDefault();if(confirm("Du verlässt jetzt den stabilen Bereich dieser Website.\nDiese Seite kann Fehler enthalten oder nicht richtig funktionieren.\nMöchtest du wirklich fortfahren?"))t.getAttribute("target")==="_blank"?window.open(u,"_blank"):location.href=u}});
-  </script>
+  <script>window.onload = () => Modal.toast("Hallo Welt!");</script>
 </body>
 </html>
