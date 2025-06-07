@@ -1,4 +1,6 @@
 Promise.all([
+    // Folgende Dateien werden automatisch geladen wenn im HTML Dokument folgender Script-Tag im <head> angegeben wurde:
+    // <script type="module" src="autoloader.js"></script>
     import('/docs/lang.js'),
     import('/docs/elements.js'),
     import('/docs/embed.js'),
@@ -8,7 +10,6 @@ Promise.all([
     import('/docs/modal.js')
 ]).then(([langModule]) => {
     const lang = langModule.default || {};
-
     document.querySelectorAll('[lang]').forEach(el => {
         const key = el.getAttribute('lang');
         el.innerText = lang[key] || `[[${key}]]`;
@@ -22,19 +23,18 @@ Promise.all([
     }
 
     const savedLang = localStorage.getItem("lang");
-    if (savedLang && savedLang !== "de" && !document.documentElement.lang.includes(savedLang)) {
+    if (savedLang && savedLang !== "de") {
         location.reload();
     }
 
     document.addEventListener("click", e => {
-        const el = e.target.closest("[unstable]");
+        let el = e.target.closest("[unstable]");
         if (!el) return;
-        const u = el.getAttribute("href") || el.dataset.href;
+        let u = el.getAttribute("href") || el.dataset.href;
         if (!u) return;
         e.preventDefault();
-        if (confirm("Du verlässt jetzt den stabilen Bereich dieser Website.\nDiese Seite kann Fehler enthalten oder nicht richtig funktionieren.\nMöchtest du wirklich fortfahren?")) {
+        if (confirm("Du verlässt jetzt den stabilen Bereich dieser Website.\nDiese Seite kann Fehler enthalten oder nicht richtig funktionieren.\nMöchtest du wirklich fortfahren?"))
             el.getAttribute("target") === "_blank" ? open(u, "_blank") : location.href = u;
-        }
     });
 });
 
