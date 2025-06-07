@@ -1,14 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => { document.querySelectorAll('[data-modal-open]').forEach(btn => { btn.addEventListener('click', () => { Modal.open(btn.getAttribute('data-modal-open')); }); }); });
-
 const Modal = (() => {
     const state = { openModals: [], zIndex: 2000 };
 
     const Modal = {
-        version: Common.version,
-        
-        open(id, opts = {}) { const modal = createModal(id, opts); modal.style.display = 'flex'; return modal; },
+        version: (typeof Common !== 'undefined' && Common.version) || '1.0',
 
-        close(id) { const modal = document.getElementById(`modal-${id}`); if (modal) { modal.remove(); state.openModals = state.openModals.filter(m => m !== modal); } },
+        open(id, opts = {}) {
+            const modal = createModal(id, opts);
+            modal.style.display = 'flex';
+            return modal;
+        },
+
+        close(id) {
+            const modal = document.getElementById(`modal-${id}`);
+            if (modal) {
+                modal.remove();
+                state.openModals = state.openModals.filter(m => m !== modal);
+            }
+        },
 
         toast(message, duration = 7000) {
             const toast = document.createElement('div');
@@ -55,7 +63,9 @@ const Modal = (() => {
             const wrapper = document.createElement('div');
             wrapper.innerHTML = options.content;
             content.appendChild(wrapper);
-        } else if (options.content instanceof HTMLElement) { content.appendChild(options.content); }
+        } else if (options.content instanceof HTMLElement) {
+            content.appendChild(options.content);
+        }
 
         modal.appendChild(content);
         document.body.appendChild(modal);
@@ -65,7 +75,7 @@ const Modal = (() => {
 
         return modal;
     }
-    
+
     function makeDraggable(el) {
         let offsetX = 0, offsetY = 0, dragging = false;
 
@@ -91,6 +101,8 @@ const Modal = (() => {
             document.body.style.userSelect = '';
         });
     }
+
+    // 🧩 Modal-Styles injizieren
     const style = document.createElement('style');
     style.textContent = `
         .modal-container {
@@ -133,6 +145,7 @@ const Modal = (() => {
         }
     `;
     document.head.appendChild(style);
+
     return Modal;
 })();
 window.Modal = Modal;
