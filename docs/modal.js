@@ -1,8 +1,8 @@
-const Modal = (() => {
+export const Modal = (() => {
     const state = { openModals: [], zIndex: 2000 };
 
     const Modal = {
-        version: (typeof Common !== 'undefined' && Common.version) || '1.0',
+        version: Common?.version || '1.0',
 
         open(id, opts = {}) {
             const modal = createModal(id, opts);
@@ -102,7 +102,6 @@ const Modal = (() => {
         });
     }
 
-    // 🧩 Modal-Styles injizieren
     const style = document.createElement('style');
     style.textContent = `
         .modal-container {
@@ -148,4 +147,4 @@ const Modal = (() => {
 
     return Modal;
 })();
-window.Modal = Modal;
+
