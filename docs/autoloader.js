@@ -8,7 +8,7 @@ Promise.all([
     import('/docs/firebase.js'),
     import('/docs/common.js'),
     import('/docs/modal.js')
-]).then(([langModule]) => {
+]).then(([langModule, elements, embed, tooltip, firebase, common, modal]) => {
     const lang = langModule.default || {};
     document.querySelectorAll('[lang]').forEach(el => {
         const key = el.getAttribute('lang');
