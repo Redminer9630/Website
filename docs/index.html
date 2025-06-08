@@ -9,7 +9,6 @@
   <meta name="keywords" content="Minecraft, Redminer9630">
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="index.css">
-  <script type="module" src="common.js"></script>
   <script type="module" src="autoloader.js"></script>
   <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-98DDEG10MK" async></script>
 </head>
@@ -47,7 +46,6 @@
       <button class="section-button" onclick="location.href='https://fatness4thegreedies.github.io'" langid="index_band.button">Jetzt Offiziele Bandseite anschauen</button>
     </section>
   </main>
-
-  <script>window.onload = () => Modal.toast("Hallo Welt!");</script>
+  <script>window.addEventListener('load', () => { if (window.Modal && Modal.toast) Modal.toast("Hallo Welt!"); });</script>
 </body>
 </html>
