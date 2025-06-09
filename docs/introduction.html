@@ -4,68 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Einführung</title>
+  <meta name="description" content="Einführung in die Welt von Redminer9630. Minecraft, Projekte, Tools und mehr.">
+  <link rel="stylesheet" href="introduction.css">
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
   <style>
-    body, html { margin:0; padding:0; overflow-x:hidden; font-family:sans-serif; background:#111; color:#fff; }
-    section { height:100vh; display:flex; align-items:center; justify-content:center; font-size:4vw; position:relative; }
-    #intro { background:linear-gradient(120deg, #1e3c72, #2a5298); }
-    #second { background:#111; }
-    #third { background:#222; }
-    .overlay-text { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:8vw; opacity:0; }
-    .parallax { position:absolute; width:100%; height:100%; top:0; left:0; background-size:cover; background-position:center; z-index:-1; }
+    body, html { margin:0; padding:0; font-family:sans-serif; background:#0a0a0a; color:#eee; }
+    main { margin-top:60px; }
+    section { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; position:relative; }
+    .section-title { font-size:3rem; margin-bottom:1rem; }
+    .section-text { max-width:800px; text-align:center; font-size:1.2rem; opacity:0.8; }
+    .section-button { margin-top:2rem; padding:0.8rem 2rem; font-size:1rem; border:none; background:#2a5298; color:#fff; border-radius:4px; cursor:pointer; transition:0.3s; }
+    .section-button:hover { background:#1e3c72; }
+    .parallax-bg { position:absolute; width:100%; height:100%; background-size:cover; background-position:center; z-index:-1; opacity:0.2; }
   </style>
 </head>
 <body>
+  <main>
 
-  <section id="intro">
-    <div class="parallax" style="background-image:url('https://picsum.photos/1920/1080?grayscale');"></div>
-    <h1>Hallo, bei unserer Offizielen Website - Redminer9630.ddns.net</h1>
-    <h2>Hier ist die Einführung zu unserer Website</h2>
-  </section>
+    <section id="hero">
+      <div class="parallax-bg" style="background-image:url('https://picsum.photos/id/1015/1920/1080');"></div>
+      <h1 class="section-title">Willkommen bei Redminer9630</h1>
+      <p class="section-text">Entdecke Minecraft-Projekte, eigene Tools und spannende Features. Starte jetzt dein Abenteuer!</p>
+    </section>
 
-  <section id="second">
-    <div class="overlay-text" id="coolText1">Runter gescrollt</div>
-  </section>
+    <section id="features">
+      <div class="section-title">Was dich erwartet</div>
+      <div class="section-text">Eigene Datapacks, Mods, Resourcepacks – alles kostenlos, alles Open Source.</div>
+      <button class="section-button" onclick="location.href='downloads'">Zu den Downloads</button>
+    </section>
 
-  <section id="third">
-    <div class="overlay-text" id="coolText2">Oben auf der Website(nur auf der Initial Seite) sind verschiede Links um sich auf unserer Website zu bewegen, sie sind angezeigt als Bilder</div>
-  </section>
+    <section id="projects">
+      <div class="section-title">Projekte & Highlights</div>
+      <div class="section-text">Aktuelle Projekte: Ultimatum-Mod, Minecraft Freunde Fanstory, und mehr.</div>
+      <button class="section-button" onclick="location.href='project'">Alle Projekte ansehen</button>
+    </section>
 
-  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <section id="community">
+      <div class="section-title">Teil der Community werden</div>
+      <div class="section-text">Tritt dem Discord bei, gib Feedback, werde Teil der Community.</div>
+      <button class="section-button" onclick="location.href='linktree.html'">Community beitreten</button>
+    </section>
+
+  </main>
+
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.to(".parallax", {
-      yPercent: 20,
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#intro",
-        start: "top top",
-        end: "bottom top",
-        scrub: true
-      }
+    gsap.utils.toArray("section").forEach((section, i) => {
+      gsap.fromTo(section.querySelector('.section-title'), 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, scrollTrigger: { trigger: section, start: "top 80%", end: "top 30%", scrub: true } }
+      );
+      gsap.fromTo(section.querySelector('.section-text'), 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 0.8, scrollTrigger: { trigger: section, start: "top 75%", end: "top 30%", scrub: true } }
+      );
     });
 
-    gsap.to("#coolText1", {
-      opacity: 1,
-      y: -50,
-      scrollTrigger: {
-        trigger: "#second",
-        start: "top center",
-        end: "bottom center",
-        scrub: true
-      }
-    });
-
-    gsap.to("#coolText2", {
-      opacity: 1,
-      scale: 1.5,
-      scrollTrigger: {
-        trigger: "#third",
-        start: "top center",
-        end: "bottom center",
-        scrub: true
-      }
+    gsap.utils.toArray(".parallax-bg").forEach((bg) => {
+      gsap.to(bg, {
+        yPercent: 20,
+        ease: "none",
+        scrollTrigger: {
+          trigger: bg.parentElement,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true
+        }
+      });
     });
   </script>
 </body>
