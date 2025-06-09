@@ -4,57 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seite nicht gefunden</title>
-    <script src="/docs/anti-hack.js"></script>
-    <script src="common.js"></script>
+    <script src="autoloader.js"></script>
     <style>
         body { font-family: 'Minecraft', sans-serif; text-align: center; margin: 0; padding-bottom: 80px; background-color: #f4f4f4; }
         h1 { font-size: 3em; color: #333; margin-top: 50px; }
         p { font-size: 1.2em; color: #666; }
         a { color: #1a73e8; text-decoration: none; }
-        a:hover{ text-decoration: underline; }
-        @media (prefers-color-scheme: dark) {
-            body{ background-color: #1a1a1a; color: #f5f5f5; }
-            p, h1{ color: #ffffff; }
-        }
-        .back {
-            font-size: 1.2em; color: white; font-size: 16px;
-            text-decoration: none; border-radius: 8px;
-            padding: 10px 20px; background: #1a73e8;
-            display: inline-block; margin-top: 20px;
-            transition: transform 0.3s ease;
-        }
+        a:hover { text-decoration: underline; }
+        @media (prefers-color-scheme: dark) { body { background-color: #1a1a1a; color: #f5f5f5; } p, h1 { color: #ffffff; } }
+        .back { font-size: 16px; color: white; text-decoration: none; border-radius: 8px; padding: 10px 20px; background: #1a73e8; display: inline-block; margin-top: 20px; transition: transform 0.3s ease; }
         .back:hover { transform: scale(1.2); }
-        #extraInfo {
-            margin-top: 40px; font-size: 0.9em;
-            color: #999; max-width: 90%; margin-inline: auto;
-            word-wrap: break-word;
-        }
+        #extraInfo { margin-top: 40px; font-size: 0.9em; color: #999; max-width: 90%; margin-inline: auto; word-wrap: break-word; }
+        progress { width: 80%; height: 20px; margin-top: 10px; appearance: none; }
+        progress::-webkit-progress-bar { background-color: #eee; border-radius: 10px; }
+        progress::-webkit-progress-value { background-color: #1a73e8; border-radius: 10px; }
+        progress::-moz-progress-bar { background-color: #1a73e8; border-radius: 10px; }
     </style>
 </head>
 <body>
     <h1>404 - Seite nicht gefunden</h1>
     <p>Die von dir gesuchte Seite konnte nicht gefunden werden. <a href="https://redminer9630.ddns.net/manual?q=404">Mehr Infos</a></p>
-    <a href='https://redminer9630.ddns.net' class="back">Zurueck zur Startseite</a>
+    <a href="https://redminer9630.ddns.net" class="back">Zurück zur Startseite</a>
     <p id="info">Du wirst in <span id="countdown">5</span> Sekunden zur Startseite geleitet</p>
-    <div id="extraInfo" aria-busy="true" aria-describedby="progress-bar"><progress id="progress-bar" aria-label="Gerätinfo wird geladen…"></progress></div>
+    <div id="extraInfo" aria-busy="true" aria-describedby="progress-bar">
+        <progress id="progress-bar" max="5" value="0" aria-label="Geräteinfo wird geladen…"></progress>
+    </div>
 
     <script>
-    const countdownElement = document.getElementById('countdown');
-    const infoElement = document.getElementById('info');
+        const countdownElement = document.getElementById('countdown');
+        const progressBar = document.getElementById('progress-bar');
+        const infoElement = document.getElementById('info');
+        const extraInfo = document.getElementById('extraInfo');
 
-    if (window.location.pathname.endsWith('404')) {
-        infoElement.textContent = 'Countdown gestopt';
-    } else {
-        let timeLeft = 5;
-        const countdownInterval = setInterval(() => {
-            timeLeft--;
-            countdownElement.textContent = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(countdownInterval);
-                window.location.href = 'https://redminer9630.ddns.net';
-            }
-        }, 1000);
-    }
+        if (window.location.pathname.endsWith('404')) {
+            infoElement.textContent = 'Countdown gestoppt';
+            progressBar.value = 0;
+            progressBar.removeAttribute('aria-busy');
+        } else {
+            let timeLeft = 5;
+            progressBar.value = 0;
+
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = timeLeft;
+                progressBar.value = progressBar.max - timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'https://redminer9630.ddns.net';
+                }
+            }, 1000);
+        }
 
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
@@ -69,9 +68,13 @@
                     <strong>Provider:</strong> ${data.org}<br>
                     <strong>Betriebssystem:</strong> ${os}
                 `;
-                document.getElementById('extraInfo').innerHTML = infoText;
+                extraInfo.innerHTML += `<div style="margin-top:10px;">${infoText}</div>`;
+                extraInfo.removeAttribute('aria-busy');
             })
-            .catch(() => { document.getElementById('extraInfo').textContent = "Fehler beim Laden der Geräteinformationen."; });
+            .catch(() => {
+                extraInfo.textContent = "Fehler beim Laden der Geräteinformationen.";
+                extraInfo.removeAttribute('aria-busy');
+            });
     </script>
 </body>
 </html>
