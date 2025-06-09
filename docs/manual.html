@@ -34,6 +34,9 @@
 		.wpage.active { background: #007BFF; color: #fff; }
 		@keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
 		.toggle { cursor: pointer; user-select: none; }
+	    #imgcrdt a { display: inline-block; margin: 8px; padding: 6px 10px; background: #f4f4f4; border-radius: 6px; color: #007BFF; text-decoration: none; transition: background 0.2s, color 0.2s; }
+	    #imgcrdt a:hover { background: #007BFF; color: #fff; }
+	    #imgcrdt { display: flex; flex-wrap: wrap; gap: 8px; }
 	</style>
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
