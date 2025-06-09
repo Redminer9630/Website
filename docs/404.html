@@ -36,7 +36,7 @@
     <p>Die von dir gesuchte Seite konnte nicht gefunden werden. <a href="https://redminer9630.ddns.net/manual?q=404">Mehr Infos</a></p>
     <a href='https://redminer9630.ddns.net' class="back">Zurueck zur Startseite</a>
     <p id="info">Du wirst in <span id="countdown">5</span> Sekunden zur Startseite geleitet</p>
-    <div id="extraInfo">Lade Geräteinformationen...</div>
+    <div id="extraInfo" aria-busy="true" aria-describedby="progress-bar"><progress id="progress-bar" aria-label="Gerätinfo wird geladen…"></progress></div>
 
     <script>
     const countdownElement = document.getElementById('countdown');
