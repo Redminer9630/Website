@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einführung</title>
+  <style>
+    body, html { margin:0; padding:0; overflow-x:hidden; font-family:sans-serif; background:#111; color:#fff; }
+    section { height:100vh; display:flex; align-items:center; justify-content:center; font-size:4vw; position:relative; }
+    #intro { background:linear-gradient(120deg, #1e3c72, #2a5298); }
+    #second { background:#111; }
+    #third { background:#222; }
+    .overlay-text { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:8vw; opacity:0; }
+    .parallax { position:absolute; width:100%; height:100%; top:0; left:0; background-size:cover; background-position:center; z-index:-1; }
+  </style>
+</head>
+<body>
+
+  <section id="intro">
+    <div class="parallax" style="background-image:url('https://picsum.photos/1920/1080?grayscale');"></div>
+    <h1>Hallo, bei unserer Offizielen Website - Redminer9630.ddns.net</h1>
+    <h2>Hier ist die Einführung zu unserer Website</h2>
+  </section>
+
+  <section id="second">
+    <div class="overlay-text" id="coolText1">Runter gescrollt</div>
+  </section>
+
+  <section id="third">
+    <div class="overlay-text" id="coolText2">Oben auf der Website(nur auf der Initial Seite) sind verschiede Links um sich auf unserer Website zu bewegen, sie sind angezeigt als Bilder</div>
+  </section>
+
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to(".parallax", {
+      yPercent: 20,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#intro",
+        start: "top top",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+
+    gsap.to("#coolText1", {
+      opacity: 1,
+      y: -50,
+      scrollTrigger: {
+        trigger: "#second",
+        start: "top center",
+        end: "bottom center",
+        scrub: true
+      }
+    });
+
+    gsap.to("#coolText2", {
+      opacity: 1,
+      scale: 1.5,
+      scrollTrigger: {
+        trigger: "#third",
+        start: "top center",
+        end: "bottom center",
+        scrub: true
+      }
+    });
+  </script>
+</body>
+</html>
