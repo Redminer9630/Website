@@ -44,3 +44,31 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 });
+
+// URL Canonicalization Fix
+if(location.hostname==="www.redminer9630.ddns.net") location.href=location.href.replace("//www.","//");
+
+// Keywords in <title> und <meta description> automatisch anpassen
+const pageTitle = document.title;
+document.querySelector('meta[name="description"]')?.setAttribute('content', pageTitle + " - Infos, Downloads und mehr von Redminer9630");
+
+// Render-blocking Ressourcen eliminieren Hinweis
+window.addEventListener("load", () => {
+	console.log("Alle Ressourcen geladen – Render-Blocking optimiert durch <link rel='preload'> empfohlen.");
+});
+
+// Modern Image Format Hinweis für Entwickler
+document.querySelectorAll("img").forEach(img => {
+	if(!img.src.endsWith(".webp")) console.warn("Bild sollte in WebP vorliegen:", img.src);
+});
+
+// Social API Integration (Beispiel, AddThis ersetzt durch eigenen Link)
+console.log("Social Integration empfohlen. Beispiel-Link: https://addthis.com oder eigene API");
+
+// JS Error Logging
+window.addEventListener('error', e => console.warn("JS Error:", e.message));
+
+// Responsive Images Hinweis
+document.querySelectorAll("img").forEach(img=>{
+	if(img.naturalWidth>800) console.warn("Bild eventuell zu groß geladen:", img.src);
+});
