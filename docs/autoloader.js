@@ -1,13 +1,14 @@
 Promise.all([
     // <script type="module" src="autoloader.js"></script>
 	// Automatisches Laden folgender Module
-	import('/docs/lang.js'),
-	import('/docs/elements.js'),
-	import('/docs/embed.js'),
-	import('/docs/tooltip.js'),
-	import('/docs/firebase.js'),
-	import('/docs/common.js'),
-	import('/docs/modal.js')
+	import('/lang.js'),
+	import('/elements.js'),
+	import('/embed.js'),
+	import('/tooltip.js'),
+	import('/firebase.js'),
+	import('/common.js'),
+	import('/modal.js'),
+    import('/need-confirm.js')
 ]).then(([langModule, elements, embed, tooltip, firebase, common, modal]) => {
 	const lang = langModule.default || {};
 	document.querySelectorAll('[lang]').forEach(el => {
