@@ -8,7 +8,8 @@ Promise.all([
 	import('/firebase.js'),
 	import('/common.js'),
 	import('/modal.js'),
-    import('/need-confirm.js')
+    import('/need-confirm.js'),
+    import('/download.js')
 ]).then(([langModule, elements, embed, tooltip, firebase, common, modal]) => {
 	const lang = langModule.default || {};
 	document.querySelectorAll('[lang]').forEach(el => {
