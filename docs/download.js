@@ -4,10 +4,8 @@ export async function download(DATA) {
 	// Unterstützte Optionen: filename, filedata, encoding, multiple (Array)
 	const encoding = DATA.encoding || "utf-8";
 
-	// Modal anzeigen
-	showDownloadModal("Download läuft...", DATA.filename || "Unbekannte Datei");
+	showDownloadModal("Download läuft...", DATA.filename || "Kein Name");
 
-	// Mehrere Dateien → ZIP
 	if (Array.isArray(DATA.multiple)) {
 		const zip = new JSZip();
 		DATA.multiple.forEach(file => {
@@ -27,7 +25,6 @@ export async function download(DATA) {
 	hideDownloadModal();
 }
 
-// ⏬ Download auslösen
 function triggerDownload(blob, filename) {
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement("a");
@@ -42,7 +39,6 @@ function triggerDownload(blob, filename) {
 function getMimeType(filename, encoding = "utf-8") {
   const ext = filename.split('.').pop().toLowerCase();
   const types = {
-    // Text / Web
     txt: "text/plain",
     html: "text/html",
     css: "text/css",
@@ -53,24 +49,18 @@ function getMimeType(filename, encoding = "utf-8") {
     md: "text/markdown",
     mht: "multipart/related",
     mhtml: "multipart/related",
-
-    // Bilder
     png: "image/png",
     jpg: "image/jpeg", jpeg: "image/jpeg",
     gif: "image/gif",
     svg: "image/svg+xml",
     webp: "image/webp",
     ico: "image/vnd.microsoft.icon",
-
-    // Audio / Video
     mp3: "audio/mpeg",
     ogg: "audio/ogg",
     wav: "audio/wav",
     mp4: "video/mp4",
     webm: "video/webm",
     mkv: "video/x-matroska",
-
-    // Archivre / Fonts
     zip: "application/zip",
     gz: "application/gzip",
     rar: "application/x-rar-compressed",
@@ -79,8 +69,6 @@ function getMimeType(filename, encoding = "utf-8") {
     otf: "font/otf",
     woff: "font/woff",
     woff2: "font/woff2",
-
-    // Dokumente
     pdf: "application/pdf",
     doc: "application/msword",
     docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -88,21 +76,15 @@ function getMimeType(filename, encoding = "utf-8") {
     xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     ppt: "application/vnd.ms-powerpoint",
     pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-
-    // Minecraft-spezifisch
     mcworld: "application/zip",
     mcpack: "application/zip",
     mcaddon: "application/zip",
     mcproject: "application/zip",
     mctemplate: "application/zip",
     mcstructure: "application/zip",
-    mcmeta: "application/json", // JSON-Konfigurationsdatei :contentReference[oaicite:1]{index=1}
-    mcfunction: "text/plain",   // Befehlsdatei in Minecraft Java :contentReference[oaicite:2]{index=2}
-
-    // 3D/Modelle
-    obj: "model/obj",           // 3D‑Modelle z. B. in Texture packs :contentReference[oaicite:3]{index=3}
-
-    // Standard-Fallback
+    mcmeta: "application/json",
+    mcfunction: "text/plain",
+    obj: "model/obj",
     default: "application/octet-stream"
   };
   const mime = types[ext] || types.default;
