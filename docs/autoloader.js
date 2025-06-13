@@ -9,7 +9,9 @@ Promise.all([
 	import('/js_components/common.js'),
 	import('/js_components/modal.js'),
     import('/js_components/need-confirm.js'),
-    import('/js_components/download.js')
+    import('/js_components/download.js'),
+    import('/js_components/back-button.js'),
+    import('/js_components/anti-hack.js')
 ]).then(([langModule, elements, embed, tooltip, firebase, common, modal, need-confirm, download]) => {
 	const lang = langModule.default || {};
 	document.querySelectorAll('[lang]').forEach(el => {
