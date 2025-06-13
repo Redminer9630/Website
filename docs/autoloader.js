@@ -1,7 +1,7 @@
 Promise.all([
     // <script type="module" src="autoloader.js"></script>
 	// Automatisches Laden folgender Module
-	import('/js_components/lang.js'),
+	import('/js_components/lang/lang.js'),
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
 	import('/js_components/tooltip.js'),
