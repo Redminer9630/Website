@@ -4,21 +4,6 @@ window.CommonVersion = {
     time: '11:03'
 };
 
-function appendThemeSupport() {
-    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-}
-
-function appendFonts() {
-    const style = document.createElement('style');
-    style.textContent = `
-        @font-face { font-family: 'Minecraft'; src: url('/fonts/minecraft_font.woff') format('woff'), url('/fonts/minecraft_font.ttf') format('truetype'); }
-        @font-face { font-family: 'MinecraftFont'; src: url('/fonts/minecraft_font.woff') format('woff'), url('/fonts/minecraft_font.ttf') format('truetype'); }
-        :root[data-theme='dark'] body { background-color: #1a1a1a; color: #f5f5f5; }
-        :root[data-theme='light'] body { background-color: #eaeaea; color: #333; }
-    `;
-    document.head.appendChild(style);
-}
 function appendFooter(version, date, time) {
     if (document.getElementById("main-footer")) return;
 
@@ -88,7 +73,7 @@ function appendFooter(version, date, time) {
         }
     });
 }
-
+/*
 function appendMetaTags() {
     const metaTags = [
         { name: 'description', content: 'Offizielle Website von Redminer9630' },
@@ -125,18 +110,7 @@ function appendCanonicalLink() {
     canonical.setAttribute('href', window.location.href.split('?')[0]);
     document.head.appendChild(canonical);
 }
-
-function replaceUmlauts(element) {
-    const umlautMap = { ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss' };
-    if (!element) return;
-    [...element.childNodes].forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            node.nodeValue = node.nodeValue.replace(/[äöüÄÖÜß]/g, m => umlautMap[m] || m);
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-            replaceUmlauts(node);
-        }
-    });
-}
+*/
 
 function initCommonFeatures(scope = document) {
     replaceUmlauts(scope);
@@ -150,11 +124,9 @@ function initCommonFeatures(scope = document) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    appendThemeSupport();
-    appendFonts();
-    appendMetaTags();
+    /*appendMetaTags();
     appendFaviconLinks();
+    appendCanonicalLink();*/
     appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time);
-    appendCanonicalLink();
     initCommonFeatures(document.body);
 });
