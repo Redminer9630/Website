@@ -1,42 +1,32 @@
-name: Update Mojangles
+name: Update Mojangles Font from FontStruct
 
 on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
-
+  
 jobs:
-  update-css:
+  update-font:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - name: Generate Mojangles Font Files with versioning
+      - name: Download TTF from FontStruct
         run: |
-          TTF="docs/minecraft_font.ttf"
-          WOFF="docs/minecraft_font.woff"
-          WOFF2="docs/minecraft_font.woff2"
+          curl -L -o fonts/minecraft_font.ttf "https://fontstruct.com/fontstructions/DEINE_FONT_ID/download/DEINE_FONT_NAME.ttf"
 
-          TTF_TS=$(date -r $TTF +%s)
-          WOFF_TS=$(date -r $WOFF +%s)
-          WOFF2_TS=$(date -r $WOFF2 +%s)
+      - name: Install FontForge
+        run: sudo apt-get update && sudo apt-get install -y fontforge
 
-          cat <<EOF > fonts.css
-          @font-face {
-            font-family: 'Mojangles';
-            src: url('fonts/minecraft_font.woff2?v=${WOFF2_TS}') format('woff2'),
-                 url('fonts/minecraft_font.woff?v=${WOFF_TS}') format('woff'),
-                 url('fonts/minecraft_font.ttf?v=${TTF_TS}') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-          }
-          EOF
+      - name: Generate woff and woff2
+        run: |
+          fontforge -script generate_webfonts.pe fonts/minecraft_font.ttf
 
-      - name: Commit and push updated Font Files
+      - name: Commit and push updated fonts
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add fonts.css
-          git commit -m "Update Font Files with timestamp versions"
+          git add fonts/minecraft_font.ttf fonts/minecraft_font.woff fonts/minecraft_font.woff2
+          git commit -m "Update fonts from FontStruct"
           git push
         continue-on-error: true
