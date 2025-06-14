@@ -1,11 +1,9 @@
-name: Update Fonts CSS
+name: Update Mojangles
 
 on:
-  push:
-    paths:
-      - 'docs/minecraft_font.ttf'
-      - 'docs/minecraft_font.woff'
-      - 'docs/minecraft_font.woff2'
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   update-css:
@@ -13,13 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Generate fonts.css with versioning
+      - name: Generate Mojangles Font Files with versioning
         run: |
           TTF="docs/minecraft_font.ttf"
           WOFF="docs/minecraft_font.woff"
           WOFF2="docs/minecraft_font.woff2"
 
-          # Zeitstempel (jeweils letzte Änderung)
           TTF_TS=$(date -r $TTF +%s)
           WOFF_TS=$(date -r $WOFF +%s)
           WOFF2_TS=$(date -r $WOFF2 +%s)
@@ -35,11 +32,11 @@ jobs:
           }
           EOF
 
-      - name: Commit and push updated fonts.css
+      - name: Commit and push updated Font Files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add fonts.css
-          git commit -m "Update fonts.css with timestamp versions"
+          git commit -m "Update Font Files with timestamp versions"
           git push
         continue-on-error: true
