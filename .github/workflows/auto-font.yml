@@ -1,0 +1,45 @@
+name: Update Fonts CSS
+
+on:
+  push:
+    paths:
+      - 'docs/minecraft_font.ttf'
+      - 'docs/minecraft_font.woff'
+      - 'docs/minecraft_font.woff2'
+
+jobs:
+  update-css:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate fonts.css with versioning
+        run: |
+          TTF="docs/minecraft_font.ttf"
+          WOFF="docs/minecraft_font.woff"
+          WOFF2="docs/minecraft_font.woff2"
+
+          # Zeitstempel (jeweils letzte Änderung)
+          TTF_TS=$(date -r $TTF +%s)
+          WOFF_TS=$(date -r $WOFF +%s)
+          WOFF2_TS=$(date -r $WOFF2 +%s)
+
+          cat <<EOF > fonts.css
+          @font-face {
+            font-family: 'Mojangles';
+            src: url('fonts/minecraft_font.woff2?v=${WOFF2_TS}') format('woff2'),
+                 url('fonts/minecraft_font.woff?v=${WOFF_TS}') format('woff'),
+                 url('fonts/minecraft_font.ttf?v=${TTF_TS}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+          EOF
+
+      - name: Commit and push updated fonts.css
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add fonts.css
+          git commit -m "Update fonts.css with timestamp versions"
+          git push
+        continue-on-error: true
