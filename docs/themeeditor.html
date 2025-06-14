@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Theme Editor</title>
+	<style>
+		body { margin: 0; font-family: sans-serif; background: var(--bg, #f4f4f4); color: var(--text, #000); }
+		#editor { padding: 1rem; max-width: 800px; margin: auto; }
+		input[type="color"], input[type="text"], select { margin: 0.2rem; }
+		.theme-box { border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 1rem; }
+		.preview { display: inline-block; width: 1.5rem; height: 1.5rem; border: 1px solid #000; vertical-align: middle; }
+		.field { display: flex; align-items: center; margin-bottom: 0.3rem; }
+		.field label { width: 100px; }
+	</style>
+</head>
+<body>
+	<div id="editor">
+		<h1>Theme Editor</h1>
+		<div>
+			<select id="themeSelect"></select>
+			<button onclick="loadTheme()">Laden</button>
+			<button onclick="applyTheme()">Anwenden</button>
+			<button onclick="saveTheme()">Speichern</button>
+		</div>
+		<div id="fields"></div>
+	</div>
+
+	<script>
+		const defaultThemes = {
+			'white-1': { '--bg': '#f4f4f4', '--text': '#000000', '--box': '#ffffff', '--accent': '#3399ff' },
+			'white-2': { '--bg': '#eeeeee', '--text': '#111111', '--box': '#ffffff', '--accent': '#ff6633' },
+			'white-3': { '--bg': '#dddddd', '--text': '#222222', '--box': '#f9f9f9', '--accent': '#33cc99' },
+			'dark-1': { '--bg': '#121212', '--text': '#ffffff', '--box': '#1e1e1e', '--accent': '#3399ff' },
+			'dark-2': { '--bg': '#181818', '--text': '#f0f0f0', '--box': '#2b2b2b', '--accent': '#ff6633' },
+			'dark-3': { '--bg': '#1a1a1a', '--text': '#eeeeee', '--box': '#252525', '--accent': '#33cc99' }
+		};
+
+		const fieldKeys = ['--bg', '--text', '--box', '--accent'];
+
+		function getThemes() {
+			return JSON.parse(localStorage.getItem('customThemes9630') || 'null') || defaultThemes;
+		}
+
+		function saveThemes(themes) {
+			localStorage.setItem('customThemes9630', JSON.stringify(themes));
+		}
+
+		function buildThemeSelect() {
+			const select = document.getElementById('themeSelect');
+			select.innerHTML = '';
+			for (const key of Object.keys(getThemes())) {
+				const opt = document.createElement('option');
+				opt.value = key;
+				opt.textContent = key;
+				select.appendChild(opt);
+			}
+		}
+
+		function buildFields(themeName) {
+			const theme = getThemes()[themeName];
+			const fields = document.getElementById('fields');
+			fields.innerHTML = '';
+			fieldKeys.forEach(key => {
+				const div = document.createElement('div');
+				div.className = 'field';
+				div.innerHTML = `
+					<label>${key}:</label>
+					<input type="color" id="color-${key}" value="${theme[key]}">
+					<span class="preview" style="background:${theme[key]}"></span>
+					<input type="text" id="text-${key}" value="${theme[key]}" size="8">
+				`;
+				fields.appendChild(div);
+				// Sync color and text input
+				const colorInput = div.querySelector(`#color-${CSS.escape(key)}`);
+				const textInput = div.querySelector(`#text-${CSS.escape(key)}`);
+				colorInput.addEventListener('input', e => {
+					textInput.value = e.target.value;
+					div.querySelector('.preview').style.background = e.target.value;
+				});
+				textInput.addEventListener('input', e => {
+					colorInput.value = e.target.value;
+					div.querySelector('.preview').style.background = e.target.value;
+				});
+			});
+		}
+
+		function loadTheme() {
+			const themeName = document.getElementById('themeSelect').value;
+			buildFields(themeName);
+		}
+
+		function applyTheme() {
+			const themeName = document.getElementById('themeSelect').value;
+			const newTheme = {};
+			fieldKeys.forEach(key => {
+				newTheme[key] = document.getElementById(`text-${CSS.escape(key)}`).value;
+			});
+			for (const key in newTheme) {
+				document.documentElement.style.setProperty(key, newTheme[key]);
+			}
+		}
+
+		function saveTheme() {
+			const themeName = document.getElementById('themeSelect').value;
+			const newTheme = {};
+			fieldKeys.forEach(key => {
+				newTheme[key] = document.getElementById(`text-${CSS.escape(key)}`).value;
+			});
+			const themes = getThemes();
+			themes[themeName] = newTheme;
+			saveThemes(themes);
+			buildThemeSelect();
+		}
+
+		document.addEventListener('DOMContentLoaded', () => {
+			buildThemeSelect();
+			loadTheme();
+			applyTheme();
+		});
+	</script>
+</body>
+</html>
