@@ -19,16 +19,6 @@
             align-items: center;
             justify-content: space-between;
         }
-        .header-link {
-            color: white;
-            font-size: 16px;
-            text-decoration: none;
-            background-color: #f44336;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        .header-link:hover { background-color: #e53935; }
         main {
             padding: 20px;
             text-align: center;
@@ -66,16 +56,6 @@
             cursor: pointer;
             border: 1px solid white;
         }
-    .header-link {
-        background-color: #e74c3c; color: white;
-        border: 1px solid #c0392b;
-    }
-    .header-link:hover { background-color: #c0392b; }
-    #content, .info-content {
-        background-color: #2b2b2b;
-        border: 1px solid #444;
-        color: #f0f0f0;
-    }
     table, th, td {
         font-family: 'Mojangles';
         border: 1px solid #555;
