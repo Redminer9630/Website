@@ -1,8 +1,3 @@
-       @font-face {
-            font-family: 'MinecraftFont';
-            src: url('minecraft_font.ttf') format('truetype'),
-                 url('minecraft_font.woff') format('woff');
-        }
         body {
             margin: 0;
             padding: 0;
@@ -52,22 +47,12 @@
             position: absolut;
             text-align: center;
             transition: all 0.2s ease;
+            font-family: 'Mojangles';
         }
         button:hover {
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
             background-color: #2980b9;
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #2c3e50;
-            color: white;
-            font-family: 'MinecraftFont', sans-serif;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-            margin-top: auto;
-        }               
+        }            
         table {
             width: 100%;
             border-collapse: collapse;
@@ -75,67 +60,24 @@
             border: 1px solid white;
         }
         th {
-            font-family: 'MinecraftFont', 'Minecraft';
+            font-family: 'Mojangles';
             padding: 8px;
             text-align: left;
             cursor: pointer;
             border: 1px solid white;
         }
-        @media (prefers-color-scheme: dark) {
-    body { background-color: #1e1e1e; color: #f5f5f5; }
-    h1, h2, h3, h4, h5, h6 { color: #ffffff; }
-
     .header-link {
         background-color: #e74c3c; color: white;
         border: 1px solid #c0392b;
     }
     .header-link:hover { background-color: #c0392b; }
-
-    .shortcut-button { background-color: #27ae60; color: white; }
-    .shortcut-nonview { background-color: #e74c3c; color: white; }
-    .shortcut-mod { background-color: #e67e22; color: white; }
-
-    .shortcut-button:hover, .shortcut-nonview:hover, .shortcut-mod:hover {
-        transform: scale(1.1); transition: 0.3s;
-        filter: brightness(1.1);
-    }
-
-    .url-bar {
-        background-color: #2c3e50;
-        border: 1px solid #34495e;
-        box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    }
-
-    .url-input {
-        background-color: #34495e; color: white;
-        border: 1px solid #1abc9c;
-    }
-
     #content, .info-content {
         background-color: #2b2b2b;
         border: 1px solid #444;
         color: #f0f0f0;
     }
-
-    .trading-one { color: #7f8c8d; }
-    .trading-two { color: #d8af93; }
-    .trading-three { color: #f1c40f; }
-    .trading-four { color: #2ecc71; }
-    .trading-five { color: #1abc9c; }
-    .trading-emerald { color: #2ecc71; }
-
-    .rarity-uncommon { color: #ffff66; }
-    .rarity-rare { color: #00ffff; }
-    .rarity-epic { color: #ff66ff; }
-
-    .custom-alert {
-        background-color: #222; color: white;
-        border: 1px solid #888;
-    }
-
     table, th, td {
-        font-family: 'MinecraftFont', 'Minecraft';
+        font-family: 'Mojangles';
         border: 1px solid #555;
     }
     th { background-color: #333; color: #eee; }
-}
