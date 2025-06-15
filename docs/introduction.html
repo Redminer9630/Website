@@ -14,45 +14,41 @@ layout: default
 	<style>
 		body, html { margin:0; padding:0; font-family:sans-serif; background:#0a0a0a; color:#eee; overflow-x:hidden; }
 		main { margin-top:60px; }
-		section { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; position:relative; }
-		.section-title { font-size:3rem; margin-bottom:1rem; }
+		section { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; position:relative; overflow:hidden; }
+		.section-title { font-size:3rem; margin-bottom:1rem; text-align:center; }
 		.section-text { max-width:800px; text-align:center; font-size:1.2rem; opacity:0.8; }
 		.section-button { margin-top:2rem; padding:0.8rem 2rem; font-size:1rem; border:none; background:#2a5298; color:#fff; border-radius:4px; cursor:pointer; transition:0.3s; }
 		.section-button:hover { background:#1e3c72; }
-		.parallax-bg { position:absolute; width:100%; height:100%; background-size:cover; background-position:center; z-index:-1; opacity:0.2; }
+		.parallax-bg { position:absolute; width:120%; height:120%; background-size:cover; background-position:center; z-index:-1; opacity:0.15; transform:translate(-10%, -10%); }
 
-		/* Zusätzliche Styles für Animationen */
-		.animated-section {
-			will-change: transform, opacity;
-			perspective: 800px;
-		}
+		.animate-up { opacity:0; transform:translateY(50px); }
 	</style>
 </head>
 <body>
 	<main>
 
-		<section id="hero" class="animated-section">
-			<div class="parallax-bg" style="background-image:url('https://picsum.photos/id/1015/1920/1080');"></div>
-			<h1 class="section-title">Willkommen bei Redminer9630</h1>
-			<p class="section-text">Entdecke Minecraft-Projekte, eigene Tools und spannende Features. Starte jetzt dein Abenteuer!</p>
+		<section id="hero">
+			<div class="parallax-bg" style="background-image:url('https://picsum.photos/id/1003/1920/1080');"></div>
+			<h1 class="section-title animate-up">Willkommen bei Redminer9630</h1>
+			<p class="section-text animate-up">Entdecke Minecraft-Projekte, eigene Tools und spannende Features. Starte jetzt dein Abenteuer!</p>
 		</section>
 
-		<section id="features" class="animated-section">
-			<div class="section-title">Was dich erwartet</div>
-			<div class="section-text">Eigene Datapacks, Mods, Resourcepacks – alles kostenlos, alles Open Source.</div>
-			<button class="section-button" onclick="location.href='downloads'">Zu den Downloads</button>
+		<section id="features">
+			<h2 class="section-title animate-up">Was dich erwartet</h2>
+			<p class="section-text animate-up">Eigene Datapacks, Mods, Resourcepacks – alles kostenlos, alles Open Source.</p>
+			<button class="section-button animate-up" onclick="location.href='downloads'">Zu den Downloads</button>
 		</section>
 
-		<section id="projects" class="animated-section">
-			<div class="section-title">Projekte & Highlights</div>
-			<div class="section-text">Aktuelle Projekte: Ultimatum-Mod, Minecraft Freunde Fanstory, und mehr.</div>
-			<button class="section-button" onclick="location.href='project'">Alle Projekte ansehen</button>
+		<section id="projects">
+			<h2 class="section-title animate-up">Projekte & Highlights</h2>
+			<p class="section-text animate-up">Aktuelle Projekte: Ultimatum-Mod, Minecraft Katzenhausen, und mehr.</p>
+			<button class="section-button animate-up" onclick="location.href='project'">Alle Projekte ansehen</button>
 		</section>
 
-		<section id="community" class="animated-section">
-			<div class="section-title">Teil der Community werden</div>
-			<div class="section-text">Tritt dem Discord bei, gib Feedback, werde Teil der Community.</div>
-			<button class="section-button" onclick="location.href='linktree.html'">Community beitreten</button>
+		<section id="community">
+			<h2 class="section-title animate-up">Teil der Community werden</h2>
+			<p class="section-text animate-up">Tritt dem Discord bei, gib Feedback, werde Teil der Community.</p>
+			<button class="section-button animate-up" onclick="location.href='discord'">Discord</button>
 		</section>
 
 	</main>
@@ -60,22 +56,9 @@ layout: default
 	<script>
 		gsap.registerPlugin(ScrollTrigger);
 
-		// Normale Fade-In Animation (leicht) für Titel & Text
-		gsap.utils.toArray(".animated-section").forEach(section => {
-			gsap.fromTo(section.querySelector('.section-title'),
-				{ y: 50, opacity: 0 },
-				{ y: 0, opacity: 1, scrollTrigger: { trigger: section, start: "top 80%", end: "top 30%", scrub: true } }
-			);
-			gsap.fromTo(section.querySelector('.section-text'),
-				{ y: 50, opacity: 0 },
-				{ y: 0, opacity: 0.8, scrollTrigger: { trigger: section, start: "top 75%", end: "top 30%", scrub: true } }
-			);
-		});
-
-		// Parallax für Hintergrundbilder
 		gsap.utils.toArray(".parallax-bg").forEach(bg => {
 			gsap.to(bg, {
-				yPercent: 20,
+				yPercent: 15,
 				ease: "none",
 				scrollTrigger: {
 					trigger: bg.parentElement,
@@ -86,35 +69,17 @@ layout: default
 			});
 		});
 
-		// Abgespacete, "kranke" Animationen für alle .animated-section zusätzlich:
-		gsap.utils.toArray(".animated-section").forEach(section => {
-			// Timeline für irre Bewegungen & Farbwechsel
-			const tl = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: 3, ease: "power1.inOut" } });
-
-			tl.to(section, {
-				x: gsap.utils.random(-150, 150),
-				y: gsap.utils.random(-150, 150),
-				rotation: gsap.utils.random(-25, 25),
-				scale: gsap.utils.random(0.8, 1.3),
-				filter: "hue-rotate(360deg) saturate(3) brightness(1.2)",
-				transformOrigin: "center center",
-				ease: "power2.inOut"
-			});
-			tl.to(section, {
-				x: gsap.utils.random(-300, 300),
-				y: gsap.utils.random(-300, 300),
-				rotation: gsap.utils.random(-45, 45),
-				scale: gsap.utils.random(0.7, 1.5),
-				filter: "hue-rotate(720deg) saturate(5) brightness(1.4)",
-				ease: "power3.inOut"
-			});
-			tl.to(section, {
-				x: 0,
+		gsap.utils.toArray(".animate-up").forEach(el => {
+			gsap.to(el, {
 				y: 0,
-				rotation: 0,
-				scale: 1,
-				filter: "hue-rotate(0deg) saturate(1) brightness(1)",
-				ease: "power4.inOut"
+				opacity: 1,
+				duration: 1,
+				ease: "power2.out",
+				scrollTrigger: {
+					trigger: el,
+					start: "top 80%",
+					toggleActions: "play none none reverse"
+				}
 			});
 		});
 	</script>
