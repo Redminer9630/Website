@@ -20,13 +20,14 @@ layout: default
 		.section-button { margin-top:2rem; padding:0.8rem 2rem; font-size:1rem; border:none; background:#2a5298; color:#fff; border-radius:4px; cursor:pointer; transition:0.3s; }
 		.section-button:hover { background:#1e3c72; }
 		.parallax-bg { position:absolute; width:120%; height:120%; background-size:cover; background-position:center; z-index:-1; opacity:0.15; transform:translate(-10%, -10%); }
-
 		.animate-up { opacity:0; transform:translateY(50px); }
+		canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; }
 	</style>
 </head>
 <body>
-	<main>
+	<canvas id="particleCanvas"></canvas>
 
+	<main>
 		<section id="hero">
 			<div class="parallax-bg" style="background-image:url('https://picsum.photos/id/1003/1920/1080');"></div>
 			<h1 class="section-title animate-up">Willkommen bei Redminer9630</h1>
@@ -50,7 +51,6 @@ layout: default
 			<p class="section-text animate-up">Tritt dem Discord bei, gib Feedback, werde Teil der Community.</p>
 			<button class="section-button animate-up" onclick="location.href='discord'">Discord</button>
 		</section>
-
 	</main>
 
 	<script>
@@ -82,68 +82,79 @@ layout: default
 				}
 			});
 		});
-        
-    <canvas id="particleCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;"></canvas>
+	</script>
 
-const canvas = document.getElementById("particleCanvas");
-const ctx = canvas.getContext("2d");
-let particles = [];
+	<script>
+		const canvas = document.getElementById("particleCanvas");
+		const ctx = canvas.getContext("2d");
+		let particles = [];
+		let mouse = { x: null, y: null };
 
-function resize() {
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resize);
-resize();
+		function resize() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		window.addEventListener("resize", resize);
+		resize();
 
-// Partikel erzeugen
-for (let i = 0; i < 80; i++) {
-	particles.push({
-		x: Math.random() * canvas.width,
-		y: Math.random() * canvas.height,
-		vx: (Math.random() - 0.5) * 0.5,
-		vy: (Math.random() - 0.5) * 0.5,
-		size: Math.random() * 2 + 1,
-		trail: []
-	});
-}
-
-function draw() {
-	ctx.fillStyle = "rgba(10,10,10,0.2)"; // Trail durch leicht transparentes Schwarz
-	ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-	particles.forEach(p => {
-		p.x += p.vx;
-		p.y += p.vy;
-
-		// Bildschirmrand umkehren
-		if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-		if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-		// Trail speichern
-		p.trail.push({ x: p.x, y: p.y });
-		if (p.trail.length > 20) p.trail.shift();
-
-		// Trail zeichnen
-		for (let i = 0; i < p.trail.length - 1; i++) {
-			const opacity = i / p.trail.length;
-			ctx.strokeStyle = `rgba(100,150,255,${opacity * 0.5})`;
-			ctx.beginPath();
-			ctx.moveTo(p.trail[i].x, p.trail[i].y);
-			ctx.lineTo(p.trail[i + 1].x, p.trail[i + 1].y);
-			ctx.stroke();
+		for (let i = 0; i < 80; i++) {
+			particles.push({
+				x: Math.random() * canvas.width,
+				y: Math.random() * canvas.height,
+				vx: (Math.random() - 0.5) * 0.5,
+				vy: (Math.random() - 0.5) * 0.5,
+				size: Math.random() * 2 + 1,
+				trail: []
+			});
 		}
 
-		// Punkt zeichnen
-		ctx.fillStyle = "rgba(150,200,255,0.7)";
-		ctx.beginPath();
-		ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-		ctx.fill();
-	});
+		window.addEventListener("mousemove", e => {
+			mouse.x = e.clientX;
+			mouse.y = e.clientY;
+		});
 
-	requestAnimationFrame(draw);
-}
-draw();
-</script>
+		function draw() {
+			ctx.fillStyle = "rgba(10,10,10,0.2)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			particles.forEach(p => {
+				p.x += p.vx;
+				p.y += p.vy;
+
+				if (mouse.x && mouse.y) {
+					const dx = mouse.x - p.x;
+					const dy = mouse.y - p.y;
+					const dist = Math.sqrt(dx * dx + dy * dy);
+					if (dist < 150) {
+						p.vx += dx / dist * 0.002;
+						p.vy += dy / dist * 0.002;
+					}
+				}
+
+				if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+				if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+				p.trail.push({ x: p.x, y: p.y });
+				if (p.trail.length > 20) p.trail.shift();
+
+				for (let i = 0; i < p.trail.length - 1; i++) {
+					const opacity = i / p.trail.length;
+					ctx.strokeStyle = `rgba(100,150,255,${opacity * 0.5})`;
+					ctx.beginPath();
+					ctx.moveTo(p.trail[i].x, p.trail[i].y);
+					ctx.lineTo(p.trail[i + 1].x, p.trail[i + 1].y);
+					ctx.stroke();
+				}
+
+				ctx.fillStyle = "rgba(150,200,255,0.7)";
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+				ctx.fill();
+			});
+
+			requestAnimationFrame(draw);
+		}
+		draw();
+	</script>
 </body>
 </html>
