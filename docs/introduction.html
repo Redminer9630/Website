@@ -84,77 +84,83 @@ layout: default
 		});
 	</script>
 
-	<script>
-		const canvas = document.getElementById("particleCanvas");
-		const ctx = canvas.getContext("2d");
-		let particles = [];
-		let mouse = { x: null, y: null };
+<script>
+	const canvas = document.createElement('canvas');
+	canvas.id = 'particleCanvas';
+	canvas.style.position = 'fixed';
+	canvas.style.top = '0';
+	canvas.style.left = '0';
+	canvas.style.width = '100%';
+	canvas.style.height = '100%';
+	canvas.style.zIndex = '-1';
+	document.body.appendChild(canvas);
 
-		function resize() {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		}
-		window.addEventListener("resize", resize);
-		resize();
+	const ctx = canvas.getContext('2d');
+	let particles = [];
 
-		for (let i = 0; i < 80; i++) {
-			particles.push({
-				x: Math.random() * canvas.width,
-				y: Math.random() * canvas.height,
-				vx: (Math.random() - 0.5) * 0.5,
-				vy: (Math.random() - 0.5) * 0.5,
-				size: Math.random() * 2 + 1,
-				trail: []
-			});
-		}
+	function resize() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+	}
+	window.addEventListener('resize', resize);
+	resize();
 
-		window.addEventListener("mousemove", e => {
-			mouse.x = e.clientX;
-			mouse.y = e.clientY;
+	for (let i = 0; i < 120; i++) {
+		particles.push({
+			x: Math.random() * canvas.width,
+			y: Math.random() * canvas.height,
+			vx: (-Math.random() * 1 - 0.2),
+			vy: (-Math.random() * 0.5 - 0.1),
+			size: Math.random() * 2 + 1,
+			trail: []
+		});
+	}
+
+	let isScrolling = false;
+	let scrollTimeout;
+
+	window.addEventListener('scroll', () => {
+		isScrolling = true;
+		clearTimeout(scrollTimeout);
+		scrollTimeout = setTimeout(() => isScrolling = false, 75);
+	});
+
+	function draw() {
+		ctx.fillStyle = "rgba(10,10,10,0.15)";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+		particles.forEach(p => {
+			if (isScrolling) {
+				p.x += p.vx * 3;
+				p.y += p.vy * 3;
+			}
+
+			if (p.x < 0) p.x = canvas.width;
+			if (p.x > canvas.width) p.x = 0;
+			if (p.y < 0) p.y = canvas.height;
+			if (p.y > canvas.height) p.y = 0;
+
+			p.trail.push({ x: p.x, y: p.y });
+			if (p.trail.length > 50) p.trail.shift();
+
+			for (let i = 0; i < p.trail.length - 1; i++) {
+				const opacity = i / p.trail.length;
+				ctx.strokeStyle = `rgba(100,150,255,${opacity * 0.6})`;
+				ctx.beginPath();
+				ctx.moveTo(p.trail[i].x, p.trail[i].y);
+				ctx.lineTo(p.trail[i + 1].x, p.trail[i + 1].y);
+				ctx.stroke();
+			}
+
+			ctx.fillStyle = "rgba(150,200,255,0.8)";
+			ctx.beginPath();
+			ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+			ctx.fill();
 		});
 
-		function draw() {
-			ctx.fillStyle = "rgba(10,10,10,0.2)";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-			particles.forEach(p => {
-				p.x += p.vx;
-				p.y += p.vy;
-
-				if (mouse.x && mouse.y) {
-					const dx = mouse.x - p.x;
-					const dy = mouse.y - p.y;
-					const dist = Math.sqrt(dx * dx + dy * dy);
-					if (dist < 150) {
-						p.vx += dx / dist * 0.002;
-						p.vy += dy / dist * 0.002;
-					}
-				}
-
-				if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-				if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-				p.trail.push({ x: p.x, y: p.y });
-				if (p.trail.length > 20) p.trail.shift();
-
-				for (let i = 0; i < p.trail.length - 1; i++) {
-					const opacity = i / p.trail.length;
-					ctx.strokeStyle = `rgba(100,150,255,${opacity * 0.5})`;
-					ctx.beginPath();
-					ctx.moveTo(p.trail[i].x, p.trail[i].y);
-					ctx.lineTo(p.trail[i + 1].x, p.trail[i + 1].y);
-					ctx.stroke();
-				}
-
-				ctx.fillStyle = "rgba(150,200,255,0.7)";
-				ctx.beginPath();
-				ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-				ctx.fill();
-			});
-
-			requestAnimationFrame(draw);
-		}
-		draw();
-	</script>
+		requestAnimationFrame(draw);
+	}
+	draw();
+</script>
 </body>
 </html>
