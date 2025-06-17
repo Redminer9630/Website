@@ -13,34 +13,29 @@ layout: default
 	main { padding: 2rem; display: grid; gap: 1rem; }
 	.quote { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; cursor: pointer; }
 	.author { font-weight: bold; margin-top: 0.5rem; color: #555; }
-	.counter { font-size: 1.5rem; font-weight: bold; color: #222; margin-top: 0.5rem; }
-	.buttons { margin-top: 0.5rem; display: flex; gap: 0.5rem; }
-	.buttons button {
-		flex: 1; padding: 0.4rem 0; border: none; border-radius: 5px; background: #333; color: #fff; cursor: pointer; font-size: 1.1rem;
-		transition: background 0.2s;
-	}
-	.buttons button:hover { background: #555; }
+	.counterbox { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.5rem; }
+	.counter { font-size: 1.5rem; font-weight: bold; color: #222; }
+	.minus { width: 1.5rem; height: 1.5rem; border: none; border-radius: 3px; background: #c00; color: #fff; font-size: 1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; }
+	.minus:hover { background: #900; }
 </style>
 </head>
 <body>
 <header><h1>Zitate-Sammlung</h1></header>
 <main>
-	<div class="quote" data-id="0"><p><em>Welten entstehen nicht durch Zufall, sondern durch jeden Klick und jeden Gedanken von dir.</em></p><div class="author">– Redminer9630</div><div class="counter">0</div><div class="buttons"><button>+</button><button>-</button></div></div>
-	<div class="quote" data-id="1"><p><em>Erst wenn man es jemand anderem erklären kann, hat man es wirklich verstanden.</em></p><div class="author">- Albert Einstein</div><div class="counter">0</div><div class="buttons"><button>+</button><button>-</button></div></div>
-	<div class="quote" data-id="2"><p><em>Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.</em></p><div class="author">- Albert Einstein</div><div class="counter">0</div><div class="buttons"><button>+</button><button>-</button></div></div>
-	<div class="quote" data-id="3"><p><em>Das Glück findet den, der es nicht sucht.</em></p><div class="author">- Glückskeks</div><div class="counter">0</div><div class="buttons"><button>+</button><button>-</button></div></div>
-	<div class="quote" data-id="4"><p><em>Wer sich nie bewegt, bleibt immer stehen.</em></p><div class="author">- Glückskeks</div><div class="counter">0</div><div class="buttons"><button>+</button><button>-</button></div></div>
+	<div class="quote" data-id="0"><p><em>Welten entstehen nicht durch Zufall, sondern durch jeden Klick und jeden Gedanken von dir.</em></p><div class="author">– Redminer9630</div><div class="counterbox"><div class="counter">0</div><button class="minus">–</button></div></div>
+	<div class="quote" data-id="1"><p><em>Erst wenn man es jemand anderem erklären kann, hat man es wirklich verstanden.</em></p><div class="author">- Albert Einstein</div><div class="counterbox"><div class="counter">0</div><button class="minus">–</button></div></div>
+	<div class="quote" data-id="2"><p><em>Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.</em></p><div class="author">- Albert Einstein</div><div class="counterbox"><div class="counter">0</div><button class="minus">–</button></div></div>
+	<div class="quote" data-id="3"><p><em>Das Glück findet den, der es nicht sucht.</em></p><div class="author">- Glückskeks</div><div class="counterbox"><div class="counter">0</div><button class="minus">–</button></div></div>
+	<div class="quote" data-id="4"><p><em>Wer sich nie bewegt, bleibt immer stehen.</em></p><div class="author">- Glückskeks</div><div class="counterbox"><div class="counter">0</div><button class="minus">–</button></div></div>
 </main>
 
 <script>
-document.querySelectorAll('.quote').forEach(quote => {
-	const id = quote.dataset.id, counter = quote.querySelector('.counter'), key = 'quote-' + id
+document.querySelectorAll('.quote').forEach(q => {
+	const id = q.dataset.id, counter = q.querySelector('.counter'), key = 'quote-' + id
 	let count = parseInt(localStorage.getItem(key) || 0); counter.textContent = count
-
-	const update = val => { count = Math.max(0, count + val); counter.textContent = count; localStorage.setItem(key, count) }
-	quote.addEventListener('click', () => update(1))
-	quote.querySelectorAll('button')[0].addEventListener('click', e => (e.stopPropagation(), update(1)))
-	quote.querySelectorAll('button')[1].addEventListener('click', e => (e.stopPropagation(), update(-1)))
+	const update = v => { count = Math.max(0, count + v); counter.textContent = count; localStorage.setItem(key, count) }
+	q.addEventListener('click', () => update(1))
+	q.querySelector('.minus').addEventListener('click', e => (e.stopPropagation(), update(-1)))
 })
 </script>
 </body>
