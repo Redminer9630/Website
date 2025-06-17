@@ -11,8 +11,11 @@ layout: default
 		body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
 		header { background: #333; color: #fff; padding: 1rem; text-align: center; }
 		main { padding: 2rem; }
-		.quote { background: #fff; margin: 1rem 0; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+		.quote { background: #fff; margin: 1rem 0; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; }
 		.author { font-weight: bold; margin-top: 0.5rem; color: #555; }
+		.counter { margin-top: 0.5rem; font-size: 1.2rem; font-weight: bold; color: #333; }
+		.buttons { margin-top: 0.5rem; }
+		.buttons button { margin-right: 0.5rem; }
 	</style>
 </head>
 <body>
@@ -20,26 +23,89 @@ layout: default
 		<h1>Zitate-Sammlung</h1>
 	</header>
 	<main>
-		<div class="quote">
+		<div class="quote" data-id="0">
 			<p><em>Welten entstehen nicht durch Zufall, sondern durch jeden Klick und jeden Gedanken von dir.</em></p>
 			<div class="author">– Redminer9630</div>
+			<div class="counter"><span>0</span></div>
+			<div class="buttons">
+				<button class="plus">+</button>
+				<button class="minus">-</button>
+			</div>
 		</div>
-        <div class="quote">
-            <p><em>Erst wenn man es jemand anderem erklären kann, hat man es wirklich verstanden.</em></p>
-            <div class="author">- Albert Einstein</div>
-        </div>
-        <div class="quote">
-            <p><em>Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.</em></p>
-            <div class="author">- Albert Einstein</div>
-        </div>
-        <div class="quote">
-            <p><em>Das Glück findet den, der es nicht sucht.</em></p>
-            <div class="author">- Glückskeks</div>
-        </div>
-        <div class="quote">
-            <p><em>Wer sich nie bewegt, bleibt immer stehen.</em></p>
-            <div class="author">- Glückskeks</div>
-        </div>
+		<div class="quote" data-id="1">
+			<p><em>Erst wenn man es jemand anderem erklären kann, hat man es wirklich verstanden.</em></p>
+			<div class="author">- Albert Einstein</div>
+			<div class="counter"><span>0</span></div>
+			<div class="buttons">
+				<button class="plus">+</button>
+				<button class="minus">-</button>
+			</div>
+		</div>
+		<div class="quote" data-id="2">
+			<p><em>Die Definition von Wahnsinn ist, immer wieder das Gleiche zu tun und andere Ergebnisse zu erwarten.</em></p>
+			<div class="author">- Albert Einstein</div>
+			<div class="counter"><span>0</span></div>
+			<div class="buttons">
+				<button class="plus">+</button>
+				<button class="minus">-</button>
+			</div>
+		</div>
+		<div class="quote" data-id="3">
+			<p><em>Das Glück findet den, der es nicht sucht.</em></p>
+			<div class="author">- Glückskeks</div>
+			<div class="counter"><span>0</span></div>
+			<div class="buttons">
+				<button class="plus">+</button>
+				<button class="minus">-</button>
+			</div>
+		</div>
+		<div class="quote" data-id="4">
+			<p><em>Wer sich nie bewegt, bleibt immer stehen.</em></p>
+			<div class="author">- Glückskeks</div>
+			<div class="counter"><span>0</span></div>
+			<div class="buttons">
+				<button class="plus">+</button>
+				<button class="minus">-</button>
+			</div>
+		</div>
 	</main>
+
+	<script>
+		const quotes = document.querySelectorAll('.quote');
+
+		quotes.forEach(q => {
+			const id = q.dataset.id;
+			const count = localStorage.getItem('quote-' + id) || 0;
+			q.querySelector('.counter span').textContent = count;
+		});
+
+		quotes.forEach(q => {
+			const id = q.dataset.id;
+			const counterSpan = q.querySelector('.counter span');
+
+			q.querySelector('.plus').addEventListener('click', e => {
+				e.stopPropagation();
+				let count = parseInt(localStorage.getItem('quote-' + id) || 0);
+				count++;
+				localStorage.setItem('quote-' + id, count);
+				counterSpan.textContent = count;
+			});
+
+			q.querySelector('.minus').addEventListener('click', e => {
+				e.stopPropagation();
+				let count = parseInt(localStorage.getItem('quote-' + id) || 0);
+				count = Math.max(0, count - 1);
+				localStorage.setItem('quote-' + id, count);
+				counterSpan.textContent = count;
+			});
+
+			q.addEventListener('click', () => {
+				let count = parseInt(localStorage.getItem('quote-' + id) || 0);
+				count++;
+				localStorage.setItem('quote-' + id, count);
+				counterSpan.textContent = count;
+			});
+		});
+	</script>
 </body>
 </html>
