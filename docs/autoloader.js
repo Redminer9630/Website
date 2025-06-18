@@ -11,7 +11,7 @@ Promise.all([
     import('/js_components/download.js'),
     import('/js_components/back-button.js'),
     import('/js_components/anti-hack.js')
-]).then(([langModule, elements, embed, tooltip, firebase, common, modal, need-confirm, download, back-buttom, anto-hack]) => {
+]).then(([langModule, elements, embed, tooltip, firebase, common, modal, needConfirm, download, backButtom, antoHack]) => {
 	const lang = langModule.default || {};
 	document.querySelectorAll('[lang]').forEach(el => {
 		const key = el.getAttribute('lang');
