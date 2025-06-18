@@ -1,3 +1,4 @@
+if(location.hostname.startsWith('www.')) { location.href = location.href.replace('//www.', '//'); } if(location.protocol !== 'https:') { location.href = location.href.replace('http:', 'https:'); } if(location.pathname.endsWith('index.html')) { location.href = location.href.replace('index.html', ''); }
 Promise.all([
 	import('/js_components/lang/lang.js'),
 	import('/js_components/elements.js'),
