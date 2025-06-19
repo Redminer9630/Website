@@ -68,49 +68,9 @@ function appendFooter(version, date, time) {
                 focus: true,
                 draggable: true
             });
-        } else {
-            window.location.href = \`/versionsdata/\${version}.json\`;
-        }
+        } else { window.location.href = \`/versionsdata/\${version}.json\`; }
     });
 }
-/*
-function appendMetaTags() {
-    const metaTags = [
-        { name: 'description', content: 'Offizielle Website von Redminer9630' },
-        { name: 'keywords', content: 'Redminer9630, Gaming, Community, Minecraft' },
-        { name: 'google-site-verification', content: 'gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA' }
-    ];
-    metaTags.forEach(data => {
-        const meta = document.createElement('meta');
-        Object.entries(data).forEach(([key, value]) => meta.setAttribute(key, value));
-        document.head.appendChild(meta);
-    });
-}
-
-function appendFaviconLinks() {
-    const timestamp = Date.now();
-    document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"], link[rel="manifest"]').forEach(e => e.remove());
-
-    const icons = [
-        { rel: 'apple-touch-icon', sizes: '180x180', href: 'favicon/apple-touch-icon.png?v=' + timestamp },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: 'favicon/favicon-32x32.png?v=' + timestamp },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'favicon/favicon-16x16.png?v=' + timestamp },
-        { rel: 'manifest', href: 'favicon/site.webmanifest?v=' + timestamp }
-    ];
-    icons.forEach(data => {
-        const link = document.createElement('link');
-        Object.entries(data).forEach(([key, value]) => link.setAttribute(key, value));
-        document.head.appendChild(link);
-    });
-}
-
-function appendCanonicalLink() {
-    const canonical = document.createElement('link');
-    canonical.setAttribute('rel', 'canonical');
-    canonical.setAttribute('href', window.location.href.split('?')[0]);
-    document.head.appendChild(canonical);
-}
-*/
 
 function initCommonFeatures(scope = document) {
     replaceUmlauts(scope);
@@ -124,9 +84,6 @@ function initCommonFeatures(scope = document) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    /*appendMetaTags();
-    appendFaviconLinks();
-    appendCanonicalLink();*/
     appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time);
     initCommonFeatures(document.body);
 });
