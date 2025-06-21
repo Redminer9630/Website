@@ -7,10 +7,6 @@ layout: default
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools</title>
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="images/android-chrome-192x192.png" sizes="192x192" type="image/png">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" type="image/png">
-    <link rel="icon" href="images/favicon-32x32.png" sizes="32x32" type="image/png">
     <style>
         @font-face { font-family: 'MinecraftFont'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.tff') format('truetype'); }
         body { font-family: 'MinecraftFont', sans-serif; background-color: #282c34; color: white; padding: 20px; }
@@ -64,8 +60,7 @@ layout: default
         #hex-generator { text-align: center; margin: 20px; }
         #color-preview { margin: 10px auto; }
     </style>
-    <script type="module" src="common.js"></script>
-    <script src="back-button.js"></script>
+    <script src="autoloader.js" type="module" defer></script>
 </head>
 <body>
     <div class="info-button" onclick="openInfoPage()"></div>
