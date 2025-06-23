@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const style = document.createElement('style');
     style.textContent = `
         @font-face {
-            font-family: 'MinecraftFont';
+            font-family: 'Mojangles';
             src: url('https://redminer9630.ddns.net/minecraft_font.woff') format('woff'),
                  url('https://redminer9630.ddns.net/minecraft_font.ttf') format('truetype');
         }
         .header-link {
-            font-family: 'MinecraftFont';
+            font-family: 'Mojangles';
             font-size: 16px;
             text-decoration: none;
             padding: 10px 20px;
