@@ -9,18 +9,9 @@
 		{tag:'link',attrs:{rel:'canonical',href:'https://redminer9630.ddns.net/'}},
 		{tag:'link',attrs:{rel:'icon',type:'image/x-icon',href:'images/favicon.ico'}}
 	];
-	tags.forEach(({tag,attrs,text})=>{
-		if(tag==='title'&&!head.querySelector('title')){
-			const el=document.createElement('title'); el.textContent=text; head.appendChild(el);
-		}else if(attrs&&!head.querySelector(`${tag}${Object.entries(attrs).map(([k,v])=>`[${k}="${v}"]`).join('')}`)){
-			const el=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); head.appendChild(el);
-		}
-	});
+	tags.forEach(({tag,attrs,text})=>{if(tag==='title'&&!head.querySelector('title')){const el=document.createElement('title'); el.textContent=text; head.appendChild(el);}else if(attrs&&!head.querySelector(`${tag}${Object.entries(attrs).map(([k,v])=>`[${k}="${v}"]`).join('')}`)){const el=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v)); head.appendChild(el);}});
 })();
-
-if(location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.','//'));
-if(location.protocol!=='https:') location.replace(location.href.replace('http:','https:'));
-if(location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
+if(location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.','//'));if(location.protocol!=='https:') location.replace(location.href.replace('http:','https:'));if(location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 
 window.CommonVersion = {
     version: 'v1.0.0',
