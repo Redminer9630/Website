@@ -36,9 +36,8 @@ Promise.all([
 	import('/js_components/modal.js'),
 	import('/js_components/need-confirm.js'),
 	import('/js_components/download.js'),
-	import('/js_components/back-button.js'),
-	import('/js_components/anti-hack.js')
-]).then(([langModule,elements,embed,tooltip,firebase,common,modal,needConfirm,download,backButton,antiHack])=>{
+	import('/js_components/back-button.js')
+]).then(([langModule,elements,embed,tooltip,firebase,common,modal,needConfirm,download,backButton])=>{
 	loader.remove();
 	const lang=langModule.default||{};
 	document.querySelectorAll('[lang]').forEach(el=>{
