@@ -27,13 +27,13 @@ loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position
 document.body.appendChild(loader);
 
 Promise.all([
+	import('/js_components/common.js'),
+	import('/js_components/modal.js'),
 	import('/js_components/lang/lang.js'),
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
-	import('/js_components/common.js'),
-	import('/js_components/modal.js'),
 	import('/js_components/need-confirm.js'),
 	import('/js_components/download.js'),
 	import('/js_components/back-button.js')
