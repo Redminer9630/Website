@@ -109,3 +109,5 @@ function appendFooter(version, date, time) {
 
 function initCommonFeatures(scope = document) { replaceUmlauts(scope); scope.querySelectorAll('[class^="element"]').forEach(toggle => { toggle.addEventListener('click', () => { toggle.classList.toggle('open'); const submenu = toggle.nextElementSibling; if (submenu) submenu.classList.toggle('show'); }); }); }
 document.addEventListener('DOMContentLoaded', () => { appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time); initCommonFeatures(document.body); });
+
+document.addEventListener("DOMContentLoaded",()=>{const style=document.createElement("style");style.textContent=`@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;}`;document.head.append(style);});
