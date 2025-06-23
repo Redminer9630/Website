@@ -2,7 +2,7 @@ export const Modal = (() => {
     const state = { openModals: [], zIndex: 2000 };
 
     const Modal = {
-        version: Common?.version || '1.0',
+        version: CommonVersion?.version || '1.0',
 
         open(id, opts = {}) {
             const modal = createModal(id, opts);
