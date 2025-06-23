@@ -34,7 +34,7 @@ Promise.all([
 	import('/js_components/download.js'),
 	import('/js_components/back_button.js'),
     import('https://www.google.com/recaptcha/api.js')
-]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button])=>{
+]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
 	const lang=lang_module.default||{};
 	document.querySelectorAll('[lang]').forEach(el=>{
