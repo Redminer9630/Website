@@ -30,12 +30,13 @@ Promise.all([
 	import('/js_components/embed.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
-	import('/js_components/need-confirm.js'),
+	import('/js_components/need_confirm.js'),
 	import('/js_components/download.js'),
-	import('/js_components/back-button.js')
-]).then(([langModule,elements,embed,tooltip,firebase,common,modal,needConfirm,download,backButton])=>{
+	import('/js_components/back_button.js'),
+    import('https://www.google.com/recaptcha/api.js')
+]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button])=>{
 	loader.remove();
-	const lang=langModule.default||{};
+	const lang=lang_module.default||{};
 	document.querySelectorAll('[lang]').forEach(el=>{
 		const key=el.getAttribute('lang');
 		el.innerText=lang[key]||`[[${key}]]`;
