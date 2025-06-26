@@ -1,7 +1,7 @@
 (function(){
 	const head=document.head;
 	const tags=[
-		{tag:'title',text:'Redminer9630.ddns.net - Minecraft Tools und Generatoren'},
+		{tag:'title',text:'Redminer9630.ddns.net - Minecraft Tools, Generatoren und anderes'},
 		{tag:'meta',attrs:{name:'description',content:'Offizielle Website von Redminer9630. - Minecraft Tools und Generatoren'}},
 		{tag:'meta',attrs:{name:'viewport',content:'width=device-width, initial-scale=1.0'}},
 		{tag:'meta',attrs:{name:'keywords',content:'Minecraft, Redminer9630, Mods, Downloads, Tools, Generatoren, Wiki, Server'}},
