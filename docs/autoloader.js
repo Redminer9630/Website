@@ -22,17 +22,15 @@ window.CommonVersion = {
 const loader=document.createElement('div');
 loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;text-align:center;padding:.5em;font-family:sans-serif;z-index:9999;';
 document.body.appendChild(loader);
-alert("autoloader.js wurde geladen");
 Promise.all([
-	/*import('/js_components/modal.js'),*/
-	import('/js_components/lang/lang.js'),
-	import('/js_components/elements.js'),
-	import('/js_components/embed.js'),
-	import('/js_components/tooltip.js'),
-	import('/js_components/firebase.js'),
-	import('/js_components/need_confirm.js'),
-	import('/js_components/download.js'),
-	import('/js_components/back_button.js'),
+	import('./js_components/lang/lang.js'),
+	import('./js_components/elements.js'),
+	import('./js_components/embed.js'),
+	import('./js_components/tooltip.js'),
+	import('./js_components/firebase.js'),
+	import('./js_components/need_confirm.js'),
+	import('./js_components/download.js'),
+	import('./js_components/back_button.js'),
     import('https://www.google.com/recaptcha/api.js')
 ]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
