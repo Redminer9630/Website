@@ -1,3 +1,2 @@
-# Set default commit message to "June Patch"
 [commit]
 template = .gitmessage.txt
