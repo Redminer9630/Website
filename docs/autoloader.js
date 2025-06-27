@@ -23,14 +23,14 @@ const loader=document.createElement('div');
 loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;text-align:center;padding:.5em;font-family:sans-serif;z-index:9999;';
 document.body.appendChild(loader);
 Promise.all([
-	import('./js_components/lang/lang.js'),
-	import('./js_components/elements.js'),
-	import('./js_components/embed.js'),
-	import('./js_components/tooltip.js'),
-	import('./js_components/firebase.js'),
-	import('./js_components/need_confirm.js'),
-	import('./js_components/download.js'),
-	import('./js_components/back_button.js'),
+	import('js_components/lang/lang.js'),
+	import('js_components/elements.js'),
+	import('js_components/embed.js'),
+	import('js_components/tooltip.js'),
+	import('js_components/firebase.js'),
+	import('js_components/need_confirm.js'),
+	import('js_components/download.js'),
+	import('js_components/back_button.js'),
     import('https://www.google.com/recaptcha/api.js')
 ]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
@@ -89,6 +89,9 @@ function appendFooter(version, date, time) {
 
 function initCommonFeatures(scope = document) { replaceUmlauts(scope); scope.querySelectorAll('[class^="element"]').forEach(toggle => { toggle.addEventListener('click', () => { toggle.classList.toggle('open'); const submenu = toggle.nextElementSibling; if (submenu) submenu.classList.toggle('show'); }); }); }
 document.addEventListener('DOMContentLoaded', () => { 
-    appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time); initCommonFeatures(document.body);
-    const style=document.createElement("style");style.textContent=`@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;}`;document.head.append(style);
+    appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time); 
+    initCommonFeatures(document.body);
+    const style=document.createElement("style");
+    style.textContent=`@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} body{font-family:'Mojangles', Arial;}`;
+    document.head.append(style);
 });
