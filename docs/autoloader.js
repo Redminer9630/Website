@@ -24,7 +24,7 @@ loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position
 document.body.appendChild(loader);
 alert("autoloader.js wurde geladen");
 Promise.all([
-	import('/js_components/modal.js'),
+	/*import('/js_components/modal.js'),*/
 	import('/js_components/lang/lang.js'),
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
