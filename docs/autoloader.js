@@ -23,15 +23,14 @@ const loader=document.createElement('div');
 loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;text-align:center;padding:.5em;font-family:sans-serif;z-index:9999;';
 document.body.appendChild(loader);
 Promise.all([
-	import('js_components/lang/lang.js'),
-	import('js_components/elements.js'),
-	import('js_components/embed.js'),
-	import('js_components/tooltip.js'),
-	import('js_components/firebase.js'),
-	import('js_components/need_confirm.js'),
-	import('js_components/download.js'),
-	import('js_components/back_button.js'),
-    import('https://www.google.com/recaptcha/api.js')
+    import('/js_components/lang/lang.js'),
+	import('/js_components/elements.js'),
+	import('/js_components/embed.js'),
+	import('/js_components/tooltip.js'),
+	import('/js_components/firebase.js'),
+	import('/js_components/need_confirm.js'),
+	import('/js_components/download.js'),
+	import('/js_components/back_button.js')
 ]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
 	const lang=lang_module.default||{};
@@ -76,6 +75,8 @@ Promise.all([
 	console.error("Fehler beim Laden der Komponenten:",err);
 });
 
+function loadCaptcha(callback) { if (window.grecaptcha) { if (callback) callback(window.grecaptcha); return; } const script = document.createElement('script'); script.src = 'https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit'; script.async = true; script.defer = true; window.onCaptchaLoad = () => { if (callback) callback(window.grecaptcha); }; document.head.appendChild(script); }
+
 function appendFooter(version, date, time) {
     if (document.getElementById("main-footer")) return; const year = new Date().getFullYear(); const footer = document.createElement('footer'); footer.id = "main-footer";
     footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. ${version} Pre ${date} ${time}</span>`;
@@ -83,11 +84,10 @@ function appendFooter(version, date, time) {
     const isIndex = location.pathname.endsWith("/") || location.pathname.endsWith("/index") || location.pathname.endsWith("/index.html");
     footer.classList.add(isIndex ? "index-footer" : "fixed-footer"); document.body.style.paddingBottom = isIndex ? "100px" : "60px";
     document.body.appendChild(footer); const responsiveStyle = document.createElement('style');
-    responsiveStyle.textContent = `footer .footer-text { font-size: 14px; display: block; padding: 0 10px; word-wrap: break-word; } @media (max-width: 480px) { footer .footer-text { font-size: 11px; } } footer.fixed-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: #222; color: #fff; text-align: center; } footer.index-footer { position: relative; margin-top: 40px; background: #222; color: #fff; text-align: center; } `;
+    responsiveStyle.textContent=`footer .footer-text{font-size:14px;display:block;padding:0 10px;word-wrap:break-word}@media(max-width:480px){footer .footer-text{font-size:11px}}footer.fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;text-align:center}footer.index-footer{position:relative;margin-top:40px;background:#222;color:#fff;text-align:center}`;
     document.head.appendChild(responsiveStyle);
 }
 
-function initCommonFeatures(scope = document) { replaceUmlauts(scope); scope.querySelectorAll('[class^="element"]').forEach(toggle => { toggle.addEventListener('click', () => { toggle.classList.toggle('open'); const submenu = toggle.nextElementSibling; if (submenu) submenu.classList.toggle('show'); }); }); }
 document.addEventListener('DOMContentLoaded', () => { 
     appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time); 
     initCommonFeatures(document.body);
