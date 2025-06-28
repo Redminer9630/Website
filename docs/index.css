@@ -8,7 +8,19 @@ section { margin-bottom: 20px; }
 h2, .h2 { color: #2ecc71; }
 button { background-color: #2ecc71; color: white; padding: 10px 20px; border: none; cursor: pointer; font-family: 'Mojangles'; z-index: 9999; }
 button:hover { background-color: #2ecc87; }
-footer { background-color: #2c3e50; color: white; text-align: center; padding: 10px 0; width: 100%; height: 20px; bottom: 0; left: 0; z-index: 998; position: static; margin-top: auto; }
+footer {
+  background-color: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+  height: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 998;
+  box-sizing: border-box;
+}
 @media (prefers-color-scheme: dark) { body { background-color: #1a1a1a; color: #f5f5f5; } header, footer { background-color: #1c2a34; } h2 { color: #27ae60; } button { background-color: #27ae60; } button:hover { background-color: #2ecc71; } }
 @media (max-width: 768px) and (orientation: portrait) { header { flex-direction: column; align-items: center; justify-content: center; } .logo-container { display: flex; flex-direction: column; align-items: center; } .logo { width: 180px; } .hiddenItem { visibility: hidden; color: gray; background-color: gray; } footer { padding: 20px; font-size: 14px; } }
 @media (max-width: 768px) and (orientation: landscape) { header { flex-direction: row; justify-content: space-between; padding: 10px; } .logo { width: 150px; } main { padding: 15px; } footer { padding: 15px; } }
@@ -26,7 +38,7 @@ footer { background-color: #2c3e50; color: white; text-align: center; padding: 1
 .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: 0.4s; border-radius: 50%; }
 input:checked + .slider { background-color: #2ecc71; }
 input:checked + .slider:before { transform: translateX(22px); }
-.linkbox { gap: 10px; align-items: center; display: block; overflow-x: auto; white-space: nowrap; padding: 10px; }
+.linkbox { gap: 10px; align-items: center; display: flex; overflow-x: auto; white-space: nowrap; padding: 10px; }
 .linkimg { width: 50px; height: 50px; margin-right: 5px; }
 .invert { filter: invert(1); }
 header { background-color: #2c3e50; height: 40px; width: 100%; position: fixed; top: 0; left: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; box-sizing: border-box; }
