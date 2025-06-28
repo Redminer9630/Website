@@ -23,7 +23,7 @@ const loader=document.createElement('div');
 loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;text-align:center;padding:.5em;font-family:sans-serif;z-index:9999;';
 document.addEventListener("DOMContentLoaded", () => { document.body.appendChild(loader); setTimeout(() => { if (document.getElementById('loader')) loader.remove(); }, 3000); });
 Promise.all([
-    import('/js_components/lang/lang.js'),
+    /*import('/js_components/lang/lang.js'),*/
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
 	import('/js_components/tooltip.js'),
@@ -31,30 +31,20 @@ Promise.all([
 	import('/js_components/need_confirm.js'),
 	import('/js_components/download.js'),
 	import('/js_components/back_button.js')
-]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
+]).then([elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
-	const lang = lang_module.default ?? lang_module ?? {};
+	/*const lang = lang_module.default ?? lang_module ?? {};
 	document.querySelectorAll('[lang]').forEach(el=>{
 		const key=el.getAttribute('lang');
 		el.innerText=lang[key]||`[[${key}]]`;
-	});
+	}); */
 
 	const savedTheme=localStorage.getItem("theme");
 	if(savedTheme==="light"||savedTheme==="dark") document.documentElement.setAttribute("data-theme",savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
 
-	const savedLang=localStorage.getItem("lang");
-	if(savedLang&&savedLang!=="de"&&savedLang!==document.documentElement.lang) location.reload();
-
-	document.addEventListener("click",e=>{
-		const el=e.target.closest("[unstable]");
-		if(!el) return;
-		const u=el.getAttribute("href")||el.dataset.href;
-		if(!u) return;
-		e.preventDefault();
-		if(confirm("Du verlässt jetzt den stabilen Bereich dieser Website.\nDiese Seite kann Fehler enthalten oder nicht richtig funktionieren.\nMöchtest du wirklich fortfahren?"))
-			el.getAttribute("target")==="_blank"?open(u,"_blank"):location.href=u;
-	});
+	/*const savedLang=localStorage.getItem("lang");
+	if(savedLang&&savedLang!=="de"&&savedLang!==document.documentElement.lang) location.reload();*/
 
 	document.querySelectorAll('[data-modal-open]').forEach(btn=>{
 		btn.addEventListener('click',()=>{
@@ -64,11 +54,7 @@ Promise.all([
 		});
 	});
 
-	document.querySelectorAll("img").forEach(img=>{
-		if(!img.src.endsWith(".webp")) console.warn("Bild sollte in WebP vorliegen:",img.src);
-		if(img.naturalWidth>800) console.warn("Bild eventuell zu groß geladen:",img.src,img.naturalWidth+"px");
-	});
-
+	document.querySelectorAll("img").forEach(img=>{ if(!img.src.endsWith(".webp")) console.warn("Bild sollte in WebP vorliegen:",img.src); if(img.naturalWidth>800) console.warn("Bild eventuell zu groß geladen:",img.src,img.naturalWidth+"px"); });
 	console.info("Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
 }).catch(err=>{
 	loader.remove();
