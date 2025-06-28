@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-<head><style>body{font-family:'Mojangles', Arial;}</style>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title langid="settings_wintitle">Einstellungen</title>
+  <title>Einstellungen</title>
   <style>
-    @font-face { font-family: 'MinecraftFont'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
     @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
+    body { font-family: 'Minecraft', monospace; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
     :root[data-theme="white"] { --bg: #f4f4f4; --text: #000; --box: #fff; }
     :root[data-theme="dark"] { --bg: #121212; --text: #fff; --box: #1e1e1e; }
-    body { font-family: 'Minecraft', monospace; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
     .container { max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
     .header { font-size: 2rem; font-weight: bold; margin-bottom: 20px; }
     .settings-group { margin-bottom: 30px; }
@@ -22,28 +21,7 @@
   </style>
   <script src="autoloader.js" type="module" defer></script>
   <script type="module">
-    import { loadLang } from './lang/lang.js';
-
-    function applyLang(t) {
-      document.title = t.settings_title;
-      document.querySelector('[langid="settings_title"]').textContent = t.settings_title;
-      document.querySelector('[langid="settings_profile"]').textContent = t.settings_profile;
-      document.querySelector('[langid="settings_pref"]').textContent = t.settings_pref;
-      document.querySelector('[langid="settings_username_label"]').textContent = t.settings_username;
-      document.getElementById("username").placeholder = t.settings_username_ph;
-      document.querySelector('[langid="settings_email_label"]').textContent = t.settings_email;
-      document.getElementById("email").placeholder = t.settings_email_ph;
-      document.querySelector('[langid="settings_lang_label"]').textContent = t.settings_lang;
-      document.querySelector('[langid="settings_theme_label"]').textContent = t.settings_theme;
-      document.querySelector('[langid="settings_save"]').textContent = t.settings_save;
-
-      document.getElementById("white").textContent = t.settings_theme_white;
-      document.getElementById("dark").textContent = t.settings_theme_dark;
-      document.getElementById("sys").textContent = t.settings_theme_sys;
-
-      document.getElementById("german").textContent = t.settings_lang_de;
-      document.getElementById("english").textContent = t.settings_lang_en;
-    }
+    import { setCookie, getCookie } from './autoloader.js';
 
     function applyTheme(theme) {
       if (theme === "sys") {
@@ -58,20 +36,15 @@
       }
     }
 
-    async function applySettings() {
-      const lang = localStorage.getItem("lang9630") || (navigator.language.startsWith("de") ? "de" : "en");
-      const theme = localStorage.getItem("theme9630") || "sys";
-      const username = localStorage.getItem("username") || "";
-      const email = localStorage.getItem("email") || "";
+    function applySettings() {
+      const theme = getCookie("theme9630") || "sys";
+      const username = getCookie("username") || "";
+      const email = getCookie("email") || "";
 
       applyTheme(theme);
 
-      const t = await loadLang(lang);
-      applyLang(t);
-
       document.getElementById("username").value = username;
       document.getElementById("email").value = email;
-      document.getElementById("language").value = lang;
       document.getElementById("theme").value = theme;
     }
 
@@ -79,10 +52,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       applySettings();
-
       document.getElementById("username").addEventListener("input", () => isDirty = true);
       document.getElementById("email").addEventListener("input", () => isDirty = true);
-      document.getElementById("language").addEventListener("change", () => isDirty = true);
       document.getElementById("theme").addEventListener("change", () => isDirty = true);
     });
 
@@ -94,14 +65,14 @@
     });
 
     window.saveSettings = function () {
-      const lang = document.getElementById("language").value;
       const theme = document.getElementById("theme").value;
       const username = document.getElementById("username").value;
       const email = document.getElementById("email").value;
-      localStorage.setItem("lang9630", lang);
-      localStorage.setItem("theme9630", theme);
-      localStorage.setItem("username", username);
-      localStorage.setItem("email", email);
+
+      setCookie("theme9630", theme);
+      setCookie("username", username);
+      setCookie("email", email);
+
       applySettings();
       isDirty = false;
     };
@@ -109,37 +80,30 @@
 </head>
 <body>
   <div class="container">
-    <div class="header" langid="settings_title">Einstellungen</div>
+    <div class="header">Einstellungen</div>
     <div class="settings-group">
-      <h2 langid="settings_profile">Profil</h2>
-      <div class="settings-item" title="Achtung! Diese Funktion ist Experimentel! Website kann nach ändern der Einstellung Fehlerhaft, abnormal oder komplett kaputt sein">
-        <label for="username" langid="settings_username_label">Benutzername</label>
-        <input type="text" id="username" placeholder="Neuen Nutzernamen eingeben">
+      <h2>Profil</h2>
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="username">Benutzername</label>
+        <input type="text" id="username" placeholder="Nutzernamen eingeben">
       </div>
-      <div title="Achtung! Diese Funktion ist Experimentel! Website kann nach ändern der Einstellung Fehlerhaft, abnormal oder komplett kaputt sein" class="settings-item">
-        <label for="email" langid="settings_email_label">E-Mail</label>
-        <input type="email" id="email" placeholder="Neue E-Mail eingeben">
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" placeholder="E-Mail eingeben">
       </div>
     </div>
     <div class="settings-group">
-      <h2 langid="settings_pref">Allgemein</h2>
+      <h2>Allgemein</h2>
       <div class="settings-item">
-        <label for="language" title="Achtung! Diese Funktion ist Experimentel! Website kann nach ändern der Einstellung Fehlerhaft, abnormal oder komplett kaputt sein" langid="settings_lang_label">Sprache</label>
-        <select id="language">
-          <option id="german" value="de">Deutsch</option>
-          <option id="english" value="en">Englisch</option>
-        </select>
-      </div>
-      <div class="settings-item">
-        <label for="theme" langid="settings_theme_label">Theme</label>
+        <label for="theme">Theme</label>
         <select id="theme">
-          <option id="white" value="white">Weiß</option>
-          <option id="dark" value="dark">Dunkel</option>
-          <option id="sys" value="sys">System</option>
+          <option value="white">Weiß</option>
+          <option value="dark">Dunkel</option>
+          <option value="sys">System</option>
         </select>
       </div>
     </div>
-    <button onclick="saveSettings()" class="save-button" langid="settings_save">Speichern</button>
+    <button onclick="saveSettings()" class="save-button">Speichern</button>
   </div>
 </body>
 </html>
