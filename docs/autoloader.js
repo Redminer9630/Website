@@ -13,12 +13,7 @@
 })();
 if(location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.','//'));if(location.protocol!=='https:') location.replace(location.href.replace('http:','https:'));if(location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 
-const error = Symbol("error");
-const warn = Symbol("warn");
-const info = Symbol("info");
-const log = Symbol("log");
-
-function noti(type, ...msgParts) { const msg = msgParts.join(' '); switch(type) { case error: console.error(msg); alert(msg); break; case warn: console.warn(msg); alert(msg); break; case info: console.info(msg); alert(msg); break; case log: console.log(msg); alert(msg); break; case debug: console.debug(msg); alert(msg); break; default: console.debug("Unknown msg type:", msg);}}
+const error = Symbol("error"); const warn = Symbol("warn"); const info = Symbol("info"); const log = Symbol("log"); function noti(type, ...msgParts) { const msg = msgParts.join(' '); switch(type) { case error: console.error(msg); alert(msg); break; case warn: console.warn(msg); alert(msg); break; case info: console.info(msg); alert(msg); break; case log: console.log(msg); alert(msg); break; case debug: console.debug(msg); alert(msg); break; default: console.debug("Unknown msg type:", msg);}}
 
 window.CommonVersion = {
     version: 'v1.0.0',
@@ -57,12 +52,12 @@ Promise.all([
 		btn.addEventListener('click',()=>{
 			const id=btn.getAttribute('data-modal-open');
 			if(typeof Modal?.open==='function') Modal.open(id);
-			else alert("Modal.open nicht verfügbar");
+			else noti(error, ("Modal.open nicht verfügbar"));
 		});
 	});
 
 	document.querySelectorAll("img").forEach(img=>{ if(!img.src.endsWith(".webp")) console.warn("Bild sollte in WebP vorliegen:",img.src); if(img.naturalWidth>800) console.warn("Bild eventuell zu groß geladen:",img.src,img.naturalWidth+"px"); });
-	console.info("Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
+	noti(info, ("Social Integration empfohlen → Beispiel: https://addthis.com/get/share/"));
 }).catch(err=>{
 	loader.remove();
 	noti(error, ("Fehler beim Laden der Komponenten:",err))
