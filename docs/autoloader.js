@@ -90,7 +90,6 @@ function appendFooter(version, date, time) {
 
 document.addEventListener('DOMContentLoaded', () => { 
     appendFooter(CommonVersion.version, CommonVersion.date, CommonVersion.time); 
-    initCommonFeatures(document.body);
     const style=document.createElement("style");
     style.textContent=`@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} body{font-family:'Mojangles', Arial;}`;
     document.head.append(style);
