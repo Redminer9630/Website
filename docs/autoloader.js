@@ -13,6 +13,13 @@
 })();
 if(location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.','//'));if(location.protocol!=='https:') location.replace(location.href.replace('http:','https:'));if(location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 
+const error = Symbol("error");
+const warn = Symbol("warn");
+const info = Symbol("info");
+const log = Symbol("log");
+
+function noti(type, ...msgParts) { const msg = msgParts.join(' '); switch(type) { case error: console.error(msg); alert(msg); break; case warn: console.warn(msg); alert(msg); break; case info: console.info(msg); alert(msg); break; case log: console.log(msg); alert(msg); break; case debug: console.debug(msg); alert(msg); break; default: console.debug("Unknown msg type:", msg);}}
+
 window.CommonVersion = {
     version: 'v1.0.0',
     date: '18.5.25',
@@ -31,7 +38,7 @@ Promise.all([
 	import('/js_components/need_confirm.js'),
 	import('/js_components/download.js'),
 	import('/js_components/back_button.js')
-]).then([elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
+]).then([elements,embed,tooltip,firebase,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
 	/*const lang = lang_module.default ?? lang_module ?? {};
 	document.querySelectorAll('[lang]').forEach(el=>{
@@ -50,7 +57,7 @@ Promise.all([
 		btn.addEventListener('click',()=>{
 			const id=btn.getAttribute('data-modal-open');
 			if(typeof Modal?.open==='function') Modal.open(id);
-			else console.warn("Modal.open nicht verfügbar");
+			else alert("Modal.open nicht verfügbar");
 		});
 	});
 
@@ -58,7 +65,7 @@ Promise.all([
 	console.info("Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
 }).catch(err=>{
 	loader.remove();
-	console.error("Fehler beim Laden der Komponenten:",err);
+	noti(error, ("Fehler beim Laden der Komponenten:",err))
 });
 
 function loadCaptcha(callback) { if (window.grecaptcha) { if (callback) callback(window.grecaptcha); return; } const script = document.createElement('script'); script.src = 'https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit'; script.async = true; script.defer = true; window.onCaptchaLoad = () => { if (callback) callback(window.grecaptcha); }; document.head.appendChild(script); }
