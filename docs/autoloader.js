@@ -33,7 +33,7 @@ Promise.all([
 	import('/js_components/back_button.js')
 ]).then(([lang_module,elements,embed,tooltip,firebase,common,modal,need_confirm,download,back_button,captcha])=>{
 	loader.remove();
-	const lang=lang_module.default||{};
+	const lang = lang_module.default ?? lang_module ?? {};
 	document.querySelectorAll('[lang]').forEach(el=>{
 		const key=el.getAttribute('lang');
 		el.innerText=lang[key]||`[[${key}]]`;
