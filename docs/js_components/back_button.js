@@ -1,13 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
+export function initHeaderButton() {
     if (location.pathname === '/' || location.pathname === '/index.html') return;
 
     const style = document.createElement('style');
     style.textContent = `
-        @font-face {
-            font-family: 'Mojangles';
-            src: url('https://redminer9630.ddns.net/minecraft_font.woff') format('woff'),
-                 url('https://redminer9630.ddns.net/minecraft_font.ttf') format('truetype');
-        }
         .header-link {
             font-family: 'Mojangles';
             font-size: 16px;
@@ -30,4 +25,4 @@ document.addEventListener('DOMContentLoaded', () => {
     backButton.textContent = 'Zurück';
     backButton.addEventListener('click', () => history.back());
     document.body.appendChild(backButton);
-});
+}
