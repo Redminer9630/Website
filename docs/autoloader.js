@@ -25,13 +25,12 @@ const loader=document.createElement('div');
 loader.id='loader'; loader.textContent='Lade...'; loader.style.cssText='position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;text-align:center;padding:.5em;font-family:sans-serif;z-index:9999;';
 document.addEventListener("DOMContentLoaded", () => { document.body.appendChild(loader); setTimeout(() => { if (document.getElementById('loader')) loader.remove(); }, 3000); });
 Promise.all([
-    /*import('/js_components/lang/lang.js'),*/
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
-	import('/js_components/download.js'),
+	import('/js_components/download.js')
 ]).then([elements,embed,tooltip,firebase,need_confirm,download,captcha])=>{
 	loader.remove();
 	/*const lang = lang_module.default ?? lang_module ?? {};
