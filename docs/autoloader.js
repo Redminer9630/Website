@@ -32,8 +32,7 @@ Promise.all([
 	import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/download.js'),
-	import('/js_components/back_button.js')
-]).then([elements,embed,tooltip,firebase,need_confirm,download,back_button,captcha])=>{
+]).then([elements,embed,tooltip,firebase,need_confirm,download,captcha])=>{
 	loader.remove();
 	/*const lang = lang_module.default ?? lang_module ?? {};
 	document.querySelectorAll('[lang]').forEach(el=>{
@@ -62,6 +61,8 @@ Promise.all([
 	loader.remove();
 	noti(error, ("Fehler beim Laden der Komponenten:",err))
 });
+
+document.addEventListener('DOMContentLoaded', () => { if (location.pathname === '/' || location.pathname === '/index.html') return; const style = document.createElement('style'); style.textContent = ` .header-link { font-family: 'Mojangles'; font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 8px; position: absolute; top: 20px; right: 20px; background-color: #f44336; color: white; cursor: pointer; } .header-link:hover { background-color: #e53935; } `; document.head.appendChild(style); const backButton = document.createElement('div'); backButton.className = 'header-link'; backButton.textContent = 'Zurück'; backButton.addEventListener('click', () => history.back()); document.body.appendChild(backButton); });
 
 function loadCaptcha(callback) { if (window.grecaptcha) { if (callback) callback(window.grecaptcha); return; } const script = document.createElement('script'); script.src = 'https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit'; script.async = true; script.defer = true; window.onCaptchaLoad = () => { if (callback) callback(window.grecaptcha); }; document.head.appendChild(script); }
 
