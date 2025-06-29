@@ -56,7 +56,7 @@ Promise.all([
 		});
 	});
 
-	document.querySelectorAll("img").forEach(img=>{ if(!img.src.endsWith(".webp")) console.warn("Bild sollte in WebP vorliegen:",img.src); if(img.naturalWidth>800) console.warn("Bild eventuell zu groß geladen:",img.src,img.naturalWidth+"px"); });
+	document.querySelectorAll("img").forEach(img=>{ if(!img.src.endsWith(".webp")) noti(warn, ("Bild sollte in WebP vorliegen:",img.src)); if(img.naturalWidth>800) noti(warn("Bild eventuell zu groß geladen:",img.src,img.naturalWidth+"px")); });
 	noti(info, ("Social Integration empfohlen → Beispiel: https://addthis.com/get/share/"));
 }).catch(err=>{
 	loader.remove();
