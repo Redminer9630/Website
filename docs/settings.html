@@ -1,77 +1,83 @@
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Profil & Einstellungen</title>
-<script src="autoloader.js" type="module" defer></script>
-<style>
-  body { font-family: monospace; background: #222; color: #eee; padding: 20px; max-width: 400px; margin: auto; }
-  input, button, select { width: 100%; margin: 6px 0; padding: 8px; border-radius: 5px; border: none; font-size: 1rem; }
-  button { background: #09f; color: white; cursor: pointer; }
-  button:hover { background: #06c; }
-  .hidden { display: none; }
-  label { margin-top: 10px; display: block; }
-  #error, #message { margin: 10px 0; }
-  #error { color: #f66; }
-  #message { color: #6f6; }
-</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Profil & Einstellungen</title>
+	<script src="autoloader.js" type="module" defer></script>
+	<style>
+		body { font-family: monospace; background: #222; color: #eee; padding: 20px; max-width: 500px; margin: auto; }
+		input, button, select { width: 100%; margin: 6px 0; padding: 8px; border-radius: 5px; border: none; font-size: 1rem; }
+		button { background: #09f; color: white; cursor: pointer; }
+		button:hover { background: #06c; }
+		.hidden { display: none; }
+		label { margin-top: 10px; display: block; }
+		#error, #message { margin: 10px 0; }
+		#error { color: #f66; }
+		#message { color: #6f6; }
+	</style>
 </head>
 <body>
 
 <h1>Profil & Einstellungen</h1>
+<p id="welcome">Lade Benutzer...</p>
 
 <div id="loginBox">
-  <h2>Login</h2>
-  <div id="error"></div>
-  <input id="emailLogin" type="email" placeholder="E-Mail" autocomplete="username" />
-  <input id="passwordLogin" type="password" placeholder="Passwort" autocomplete="current-password" />
-  <button id="btnLogin">Einloggen</button>
-  <p>Noch kein Konto? <a href="#" id="showRegister">Registrieren</a></p>
-  <p><a href="#" id="btnResetPassword">Passwort vergessen?</a></p>
+	<h2>Login</h2>
+	<div id="error"></div>
+	<input id="emailLogin" type="email" placeholder="E-Mail" autocomplete="username" />
+	<input id="passwordLogin" type="password" placeholder="Passwort" autocomplete="current-password" />
+	<button id="btnLogin">Einloggen</button>
+	<p>Noch kein Konto? <a href="#" id="showRegister">Registrieren</a></p>
+	<p><a href="#" id="btnResetPassword">Passwort vergessen?</a></p>
 </div>
 
 <div id="registerBox" class="hidden">
-  <h2>Registrieren</h2>
-  <div id="errorReg"></div>
-  <input id="emailReg" type="email" placeholder="E-Mail" autocomplete="email" />
-  <input id="passwordReg" type="password" placeholder="Passwort" autocomplete="new-password" />
-  <input id="passwordRegConfirm" type="password" placeholder="Passwort bestätigen" autocomplete="new-password" />
-  <button id="btnRegister">Registrieren</button>
-  <p><a href="#" id="showLogin">Zurück zum Login</a></p>
+	<h2>Registrieren</h2>
+	<div id="errorReg"></div>
+	<input id="emailReg" type="email" placeholder="E-Mail" autocomplete="email" />
+	<input id="passwordReg" type="password" placeholder="Passwort" autocomplete="new-password" />
+	<input id="passwordRegConfirm" type="password" placeholder="Passwort bestätigen" autocomplete="new-password" />
+	<button id="btnRegister">Registrieren</button>
+	<p><a href="#" id="showLogin">Zurück zum Login</a></p>
 </div>
 
 <div id="settingsBox" class="hidden">
-  <div id="message"></div>
-  <p>Angemeldet als <span id="userEmail"></span></p>
-  <button id="btnLogout">Logout</button>
+	<div id="message"></div>
+	<p>Angemeldet als <span id="userEmail"></span></p>
+	<button id="btnLogout">Logout</button>
 
-  <label for="newEmail">Neue E-Mail</label>
-  <input id="newEmail" type="email" placeholder="Neue E-Mail eingeben" />
+	<!-- E-Mail ändern über dein Backend -->
+	<form id="emailChange">
+		<h3>E-Mail ändern</h3>
+		<input type="email" id="newEmail" placeholder="Neue E-Mail" required />
+		<button type="submit">Ändern</button>
+	</form>
 
-  <label for="newPassword">Neues Passwort</label>
-  <input id="newPassword" type="password" placeholder="Neues Passwort eingeben" />
+	<!-- Passwort ändern lokal (Firebase) -->
+	<h3>Passwort ändern</h3>
+	<input id="newPassword" type="password" placeholder="Neues Passwort eingeben" />
+	<input id="newPasswordConfirm" type="password" placeholder="Neues Passwort bestätigen" />
+	<button id="btnSaveChanges">Passwort ändern</button>
 
-  <label for="newPasswordConfirm">Neues Passwort bestätigen</label>
-  <input id="newPasswordConfirm" type="password" placeholder="Neues Passwort bestätigen" />
-
-  <button id="btnSaveChanges">Änderungen speichern</button>
+	<!-- Theme-Auswahl -->
+	<h3>Theme</h3>
+	<select id="themeSelect">
+		<option value="system">Systemstandard</option>
+		<option value="light">Hell</option>
+		<option value="dark">Dunkel</option>
+	</select>
 </div>
 
-<script src="js_components/firebase.js" type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
 import {
-  getAuth, 
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  signOut,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  updateEmail,
-  updatePassword,
-  reload
+	getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+	sendEmailVerification, signOut, onAuthStateChanged,
+	sendPasswordResetEmail, updatePassword
 } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-auth.js";
 
+const firebaseConfig = { /* Deine Config */ };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -81,168 +87,125 @@ const settingsBox = document.getElementById('settingsBox');
 const error = document.getElementById('error');
 const errorReg = document.getElementById('errorReg');
 const message = document.getElementById('message');
-
 const userEmailSpan = document.getElementById('userEmail');
 
 document.getElementById('btnLogin').onclick = async () => {
-  error.textContent = '';
-  const email = document.getElementById('emailLogin').value.trim();
-  const pass = document.getElementById('passwordLogin').value;
-  if (!email || !pass) {
-    error.textContent = 'Bitte E-Mail und Passwort eingeben.';
-    return;
-  }
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-    if (!userCredential.user.emailVerified) {
-      error.textContent = 'Bitte bestätige zuerst deine E-Mail.';
-      await sendEmailVerification(userCredential.user);
-      await signOut(auth);
-      return;
-    }
-  } catch(e) { error.textContent = 'Fehler beim Einloggen: ' + e.message; }
+	error.textContent = '';
+	const email = document.getElementById('emailLogin').value.trim();
+	const pass = document.getElementById('passwordLogin').value;
+	if (!email || !pass) return error.textContent = 'Bitte E-Mail und Passwort eingeben.';
+	try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+		if (!userCredential.user.emailVerified) {
+			error.textContent = 'Bitte bestätige deine E-Mail.';
+			await sendEmailVerification(userCredential.user);
+			await signOut(auth);
+			return;
+		}
+	} catch(e) { error.textContent = 'Fehler beim Einloggen: ' + e.message; }
 };
 
 document.getElementById('showRegister').onclick = e => {
-  e.preventDefault();
-  error.textContent = '';
-  errorReg.textContent = '';
-  loginBox.classList.add('hidden');
-  registerBox.classList.remove('hidden');
+	e.preventDefault(); error.textContent = ''; errorReg.textContent = '';
+	loginBox.classList.add('hidden'); registerBox.classList.remove('hidden');
 };
 
 document.getElementById('showLogin').onclick = e => {
-  e.preventDefault();
-  error.textContent = '';
-  errorReg.textContent = '';
-  registerBox.classList.add('hidden');
-  loginBox.classList.remove('hidden');
+	e.preventDefault(); error.textContent = ''; errorReg.textContent = '';
+	registerBox.classList.add('hidden'); loginBox.classList.remove('hidden');
 };
 
 document.getElementById('btnRegister').onclick = async () => {
-  errorReg.textContent = '';
-  const email = document.getElementById('emailReg').value.trim();
-  const pass = document.getElementById('passwordReg').value;
-  const passConfirm = document.getElementById('passwordRegConfirm').value;
-  if (!email || !pass || !passConfirm) {
-    errorReg.textContent = 'Bitte alle Felder ausfüllen.';
-    return;
-  }
-  if (pass !== passConfirm) {
-    errorReg.textContent = 'Passwörter stimmen nicht überein.';
-    return;
-  }
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-    await sendEmailVerification(userCredential.user);
-    alert('Registrierung erfolgreich! Bitte bestätige deine E-Mail und logge dich danach ein.');
-    registerBox.classList.add('hidden');
-    loginBox.classList.remove('hidden');
-  } catch(e) { errorReg.textContent = 'Fehler bei der Registrierung: ' + e.message; }
+	errorReg.textContent = '';
+	const email = document.getElementById('emailReg').value.trim();
+	const pass = document.getElementById('passwordReg').value;
+	const confirm = document.getElementById('passwordRegConfirm').value;
+	if (!email || !pass || !confirm) return errorReg.textContent = 'Bitte alle Felder ausfüllen.';
+	if (pass !== confirm) return errorReg.textContent = 'Passwörter stimmen nicht überein.';
+	try {
+		const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+		await sendEmailVerification(userCredential.user);
+		alert('Registrierung erfolgreich! Bitte bestätige deine E-Mail und logge dich dann ein.');
+		registerBox.classList.add('hidden'); loginBox.classList.remove('hidden');
+	} catch(e) { errorReg.textContent = 'Fehler bei der Registrierung: ' + e.message; }
 };
 
 document.getElementById('btnLogout').onclick = async () => { await signOut(auth); };
 
 document.getElementById('btnResetPassword').onclick = async e => {
-  e.preventDefault();
-  const email = prompt('Bitte gib deine E-Mail für das Zurücksetzen des Passworts ein:');
-  if (email) {
-    try {
-      await sendPasswordResetEmail(auth, email);
-      noti(info, ('Passwort-Zurücksetz-Mail gesendet.'));
-    } catch (e) {
-      noti(error, ('Fehler: ' + e.message));
-    }
-  }
+	e.preventDefault();
+	const email = prompt('E-Mail zum Zurücksetzen des Passworts eingeben:');
+	if (email) {
+		try {
+			await sendPasswordResetEmail(auth, email);
+			alert('Passwort-Zurücksetz-Mail gesendet.');
+		} catch (e) { alert('Fehler: ' + e.message); }
+	}
 };
 
 document.getElementById('btnSaveChanges').onclick = async () => {
-  message.textContent = '';
-  error.textContent = '';
-  errorReg.textContent = '';
-
-  const user = auth.currentUser;
-  if (!user) {
-    error.textContent = 'Nicht eingeloggt.';
-    settingsBox.classList.add('hidden');
-    loginBox.classList.remove('hidden');
-    return;
-  }
-
-  const newEmail = document.getElementById('newEmail').value.trim();
-  const newPass = document.getElementById('newPassword').value;
-  const newPassConfirm = document.getElementById('newPasswordConfirm').value;
-
-  try {
-    if (newEmail && newEmail !== user.email) {
-      await updateEmail(user, newEmail);
-      message.textContent = 'E-Mail wurde aktualisiert. Bitte bestätige die neue E-Mail!';
-      await sendEmailVerification(user);
-      await signOut(auth);
-      settingsBox.classList.add('hidden');
-      loginBox.classList.remove('hidden');
-      return;
-    }
-    if (newPass) {
-      if (newPass !== newPassConfirm) {
-        error.textContent = 'Passwörter stimmen nicht überein.';
-        return;
-      }
-      await updatePassword(user, newPass);
-      message.textContent = 'Passwort wurde geändert.';
-    }
-  } catch (e) { error.textContent = 'Fehler: ' + e.message; }
+	message.textContent = ''; error.textContent = '';
+	const user = auth.currentUser;
+	if (!user) return error.textContent = 'Nicht eingeloggt.';
+	const newPass = document.getElementById('newPassword').value;
+	const newConfirm = document.getElementById('newPasswordConfirm').value;
+	if (newPass && newPass === newConfirm) {
+		try {
+			await updatePassword(user, newPass);
+			message.textContent = 'Passwort wurde geändert.';
+		} catch(e) { error.textContent = 'Fehler: ' + e.message; }
+	} else if (newPass || newConfirm) {
+		error.textContent = 'Passwörter stimmen nicht überein.';
+	}
 };
 
+// Theme speichern
+const themeSelect = document.getElementById('themeSelect');
+themeSelect.value = localStorage.getItem("theme") || "system";
+themeSelect.onchange = () => {
+	localStorage.setItem("theme", themeSelect.value);
+	alert("Theme-Einstellung gespeichert: " + themeSelect.value);
+};
+
+// Benutzer über Backend abrufen
+(async () => {
+	try {
+		const res = await fetch("https://backend9630.onrender.com/api/me", { credentials: "include" });
+		const data = await res.json();
+		if (!data.success) return;
+		document.getElementById("welcome").innerText = "Willkommen, " + data.username;
+	} catch (e) {
+		console.warn("Backend nicht erreichbar.");
+	}
+})();
+
+// E-Mail über Backend ändern
+document.getElementById('emailChange').addEventListener("submit", async e => {
+	e.preventDefault();
+	const email = document.querySelector("#newEmail").value;
+	const res = await fetch("https://backend9630.onrender.com/api/change-email", {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		credentials: "include",
+		body: JSON.stringify({ email })
+	});
+	const out = await res.json();
+	alert(out.message);
+});
+
+// Auth-Zustand prüfen
 onAuthStateChanged(auth, user => {
-  if (user) {
-    loginBox.classList.add('hidden');
-    registerBox.classList.add('hidden');
-    settingsBox.classList.remove('hidden');
-    userEmailSpan.textContent = user.email || '(keine E-Mail)';
-  } else {
-    loginBox.classList.remove('hidden');
-    registerBox.classList.add('hidden');
-    settingsBox.classList.add('hidden');
-  }
+	if (user) {
+		loginBox.classList.add('hidden');
+		registerBox.classList.add('hidden');
+		settingsBox.classList.remove('hidden');
+		userEmailSpan.textContent = user.email || '(keine E-Mail)';
+	} else {
+		loginBox.classList.remove('hidden');
+		registerBox.classList.add('hidden');
+		settingsBox.classList.add('hidden');
+	}
 });
 </script>
-</body>
-</html>-->
-<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><title>Einstellungen</title></head>
-<body>
-	<h1>Account-Einstellungen</h1>
-	<p id="welcome">Lade...</p>
-
-	<form id="emailChange">
-		<h3>E-Mail ändern</h3>
-		<input type="email" id="newEmail" placeholder="Neue E-Mail" required><br>
-		<button type="submit">Ändern</button>
-	</form>
-
-	<script>
-		async function getUser() {
-			const res = await fetch("https://backend9630.onrender.com/api/me", { credentials: "include" });
-			const out = await res.json();
-			if (!out.success) return location.href = "signin.html";
-			document.getElementById("welcome").innerText = "Willkommen, " + out.username;
-		}
-		getUser();
-
-		document.getElementById("emailChange").addEventListener("submit", async e => {
-			e.preventDefault();
-			const email = document.querySelector("#newEmail").value;
-			const res = await fetch("https://backend9630.onrender.com/api/change-email", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-				body: JSON.stringify({ email })
-			});
-			const out = await res.json();
-			alert(out.message);
-		});
-	</script>
 </body>
 </html>
