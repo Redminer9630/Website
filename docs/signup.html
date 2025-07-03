@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<title>Registrieren</title>
+</head>
+<body>
+	<h1>Registrieren</h1>
+	<form>
+		<input type="text" id="username" placeholder="Benutzername" required><br>
+		<input type="email" id="email" placeholder="E-Mail" required><br>
+		<input type="password" id="password" placeholder="Passwort" required><br>
+		<button type="submit">Registrieren</button>
+	</form>
+	<script>
+		document.querySelector("form").addEventListener("submit", async e => {
+			e.preventDefault();
+			const data = {
+				username: document.querySelector("#username").value,
+				email: document.querySelector("#email").value,
+				password: document.querySelector("#password").value
+			};
+			const res = await fetch("https://backend9630.onrender.com/api/signup", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(data)
+			});
+			const out = await res.json();
+			alert(out.message);
+		});
+	</script>
+</body>
+</html>
