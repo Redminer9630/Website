@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -207,5 +207,42 @@ onAuthStateChanged(auth, user => {
   }
 });
 </script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="de">
+<head><meta charset="UTF-8"><title>Einstellungen</title></head>
+<body>
+	<h1>Account-Einstellungen</h1>
+	<p id="welcome">Lade...</p>
+
+	<form id="emailChange">
+		<h3>E-Mail ändern</h3>
+		<input type="email" id="newEmail" placeholder="Neue E-Mail" required><br>
+		<button type="submit">Ändern</button>
+	</form>
+
+	<script>
+		async function getUser() {
+			const res = await fetch("https://backend9630.onrender.com/api/me", { credentials: "include" });
+			const out = await res.json();
+			if (!out.success) return location.href = "signin.html";
+			document.getElementById("welcome").innerText = "Willkommen, " + out.username;
+		}
+		getUser();
+
+		document.getElementById("emailChange").addEventListener("submit", async e => {
+			e.preventDefault();
+			const email = document.querySelector("#newEmail").value;
+			const res = await fetch("https://backend9630.onrender.com/api/change-email", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				credentials: "include",
+				body: JSON.stringify({ email })
+			});
+			const out = await res.json();
+			alert(out.message);
+		});
+	</script>
 </body>
 </html>
