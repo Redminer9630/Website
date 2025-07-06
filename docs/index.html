@@ -12,27 +12,23 @@
 <body>
   <header>
     <nav class="icon-left" aria-label="Hauptnavigation">
-      <div class="logo-static" onclick="location.href='introduction'" unstable><img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung"></div>
-      <div class="nav-item" onclick="location.href='downloads'" unstable><img src="images/icons/downloads.webp" class="nav-icon" alt="Download"></div>
-      <div class="nav-item" onclick="location.href='generators'" unstable><img src="images/icons/generators.webp" class="nav-icon" alt="Generators"></div>
-      <div class="nav-item" onclick="location.href='tools'" unstable><img src="images/icons/tools.webp" class="nav-icon" alt="Tools"></div>
-      <div class="nav-item" onclick="location.href='server'" unstable><img src="images/icons/team.webp" class="nav-icon" alt="Server"></div>
-      <div class="nav-item" onclick="location.href='linktree'"><img src="images/tree.webp" class="nav-icon" alt="Linktree"></div>
+      <div class="logo-static" onclick="location.href='introduction'"><img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung"></div>
     </nav>
-    <div class="icon-right" aria-label="Benutztermenü">
-      <div><img src="images/icons/search.webp" class="account-icon" alt="Suchen"><input placeholder="Suche..." id="search"></div>
-      <img onclick="location.href='manual'" unstable src="images/icons/about.webp" class="account-icon" alt="Benutzerhandbuch öffnen">
-      <img onclick="location.href='feedback'" unstable src="images/icons/feedback.webp" class="account-icon" alt="Feedback geben">
-      <img onclick="location.href='settings'" unstable src="images/icons/settings.webp" class="account-icon" style="width: auto;" alt="Einstellungen öffnen">
+    <div class="icon-right" aria-label="Suche">
+      <section id="search-section">
+        <input type="text" id="search" placeholder="Suche..." />
+        <img src="images/icons/search.webp" id="btnSearch" class="account-icon" alt="Suchen" style="cursor: pointer;">
+      </section>
     </div>
   </header>
+
   <main>
     <br>
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2><br></noscript>
     <section id="about">
       <h1 class="h2">Über Redminer9630</h1>
       <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
-      <button onclick="location.href='manual?q=about'" unstable>Mehr über mich erfahren</button>
+      <button onclick="location.href='manual?q=about'">Mehr über mich erfahren</button>
     </section>
 
     <section>
@@ -46,6 +42,6 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-  <noscript><style>section{display:none!important;}</style></noscript><script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});</script>
+  <script> document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});</script>
 </body>
 </html>
