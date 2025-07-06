@@ -21,7 +21,10 @@
       <div class="nav-item" onclick="location.href='linktree'"><img src="images/tree.webp" class="nav-icon" alt="Linktree"></div>
     </nav>
     <div class="icon-right" aria-label="Benutztermenü">
-      <div class="icon-right" aria-label="Suche"><section id="search-section"><input type="text" id="search" placeholder="Suche..." /><img src="images/icons/search.webp" id="btnSearch" class="account-icon" alt="Suchen" style="cursor: pointer;"></section>
+      <section id="search-section" style="display: flex; align-items: center; gap: 0.5rem;">
+          <img src="images/icons/search.webp" alt="Suche" style="width: 24px; height: 24px;" />
+          <input type="text" id="search" placeholder="Suche..." style="flex: 1; padding: 0.4rem;" />
+      </section>
       <img onclick="location.href='manual'" unstable src="images/icons/about.webp" class="account-icon" alt="Benutzerhandbuch öffnen">
       <img onclick="location.href='feedback'" unstable src="images/icons/feedback.webp" class="account-icon" alt="Feedback geben">
       <img onclick="location.href='settings'" unstable src="images/icons/settings.webp" class="account-icon" style="width: auto;" alt="Einstellungen öffnen">
@@ -48,6 +51,6 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-  <script> document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});</script>
+  <script> document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});const input = document.getElementById("search");input.addEventListener("keypress", e => {if (e.key === "Enter") {const term = input.value.trim();if (term) window.location.href = "search.html?q=" + encodeURIComponent(term);}});</script>
 </body>
 </html>
