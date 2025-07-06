@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <title>Suche - Redminer9630</title>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Suche auf redminer9630.ddns.net">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preload" href="../index.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="../index.css"></noscript>
+</head>
+<body>
+  <header>
+    <nav class="icon-left"><div class="logo-static" onclick="location.href='../introduction'"><img src="../favicon/apple-touch-icon.webp" class="logo-icon" alt="Zurück"></div></nav>
+    <div class="icon-right">
+      <section id="search-section">
+        <input type="text" id="search" placeholder="Suche..." />
+        <img src="../images/icons/search.webp" id="btnSearch" class="account-icon" alt="Suchen" style="cursor: pointer;">
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <h1>Suchergebnisse</h1>
+    <div id="search-results"><p>Wird geladen...</p></div>
+    <h2>Letzte Suchen</h2>
+    <ul id="recent-searches"></ul>
+  </main>
+
+  <script>
+    const indexFiles = ["tools-index.json", "generator-index.json"];
+    const resultsDiv = document.getElementById("search-results");
+    const recentList = document.getElementById("recent-searches");
+    const searchInput = document.getElementById("search");
+
+    // aktuelle Suche aus URL holen
+    const params = new URLSearchParams(location.search);
+    const query = (params.get("q") || "").trim().toLowerCase();
+    if (query) searchInput.value = query;
+
+    document.getElementById("btnSearch").addEventListener("click", () => {
+      const q = searchInput.value.trim();
+      if (q) window.location.href = "search.html?q=" + encodeURIComponent(q);
+    });
+    searchInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        const q = searchInput.value.trim();
+        if (q) window.location.href = "search.html?q=" + encodeURIComponent(q);
+      }
+    });
+
+    // Letzte Suchbegriffe laden & anzeigen
+    function loadRecent() {
+      const list = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+      recentList.innerHTML = "";
+      list.slice(0, 5).forEach(term => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = "search.html?q=" + encodeURIComponent(term);
+        a.textContent = term;
+        li.appendChild(a);
+        recentList.appendChild(li);
+      });
+    }
+
+    function saveRecent(term) {
+      if (!term) return;
+      let list = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+      list = [term, ...list.filter(e => e !== term)];
+      localStorage.setItem("recentSearches", JSON.stringify(list.slice(0, 10)));
+    }
+
+    async function loadIndexesAndSearch() {
+      if (!query) {
+        resultsDiv.innerHTML = "<p>Gib einen Suchbegriff ein.</p>";
+        return;
+      }
+
+      saveRecent(query);
+      loadRecent();
+
+      let indexEntries = [];
+      for (const file of indexFiles) {
+        try {
+          const res = await fetch("/search/" + file);
+          const data = await res.json();
+          indexEntries = indexEntries.concat(data);
+        } catch (e) {
+          console.warn("Fehler beim Laden von", file, e);
+        }
+      }
+
+      const matches = indexEntries.filter(e =>
+        e.alias?.split(",").some(a => a.trim().toLowerCase().startsWith(query)) ||
+        e.title?.toLowerCase().includes(query) ||
+        e.description?.toLowerCase().includes(query)
+      );
+
+      resultsDiv.innerHTML = "";
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = "<p>Keine Treffer. Du kannst es alternativ auf Google versuchen.</p>";
+      }
+
+      for (const e of matches) {
+        const div = document.createElement("div");
+        div.classList.add("search-item");
+        div.innerHTML = `<h3>${e.title}</h3><p>${e.description}</p>`;
+        const btn = document.createElement("button");
+        btn.textContent = "Ansehen";
+        btn.onclick = () => window.location.href = e.url;
+        div.appendChild(btn);
+
+        if (e.special_feature) {
+          try {
+            const f = eval(`(${e.special_feature})`);
+            if (typeof f === "function") f(div);
+          } catch (err) {
+            console.warn("Fehler in special_feature:", err);
+          }
+        }
+
+        resultsDiv.appendChild(div);
+      }
+
+      const googleAlt = document.createElement("div");
+      googleAlt.innerHTML = `<p><a href="https://www.google.com/search?q=${encodeURIComponent(query)}" target="_blank">Auf Google nach "${query}" suchen</a></p>`;
+      resultsDiv.appendChild(googleAlt);
+    }
+
+    loadRecent();
+    loadIndexesAndSearch();
+  </script>
+</body>
+</html>
