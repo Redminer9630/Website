@@ -3,41 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <title>Suche – Redminer9630</title>
-  <script async src="https://cse.google.com/cse.js?cx=74973ae30e9254cf6"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
+    body { font-family: Arial, sans-serif; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
-    #search-input { width: 100%; max-width: 400px; padding: 0.5rem; font-size: 1rem; margin-bottom: 1rem; }
+    #search-section { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
+    #search-input { flex: 1; padding: 0.5rem; font-size: 1rem; }
+    #results { margin-top: 1rem; }
+    .no-results { color: #888; font-style: italic; margin-top: 1rem; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; }
   </style>
 </head>
 <body>
-  <h1>Suchergebnisse</h1>
-  <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
-  <div class="gcse-searchresults-only" data-queryParameterName="q"></div>
+  <h1>Suche</h1>
+  <section id="search-section">
+    <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
+    <button id="search-button">Suchen</button>
+  </section>
+  <div id="results"></div>
+  <div id="google-fallback" style="margin-top: 2rem; display: none;">
+    <p>Keine lokalen Suchergebnisse gefunden. Du kannst stattdessen mit Google suchen:</p>
+    <button id="google-search">Auf Google suchen</button>
+  </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const q = urlParams.get("q");
     const input = document.getElementById("search-input");
+    const results = document.getElementById("results");
+    const fallback = document.getElementById("google-fallback");
 
+    // Initiale Suche vom URL-Parameter übernehmen
+    const urlParams = new URLSearchParams(location.search);
+    const q = urlParams.get("q");
     if (q) {
       input.value = q;
-      window.__gcse = {
-        callback: function() {
-          if (window.google && window.google.search && window.google.search.cse) {
-            google.search.cse.element.getElement('searchresults-only0').execute(q);
-          }
-        }
-      };
+      runSearch(q);
     }
+
+    document.getElementById("search-button").addEventListener("click", () => {
+      const term = input.value.trim();
+      if (term) {
+        history.replaceState(null, "", "?q=" + encodeURIComponent(term));
+        runSearch(term);
+      }
+    });
 
     input.addEventListener("keypress", e => {
       if (e.key === "Enter") {
         e.preventDefault();
-        const term = input.value.trim();
-        if(term) window.location.search = "?q=" + encodeURIComponent(term);
+        document.getElementById("search-button").click();
       }
     });
+
+    document.getElementById("google-search").addEventListener("click", () => {
+      const term = input.value.trim();
+      if (term) {
+        const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
+        window.open(url, "_blank");
+      }
+    });
+
+    // Lokale "Fake"-Suchfunktion – hier kannst du deine indexierte Suche integrieren
+    function runSearch(term) {
+      results.innerHTML = "";
+      fallback.style.display = "none";
+
+      // Beispiel-Simulation (ersetzbar durch echte JSON-Suche)
+      const exampleIndex = [
+        { title: "Willkommen", content: "Startseite von Redminer9630" },
+        { title: "Kontakt", content: "Hier erfährst du, wie du mich erreichst" },
+        { title: "Minecraft Projekte", content: "Meine Datapacks und Mods" }
+      ];
+
+      const found = exampleIndex.filter(entry =>
+        entry.title.toLowerCase().includes(term.toLowerCase()) ||
+        entry.content.toLowerCase().includes(term.toLowerCase())
+      );
+
+      if (found.length > 0) {
+        found.forEach(entry => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${entry.title}</strong><br><small>${entry.content}</small><hr>`;
+          results.appendChild(div);
+        });
+      } else {
+        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
+        fallback.style.display = "block";
+      }
+    }
   </script>
 </body>
 </html>
