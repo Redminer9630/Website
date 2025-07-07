@@ -1,104 +1,91 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Suche</title>
-	<style>
-@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;}
-body{font-family:'Mojangles',sans-serif;background:#eaeaea;margin:0;padding:0;color:#333;display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box;}
-h1{margin:0;display:flex;align-items:center;width:auto;white-space:nowrap;}
-.logo-container{display:flex;align-items:center;position:relative;}
-.logo{width:225px;display:flex;align-items:center;height:auto;border-radius:4px;position:relative;}
-main{flex:1;padding:20px;margin-top:0;}
-section{margin-bottom:20px;}
-h2,.h2{color:#2ecc71;}
-button{background:#2ecc71;color:#fff;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';z-index:9999;}
-button:hover{background:#2ecc87;}
-footer{background:#2c3e50;color:#fff;text-align:center;padding:10px 0;width:100%;height:20px;position:fixed;bottom:0;left:0;z-index:998;box-sizing:border-box;}
-@media(prefers-color-scheme:dark){body{background:#1a1a1a;color:#f5f5f5;}header,footer{background:#1c2a34;}h2{color:#27ae60;}button{background:#27ae60;}button:hover{background:#2ecc71;}}
-@media(max-width:768px)and(orientation:portrait){header{flex-direction:column;align-items:center;justify-content:center;}.logo-container{flex-direction:column;align-items:center;}.logo{width:180px;}.hiddenItem{visibility:hidden;color:gray;background:gray;}footer{padding:20px;font-size:14px;}}
-@media(max-width:768px)and(orientation:landscape){header{flex-direction:row;justify-content:space-between;padding:10px;}.logo{width:150px;}main{padding:15px;}footer{padding:15px;}}
-.account-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;}
-.account-icon{display:flex;align-items:center;gap:10px;}
-.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;transition:.4s;border-radius:28px;}
-.slider:before{position:absolute;content:"";height:20px;width:20px;left:4px;bottom:4px;background:#fff;transition:.4s;border-radius:50%;}
-input:checked+.slider{background:#2ecc71;}
-input:checked+.slider:before{transform:translateX(22px);}
-.linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
-.linkimg{width:50px;height:50px;margin-right:5px;}
-.invert{filter:invert(1);}
-header{background:#2c3e50;height:40px;width:100%;position:fixed;top:0;left:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:0 10px;box-sizing:border-box;flex-wrap:nowrap;}
-.icon-left,.icon-right{display:flex;gap:10px;align-items:center;}
-.icon-left{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.icon-left::-webkit-scrollbar{display:none;}
-.nav-icon,.account-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;filter:brightness(0) invert(1);}
-.logo-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;}
-.nav-icon:hover,.account-icon:hover{transform:scale(1.2);}
-.linkbox .linkimg{display:inline-block;}
-.linkbox::-webkit-scrollbar{height:8px;}
-.linkbox::-webkit-scrollbar-thumb{background:#888;border-radius:4px;}
-.linkbox::-webkit-scrollbar-track{background:#f1f1f1;}
-.logo-static{width:30px;height:30px;}
-.nav-item{display:flex;align-items:center;cursor:pointer;}
-.fixed-footer{font-family:'Mojangles';background:#2c3e50;color:#fff;text-align:center;padding:10px;width:100%;box-sizing:border-box;line-height:1.5;bottom:0;left:0;z-index:998;position:fixed;}
-@media(max-width:768px){header{flex-wrap:nowrap;flex-direction:row;justify-content:space-between;}.icon-left{flex:1 1 auto;margin-right:10px;}.icon-right{flex-shrink:0;}}
-.linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
-	</style>
+  <meta charset="UTF-8" />
+  <title>Suche – Redminer9630</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 1rem; }
+    h1 { margin-bottom: 1rem; }
+    #search-section { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
+    #search-input { flex: 1; padding: 0.5rem; font-size: 1rem; }
+    #results { margin-top: 1rem; }
+    .no-results { color: #888; font-style: italic; margin-top: 1rem; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; }
+  </style>
 </head>
 <body>
-<header>
-	<div class="logo-container">
-		<img src="logo.png" alt="Logo" class="logo" />
-	</div>
-</header>
-<main>
-	<h1>Suche</h1>
-	<section>
-		<input id="searchInput" type="text" placeholder="Suchbegriff eingeben..." />
-		<button id="searchBtn">Suchen</button>
-	</section>
-	<section>
-		<h2>Suchergebnisse</h2>
-		<ul id="results"></ul>
-	</section>
-</main>
-<footer>© 2025 Redminer9630</footer>
-<script>
-async function loadSearchData() {
-	const response = await fetch('/search/.json');
-	if (!response.ok) throw new Error('Daten konnten nicht geladen werden.');
-	return await response.json();
-}
+  <h1>Suche</h1>
+  <section id="search-section">
+    <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
+    <button id="search-button">Suchen</button>
+  </section>
+  <div id="results"></div>
+  <div id="google-fallback" style="margin-top: 2rem; display: none;">
+    <p>Keine lokalen Suchergebnisse gefunden. Du kannst stattdessen mit Google suchen:</p>
+    <button id="google-search">Auf Google suchen</button>
+  </div>
 
-function createListItem(entry) {
-	const li = document.createElement('li');
-	li.textContent = entry.title + ' - ' + entry.description;
-	return li;
-}
+  <script>
+    const input = document.getElementById("search-input");
+    const results = document.getElementById("results");
+    const fallback = document.getElementById("google-fallback");
 
-function createSpecialFeature(content) {
-	const div = document.getElementById('specialFeature');
-	div.textContent = content || 'Kein Special Feature verfügbar.';
-}
+    const urlParams = new URLSearchParams(location.search);
+    const q = urlParams.get("q");
+    if (q) {
+      input.value = q;
+      runSearch(q);
+    }
 
-document.getElementById('searchBtn').addEventListener('click', async () => {
-	const term = document.getElementById('searchInput').value.toLowerCase();
-	try {
-		const data = await loadSearchData();
-		const results = data.entries.filter(e => e.title.toLowerCase().includes(term) || e.description.toLowerCase().includes(term));
-		const resultsList = document.getElementById('results');
-		resultsList.innerHTML = '';
-		if (results.length === 0) {
-			resultsList.innerHTML = '<li>Keine Treffer gefunden.</li>';
-		} else {
-			results.forEach(entry => resultsList.appendChild(createListItem(entry)));
-		}
-		createSpecialFeature(data.specialFeature);
-	} catch (error) {
-		alert(error.message);
-	}
-});
-</script>
+    document.getElementById("search-button").addEventListener("click", () => {
+      const term = input.value.trim();
+      if (term) {
+        history.replaceState(null, "", "?q=" + encodeURIComponent(term));
+        runSearch(term);
+      }
+    });
+
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        document.getElementById("search-button").click();
+      }
+    });
+
+    document.getElementById("google-search").addEventListener("click", () => {
+      const term = input.value.trim();
+      if (term) {
+        const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
+        window.open(url, "_blank");
+      }
+    });
+
+    function runSearch(term) {
+      results.innerHTML = "";
+      fallback.style.display = "none";
+        
+      const exampleIndex = [
+        { title: "Willkommen", content: "Startseite von Redminer9630" },
+        { title: "Kontakt", content: "Hier erfährst du, wie du mich erreichst" },
+        { title: "Minecraft Projekte", content: "Meine Datapacks und Mods" }
+      ];
+
+      const found = exampleIndex.filter(entry =>
+        entry.title.toLowerCase().includes(term.toLowerCase()) ||
+        entry.content.toLowerCase().includes(term.toLowerCase())
+      );
+
+      if (found.length > 0) {
+        found.forEach(entry => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${entry.title}</strong><br><small>${entry.content}</small><hr>`;
+          results.appendChild(div);
+        });
+      } else {
+        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
+        fallback.style.display = "block";
+      }
+    }
+  </script>
 </body>
 </html>
