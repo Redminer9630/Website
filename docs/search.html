@@ -24,68 +24,119 @@
   </section>
   <div id="results"></div>
   <div id="google-fallback" style="margin-top: 2rem; display: none;"><button id="google-search">Auf Google suchen</button></div>
+<script>
+  const input = document.getElementById("search-input");
+  const results = document.getElementById("results");
+  const fallback = document.getElementById("google-fallback");
 
-  <script>
-    const input = document.getElementById("search-input");
-    const results = document.getElementById("results");
-    const fallback = document.getElementById("google-fallback");
+  // Beispiel-Funktionen, die special_feature referenzieren kann
+  function highlightEntry() {
+    alert("Highlight-Funktion ausgeführt!");
+  }
+  function showNewBadge() {
+    alert("Neues Feature angezeigt!");
+  }
 
-    const urlParams = new URLSearchParams(location.search);
-    const q = urlParams.get("q");
-    if (q) {
-      input.value = q;
-      runSearch(q);
+  const urlParams = new URLSearchParams(location.search);
+  const q = urlParams.get("q");
+  if (q) {
+    input.value = q;
+    runSearch(q);
+  }
+
+  document.getElementById("search-button").addEventListener("click", () => {
+    const term = input.value.trim();
+    if (term) {
+      history.replaceState(null, "", "?q=" + encodeURIComponent(term));
+      runSearch(term);
     }
+  });
 
-    document.getElementById("search-button").addEventListener("click", () => {
-      const term = input.value.trim();
-      if (term) {
-        history.replaceState(null, "", "?q=" + encodeURIComponent(term));
-        runSearch(term);
-      }
-    });
-
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        document.getElementById("search-button").click();
-      }
-    });
-
-    document.getElementById("google-search").addEventListener("click", () => {
-      const term = input.value.trim();
-      if (term) {
-        const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
-        window.open(url, "_blank");
-      }
-    });
-
-    function runSearch(term) {
-      results.innerHTML = "";
-      fallback.style.display = "none";
-        
-      const exampleIndex = [
-        { title: "Willkommen", content: "Startseite von Redminer9630" },
-        { title: "Kontakt", content: "Hier erfährst du, wie du mich erreichst" },
-        { title: "Minecraft Projekte", content: "Meine Datapacks und Mods" }
-      ];
-
-      const found = exampleIndex.filter(entry =>
-        entry.title.toLowerCase().includes(term.toLowerCase()) ||
-        entry.content.toLowerCase().includes(term.toLowerCase())
-      );
-
-      if (found.length > 0) {
-        found.forEach(entry => {
-          const div = document.createElement("div");
-          div.innerHTML = `<strong>${entry.title}</strong><br><small>${entry.content}</small><hr>`;
-          results.appendChild(div);
-        });
-      } else {
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-        fallback.style.display = "block";
-      }
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      document.getElementById("search-button").click();
     }
-  </script>
+  });
+
+  document.getElementById("google-search").addEventListener("click", () => {
+    const term = input.value.trim();
+    if (term) {
+      const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
+      window.open(url, "_blank");
+    }
+  });
+
+  // Hilfsfunktion: Text in Kleinbuchstaben, ohne Symbole, in Wörter aufsplitten
+  function normalizeText(text) {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9äöüß ]/gi, "")
+      .split(/\s+/)
+      .filter(Boolean);
+  }
+
+  function runSearch(term) {
+    results.innerHTML = "";
+    fallback.style.display = "none";
+
+    const exampleIndex = [
+      {
+        title: "Willkommen",
+        desc: "Startseite von Redminer9630",
+        url: "/index.html",
+        alias: ["startseite", "home"],
+        special_feature: "highlightEntry"
+      },
+      {
+        title: "Kontakt",
+        desc: "Hier erfährst du, wie du mich erreichst",
+        url: "/kontakt.html",
+        alias: ["impressum", "mail"],
+        special_feature: ""
+      },
+      {
+        title: "Minecraft Projekte",
+        desc: "Meine Datapacks und Mods",
+        url: "/minecraft-projekte.html",
+        alias: ["mods", "datapacks"],
+        special_feature: "showNewBadge"
+      }
+    ];
+
+    const searchWords = normalizeText(term);
+
+    const found = exampleIndex.filter(entry => {
+      // Alle durchsuchbaren Texte zusammenfügen: title, desc und alle Aliase
+      const combinedText = entry.title + " " + entry.desc + " " + (entry.alias ? entry.alias.join(" ") : "");
+      const textWords = normalizeText(combinedText);
+      // Prüfen, ob alle Suchwörter drin sind
+      return searchWords.every(word => textWords.includes(word));
+    });
+
+    if (found.length > 0) {
+      found.forEach(entry => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <a href="${entry.url}" style="font-weight:bold; font-size:1.1em; color:#2ecc71; text-decoration:none;">${entry.title}</a><br>
+          <small>${entry.desc}</small><br>
+          ${entry.special_feature ? `<button style="color:#e67e22; font-weight:bold; cursor:pointer; margin: 0.3em 0;" class="special-feature-btn">${entry.special_feature}</button><br>` : ""}
+          <hr>
+        `;
+        results.appendChild(div);
+        // Button-Event binden, nur wenn Funktion existiert
+        if(entry.special_feature && typeof window[entry.special_feature] === "function") {
+          div.querySelector(".special-feature-btn").addEventListener("click", () => {
+            window[entry.special_feature]();
+          });
+        }
+      });
+    } else {
+      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
+      fallback.style.display = "block";
+    }
+  }
+</script>
+
 </body>
 </html>
