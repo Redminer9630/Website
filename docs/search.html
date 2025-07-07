@@ -1,135 +1,104 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<title>Suche – Redminer9630</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  body { font-family: Arial, sans-serif; margin: 20px; max-width: 700px; }
-  h1 { margin-bottom: 1rem; }
-  #search-input { width: 100%; padding: 0.5rem; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; }
-  .result-entry { border-bottom: 1px solid #ccc; padding: 0.5rem 0; }
-  .result-entry h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
-  .result-entry p { margin: 0 0 0.2rem 0; color: #555; font-size: 0.9rem; }
-  .result-entry a { color: #1a73e8; text-decoration: none; font-size: 0.9rem; }
-  .result-entry a:hover { text-decoration: underline; }
-  .badge {
-    font-size: 0.7rem; font-weight: bold; padding: 2px 6px; margin-left: 8px; border-radius: 4px; vertical-align: middle; color: white;
-  }
-  .badge.neu { background-color: #e74c3c; }
-  .badge.beta { background-color: #3498db; }
-  #google-search-btn {
-    margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer;
-    background-color: #4285f4; border: none; border-radius: 4px; color: white;
-  }
-  #no-results { color: #888; font-style: italic; margin-top: 1rem; }
-</style>
-<link rel="stylesheet" href="index.css">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Suche</title>
+	<style>
+@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;}
+body{font-family:'Mojangles',sans-serif;background:#eaeaea;margin:0;padding:0;color:#333;display:flex;flex-direction:column;min-height:100vh;box-sizing:border-box;}
+h1{margin:0;display:flex;align-items:center;width:auto;white-space:nowrap;}
+.logo-container{display:flex;align-items:center;position:relative;}
+.logo{width:225px;display:flex;align-items:center;height:auto;border-radius:4px;position:relative;}
+main{flex:1;padding:20px;margin-top:0;}
+section{margin-bottom:20px;}
+h2,.h2{color:#2ecc71;}
+button{background:#2ecc71;color:#fff;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';z-index:9999;}
+button:hover{background:#2ecc87;}
+footer{background:#2c3e50;color:#fff;text-align:center;padding:10px 0;width:100%;height:20px;position:fixed;bottom:0;left:0;z-index:998;box-sizing:border-box;}
+@media(prefers-color-scheme:dark){body{background:#1a1a1a;color:#f5f5f5;}header,footer{background:#1c2a34;}h2{color:#27ae60;}button{background:#27ae60;}button:hover{background:#2ecc71;}}
+@media(max-width:768px)and(orientation:portrait){header{flex-direction:column;align-items:center;justify-content:center;}.logo-container{flex-direction:column;align-items:center;}.logo{width:180px;}.hiddenItem{visibility:hidden;color:gray;background:gray;}footer{padding:20px;font-size:14px;}}
+@media(max-width:768px)and(orientation:landscape){header{flex-direction:row;justify-content:space-between;padding:10px;}.logo{width:150px;}main{padding:15px;}footer{padding:15px;}}
+.account-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;}
+.account-icon{display:flex;align-items:center;gap:10px;}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;transition:.4s;border-radius:28px;}
+.slider:before{position:absolute;content:"";height:20px;width:20px;left:4px;bottom:4px;background:#fff;transition:.4s;border-radius:50%;}
+input:checked+.slider{background:#2ecc71;}
+input:checked+.slider:before{transform:translateX(22px);}
+.linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
+.linkimg{width:50px;height:50px;margin-right:5px;}
+.invert{filter:invert(1);}
+header{background:#2c3e50;height:40px;width:100%;position:fixed;top:0;left:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:0 10px;box-sizing:border-box;flex-wrap:nowrap;}
+.icon-left,.icon-right{display:flex;gap:10px;align-items:center;}
+.icon-left{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.icon-left::-webkit-scrollbar{display:none;}
+.nav-icon,.account-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;filter:brightness(0) invert(1);}
+.logo-icon{width:30px;height:30px;cursor:pointer;transition:transform .2s ease;}
+.nav-icon:hover,.account-icon:hover{transform:scale(1.2);}
+.linkbox .linkimg{display:inline-block;}
+.linkbox::-webkit-scrollbar{height:8px;}
+.linkbox::-webkit-scrollbar-thumb{background:#888;border-radius:4px;}
+.linkbox::-webkit-scrollbar-track{background:#f1f1f1;}
+.logo-static{width:30px;height:30px;}
+.nav-item{display:flex;align-items:center;cursor:pointer;}
+.fixed-footer{font-family:'Mojangles';background:#2c3e50;color:#fff;text-align:center;padding:10px;width:100%;box-sizing:border-box;line-height:1.5;bottom:0;left:0;z-index:998;position:fixed;}
+@media(max-width:768px){header{flex-wrap:nowrap;flex-direction:row;justify-content:space-between;}.icon-left{flex:1 1 auto;margin-right:10px;}.icon-right{flex-shrink:0;}}
+.linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
+	</style>
 </head>
 <body>
-
-<h1>Suchergebnisse</h1>
-<input id="search-input" type="search" placeholder="Suchbegriff eingeben" autocomplete="off" />
-<div id="results"></div>
-<p id="no-results" style="display:none;">Keine Suchergebnisse gefunden.</p>
-<button id="google-search-btn" style="display:none;">Suche bei Google</button>
-
+<header>
+	<div class="logo-container">
+		<img src="logo.png" alt="Logo" class="logo" />
+	</div>
+</header>
+<main>
+	<h1>Suche</h1>
+	<section>
+		<input id="searchInput" type="text" placeholder="Suchbegriff eingeben..." />
+		<button id="searchBtn">Suchen</button>
+	</section>
+	<section>
+		<h2>Suchergebnisse</h2>
+		<ul id="results"></ul>
+	</section>
+</main>
+<footer>© 2025 Redminer9630</footer>
 <script>
-  const resultsDiv = document.getElementById('results');
-  const noResults = document.getElementById('no-results');
-  const googleBtn = document.getElementById('google-search-btn');
-  const input = document.getElementById('search-input');
+async function loadSearchData() {
+	const response = await fetch('/search/.json');
+	if (!response.ok) throw new Error('Daten konnten nicht geladen werden.');
+	return await response.json();
+}
 
-  // Hilfsfunktion: Lade JSON-Datei
-  async function loadJSON(path) {
-    try {
-      const res = await fetch(path);
-      if (!res.ok) throw new Error('Nicht gefunden');
-      return await res.json();
-    } catch {
-      return null;
-    }
-  }
+function createListItem(entry) {
+	const li = document.createElement('li');
+	li.textContent = entry.title + ' - ' + entry.description;
+	return li;
+}
 
-  // Alle JSON Dateien, die durchsucht werden sollen (kannst du erweitern)
-  const jsonFiles = [
-    '/search/general.json',
-    '/search/docs.json',
-    '/search/tutorials.json'
-  ];
+function createSpecialFeature(content) {
+	const div = document.getElementById('specialFeature');
+	div.textContent = content || 'Kein Special Feature verfügbar.';
+}
 
-  // Suche starten
-  async function search(term) {
-    if (!term) {
-      resultsDiv.innerHTML = '';
-      noResults.style.display = 'none';
-      googleBtn.style.display = 'none';
-      return;
-    }
-
-    let allResults = [];
-
-    // Alle Dateien nacheinander laden und filtern
-    for (const file of jsonFiles) {
-      const data = await loadJSON(file);
-      if (!data) continue;
-
-      // Suche in title + description, case insensitive
-      const filtered = data.filter(entry => {
-        const title = entry.title?.toLowerCase() || '';
-        const desc = entry.description?.toLowerCase() || '';
-        return title.includes(term.toLowerCase()) || desc.includes(term.toLowerCase());
-      });
-
-      allResults = allResults.concat(filtered);
-    }
-
-    if (allResults.length === 0) {
-      resultsDiv.innerHTML = '';
-      noResults.style.display = 'block';
-      googleBtn.style.display = 'inline-block';
-      return;
-    }
-
-    noResults.style.display = 'none';
-    googleBtn.style.display = 'inline-block';
-
-    resultsDiv.innerHTML = allResults.map(entry => {
-      const badge = entry.specialFeature ? `<span class="badge ${entry.specialFeature}">${entry.specialFeature.toUpperCase()}</span>` : '';
-      return `
-        <div class="result-entry">
-          <h3>${entry.title} ${badge}</h3>
-          <p>${entry.description || ''}</p>
-          <a href="${entry.url}">Mehr erfahren</a>
-        </div>`;
-    }).join('');
-  }
-
-  // Google Suche öffnen
-  function openGoogleSearch() {
-    const q = input.value.trim();
-    if (!q) return;
-    window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}+site:redminer9630.ddns.net`, '_blank');
-  }
-
-  googleBtn.addEventListener('click', openGoogleSearch);
-
-  // Suche bei Enter im Input
-  input.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const term = input.value.trim();
-      if (term) search(term);
-    }
-  });
-
-  // Suche aus URL Query
-  const urlParams = new URLSearchParams(window.location.search);
-  const q = urlParams.get('q');
-  if (q) {
-    input.value = q;
-    search(q);
-  }
+document.getElementById('searchBtn').addEventListener('click', async () => {
+	const term = document.getElementById('searchInput').value.toLowerCase();
+	try {
+		const data = await loadSearchData();
+		const results = data.entries.filter(e => e.title.toLowerCase().includes(term) || e.description.toLowerCase().includes(term));
+		const resultsList = document.getElementById('results');
+		resultsList.innerHTML = '';
+		if (results.length === 0) {
+			resultsList.innerHTML = '<li>Keine Treffer gefunden.</li>';
+		} else {
+			results.forEach(entry => resultsList.appendChild(createListItem(entry)));
+		}
+		createSpecialFeature(data.specialFeature);
+	} catch (error) {
+		alert(error.message);
+	}
+});
 </script>
 </body>
 </html>
