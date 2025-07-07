@@ -1,94 +1,134 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <title>Suche – Redminer9630</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 1rem; }
-    h1 { margin-bottom: 1rem; }
-    #search-section { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
-    #search-input { flex: 1; padding: 0.5rem; font-size: 1rem; }
-    #results { margin-top: 1rem; }
-    .no-results { color: #888; font-style: italic; margin-top: 1rem; }
-    button { padding: 0.5rem 1rem; font-size: 1rem; }
-  </style>
+<meta charset="UTF-8" />
+<title>Suche – Redminer9630</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; max-width: 700px; }
+  h1 { margin-bottom: 1rem; }
+  #search-input { width: 100%; padding: 0.5rem; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; }
+  .result-entry { border-bottom: 1px solid #ccc; padding: 0.5rem 0; }
+  .result-entry h3 { margin: 0 0 0.2rem 0; font-size: 1.1rem; }
+  .result-entry p { margin: 0 0 0.2rem 0; color: #555; font-size: 0.9rem; }
+  .result-entry a { color: #1a73e8; text-decoration: none; font-size: 0.9rem; }
+  .result-entry a:hover { text-decoration: underline; }
+  .badge {
+    font-size: 0.7rem; font-weight: bold; padding: 2px 6px; margin-left: 8px; border-radius: 4px; vertical-align: middle; color: white;
+  }
+  .badge.neu { background-color: #e74c3c; }
+  .badge.beta { background-color: #3498db; }
+  #google-search-btn {
+    margin-top: 1.5rem; padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer;
+    background-color: #4285f4; border: none; border-radius: 4px; color: white;
+  }
+  #no-results { color: #888; font-style: italic; margin-top: 1rem; }
+</style>
 </head>
 <body>
-  <h1>Suche</h1>
-  <section id="search-section">
-    <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
-    <button id="search-button">Suchen</button>
-  </section>
-  <div id="results"></div>
-  <div id="google-fallback" style="margin-top: 2rem; display: none;">
-    <p>Keine lokalen Suchergebnisse gefunden. Du kannst stattdessen mit Google suchen:</p>
-    <button id="google-search">Auf Google suchen</button>
-  </div>
 
-  <script>
-    const input = document.getElementById("search-input");
-    const results = document.getElementById("results");
-    const fallback = document.getElementById("google-fallback");
+<h1>Suchergebnisse</h1>
+<input id="search-input" type="search" placeholder="Suchbegriff eingeben" autocomplete="off" />
+<div id="results"></div>
+<p id="no-results" style="display:none;">Keine Suchergebnisse gefunden.</p>
+<button id="google-search-btn" style="display:none;">Suche bei Google</button>
 
-    // Initiale Suche vom URL-Parameter übernehmen
-    const urlParams = new URLSearchParams(location.search);
-    const q = urlParams.get("q");
-    if (q) {
-      input.value = q;
-      runSearch(q);
+<script>
+  const resultsDiv = document.getElementById('results');
+  const noResults = document.getElementById('no-results');
+  const googleBtn = document.getElementById('google-search-btn');
+  const input = document.getElementById('search-input');
+
+  // Hilfsfunktion: Lade JSON-Datei
+  async function loadJSON(path) {
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error('Nicht gefunden');
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  // Alle JSON Dateien, die durchsucht werden sollen (kannst du erweitern)
+  const jsonFiles = [
+    '/search/general.json',
+    '/search/docs.json',
+    '/search/tutorials.json'
+  ];
+
+  // Suche starten
+  async function search(term) {
+    if (!term) {
+      resultsDiv.innerHTML = '';
+      noResults.style.display = 'none';
+      googleBtn.style.display = 'none';
+      return;
     }
 
-    document.getElementById("search-button").addEventListener("click", () => {
-      const term = input.value.trim();
-      if (term) {
-        history.replaceState(null, "", "?q=" + encodeURIComponent(term));
-        runSearch(term);
-      }
-    });
+    let allResults = [];
 
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        document.getElementById("search-button").click();
-      }
-    });
+    // Alle Dateien nacheinander laden und filtern
+    for (const file of jsonFiles) {
+      const data = await loadJSON(file);
+      if (!data) continue;
 
-    document.getElementById("google-search").addEventListener("click", () => {
-      const term = input.value.trim();
-      if (term) {
-        const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
-        window.open(url, "_blank");
-      }
-    });
+      // Suche in title + description, case insensitive
+      const filtered = data.filter(entry => {
+        const title = entry.title?.toLowerCase() || '';
+        const desc = entry.description?.toLowerCase() || '';
+        return title.includes(term.toLowerCase()) || desc.includes(term.toLowerCase());
+      });
 
-    // Lokale "Fake"-Suchfunktion – hier kannst du deine indexierte Suche integrieren
-    function runSearch(term) {
-      results.innerHTML = "";
-      fallback.style.display = "none";
-
-      // Beispiel-Simulation (ersetzbar durch echte JSON-Suche)
-      const exampleIndex = [
-        { title: "Willkommen", content: "Startseite von Redminer9630" },
-        { title: "Kontakt", content: "Hier erfährst du, wie du mich erreichst" },
-        { title: "Minecraft Projekte", content: "Meine Datapacks und Mods" }
-      ];
-
-      const found = exampleIndex.filter(entry =>
-        entry.title.toLowerCase().includes(term.toLowerCase()) ||
-        entry.content.toLowerCase().includes(term.toLowerCase())
-      );
-
-      if (found.length > 0) {
-        found.forEach(entry => {
-          const div = document.createElement("div");
-          div.innerHTML = `<strong>${entry.title}</strong><br><small>${entry.content}</small><hr>`;
-          results.appendChild(div);
-        });
-      } else {
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-        fallback.style.display = "block";
-      }
+      allResults = allResults.concat(filtered);
     }
-  </script>
+
+    if (allResults.length === 0) {
+      resultsDiv.innerHTML = '';
+      noResults.style.display = 'block';
+      googleBtn.style.display = 'inline-block';
+      return;
+    }
+
+    noResults.style.display = 'none';
+    googleBtn.style.display = 'inline-block';
+
+    resultsDiv.innerHTML = allResults.map(entry => {
+      const badge = entry.specialFeature ? `<span class="badge ${entry.specialFeature}">${entry.specialFeature.toUpperCase()}</span>` : '';
+      return `
+        <div class="result-entry">
+          <h3>${entry.title} ${badge}</h3>
+          <p>${entry.description || ''}</p>
+          <a href="${entry.url}">Mehr erfahren</a>
+        </div>`;
+    }).join('');
+  }
+
+  // Google Suche öffnen
+  function openGoogleSearch() {
+    const q = input.value.trim();
+    if (!q) return;
+    window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}+site:redminer9630.ddns.net`, '_blank');
+  }
+
+  googleBtn.addEventListener('click', openGoogleSearch);
+
+  // Suche bei Enter im Input
+  input.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const term = input.value.trim();
+      if (term) search(term);
+    }
+  });
+
+  // Suche aus URL Query
+  const urlParams = new URLSearchParams(window.location.search);
+  const q = urlParams.get('q');
+  if (q) {
+    input.value = q;
+    search(q);
+  }
+</script>
 </body>
 </html>
