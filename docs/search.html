@@ -5,138 +5,88 @@
   <title>Suche – Redminer9630</title>
   <style>
     @font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;}
-    body { font-family: 'Mojangles', sans-serif; margin: 1rem; }
-    button{background-color:#2ecc71;color:white;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';z-index:9999;}
-    button:hover{background-color:#2ecc87;}
-    h1 { margin-bottom: 1rem; }
-    #search-section { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
-    #search-input { flex: 1; padding: 0.5rem; font-size: 1rem; }
-    #results { margin-top: 1rem; }
-    .no-results { color: #888; font-style: italic; margin-top: 1rem; }
-    button { padding: 0.5rem 1rem; font-size: 1rem; }
+    body{font-family:'Mojangles',sans-serif;margin:1rem;}
+    h1{margin-bottom:1rem;}
+    #search-section{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
+    #search-input{flex:1;padding:0.5rem;font-size:1rem;font-family:'Mojangles',Arial;}
+    button{background:#2ecc71;color:white;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';font-size:1rem;}
+    button:hover{background:#2ecc87;}
+    label{display:flex;align-items:center;gap:0.5rem;}
+    #results{margin-top:1rem;}
+    .no-results{color:#888;font-style:italic;margin-top:1rem;}
   </style>
 </head>
 <body>
   <h1>Suche</h1>
   <section id="search-section">
-    <input id="search-input" type="search" style="font-family: 'Mojangles', Arial;" placeholder="Suchbegriff eingeben" />
+    <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
     <button id="search-button">Suchen</button>
+    <label><input type="checkbox" id="include-google" /> Auf Google suchen</label>
   </section>
   <div id="results"></div>
-  <div id="google-fallback" style="margin-top: 2rem; display: none;"><button id="google-search">Auf Google suchen</button></div>
-<script>
-  const input = document.getElementById("search-input");
-  const results = document.getElementById("results");
-  const fallback = document.getElementById("google-fallback");
 
-  // Beispiel-Funktionen, die special_feature referenzieren kann
-  function highlightEntry() {
-    alert("Highlight-Funktion ausgeführt!");
-  }
-  function showNewBadge() {
-    alert("Neues Feature angezeigt!");
-  }
+  <script>
+    const input = document.getElementById("search-input")
+    const results = document.getElementById("results")
+    const fallbackCheck = document.getElementById("include-google")
 
-  const urlParams = new URLSearchParams(location.search);
-  const q = urlParams.get("q");
-  if (q) {
-    input.value = q;
-    runSearch(q);
-  }
+    const urlParams = new URLSearchParams(location.search)
+    const q = urlParams.get("q")
+    if(q){input.value=q;runSearch(q)}
 
-  document.getElementById("search-button").addEventListener("click", () => {
-    const term = input.value.trim();
-    if (term) {
-      history.replaceState(null, "", "?q=" + encodeURIComponent(term));
-      runSearch(term);
-    }
-  });
+    document.getElementById("search-button").addEventListener("click",()=>{const term=input.value.trim();if(term){history.replaceState(null,"","?q="+encodeURIComponent(term));runSearch(term)}})
+    input.addEventListener("keypress",e=>{if(e.key==="Enter"){e.preventDefault();document.getElementById("search-button").click()}})
 
-  input.addEventListener("keypress", e => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      document.getElementById("search-button").click();
-    }
-  });
+    async function runSearch(term){
+      results.innerHTML=""
+      const includeGoogle=fallbackCheck.checked
 
-  document.getElementById("google-search").addEventListener("click", () => {
-    const term = input.value.trim();
-    if (term) {
-      const url = "https://www.google.com/search?q=" + encodeURIComponent(term);
-      window.open(url, "_blank");
-    }
-  });
+      let data=[]
+      try{
+        const res=await fetch("/crawl/index.json")
+        data=await res.json()
+      }catch(e){console.error("Fehler beim Laden der JSON:",e)}
 
-  // Hilfsfunktion: Text in Kleinbuchstaben, ohne Symbole, in Wörter aufsplitten
-  function normalizeText(text) {
-    return text
-      .toLowerCase()
-      .replace(/[^a-z0-9äöüß ]/gi, "")
-      .split(/\s+/)
-      .filter(Boolean);
-  }
+      const normalized=txt=>txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
+      const words=normalized(term).split(" ").filter(w=>w)
+      const found=data.filter(e=>{
+        const combined=[e.title,e.desc,...(e.alias||[])].join(" ")
+        const flat=normalized(combined)
+        return words.every(w=>flat.includes(w))
+      })
 
-  function runSearch(term) {
-    results.innerHTML = "";
-    fallback.style.display = "none";
-
-    const exampleIndex = [
-      {
-        title: "Willkommen",
-        desc: "Startseite von Redminer9630",
-        url: "/index.html",
-        alias: ["startseite", "home"],
-        special_feature: "highlightEntry"
-      },
-      {
-        title: "Kontakt",
-        desc: "Hier erfährst du, wie du mich erreichst",
-        url: "/kontakt.html",
-        alias: ["impressum", "mail"],
-        special_feature: ""
-      },
-      {
-        title: "Minecraft Projekte",
-        desc: "Meine Datapacks und Mods",
-        url: "/minecraft-projekte.html",
-        alias: ["mods", "datapacks"],
-        special_feature: "showNewBadge"
+      if(found.length>0){
+        results.innerHTML+=`<h2>Lokale Ergebnisse</h2>`
+        found.forEach(e=>{
+          const div=document.createElement("div")
+          div.innerHTML=`<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
+          results.appendChild(div)
+          if(typeof e.special_feature==="function"){e.special_feature()}
+        })
       }
-    ];
 
-    const searchWords = normalizeText(term);
-
-    const found = exampleIndex.filter(entry => {
-      // Alle durchsuchbaren Texte zusammenfügen: title, desc und alle Aliase
-      const combinedText = entry.title + " " + entry.desc + " " + (entry.alias ? entry.alias.join(" ") : "");
-      const textWords = normalizeText(combinedText);
-      // Prüfen, ob alle Suchwörter drin sind
-      return searchWords.every(word => textWords.includes(word));
-    });
-
-    if (found.length > 0) {
-      found.forEach(entry => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <a href="${entry.url}" style="font-weight:bold; font-size:1.1em; color:#2ecc71; text-decoration:none;">${entry.title}</a><br>
-          <small>${entry.desc}</small><br>
-          ${entry.special_feature ? `<button style="color:#e67e22; font-weight:bold; cursor:pointer; margin: 0.3em 0;" class="special-feature-btn">${entry.special_feature}</button><br>` : ""}
-          <hr>
-        `;
-        results.appendChild(div);
-        // Button-Event binden, nur wenn Funktion existiert
-        if(entry.special_feature && typeof window[entry.special_feature] === "function") {
-          div.querySelector(".special-feature-btn").addEventListener("click", () => {
-            window[entry.special_feature]();
-          });
+      if(includeGoogle){
+        try{
+          const gRes=await fetch("/api/search/google?q="+encodeURIComponent(term))
+          const gData=await gRes.json()
+          if(gData.items?.length){
+            results.innerHTML+=`<h2>Google-Ergebnisse</h2>`
+            gData.items.forEach(g=>{
+              const div=document.createElement("div")
+              div.innerHTML=`<strong><a href="${g.link}" target="_blank">${g.title}</a></strong><br><small>${g.snippet}</small><hr>`
+              results.appendChild(div)
+            })
+          }else{
+            results.innerHTML+=`<div class="no-results">Keine Google-Ergebnisse</div>`
+          }
+        }catch(err){
+          results.innerHTML+=`<div class="no-results">Fehler bei Google-Suche</div>`
+          console.error(err)
         }
-      });
-    } else {
-      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-      fallback.style.display = "block";
-    }
-  }
-</script>
+      }
 
+      if(results.innerHTML.trim()===""){results.innerHTML=`<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`}
+    }
+  </script>
 </body>
 </html>
