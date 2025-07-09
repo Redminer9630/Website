@@ -14,6 +14,8 @@
     label{display:flex;align-items:center;gap:0.5rem;}
     #results{margin-top:1rem;}
     .no-results{color:#888;font-style:italic;margin-top:1rem;}
+    .google-logo{display:flex;justify-content:flex-end;margin-top:0.5rem;}
+    .google-logo img{height:24px;opacity:0.8;}
   </style>
 </head>
 <body>
@@ -32,60 +34,87 @@
 
     const urlParams = new URLSearchParams(location.search)
     const q = urlParams.get("q")
-    if(q){input.value=q;runSearch(q)}
+    if(q){
+      input.value = q
+      fallbackCheck.checked = true // Checkbox aktivieren bei direktem Link mit ?q
+      runSearch(q)
+    }
 
-    document.getElementById("search-button").addEventListener("click",()=>{const term=input.value.trim();if(term){history.replaceState(null,"","?q="+encodeURIComponent(term));runSearch(term)}})
-    input.addEventListener("keypress",e=>{if(e.key==="Enter"){e.preventDefault();document.getElementById("search-button").click()}})
+    document.getElementById("search-button").addEventListener("click",()=>{
+      const term = input.value.trim()
+      if(term){
+        history.replaceState(null,"","?q="+encodeURIComponent(term))
+        runSearch(term)
+      }
+    })
+
+    input.addEventListener("keypress",e=>{
+      if(e.key==="Enter"){
+        e.preventDefault()
+        document.getElementById("search-button").click()
+      }
+    })
 
     async function runSearch(term){
-      results.innerHTML=""
-      const includeGoogle=fallbackCheck.checked
+      results.innerHTML = ""
+      const includeGoogle = fallbackCheck.checked
 
-      let data=[]
+      let data = []
       try{
-        const res=await fetch("/crawl/index.json")
-        data=await res.json()
+        const res = await fetch("/crawl/index.json")
+        data = await res.json()
       }catch(e){console.error("Fehler beim Laden der JSON:",e)}
 
-      const normalized=txt=>txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
-      const words=normalized(term).split(" ").filter(w=>w)
-      const found=data.filter(e=>{
-        const combined=[e.title,e.desc,...(e.alias||[])].join(" ")
-        const flat=normalized(combined)
-        return words.every(w=>flat.includes(w))
+      const normalized = txt => txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
+      const words = normalized(term).split(" ").filter(w=>w)
+      const found = data.filter(e=>{
+        const combined = [e.title, e.desc, ...(e.alias||[])].join(" ")
+        const flat = normalized(combined)
+        return words.every(w => flat.includes(w))
       })
 
-      if(found.length>0){
-        results.innerHTML+=`<h2>Lokale Ergebnisse</h2>`
+      if(found.length > 0){
+        results.innerHTML += `<h2>Lokale Ergebnisse</h2>`
         found.forEach(e=>{
-          const div=document.createElement("div")
-          div.innerHTML=`<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
+          const div = document.createElement("div")
+          div.innerHTML = `<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
           results.appendChild(div)
-          if(typeof e.special_feature==="function"){e.special_feature()}
+          if(typeof e.special_feature === "function"){e.special_feature()}
         })
       }
 
       if(includeGoogle){
         try{
-          const gRes=await fetch("/api/search/google?q="+encodeURIComponent(term))
-          const gData=await gRes.json()
-          if(gData.items?.length){
-            results.innerHTML+=`<h2>Google-Ergebnisse</h2>`
-            gData.items.forEach(g=>{
-              const div=document.createElement("div")
-              div.innerHTML=`<strong><a href="${g.link}" target="_blank">${g.title}</a></strong><br><small>${g.snippet}</small><hr>`
+          const gRes = await fetch("/api/search/google?q="+encodeURIComponent(term))
+          const gData = await gRes.json()
+          const gResults = gData.results || []
+
+          if(gResults.length){
+            results.innerHTML += `<h2>Google-Ergebnisse</h2>`
+            gResults.forEach(g=>{
+              const div = document.createElement("div")
+              div.innerHTML = `<strong><a href="${g.url}" target="_blank">${g.title}</a></strong><br><small>${g.desc}</small><hr>`
               results.appendChild(div)
             })
+
+            // Google-Logo unten rechts einfügen
+            const logoBox = document.createElement("div")
+            logoBox.className = "google-logo"
+            logoBox.innerHTML = `<a href="https://www.google.com/search?q=${encodeURIComponent(term)}" target="_blank"><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google Logo" /></a>`
+            results.appendChild(logoBox)
+
           }else{
-            results.innerHTML+=`<div class="no-results">Keine Google-Ergebnisse</div>`
+            results.innerHTML += `<div class="no-results">Keine Google-Ergebnisse</div>`
           }
         }catch(err){
-          results.innerHTML+=`<div class="no-results">Fehler bei Google-Suche</div>`
+          results.innerHTML += `<div class="no-results">Fehler bei Google-Suche</div>`
           console.error(err)
         }
       }
 
-      if(results.innerHTML.trim()===""){results.innerHTML=`<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`}
+      if(results.innerHTML.trim() === ""){
+        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`
+      }
     }
   </script>
 </body>
