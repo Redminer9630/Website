@@ -61,7 +61,7 @@
 
       let data = []
       try{
-        const res = await fetch("/crawl/index.json")
+        const res = await fetch("search/index.json")
         data = await res.json()
       }catch(e){console.error("Fehler beim Laden der JSON:",e)}
 
@@ -85,7 +85,7 @@
 
       if(includeGoogle){
         try{
-          const gRes = await fetch("/api/search/google?q="+encodeURIComponent(term))
+          const gRes = await fetch("https://backend9630.onrender.com/api/search/google?q="+encodeURIComponent(term))
           const gData = await gRes.json()
           const gResults = gData.results || []
 
