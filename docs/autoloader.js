@@ -38,10 +38,11 @@ Promise.all([
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
+    import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
 	import('/js_components/modal9630.js'),
 	import('/js_components/modals.js')
-]).then(([elements, embed, tooltip, firebase, need_confirm, download, modal9630, modals]) => {
+]).then(([elements, embed, tooltip, firebase, back_button, need_confirm, download, modal9630, modals]) => {
 	loader.remove();
 	/*const lang = lang_module.default ?? lang_module ?? {};
 	document.querySelectorAll('[lang]').forEach(el=>{
