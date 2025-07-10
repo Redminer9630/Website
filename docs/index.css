@@ -37,4 +37,6 @@ header{background-color:#2c3e50;height:40px;width:100%;position:fixed;top:0;left
 @media(max-width:768px){header{flex-wrap:nowrap;flex-direction:row;justify-content:space-between;}.icon-left{flex:1 1 auto;margin-right:10px;}.icon-right{flex-shrink:0;}}
 .linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
 #search-section { display: flex; align-items: center; gap: 0.4rem; height: 2rem; }
-#search-section input { font-family: 'Mojangles', Arial; height: 1.6rem; padding: 0 0.4rem; font-size: 0.85rem; line-height: 1.6rem; }
+#search-section input { font-family: 'Mojangles', Arial; height: 1.6rem; padding: 0 0.4rem; font-size: 0.85rem; line-height: 1.6rem;                        
+.icon-right {display: flex;align-items: center;gap: 10px;}
+#search {height: 30px;padding: 4px 10px;border-radius: 5px;border: 1px solid #aaa;font-family: 'Mojangles';}
