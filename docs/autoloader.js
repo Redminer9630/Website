@@ -16,9 +16,9 @@ if(location.hostname.startsWith('www.')) location.replace(location.href.replace(
 const error = Symbol("error"); const warn = Symbol("warn"); const info = Symbol("info"); const log = Symbol("log"); function noti(type, ...msgParts) { const msg = msgParts.join(' '); switch(type) { case error: console.error(msg); alert(msg); break; case warn: console.warn(msg); alert(msg); break; case info: console.info(msg); alert(msg); break; case log: console.log(msg); alert(msg); break; case debug: console.debug(msg); alert(msg); break; default: console.debug("Unknown msg type:", msg);}}
 
 window.CommonVersion = {
-    version: 'v1.0.0',
-    date: '18.5.25',
-    time: '11:03'
+    version: 'v1.0.1', //old = v1.0.0
+    date: '10.7.25', //old = 18.5.25
+    time: '18:21' //old = 11:03
 };
 
 const loader=document.createElement('div');document.addEventListener("DOMContentLoaded", () => {setTimeout(() => { if (document.getElementById('loader')) loader.remove(); }, 3000);});
