@@ -13,7 +13,17 @@
 })();
 if(location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.','//'));if(location.protocol!=='https:') location.replace(location.href.replace('http:','https:'));if(location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 
-const error = Symbol("error"); const warn = Symbol("warn"); const info = Symbol("info"); const log = Symbol("log"); function noti(type, ...msgParts) { const msg = msgParts.join(' '); switch(type) { case error: console.error(msg); alert(msg); break; case warn: console.warn(msg); alert(msg); break; case info: console.info(msg); alert(msg); break; case log: console.log(msg); alert(msg); break; case debug: console.debug(msg); alert(msg); break; default: console.debug("Unknown msg type:", msg);}}
+const noti = (type, ...msg) => {
+	const txt = msg.join(' ');
+	const t = {
+		[Symbol("error")]: console.error,
+		[Symbol("warn")]: console.warn,
+		[Symbol("info")]: console.info,
+		[Symbol("log")]: console.log,
+		[Symbol("debug")]: console.debug
+	}[type] || console.debug;
+	t(txt); alert(txt);
+};
 
 window.CommonVersion = {
     version: 'v1.0.1', //old = v1.0.0
