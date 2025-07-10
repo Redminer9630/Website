@@ -37,3 +37,6 @@ header{background-color:#2c3e50;height:40px;width:100%;position:fixed;top:0;left
 .fixed-footer{font-family:'Mojangles';background-color:#2c3e50;color:white;text-align:center;padding:10px;width:100%;box-sizing:border-box;line-height:1.5;bottom:0;left:0;z-index:998;position:fixed;}
 @media(max-width:768px){header{flex-wrap:nowrap;flex-direction:row;justify-content:space-between;}.icon-left{flex:1 1 auto;margin-right:10px;}.icon-right{flex-shrink:0;}}
 .linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y:hidden;white-space:nowrap;padding:10px;}
+#search-section { display: flex; align-items: center; gap: 0.4rem; height: 2rem; }
+#search-section img { width: 18px; height: 18px; margin: 0; }
+#search-section input { height: 1.6rem; padding: 0 0.4rem; font-size: 0.85rem; line-height: 1.6rem; }
