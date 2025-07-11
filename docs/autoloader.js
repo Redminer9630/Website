@@ -15,14 +15,15 @@ if(location.hostname.startsWith('www.')) location.replace(location.href.replace(
 
 const noti = (type, ...msg) => {
 	const txt = msg.join(' ');
-	const t = {
-		[Symbol("error")]: console.error,
-		[Symbol("warn")]: console.warn,
-		[Symbol("info")]: console.info,
-		[Symbol("log")]: console.log,
-		[Symbol("debug")]: console.debug
-	}[type] || console.debug;
-	t(txt); alert(txt);
+	const types = {
+		error: console.error,
+		warn: console.warn,
+		info: console.info,
+		log: console.log,
+		debug: console.debug
+	};
+	(types[type] || console.debug)(txt);
+	alert(txt);
 };
 
 window.CommonVersion = {
