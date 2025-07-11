@@ -70,6 +70,9 @@
 </div>
 
 <script type="module">
+alert("Einstellungen sind Experimentel und könnten Korruption verursachen, deshalb leiten wir dich zurück.");
+location.href = '/';
+/*
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
 import {
 	getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
@@ -77,7 +80,7 @@ import {
 	sendPasswordResetEmail, updatePassword
 } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-auth.js";
 
-const firebaseConfig = { /* Deine Config */ };
+const firebaseConfig = { /* Deine Config *\ };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -205,7 +208,7 @@ onAuthStateChanged(auth, user => {
 		registerBox.classList.add('hidden');
 		settingsBox.classList.add('hidden');
 	}
-});
+});*/
 </script>
 </body>
 </html>
