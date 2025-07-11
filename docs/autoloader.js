@@ -18,12 +18,10 @@
 	});
 })();
 
-// Weiterleitungen (www → non-www, http → https, /index.html entfernen)
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));
 if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));
 if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 
-// Notifikationsfunktion
 const noti = (type, ...msg) => {
 	const txt = msg.join(' ');
 	const types = {
@@ -37,14 +35,12 @@ const noti = (type, ...msg) => {
 	alert(txt);
 };
 
-// Version für Footer etc.
 window.CommonVersion = {
-	version: 'v1.0.1',
-	date: '10.7.25',
-	time: '18:21'
+	version: 'v1.0.2',
+	date: '11.7.25',
+	time: '19:07'
 };
 
-// Komponenten laden
 Promise.all([
 	import('/js_components/elements.js'),
 	import('/js_components/embed.js'),
@@ -72,15 +68,9 @@ Promise.all([
 		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
 	});
+}).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
-	//noti("info", "Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
-}).catch(err => {
-	noti("error", "Fehler beim Laden der Komponenten:", err);
-});
-
-// DOM fertig geladen
 document.addEventListener('DOMContentLoaded', () => {
-	// Footer
 	const year = new Date().getFullYear();
 	const footer = document.createElement('footer');
 	footer.id = "main-footer";
@@ -94,13 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const footerCSS = document.createElement('style');
 	footerCSS.textContent = `footer .footer-text{font-size:14px;display:block;padding:0 10px;word-wrap:break-word}@media(max-width:480px){footer .footer-text{font-size:11px}}footer.fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;text-align:center}`;
 	document.head.appendChild(footerCSS);
-
-	// Font
+    
 	const fontStyle = document.createElement("style");
 	fontStyle.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} body{font-family:'Mojangles', Arial;}`;
 	document.head.appendChild(fontStyle);
-    
-	// Zurück-Button (außer auf Index)
+
 	if (location.pathname !== '/' && location.pathname !== '/index.html') {
 		const backCSS = document.createElement('style');
 		backCSS.textContent = `.header-link{font-family:'Mojangles';font-size:16px;text-decoration:none;padding:10px 20px;border-radius:8px;position:absolute;top:20px;right:20px;background-color:#f44336;color:white;cursor:pointer}.header-link:hover{background-color:#e53935}`;
@@ -114,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 });
 
-// CAPTCHA
 function loadCaptcha(callback) {
 	if (window.grecaptcha) {
 		if (callback) callback(window.grecaptcha);
