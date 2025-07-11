@@ -20,7 +20,7 @@ input:checked+.slider:before{transform:translateX(22px);}
 .linkbox{gap:10px;align-items:center;display:flex;overflow-x:auto;overflow-y: hidden;white-space:nowrap;padding:10px;}
 .linkimg{width:50px;height:50px;margin-right:5px;}
 .invert{filter:invert(1);}
-header{background-color:#2c3e50;height:40px;width:100%;position:fixed;top:0;left:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:0 10px;box-sizing:border-box;flex-wrap:nowrap;}
+header{background-color:#2c3e50;height:50px;width:100%;position:fixed;top:0;left:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:0 10px;box-sizing:border-box;flex-wrap:nowrap;}
 .icon-left,.icon-right{display:flex;gap:10px;align-items:center;}
 .icon-left{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .icon-left::-webkit-scrollbar{display:none;}
