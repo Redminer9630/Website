@@ -89,7 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.body.style.paddingBottom = "60px";
 	document.body.appendChild(footer);
 
-	const footerCSS = document.createElement('style');
+    document.querySelectorAll('br[height]').forEach(br => {const height = parseInt(br.getAttribute('height')) || 0;const spacer = document.createElement('div');spacer.style.height = `${height}px`;br.replaceWith(spacer);});
+	
+    const footerCSS = document.createElement('style');
 	footerCSS.textContent = `footer .footer-text{font-size:14px;display:block;padding:0 10px;word-wrap:break-word}@media(max-width:480px){footer .footer-text{font-size:11px}}footer.fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;text-align:center}`;
 	document.head.appendChild(footerCSS);
 
@@ -97,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const fontStyle = document.createElement("style");
 	fontStyle.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} body{font-family:'Mojangles', Arial;}`;
 	document.head.appendChild(fontStyle);
-
+    
 	// Zurück-Button (außer auf Index)
 	if (location.pathname !== '/' && location.pathname !== '/index.html') {
 		const backCSS = document.createElement('style');
