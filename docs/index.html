@@ -32,22 +32,19 @@
     <br>
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2><br></noscript>
     <section id="about">
-      <h1 class="h2">Über Redminer9630</h1>
-      <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
+      <h1 class="h2">Über Redminer9630</h1><br height="10px"><p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
       <button onclick="location.href='manual?q=about'">Mehr über mich erfahren</button>
     </section>
 
     <section>
-      <h2>Schreck um Mitternacht – MC Freunde Fanstory</h2>
-      <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
+      <h2>Schreck um Mitternacht – MC Freunde Fanstory</h2><br height="10"><p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
       <button onclick="location.href='doc/mcfreundefanstory'">Geschichte lesen</button>
     </section>
 
     <section>
-      <h2>fatness4...the greedies</h2>
-      <button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
+      <h2>fatness4...the greedies</h2><br height="10"><button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-  <script> document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});const input = document.getElementById("search");input.addEventListener("keypress", e => {if (e.key === "Enter") {const term = input.value.trim();if (term) window.location.href = "search.html?q=" + encodeURIComponent(term);}});</script>
+  <script>document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});const input = document.getElementById("search");input.addEventListener("keypress", e => {if (e.key === "Enter") {const term = input.value.trim();if (term) window.location.href = "search.html?q=" + encodeURIComponent(term);}});</script>
 </body>
 </html>
