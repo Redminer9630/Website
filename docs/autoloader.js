@@ -73,7 +73,7 @@ Promise.all([
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
 	});
 
-	noti("info", "Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
+	//noti("info", "Social Integration empfohlen → Beispiel: https://addthis.com/get/share/");
 }).catch(err => {
 	noti("error", "Fehler beim Laden der Komponenten:", err);
 });
