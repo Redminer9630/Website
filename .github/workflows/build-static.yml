@@ -1,0 +1,37 @@
+name: Build and Minify Static Files
+
+on:
+  push:
+    paths:
+      - 'autoloader_pull.js'
+      - 'index_pull.css'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Minifier Tools
+        run: |
+          npm install -g terser clean-css-cli
+
+      - name: Minify autoloader_pull.js → autoloader.js
+        run: terser autoloader_pull.js -o autoloader.js --compress --mangle
+
+      - name: Minify index_pull.css → index.css
+        run: cleancss index_pull.css -o index.css
+
+      - name: Commit & push minified files
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "actions@github.com"
+          git add autoloader.js index.css
+          git commit -m "Automatisch generiert: autoloader.js & index.css" || echo "Nichts zu committen"
+          git push
