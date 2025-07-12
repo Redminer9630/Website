@@ -3,8 +3,8 @@ name: Build and Minify Static Files
 on:
   push:
     paths:
-      - 'autoloader_pull.js'
-      - 'index_pull.css'
+      - 'docs/autoloader_pull.js'
+      - 'docs/index_pull.css'
   workflow_dispatch:
 
 jobs:
