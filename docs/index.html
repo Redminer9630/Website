@@ -48,8 +48,34 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-<script>document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("search-section");let t=!1;function n(){t||(t=!0,e.innerHTML='<input type="text" id="search" placeholder="Suche...">',document.getElementById("search").focus(),document.getElementById("search").addEventListener("keypress",function(e){"Enter"===e.key&&(e.preventDefault(),(t=document.getElementById("search").value.trim())&&(window.location.href="search?q="+encodeURIComponent(t)))}))}function r(){e.innerHTML='<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">',document.getElementById("search-icon").addEventListener("click",n)}window.innerWidth<=768?r():n()});
-const logoBtn = document.getElementById("logoInfoBtn");
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const searchSection = document.getElementById("search-section");
+  let initialized = false;
+
+  function activateSearch() {
+    if (initialized) return;
+    initialized = true;
+    searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche...">';
+    const input = document.getElementById("search");
+    input.focus();
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const query = input.value.trim();
+        if (query) window.location.href = "search?q=" + encodeURIComponent(query);
+      }
+    });
+  }
+
+  function setupSearchIcon() {
+    searchSection.innerHTML = '<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">';
+    document.getElementById("search-icon").addEventListener("click", activateSearch);
+  }
+
+  window.innerWidth <= 768 ? setupSearchIcon() : activateSearch();
+
+  const logoBtn = document.getElementById("logoInfoBtn");
   if (logoBtn) {
     logoBtn.addEventListener("click", () => {
       if (!Modal.getAll().includes("infoModal")) {
@@ -64,7 +90,7 @@ const logoBtn = document.getElementById("logoInfoBtn");
           color: "#fff",
           draggable: false
         });
-      } else {Modal.open("infoModal");}
+      } else { Modal.open("infoModal"); }
     });
   }
 });
