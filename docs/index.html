@@ -48,6 +48,38 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-  <script>document.getElementById("btnSearch").addEventListener("click", redirectToSearch);document.getElementById("search").addEventListener("keypress", e => { if (e.key === "Enter") { e.preventDefault(); redirectToSearch(); } });function redirectToSearch() {const q = document.getElementById("search").value.trim(); if (q) window.location.href = "search.html?q=" + encodeURIComponent(q); } </script><noscript><style>section{display:none!important;}</style></noscript> <script>document.querySelectorAll("noscript").forEach(el => {if(el.textContent.includes("section"))el.remove();});const input = document.getElementById("search");input.addEventListener("keypress", e => {if (e.key === "Enter") {const term = input.value.trim();if (term) window.location.href = "search.html?q=" + encodeURIComponent(term);}});</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchSection = document.getElementById("search-section");
+
+    function createSearchInput() {
+      searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche..." />';
+      const input = document.getElementById("search");
+      
+      input.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          const query = input.value.trim();
+          if (query) {
+            window.location.href = "search?q=" + encodeURIComponent(query);
+          }
+        }
+      });
+      //input.focus();
+    }
+
+    function createSearchIcon() {
+      searchSection.innerHTML = `
+        <img src="images/icons/search.webp"
+             alt="Suche öffnen"
+             id="search-icon"
+             style="width: 32px; height: 32px; cursor: pointer;">
+      `;
+      const icon = document.getElementById("search-icon");
+      icon.addEventListener("click", createSearchInput);
+    }
+    if (window.innerWidth <= 768) {createSearchIcon();} else {createSearchInput();}
+    window.addEventListener("resize", function () { if (window.innerWidth <= 768) { createSearchIcon(); } else { createSearchInput(); } }); });
+</script>
 </body>
 </html>
