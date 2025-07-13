@@ -13,7 +13,7 @@
   <header>
     </div>
     <nav class="icon-left" aria-label="Hauptnavigation">
-      <div class="logo-static" onclick="location.href='introduction'" unstable><img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung"></div>
+      <div class="logo-static" id="logoInfoBtn" unstable><img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung"></div>
       <div class="nav-item" onclick="location.href='projects'" unstable><img src="images/icons/downloads.webp" class="nav-icon" alt="Download"></div>
       <div class="nav-item" onclick="location.href='generators'" unstable><img src="images/icons/generators.webp" class="nav-icon" alt="Generators"></div>
       <div class="nav-item" onclick="location.href='tools'" unstable><img src="images/icons/tools.webp" class="nav-icon" alt="Tools"></div>
@@ -48,6 +48,28 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-<script>document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("search-section");let t=!1;function n(){t||(t=!0,e.innerHTML='<input type="text" id="search" placeholder="Suche...">',document.getElementById("search").focus(),document.getElementById("search").addEventListener("keypress",function(e){"Enter"===e.key&&(e.preventDefault(),(t=document.getElementById("search").value.trim())&&(window.location.href="search?q="+encodeURIComponent(t)))}))}function r(){e.innerHTML='<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">',document.getElementById("search-icon").addEventListener("click",n)}window.innerWidth<=768?r():n()});</script>
+<script>document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("search-section");let t=!1;function n(){t||(t=!0,e.innerHTML='<input type="text" id="search" placeholder="Suche...">',document.getElementById("search").focus(),document.getElementById("search").addEventListener("keypress",function(e){"Enter"===e.key&&(e.preventDefault(),(t=document.getElementById("search").value.trim())&&(window.location.href="search?q="+encodeURIComponent(t)))}))}function r(){e.innerHTML='<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">',document.getElementById("search-icon").addEventListener("click",n)}window.innerWidth<=768?r():n()});
+const logoBtn = document.getElementById("logoInfoBtn");
+  if (logoBtn) {
+    logoBtn.addEventListener("click", () => {
+      if (!Modal.getAll().includes("infoModal")) {
+        Modal.create({
+          id: "infoModal",
+          title: "Info",
+          content: "<h3>Info</h3><br>Test",
+          width: "400px",
+          height: "250px",
+          anchor: "center",
+          background: "#333",
+          color: "#fff",
+          draggable: false
+        });
+      } else {
+        Modal.open("infoModal");
+      }
+    });
+  }
+});
+</script>
 </body>
 </html>
