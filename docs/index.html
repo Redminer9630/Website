@@ -45,7 +45,7 @@
 
     <section>
       <h2>fatness4...the greedies</h2>
-      <button onclick="location.href='https://fatness4thegreedies.github.io'">Offizielle Bandseite anschauen</button>
+      <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
 <script>document.addEventListener("DOMContentLoaded",function(){const e=document.getElementById("search-section");let t=!1;function n(){t||(t=!0,e.innerHTML='<input type="text" id="search" placeholder="Suche...">',document.getElementById("search").focus(),document.getElementById("search").addEventListener("keypress",function(e){"Enter"===e.key&&(e.preventDefault(),(t=document.getElementById("search").value.trim())&&(window.location.href="search?q="+encodeURIComponent(t)))}))}function r(){e.innerHTML='<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">',document.getElementById("search-icon").addEventListener("click",n)}window.innerWidth<=768?r():n()});</script>
