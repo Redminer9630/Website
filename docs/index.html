@@ -95,5 +95,57 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  const source = params.get("source");
+  const sources = {
+    github_rdm: {
+      text: "Zurück zu Github",
+      link: "https://github.com/Redminer9630"
+    },
+    yt: {
+      text: "Zurück zu Youtube",
+      link: "https://youtube.com/@Redminer9630"
+    },
+    twitch: {
+      text: "Zurück zu Twitch",
+      link: "https://twitch.tv/Redminer9630"
+    }
+  };
+
+  if (source && sources[source]) {
+    const info = sources[source];
+    const style = document.createElement("style");
+    style.textContent = `
+      .source-button {
+        font-family: 'Mojangles', sans-serif;
+        font-size: 16px;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4CAF50; /* Grün */
+        color: white;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: background-color 0.3s ease;
+      }
+      .source-button:hover { background-color: #45a049; }
+    `;
+    document.head.appendChild(style);
+
+    const button = document.createElement("a");
+    button.className = "source-button";
+    button.textContent = info.text;
+    button.href = info.link;
+    //button.target = "_blank";
+    document.body.appendChild(button);
+  }
+});
+</script>
 </body>
 </html>
