@@ -1,5 +1,5 @@
 {
-  "version": "v1.1.0",
+  "version": "v1.0.4",
   "date": "2025-07-14",
   "changes": [
     "Die Suchleiste(und das Icon) sind jetzt Vertikal in der Mitte vom Header",
@@ -7,7 +7,6 @@
     "projects.html | Projekte - Redminer9630",
     "tools.html | Tools - Redminer9630",
     "linktree.html | Linktree wurde in vielerlei Hinsicht verbessert, Icons sind möglicherweise Fehlerhaft",
-    "",
     "generators.html(+ .css) und server.html wurden gelöscht"
   ]
 }
