@@ -108,11 +108,14 @@
             cursor: pointer;
         }
         img { width: 50px; height: 50px; }
+        .table-responsive {width: 100%;overflow-x: auto;-webkit-overflow-scrolling: touch;}
+        .table-responsive table { min-width: 600px; }
     </style>
     <script src="autoloader.js" type="module" defer></script>
 </head>
 <body>
     <h1>Projekte - Redminer9630</h1>
+    <div class="table-responsive">
     <table id="downloadTable">
         <thead>
             <tr>
@@ -154,6 +157,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
     <script>
         function sortTable(columnIndex) {
             const table = document.getElementById("downloadTable");
