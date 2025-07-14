@@ -154,20 +154,9 @@
             display.value += input;
             display.placeholder = "";
         }
-
-        function calc() {
-            try {
-                display.value = eval(display.value);
-            } catch {
-                display.placeholder = "Fehler";
-                display.value = "";
-            }
-        }
-
-        function openInfoPage() {
-            window.location.href = "https://github.com/Redminer9630de/redminer9630de.github.io/wiki/Taschenrechner";
-        }
-
+        
+        function calc() {if (!display.value.trim()) {display.value = ""; display.placeholder = ""; return;} try {display.value = eval(display.value);} catch {display.placeholder = "Fehler";display.value = ""; } }
+        
         function changeMode() {
             const mode = document.getElementById('modeSelector').value;
             document.querySelectorAll('.mode').forEach(div => div.style.display = 'none');
