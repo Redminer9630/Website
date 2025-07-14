@@ -5,7 +5,9 @@
     "Die Suchleiste(und das Icon) sind jetzt Vertikal in der Mitte vom Header",
     "Folgende Dateien wurden Mobile Freundlich gemacht:",
     "projects.html | Projekte - Redminer9630",
+    "tools.html | Tools - Redminer9630",
+    "linktree.html | Linktree wurde in vielerlei Hinsicht verbessert",
     "",
-    "generators.html(+ .css) wurde gelöscht"
+    "generators.html(+ .css) und server.html wurden gelöscht"
   ]
 }
