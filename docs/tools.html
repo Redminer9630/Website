@@ -55,6 +55,11 @@
         .output-number.fast { animation: moveNumber 0.2s ease; }
         #hex-generator { text-align: center; margin: 20px; }
         #color-preview { margin: 10px auto; }
+        .output-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+        }
     </style>
     <script src="autoloader.js" type="module" defer></script>
 </head>
@@ -75,7 +80,7 @@
     </select>
     
     <div id="calculator" class="mode">
-        <input id="display">
+        <div class="output-scroll"><input id="display"></div>
         <div id="keys">
             <button onclick="appendToDisplay('+')" class="op-btn">+</button>        
             <button onclick="appendToDisplay('7')">7</button>       
