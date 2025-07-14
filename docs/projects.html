@@ -49,18 +49,10 @@
             margin-top: 20px;
         }
         th, td { padding: 8px; text-align: left; }
-        .download-button {
-            background-color: var(--button-bg-color);
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 10px;
-            cursor: pointer;
-        }
+        .download-button { background-color: var(--button-bg-color);}
         .download-button:hover { background-color: var(--button-hover-color); }
-        .state-active {
-            background-color: green;
+        .state-active {background-color: green;}
+        .state {
             color: white;
             padding: 10px;
             text-decoration: none;
@@ -68,45 +60,11 @@
             font-size: 10px;
             cursor: pointer;
         }
-        .state-edit {
-            background-color: blue;            
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .state-edit img { color: grey; }
-        .state-buged {
-            background-color: orange;
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .state-buged img { color: grey; }
-        .state-error {
-            background-color: red;
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .state-error img { color: grey; }
-        .state-closed {
-            background-color: grey;
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 10px;
-            cursor: pointer;
-        }
+        .state-edit {background-color: blue;}
+        .img { color: grey; }
+        .state-buged { background-color: orange; }
+        .state-error {background-color: red;}
+        .state-closed {background-color: grey; }
         img { width: 50px; height: 50px; }
         .table-responsive {width: 100%;overflow-x: auto;-webkit-overflow-scrolling: touch;}
         .table-responsive table { min-width: 600px; }
@@ -132,28 +90,27 @@
                 <td>MC is Bones</td>
                 <td>Verändert End Game Items zur Knochen Textur und hat Support für ein paar Mods. Extrahiere diese Datei um sie richtig zu benutzten</td>
                 <td>Resourcepack/Datapack</td>
-                <td><a href="" class="state-edit"><img src="images/icons/download.webp"></a></td>
+                <td class="state-edit state"><a href=""><img src="images/icons/download.webp"></a></td>
             </tr>
             <tr>
                 <td>1.21.3</td>
                 <td>MC is Bones</td>
                 <td>Verschiedene Knochenarten und Blöcke wurden hinzugefügt</td>
                 <td>Mod</td>
-                <td><a href="" class="state-edit"><img src="images/icons/download.webp"></a></td>
+                <td class="state-edit state"><a href=""><img src="images/icons/download.webp"></a></td>
             </tr>
             <tr>
                 <td>1.21</td>
                 <td>Higher Enchantments</td>
                 <td>Verändert die höchste Stufe von den meisten Verzauberungen</td>
                 <td>Datapack</td>
-                <td><a href="" class="state-buged"><img src="images/icons/download.webp"></a></td>
-            </tr>
+                <td class="state-buged state"><a href=""><img src="images/icons/download.webp"></a></td>
             <tr>
                 <td>1.21-1.21.5</td>
                 <td>Katzenhausen</td>
                 <td>Ein Pack gemacht für Katzenhausen</td>
                 <td>Resourcepack</td>
-                <td><a href="files/katzenhausen.zip" class="state-active"><img src="images/icons/download.webp"></a></td>
+                <td class="state-active state"><a href="files/katzenhausen.zip"><img src="images/icons/download.webp"></a></td>
             </tr>
         </tbody>
     </table>
