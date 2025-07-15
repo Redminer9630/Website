@@ -43,15 +43,15 @@ window.CommonVersion = {
 
 Promise.all([
 	import('/js_components/elements.js'),
-	import('/js_components/modals.js'),
+	//import('/js_components/modals.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
-	import('/js_components/modal9630.js'),
+	//import('/js_components/modal9630.js'),
 	import('/js_components/embed.js')
-]).then(([elements, modals, tooltip, firebase, back_button, need_confirm, download, modal9630, embed]) => {
+]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed]) => {
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
