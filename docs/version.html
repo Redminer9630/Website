@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
-<head><style>body{font-family:'Mojangles', Arial;}</style>
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website-Versionen</title>
@@ -61,8 +61,11 @@ const version = getParameterByName("v");
 if (version && version !== 'info') {
   loadVersion(version);
 } else {
-  document.getElementById("content").innerHTML = versionListHTML;
+const isMobileWidth = window.innerWidth <= 768;
+let adjustedVersionListHTML = versionListHTML;
+if (isMobileWidth) {adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');}
+document.getElementById("content").innerHTML = adjustedVersionListHTML;
 }
-  </script>
+</script>
 </body>
 </html>
