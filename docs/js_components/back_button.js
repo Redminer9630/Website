@@ -6,49 +6,60 @@ export function initHeaderButton() {
     if (urlParams.get('showButton') !== '1') return;
   }
 
-const style = document.createElement('style');
-style.textContent = `
-    .header-link {
-        font-family: 'Mojangles';
-        font-size: 16px;
-        text-decoration: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background-color: #f44336;
-        color: white;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: auto;
-        height: auto;
+  const style = document.createElement('style');
+  style.textContent = `
+    :root {
+      --btn-color: #f44336;
+      --btn-hover-color: #e53935;
+      --btn-text-color: #fff;
     }
 
-    .header-link:hover {
-        background-color: #e53935;
+    .header-link {
+      font-family: 'Mojangles';
+      font-size: 16px;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--btn-color);
+      color: var(--btn-text-color);
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
+
+    .header-link:hover { background-color: var(--btn-hover-color); transform: scale(1.05); }
 
     @media (max-width: 768px) {
-        .header-link {
-            font-size: 12px;
-            width: 80px;
-            height: 32px;
-            padding: 0;
-            top: 10px;
-            right: 10px;
-            border-radius: 6px;
-        }
+      .header-link {
+        font-size: 14px;
+        padding: 8px 16px;
+        top: 12px;
+        right: 12px;
+        border-radius: 6px;
+      }
     }
-`;
+
+    @media (max-width: 480px) {
+      .header-link {
+        font-size: 12px;
+        padding: 6px 12px;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  `;
   document.head.appendChild(style);
 
-  const backButton = document.createElement('div');
+  const backButton = document.createElement('button');
   backButton.className = 'header-link';
   backButton.textContent = 'Zurück';
+  backButton.setAttribute('aria-label', 'Zurück zur vorherigen Seite');
   backButton.addEventListener('click', () => history.back());
   document.body.appendChild(backButton);
 }
