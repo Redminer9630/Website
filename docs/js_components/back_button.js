@@ -22,6 +22,7 @@ export function initHeaderButton() {
           cursor: pointer;
       }
       .header-link:hover { background-color: #e53935; }
+      @media (max-width: 768px) {.header-link {font-size: 12px;padding: 6px 12px;top: 10px;right: 10px;border-radius: 6px; } }
   `;
   document.head.appendChild(style);
 
