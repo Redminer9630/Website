@@ -5,55 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools</title>
     <style>
-        body { font-family: 'Mojangles', sans-serif; background-color: #282c34; color: white; padding: 20px; }
-        h1 { font-size: 30px; margin-bottom: 20px; text-align: center; }
-        .header-link { color: white; font-size: 16px; text-decoration: none; background-color: #f44336; padding: 10px 20px; border-radius: 8px; position: absolute; top: 20px; right: 20px; }
-        .header-link:hover { background-color: #e53935; }
-        .info-button { position: absolute; top: 20px; left: 20px; width: 32px; height: 32px; background-image: url('downloads/info.png'); background-size: cover; cursor: pointer; }
-        .info-button:hover { background-image: url('downloads/info_hover.png'); cursor: help; }
-        button, .button { font-weight: bold; display: inline-block; background-color: hsl(122, 40%, 45%); color: white; padding: 15px; margin: 5px; cursor: pointer; border: none; border-radius: 8px; font-size: 18px; font-family: 'Mojangles', sans-serif; }
-        #keys, #advancedKeys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
-        #display, .display { font-size: 24px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background-color: #333; margin-bottom: 10px; color: white; text-align: left; font-family: 'Mojangles', sans-serif; }
-        button:hover, .button:hover { background-color: hsl(122, 40%, 55%); }
-        button:active, .button:active { background-color: hsl(122, 40%, 65%); }
-        .op-btn { background-color: hsl(35, 100%, 60%); }
-        .op-btn:hover { background-color: hsl(35, 100%, 70%); }
-        .op-btn:active { background-color: hsl(35, 100%, 80%); }
-        .equal { grid-column: span 4; background-color: hsl(206, 90%, 55%); color: white; font-size: 24px; }
-        .equal:hover { background-color: hsl(206, 90%, 65%); }
-        .equal:active { background-color: hsl(206, 90%, 75%); }
-        #advancedKeys { display: none; margin-top: 10px; }
-    </style>
-    <script src="autoloader.js" type="module" defer></script>
-</head>
-<body>
-    <div class="info-button" onclick="openInfoPage()"></div>
-    <h1>Tools - Redminer9630</h1>
-
-    <select id="modeSelector" onchange="changeMode()" class="button" style="margin-bottom: 20px; padding: 10px; border-radius: 8px; border: none; font-size: 16px;">
-        <optgroup label="Misc">
-            <option value="standard">Taschenrechner</option>
-        </optgroup>
-        <optgroup label="Minecraft">
-            <option value="nether">Nether Portal</option>
-            <option value="si">Item Stack</option>
-            <option value="item">Item Listen</option>
-        </optgroup>
-        <optgroup label="Text">
-            <option value="hex">Hex</option>
-        </optgroup>
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools</title>
-    <style>
-        body { font-family: 'Mojangles', sans-serif; background-color: #282c34; color: white; padding: 20px; }
-        h1 { font-size: 30px; margin-bottom: 20px; text-align: center; }
+        body {
+            font-family: 'Mojangles', sans-serif;
+            background-color: #282c34;
+            color: white;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
         button, .button {
             font-weight: bold;
-            display: inline-block;
             background-color: hsl(122, 40%, 45%);
             color: white;
             padding: 15px;
@@ -63,21 +27,42 @@
             border-radius: 8px;
             font-size: 18px;
             font-family: 'Mojangles', sans-serif;
+            max-width: 100%;
+            min-width: 0;
+            word-break: break-word;
         }
-        button:hover, .button:hover { background-color: hsl(122, 40%, 55%); }
-        button:active, .button:active { background-color: hsl(122, 40%, 65%); }
-        .op-btn { background-color: hsl(35, 100%, 60%) !important; }
-        .op-btn:hover { background-color: hsl(35, 100%, 70%) !important; }
-        .op-btn:active { background-color: hsl(35, 100%, 80%) !important; }
+        button:hover, .button:hover {
+            background-color: hsl(122, 40%, 55%);
+        }
+        button:active, .button:active {
+            background-color: hsl(122, 40%, 65%);
+        }
+        .op-btn {
+            background-color: hsl(35, 100%, 60%) !important;
+        }
+        .op-btn:hover {
+            background-color: hsl(35, 100%, 70%) !important;
+        }
+        .op-btn:active {
+            background-color: hsl(35, 100%, 80%) !important;
+        }
         .equal {
-            grid-column: span 4;
+            display: block;
+            width: 100%;
             background-color: hsl(206, 90%, 55%);
             color: white;
             font-size: 24px;
             margin-top: 10px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
         }
-        .equal:hover { background-color: hsl(206, 90%, 65%); }
-        .equal:active { background-color: hsl(206, 90%, 75%); }
+        .equal:hover {
+            background-color: hsl(206, 90%, 65%);
+        }
+        .equal:active {
+            background-color: hsl(206, 90%, 75%);
+        }
         #display {
             font-size: 24px;
             padding: 10px;
@@ -90,10 +75,13 @@
         }
         #keys, #advancedKeys {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 10px;
         }
-        #advancedKeys { display: none; margin-top: 10px; }
+        #advancedKeys {
+            display: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -120,13 +108,12 @@
 
             <button onclick="appendToDisplay('0')">0</button>
             <button onclick="appendToDisplay('.')" class="op-btn">.</button>
-            <button onclick="display.value = '';" class="op-btn">C</button>
+            <button onclick="display.value = ''" class="op-btn">C</button>
             <button onclick="appendToDisplay('+')" class="op-btn">+</button>
         </div>
         <div id="advancedKeys">
             <button onclick="appendToDisplay('(')" class="op-btn">(</button>
             <button onclick="appendToDisplay(')')" class="op-btn">)</button>
-            <button onclick="appendToDisplay('**')" class="op-btn">^</button>
             <button onclick="appendToDisplay('Math.sqrt(')" class="op-btn">√</button>
             <button onclick="appendToDisplay('Math.PI')" class="op-btn">π</button>
             <button onclick="appendToDisplay('Math.E')" class="op-btn">e</button>
