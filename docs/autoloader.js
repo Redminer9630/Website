@@ -51,7 +51,7 @@ Promise.all([
 	import('/js_components/download.js'),
 	import('/js_components/modal9630.js'),
 	import('/js_components/embed.js')
-]).then(([elements, embed, tooltip, firebase, back_button, need_confirm, download, modal9630, modals]) => {
+]).then(([elements, modals, tooltip, firebase, back_button, need_confirm, download, modal9630, embed]) => {
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
