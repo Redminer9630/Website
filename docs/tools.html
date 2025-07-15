@@ -12,7 +12,7 @@
         .info-button { position: absolute; top: 20px; left: 20px; width: 32px; height: 32px; background-image: url('downloads/info.png'); background-size: cover; cursor: pointer; }
         .info-button:hover { background-image: url('downloads/info_hover.png'); cursor: help; }
         button, .button { font-weight: bold; display: inline-block; background-color: hsl(122, 40%, 45%); color: white; padding: 15px; margin: 5px; cursor: pointer; border: none; border-radius: 8px; font-size: 18px; font-family: 'Mojangles', sans-serif; }
-        #keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        #keys, #advancedKeys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
         #display, .display { font-size: 24px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; background-color: #333; margin-bottom: 10px; color: white; text-align: left; font-family: 'Mojangles', sans-serif; }
         button:hover, .button:hover { background-color: hsl(122, 40%, 55%); }
         button:active, .button:active { background-color: hsl(122, 40%, 65%); }
@@ -22,129 +22,119 @@
         .equal { grid-column: span 4; background-color: hsl(206, 90%, 55%); color: white; font-size: 24px; }
         .equal:hover { background-color: hsl(206, 90%, 65%); }
         .equal:active { background-color: hsl(206, 90%, 75%); }
-        .item-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .item-row input { padding: 8px; border: 1px solid #555; border-radius: 4px; flex: 1; background-color: #444; color: white; height: 40px; }
-        .item-row input::placeholder { color: #ccc; }
-        .calculated-list { margin-top: 10px; }
-        .remove-btn { background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 10px; height: 40px; width: 50px; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-        .remove-btn:hover { background-color: #e53935; }
-        .nether-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .nether-row input,
-        .nether-row select,
-        .nether-row button { padding: 8px; border: 1px solid #555; border-radius: 4px; background-color: #444; color: white; height: 40px; font-family: 'Mojangles', sans-serif; }
-        .nether-row button { background-color: hsl(206, 90%, 55%); cursor: pointer; }
-        .nether-row button:hover { background-color: hsl(206, 90%, 65%); }
-        .nether-row button:active { background-color: hsl(206, 90%, 75%); }
-        #netherMode input,
-        #netherMode select,
-        #netherMode button,
-        #itemMode input,
-        #itemMode button { font-size: 16px; }
-        .item-row input.output { background-color: #333; cursor: default; }
-        @media (prefers-color-scheme: light) {
-            body { background-color: white; color: black; }
-            h1, h2 { color: black; }
-            #display, .display { background-color: #f0f0f0; color: #000; border: 1px solid #ccc; }
-            .item-row input { background-color: #f9f9f9; color: #000; border: 1px solid #ccc; }
-            .item-row input::placeholder { color: #666; }
-            .nether-row input, .nether-row select, .nether-row button { background-color: #f0f0f0; color: #000; border: 1px solid #ccc; }
-            .item-row input.output { background-color: #e0e0e0; color: #000; } 
-        }
-        @keyframes moveNumber { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-        .output-number { animation: moveNumber 0.4s ease; }
-        .output-number.fast { animation: moveNumber 0.2s ease; }
-        #hex-generator { text-align: center; margin: 20px; }
-        #color-preview { margin: 10px auto; }
-        .output-scroll {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-        }
+        #advancedKeys { display: none; margin-top: 10px; }
     </style>
     <script src="autoloader.js" type="module" defer></script>
 </head>
 <body>
     <div class="info-button" onclick="openInfoPage()"></div>
     <h1>Tools - Redminer9630</h1>
-    
+
     <select id="modeSelector" onchange="changeMode()" class="button" style="margin-bottom: 20px; padding: 10px; border-radius: 8px; border: none; font-size: 16px;">
-        Misc
-        <option value="standard">Taschenrechner</option>
-        Minecraft
-        <option value="nether">Nether Portal</option>
-        <option value="si">Item Stack</option>
-        <option value="item">Item Listen</option>
-        Text
-        <option value="hex">Hex</option>
-        <option value="mctext">MC Text Editor</option>
-    </select>
-    
+        <optgroup label="Misc">
+            <option value="standard">Taschenrechner</option>
+        </optgroup>
+        <optgroup label="Minecraft">
+            <option value="nether">Nether Portal</option>
+            <option value="si">Item Stack</option>
+            <option value="item">Item Listen</option>
+        </optgroup>
+        <optgroup label="Text">
+            <option value="hex">Hex</option>
+        </optgroup>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools</title>
+    <style>
+        body { font-family: 'Mojangles', sans-serif; background-color: #282c34; color: white; padding: 20px; }
+        h1 { font-size: 30px; margin-bottom: 20px; text-align: center; }
+        button, .button {
+            font-weight: bold;
+            display: inline-block;
+            background-color: hsl(122, 40%, 45%);
+            color: white;
+            padding: 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-family: 'Mojangles', sans-serif;
+        }
+        button:hover, .button:hover { background-color: hsl(122, 40%, 55%); }
+        button:active, .button:active { background-color: hsl(122, 40%, 65%); }
+        .op-btn { background-color: hsl(35, 100%, 60%) !important; }
+        .op-btn:hover { background-color: hsl(35, 100%, 70%) !important; }
+        .op-btn:active { background-color: hsl(35, 100%, 80%) !important; }
+        .equal {
+            grid-column: span 4;
+            background-color: hsl(206, 90%, 55%);
+            color: white;
+            font-size: 24px;
+            margin-top: 10px;
+        }
+        .equal:hover { background-color: hsl(206, 90%, 65%); }
+        .equal:active { background-color: hsl(206, 90%, 75%); }
+        #display {
+            font-size: 24px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #333;
+            margin-bottom: 10px;
+            color: white;
+            width: 100%;
+        }
+        #keys, #advancedKeys {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        #advancedKeys { display: none; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Tools - Redminer9630</h1>
+
     <div id="calculator" class="mode">
-        <div class="output-scroll"><input id="display"></div>
+        <label><input type="checkbox" id="advancedToggle" onchange="toggleAdvanced()"> Erweitert</label>
+        <input id="display">
         <div id="keys">
-            <button onclick="appendToDisplay('+')" class="op-btn">+</button>        
-            <button onclick="appendToDisplay('7')">7</button>       
+            <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
             <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('-')" class="op-btn">-</button>
+            <button onclick="appendToDisplay('/')" class="op-btn">/</button>
+
             <button onclick="appendToDisplay('4')">4</button>
             <button onclick="appendToDisplay('5')">5</button>
             <button onclick="appendToDisplay('6')">6</button>
             <button onclick="appendToDisplay('*')" class="op-btn">*</button>
+
             <button onclick="appendToDisplay('1')">1</button>
             <button onclick="appendToDisplay('2')">2</button>
             <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('/')" class="op-btn">/</button>
-            <button onclick="appendToDisplay('0')">0</button>
-            <button onclick="appendToDisplay('.')">.</button>
-            <button onclick="display.value = '';" class="op-btn">C</button>
-            <button onclick="calc()" class="equal">=</button>   
-        </div>
-    </div>
-    <div id="itemstack" class="mode" style="display:none;">
-        <h2>Item Stack</h2>
-        <div class="si_input">
-            <input type="number" id="si_stack" placeholder="Stacks">
-            <input type="number" id="id_item" placeholder="Zusätzliche Items">
-            <button onclick="stackitem()">Berechnen</button>
-        </div>
-        <input id="si_result" readonly placeholder="Item Anzahl" class="display">
-    </div>
-    <div id="netherMode" class="mode" style="display: none;">
-        <h2>Nether Portal Koordinaten</h2>
-        <div class="nether-row">
-            <input type="number" id="coordX" placeholder="X-Koordinate" class="display">
-            <input type="number" id="coordZ" placeholder="Z-Koordinate" class="display">
-            <select id="dimension" class="display">
-                <option value="overworld">zu Overworld</option>
-                <option value="nether">zu Nether</option>
-            </select>
-            <button onclick="calculatePortalCoords()">Berechnen</button>
-        </div>
-        <input id="portalResult" readonly placeholder="Koordinaten" class="display">
-    </div>
+            <button onclick="appendToDisplay('-')" class="op-btn">-</button>
 
-    <div id="itemMode" class="mode" style="display: none;">
-        <h2>Item Materialliste</h2>
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <input type="number" id="multiplier" placeholder="Multiplikator" class="display">
-            <button onclick="calculateItems()">Berechnen</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')" class="op-btn">.</button>
+            <button onclick="display.value = '';" class="op-btn">C</button>
+            <button onclick="appendToDisplay('+')" class="op-btn">+</button>
         </div>
-        <div id="itemList">
-            <div class="item-row">
-                <input type="text" class="item-name" placeholder="Item" oninput="addItemRowIfNeeded()">
-                <input type="number" class="item-quantity" placeholder="Anzahl" oninput="addItemRowIfNeeded()">
-                <input type="number" class="item-result" placeholder="Ergebnis" readonly class="output">
-                <button class="remove-btn" onclick="removeItemRow(this)">-</button>
-            </div>
+        <div id="advancedKeys">
+            <button onclick="appendToDisplay('(')" class="op-btn">(</button>
+            <button onclick="appendToDisplay(')')" class="op-btn">)</button>
+            <button onclick="appendToDisplay('**')" class="op-btn">^</button>
+            <button onclick="appendToDisplay('Math.sqrt(')" class="op-btn">√</button>
+            <button onclick="appendToDisplay('Math.PI')" class="op-btn">π</button>
+            <button onclick="appendToDisplay('Math.E')" class="op-btn">e</button>
+            <button onclick="appendToDisplay('Math.sin(')" class="op-btn">sin</button>
+            <button onclick="appendToDisplay('Math.cos(')" class="op-btn">cos</button>
+            <button onclick="appendToDisplay('Math.tan(')" class="op-btn">tan</button>
         </div>
-    </div>
-    
-    <div id="hex-generator" class="mode" style="display: none;">
-        <h2>Hex Generator</h2>
-        <p>Hexcode: <span id="hex-code">#FFFFFF</span></p>
-        <button id="generate-hex">Generiere Hex-Farbcode</button>
-        <div id="color-preview" style="width: 100px; height: 100px; background-color: #FFFFFF; border: 1px solid #000;"></div>
+        <button onclick="calc()" class="equal">=</button>
     </div>
 
     <script>
@@ -154,173 +144,25 @@
             display.value += input;
             display.placeholder = "";
         }
-        
-        function calc() {if (!display.value.trim()) {display.value = ""; display.placeholder = ""; return;} try {display.value = eval(display.value);} catch {display.placeholder = "Fehler";display.value = ""; } }
-        
-        function changeMode() {
-            const mode = document.getElementById('modeSelector').value;
-            document.querySelectorAll('.mode').forEach(div => div.style.display = 'none');
-            if (mode === 'standard') {
-                document.getElementById('calculator').style.display = 'block';
-            } else if (mode === 'nether') {
-                document.getElementById('netherMode').style.display = 'block';
-            } else if (mode === 'item') {
-                document.getElementById('itemMode').style.display = 'block';
-            }
-        }
 
-        function calculatePortalCoords() {
-            const x = parseFloat(document.getElementById('coordX').value);
-            const z = parseFloat(document.getElementById('coordZ').value);
-            const dimension = document.getElementById('dimension').value;
-            let resultX, resultZ;
-
-            if (dimension === 'overworld') {
-                resultX = x / 8;
-                resultZ = z / 8;
-            } else {
-                resultX = x * 8;
-                resultZ = z * 8;
-            }
-
-            document.getElementById('portalResult').value =
-                `X: ${resultX} Z: ${resultZ}`;
-        }
-
-        function calculateItems() {
-            const multiplier = parseFloat(document.getElementById('multiplier').value);
-            if (isNaN(multiplier) || multiplier <= 0) {
-                alert("Gib einen gültigen Multiplikator ein.");
+        function calc() {
+            if (!display.value.trim()) {
+                display.value = "";
+                display.placeholder = "";
                 return;
             }
-
-            const items = document.querySelectorAll('.item-row');
-            let allEmpty = true;
-
-            items.forEach(item => {
-                const name = item.querySelector('.item-name').value.trim();
-                const quantity = parseFloat(item.querySelector('.item-quantity').value);
-                const resultInput = item.querySelector('.item-result');
-
-                if (name !== "" && !isNaN(quantity) && quantity > 0) {
-                    allEmpty = false;
-                    const resultQuantity = quantity * multiplier;
-                    resultInput.value = resultQuantity;
-                } else {
-                    resultInput.value = "";
-                }
-            });
-
-            if (allEmpty) {
-                alert("Keine Items eingegeben.");
+            try {
+                display.value = eval(display.value);
+            } catch {
+                display.placeholder = "Fehler";
+                display.value = "";
             }
         }
-        
-        function ensureAtLeastOneEmptyRow() {
-            const itemRows = document.querySelectorAll('.item-row');
-            const allEmpty = Array.from(itemRows).every(row => {
-                const name = row.querySelector('.item-name').value.trim();
-                const quantity = row.querySelector('.item-quantity').value.trim();
-                return name === "" && quantity === "";
-            });
 
-            if (allEmpty) {
-                addItemRow();
-            }    
+        function toggleAdvanced() {
+            const adv = document.getElementById('advancedToggle').checked;
+            document.getElementById('advancedKeys').style.display = adv ? 'grid' : 'none';
         }
-
-        function addItemRow() {
-            const newRow = document.createElement('div');
-            newRow.classList.add('item-row');
-            newRow.innerHTML = `
-                <input type="text" class="item-name" placeholder="Item" oninput="addItemRowIfNeeded()">
-                <input type="number" class="item-quantity" placeholder="Anzahl" oninput="addItemRowIfNeeded()">
-                <input type="number" class="item-result" placeholder="Ergebnis" readonly class="output">
-                <button class="remove-btn" onclick="removeItemRow(this)">-</button>
-            `;
-            document.getElementById('itemList').appendChild(newRow);
-    
-            // Füge Event-Listener hinzu
-            newRow.querySelector('.item-name').addEventListener('input', addItemRowIfNeeded);
-            newRow.querySelector('.item-quantity').addEventListener('input', addItemRowIfNeeded);
-        }
-
-        function removeItemRow(button) {
-            const row = button.parentElement;
-            const itemList = document.getElementById('itemList');
-            itemList.removeChild(row);
-            ensureAtLeastOneEmptyRow();
-        }
-
-        function addItemRowIfNeeded() {
-            const itemRows = document.querySelectorAll('.item-row');
-            const lastRow = itemRows[itemRows.length - 1];
-            const nameInput = lastRow.querySelector('.item-name');
-            const quantityInput = lastRow.querySelector('.item-quantity');
-
-            // Überprüfen, ob das letzte Eingabefeld ausgefüllt ist    
-            if (nameInput.value.trim() !== "" || quantityInput.value.trim() !== "") {
-                addItemRow();
-            }
-
-            // Sicherstellen, dass immer mindestens eine leere Reihe vorhanden ist
-            ensureAtLeastOneEmptyRow();
-        }
-
-        // Initialer Event-Listener für die erste Reihe
-        document.querySelector('.item-row .item-name').addEventListener('input', addItemRowIfNeeded);
-        document.querySelector('.item-row .item-quantity').addEventListener('input', addItemRowIfNeeded);
-
-        function getURLParameter(name) {
-            return new URLSearchParams(window.location.search).get(name);
-        }
-
-        window.onload = function() {
-            const tool = getURLParameter('tool');
-            const hideURL = getURLParameter('hideURL');
-            if (tool) {
-                if (tool === 'nether') {
-                    document.getElementById('modeSelector').value = 'nether';
-                } else if (tool === 'item') {
-                    document.getElementById('modeSelector').value = 'item';
-                } else {
-                    document.getElementById('modeSelector').value = 'standard';
-                }
-                changeMode();
-            }
-
-            if (hideURL === '1') {
-                history.replaceState("https://redminer9630de.github.io/tools");
-            }
-        };
-
-        const calculatorOutput = document.querySelector('.output');
-        let lastInputTime = Date.now();
-
-        function animateNumber(input) {
-            const newNumber = document.createElement('div');
-            newNumber.textContent = input;
-            newNumber.classList.add('output-number');
-  
-            const currentTime = Date.now();
-            if (currentTime - lastInputTime < 100) {
-                newNumber.classList.add('fast');
-            }
-            lastInputTime = currentTime;
-
-            calculatorOutput.appendChild(newNumber);
-            setTimeout(() => newNumber.remove(), 400);
-        }
-
-        document.getElementById("generate-hex").addEventListener("click", function () {
-          const hexCode = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-          const hexCodeElement = document.getElementById("hex-code");
-          hexCodeElement.textContent = hexCode;
-          const colorPreview = document.getElementById("color-preview");
-          colorPreview.style.backgroundColor = hexCode;
-        });
-        
-        document.getElementById('itemList').addEventListener('input', ensureAtLeastOneEmptyRow);
     </script>
 </body>
 </html>
