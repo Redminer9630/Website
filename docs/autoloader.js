@@ -36,9 +36,9 @@ const noti = (type, ...msg) => {
 };
 
 window.CommonVersion = {
-	version: 'v1.0.3',
-	date: '13.7.25',
-	time: '19:18'
+	version: 'v1.0.0',
+	date: '15.7.25',
+	time: '12:47'
 };
 
 Promise.all([
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const year = new Date().getFullYear();
 	const footer = document.createElement('footer');
 	footer.id = "main-footer";
-	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. ${CommonVersion.version} Pre ${CommonVersion.date} ${CommonVersion.time}</span>`;
+	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. ${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</span>`;
 	footer.classList.add("fixed-footer");
 	document.body.style.paddingBottom = "60px";
 	document.body.appendChild(footer);
