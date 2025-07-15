@@ -114,3 +114,26 @@ function loadCaptcha(callback) {
 	window.onCaptchaLoad = () => { if (callback) callback(window.grecaptcha); };
 	document.head.appendChild(script);
 }
+
+function adjustContentSpacingGlobally() {
+  if (window.innerWidth > 768) return;
+
+  const content = document.getElementById("content");
+  if (!content) return;
+
+  while (content.lastChild && content.lastChild.tagName === 'BR') {content.removeChild(content.lastChild);}
+
+  const bottomOffset = 65;
+  let contentRect = content.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+
+  while (contentRect.bottom > (viewportHeight - bottomOffset)) {
+    content.appendChild(document.createElement('br'));
+    const newRect = content.getBoundingClientRect();
+    if (newRect.bottom === contentRect.bottom) break;
+    contentRect = newRect;
+  }
+}
+
+window.addEventListener('load', adjustContentSpacingGlobally);
+window.addEventListener('resize', adjustContentSpacingGlobally);
