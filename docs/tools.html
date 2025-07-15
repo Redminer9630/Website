@@ -130,6 +130,7 @@
 
     <script>
         const display = document.getElementById('display');
+        const advToggle = document.getElementById('advancedToggle');
 
         function appendToDisplay(input) {
             display.value += input;
@@ -151,9 +152,18 @@
         }
 
         function toggleAdvanced() {
-            const adv = document.getElementById('advancedToggle').checked;
+            const adv = advToggle.checked;
             document.getElementById('advancedKeys').style.display = adv ? 'grid' : 'none';
+            localStorage.setItem('advancedMode', adv);
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('advancedMode');
+            if (saved === 'true') {
+                advToggle.checked = true;
+                document.getElementById('advancedKeys').style.display = 'grid';
+            }
+        });
     </script>
 </body>
 </html>
