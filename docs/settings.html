@@ -1,214 +1,109 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Profil & Einstellungen</title>
-	<script src="autoloader.js" type="module" defer></script>
-	<style>
-		body { font-family: monospace; background: #222; color: #eee; padding: 20px; max-width: 500px; margin: auto; }
-		input, button, select { width: 100%; margin: 6px 0; padding: 8px; border-radius: 5px; border: none; font-size: 1rem; }
-		button { background: #09f; color: white; cursor: pointer; }
-		button:hover { background: #06c; }
-		.hidden { display: none; }
-		label { margin-top: 10px; display: block; }
-		#error, #message { margin: 10px 0; }
-		#error { color: #f66; }
-		#message { color: #6f6; }
-	</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstellungen</title>
+  <style>
+    @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
+    body { font-family: 'Minecraft', monospace; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
+    :root[data-theme="white"] { --bg: #f4f4f4; --text: #000; --box: #fff; }
+    :root[data-theme="dark"] { --bg: #121212; --text: #fff; --box: #1e1e1e; }
+    .container { max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
+    .header { font-size: 2rem; font-weight: bold; margin-bottom: 20px; }
+    .settings-group { margin-bottom: 30px; }
+    .settings-group h2 { font-size: 1.25rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+    .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .settings-item label { font-size: 1rem; }
+    .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Minecraft', monospace; }
+    .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Minecraft'; }
+    .save-button:hover { background-color: #0056b3; }
+  </style>
+  <script src="autoloader.js" type="module" defer></script>
+  <script type="module">
+    import { setCookie, getCookie } from './autoloader.js';
+
+    function applyTheme(theme) {
+      if (theme === "sys") {
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const applySystemTheme = () => {
+          document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white";
+        };
+        applySystemTheme();
+        mediaQuery.addEventListener("change", applySystemTheme);
+      } else {
+        document.documentElement.dataset.theme = theme;
+      }
+    }
+
+    function applySettings() {
+      const theme = getCookie("theme9630") || "sys";
+      const username = getCookie("username") || "";
+      const email = getCookie("email") || "";
+
+      applyTheme(theme);
+
+      document.getElementById("username").value = username;
+      document.getElementById("email").value = email;
+      document.getElementById("theme").value = theme;
+    }
+
+    let isDirty = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySettings();
+      document.getElementById("username").addEventListener("input", () => isDirty = true);
+      document.getElementById("email").addEventListener("input", () => isDirty = true);
+      document.getElementById("theme").addEventListener("change", () => isDirty = true);
+    });
+
+    window.addEventListener("beforeunload", function (e) {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    window.saveSettings = function () {
+      const theme = document.getElementById("theme").value;
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+
+      setCookie("theme9630", theme);
+      setCookie("username", username);
+      setCookie("email", email);
+
+      applySettings();
+      isDirty = false;
+    };
+  </script>
 </head>
 <body>
-
-<h1>Profil & Einstellungen</h1>
-<p id="welcome">Lade Benutzer...</p>
-
-<div id="loginBox">
-	<h2>Login</h2>
-	<div id="error"></div>
-	<input id="emailLogin" type="email" placeholder="E-Mail" autocomplete="username" />
-	<input id="passwordLogin" type="password" placeholder="Passwort" autocomplete="current-password" />
-	<button id="btnLogin">Einloggen</button>
-	<p>Noch kein Konto? <a href="#" id="showRegister">Registrieren</a></p>
-	<p><a href="#" id="btnResetPassword">Passwort vergessen?</a></p>
-</div>
-
-<div id="registerBox" class="hidden">
-	<h2>Registrieren</h2>
-	<div id="errorReg"></div>
-	<input id="emailReg" type="email" placeholder="E-Mail" autocomplete="email" />
-	<input id="passwordReg" type="password" placeholder="Passwort" autocomplete="new-password" />
-	<input id="passwordRegConfirm" type="password" placeholder="Passwort bestätigen" autocomplete="new-password" />
-	<button id="btnRegister">Registrieren</button>
-	<p><a href="#" id="showLogin">Zurück zum Login</a></p>
-</div>
-
-<div id="settingsBox" class="hidden">
-	<div id="message"></div>
-	<p>Angemeldet als <span id="userEmail"></span></p>
-	<button id="btnLogout">Logout</button>
-
-	<!-- E-Mail ändern über dein Backend -->
-	<form id="emailChange">
-		<h3>E-Mail ändern</h3>
-		<input type="email" id="newEmail" placeholder="Neue E-Mail" required />
-		<button type="submit">Ändern</button>
-	</form>
-
-	<!-- Passwort ändern lokal (Firebase) -->
-	<h3>Passwort ändern</h3>
-	<input id="newPassword" type="password" placeholder="Neues Passwort eingeben" />
-	<input id="newPasswordConfirm" type="password" placeholder="Neues Passwort bestätigen" />
-	<button id="btnSaveChanges">Passwort ändern</button>
-
-	<!-- Theme-Auswahl -->
-	<h3>Theme</h3>
-	<select id="themeSelect">
-		<option value="system">Systemstandard</option>
-		<option value="light">Hell</option>
-		<option value="dark">Dunkel</option>
-	</select>
-</div>
-
-<script type="module">
-alert("Einstellungen sind Experimentel und könnten Korruption verursachen, deshalb leiten wir dich zurück.");
-location.href = '/';
-/*
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.24.0/firebase-app.js";
-import {
-	getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-	sendEmailVerification, signOut, onAuthStateChanged,
-	sendPasswordResetEmail, updatePassword
-} from "https://www.gstatic.com/firebasejs/9.24.0/firebase-auth.js";
-
-const firebaseConfig = { /* Deine Config *\ };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-const loginBox = document.getElementById('loginBox');
-const registerBox = document.getElementById('registerBox');
-const settingsBox = document.getElementById('settingsBox');
-const error = document.getElementById('error');
-const errorReg = document.getElementById('errorReg');
-const message = document.getElementById('message');
-const userEmailSpan = document.getElementById('userEmail');
-
-document.getElementById('btnLogin').onclick = async () => {
-	error.textContent = '';
-	const email = document.getElementById('emailLogin').value.trim();
-	const pass = document.getElementById('passwordLogin').value;
-	if (!email || !pass) return error.textContent = 'Bitte E-Mail und Passwort eingeben.';
-	try {
-		const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-		if (!userCredential.user.emailVerified) {
-			error.textContent = 'Bitte bestätige deine E-Mail.';
-			await sendEmailVerification(userCredential.user);
-			await signOut(auth);
-			return;
-		}
-	} catch(e) { error.textContent = 'Fehler beim Einloggen: ' + e.message; }
-};
-
-document.getElementById('showRegister').onclick = e => {
-	e.preventDefault(); error.textContent = ''; errorReg.textContent = '';
-	loginBox.classList.add('hidden'); registerBox.classList.remove('hidden');
-};
-
-document.getElementById('showLogin').onclick = e => {
-	e.preventDefault(); error.textContent = ''; errorReg.textContent = '';
-	registerBox.classList.add('hidden'); loginBox.classList.remove('hidden');
-};
-
-document.getElementById('btnRegister').onclick = async () => {
-	errorReg.textContent = '';
-	const email = document.getElementById('emailReg').value.trim();
-	const pass = document.getElementById('passwordReg').value;
-	const confirm = document.getElementById('passwordRegConfirm').value;
-	if (!email || !pass || !confirm) return errorReg.textContent = 'Bitte alle Felder ausfüllen.';
-	if (pass !== confirm) return errorReg.textContent = 'Passwörter stimmen nicht überein.';
-	try {
-		const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-		await sendEmailVerification(userCredential.user);
-		alert('Registrierung erfolgreich! Bitte bestätige deine E-Mail und logge dich dann ein.');
-		registerBox.classList.add('hidden'); loginBox.classList.remove('hidden');
-	} catch(e) { errorReg.textContent = 'Fehler bei der Registrierung: ' + e.message; }
-};
-
-document.getElementById('btnLogout').onclick = async () => { await signOut(auth); };
-
-document.getElementById('btnResetPassword').onclick = async e => {
-	e.preventDefault();
-	const email = prompt('E-Mail zum Zurücksetzen des Passworts eingeben:');
-	if (email) {
-		try {
-			await sendPasswordResetEmail(auth, email);
-			alert('Passwort-Zurücksetz-Mail gesendet.');
-		} catch (e) { alert('Fehler: ' + e.message); }
-	}
-};
-
-document.getElementById('btnSaveChanges').onclick = async () => {
-	message.textContent = ''; error.textContent = '';
-	const user = auth.currentUser;
-	if (!user) return error.textContent = 'Nicht eingeloggt.';
-	const newPass = document.getElementById('newPassword').value;
-	const newConfirm = document.getElementById('newPasswordConfirm').value;
-	if (newPass && newPass === newConfirm) {
-		try {
-			await updatePassword(user, newPass);
-			message.textContent = 'Passwort wurde geändert.';
-		} catch(e) { error.textContent = 'Fehler: ' + e.message; }
-	} else if (newPass || newConfirm) {
-		error.textContent = 'Passwörter stimmen nicht überein.';
-	}
-};
-
-// Theme speichern
-const themeSelect = document.getElementById('themeSelect');
-themeSelect.value = localStorage.getItem("theme") || "system";
-themeSelect.onchange = () => {
-	localStorage.setItem("theme", themeSelect.value);
-	alert("Theme-Einstellung gespeichert: " + themeSelect.value);
-};
-
-// Benutzer über Backend abrufen
-(async () => {
-	try {
-		const res = await fetch("https://backend9630.onrender.com/api/me", { credentials: "include" });
-		const data = await res.json();
-		if (!data.success) return;
-		document.getElementById("welcome").innerText = "Willkommen, " + data.username;
-	} catch (e) {
-		console.warn("Backend nicht erreichbar.");
-	}
-})();
-
-// E-Mail über Backend ändern
-document.getElementById('emailChange').addEventListener("submit", async e => {
-	e.preventDefault();
-	const email = document.querySelector("#newEmail").value;
-	const res = await fetch("https://backend9630.onrender.com/api/change-email", {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		credentials: "include",
-		body: JSON.stringify({ email })
-	});
-	const out = await res.json();
-	alert(out.message);
-});
-
-// Auth-Zustand prüfen
-onAuthStateChanged(auth, user => {
-	if (user) {
-		loginBox.classList.add('hidden');
-		registerBox.classList.add('hidden');
-		settingsBox.classList.remove('hidden');
-		userEmailSpan.textContent = user.email || '(keine E-Mail)';
-	} else {
-		loginBox.classList.remove('hidden');
-		registerBox.classList.add('hidden');
-		settingsBox.classList.add('hidden');
-	}
-});*/
-</script>
+  <div class="container">
+    <div class="header">Einstellungen</div>
+    <div class="settings-group">
+      <h2>Profil</h2>
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="username">Benutzername</label>
+        <input type="text" id="username" placeholder="Nutzernamen eingeben">
+      </div>
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" placeholder="E-Mail eingeben">
+      </div>
+    </div>
+    <div class="settings-group">
+      <h2>Allgemein</h2>
+      <div class="settings-item">
+        <label for="theme">Theme</label>
+        <select id="theme">
+          <option value="white">Weiß</option>
+          <option value="dark">Dunkel</option>
+          <option value="sys">System</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="saveSettings()" class="save-button">Speichern</button>
+  </div>
 </body>
 </html>
