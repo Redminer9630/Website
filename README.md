@@ -36,6 +36,6 @@ Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](
 
 ### Ein Wuffi:
 
-![Wuffi](ttps://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Cute_dog.jpg/640px-Cute_dog.jpg)
+![Wuffi](https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/color/618x618/1F415.png)
 
 © 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. Seit 29.08.24
