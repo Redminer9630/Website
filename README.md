@@ -24,7 +24,9 @@ Dieses Repository enthält Dateien, die für den Betrieb der Website notwendig s
 
 ## ⚙️ Lizenz
 
-Dieses Projekt wird unter der MIT-Lizenz bereitgestellt.
+Dieses Projekt steht unter der [CC BY-ND 4.0 Lizenz](LICENSE.md).  
+Weitere Informationen: [https://creativecommons.org/licenses/by-nd/4.0/](https://creativecommons.org/licenses/by-nd/4.0/)
+
 
 ## 📬 Kontakt
 
