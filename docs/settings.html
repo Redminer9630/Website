@@ -17,6 +17,14 @@
     .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Mojangles'; }
     .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Mojangles'; }
     .save-button:hover { background-color: #0056b3; }
+    @media (min-width: 768px) {
+     body { font-size: 1.2em; }
+     .header { font-size: 2.4rem; }
+     .settings-group h2 { font-size: 1.5rem; }
+     .settings-item label { font-size: 1.2rem; }
+     .settings-item input, .settings-item select { font-size: 1.2rem; max-width: 360px;}
+     .save-button { font-size: 1.2rem; padding: 12px 24px; }
+    }
   </style>
   <script src="autoloader.js" type="module" defer></script>
   <script type="module">
