@@ -14,6 +14,7 @@
     .settings-group h2 { font-size: 1.25rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
     .settings-item {display: flex;gap: 20px;align-items: center;padding: 10px 0;border-bottom: 1px solid #eee;flex-wrap: wrap;}
     .settings-item label { font-size: 1rem; }
+    .settings-item input,.settings-item select {margin-left: auto;}
     .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Mojangles'; }
     .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Mojangles'; }
     .save-button:hover { background-color: #0056b3; }
@@ -30,18 +31,7 @@
   <script type="module">
     import { setCookie, getCookie } from './autoloader.js';
 
-    function applyTheme(theme) {
-      if (theme === "sys") {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const applySystemTheme = () => {
-          document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white";
-        };
-        applySystemTheme();
-        mediaQuery.addEventListener("change", applySystemTheme);
-      } else {
-        document.documentElement.dataset.theme = theme;
-      }
-    }
+    function applyTheme(theme) { if (theme === "sys") { const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)"); const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; }; applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme); } else { document.documentElement.dataset.theme = theme; } }
 
     function applySettings() {
       const theme = getCookie("theme9630") || "sys";
@@ -64,12 +54,7 @@
       document.getElementById("theme").addEventListener("change", () => isDirty = true);
     });
 
-    window.addEventListener("beforeunload", function (e) {
-      if (isDirty) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    });
+    window.addEventListener("beforeunload", function (e) { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
     window.saveSettings = function () {
       const theme = document.getElementById("theme").value;
