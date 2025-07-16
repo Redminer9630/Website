@@ -136,15 +136,18 @@ document.addEventListener("DOMContentLoaded", function () {
       text: "Zurück zu GitHub",
       links: [
         "https://www.github.com/Redminer9630de/Redminer9630*",
-        "https://github.com/redminer9630de/redminer9630*"
-      ]
+        "https://github.com/redminer9630de/redminer9630*",
+        "!https://github.com/redminer9630de/Redminer9630/issues/15*
+      ],
+      target: "https://github.com/Redminer9630de/Redminer9630"
     },
     twitch_twi9630: {
       text: "Zurück zu Twitch",
       links: [
         "https://twitch.tv/Redminer9630/*",
         "https://www.twitch.tv/Redminer9630/*"
-      ]
+      ],
+      target: "https://twitch.tv/Redminer9630"
     },
   };
 
@@ -154,14 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const exclusion = pattern.substring(1);
       if (exclusion.includes("*")) {
         return normalizedUrl.startsWith(exclusion.split("*")[0]);
-      }
-      return normalizedUrl === exclusion;
-    } else if (pattern.includes("*")) {
-      return normalizedUrl.startsWith(pattern.split("*")[0]);
-    } else {
-      return normalizedUrl === pattern;
-    }
-  }
+      } return normalizedUrl === exclusion; } else if (pattern.includes("*")) { return normalizedUrl.startsWith(pattern.split("*")[0]); } else { return normalizedUrl === pattern; } }
 
   let matchedSource = null;
   for (const key in sources) {
