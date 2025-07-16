@@ -24,7 +24,7 @@ Dieses Repository enthält Dateien, die für den Betrieb der Website notwendig s
 
 ## ⚙️ Lizenz
 
-Dieses Projekt steht unter der [CC BY-ND 4.0 Lizenz](LICENSE.md).  
+Dieses Projekt steht unter der [CC BY-ND 4.0 Lizenz](https://github.com/Redminer9630de/Redminer9630/tree/main?tab=License-1-ov-file).  
 Weitere Informationen: [https://creativecommons.org/licenses/by-nd/4.0/](https://creativecommons.org/licenses/by-nd/4.0/)
 
 
