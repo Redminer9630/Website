@@ -27,9 +27,8 @@
      .save-button { font-size: 1.2rem; padding: 12px 24px; }
     }
   </style>
-  <script src="autoloader.js" type="module" defer></script>
-  <script type="module">
-    import { setCookie, getCookie } from './autoloader.js';
+  <script src="autoloader.js" type="module" defer>
+    import { setCookie, getCookie } from 'autoloader.js';
 
     function applyTheme(theme) { if (theme === "sys") { const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)"); const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; }; applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme); } else { document.documentElement.dataset.theme = theme; } }
 
