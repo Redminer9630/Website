@@ -34,4 +34,8 @@ Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](
 
 ### Redminer9630 App Repo [Hier Klicken](https://github.com/Redminer9630de/app9630)
 
+### Ein Wuffi:
+
+![Wuffi](ttps://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Cute_dog.jpg/640px-Cute_dog.jpg)
+
 © 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. Seit 29.08.24
