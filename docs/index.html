@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function activateSearch() {
     if (initialized) return;
     initialized = true;
-    searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche..."><span style="left: auto; right: 105%; top: 50%; transform: translateY(-50%); class="tooltiptext">Suchleiste anzeigen</span>
+    searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche..."><span style="left: auto; right: 105%; top: 50%; transform: translateY(-50%); class="tooltiptext">Suchleiste anzeigen</span>';
     const input = document.getElementById("search");
     input.focus();
     input.addEventListener("keypress", function (e) {
