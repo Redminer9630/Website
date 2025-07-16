@@ -34,7 +34,41 @@
 	    #imgcrdt a:hover { background: #007BFF; color: #fff; }
 	    #imgcrdt { display: flex; flex-wrap: wrap; gap: 8px; }
 	</style>
-	<script>document.addEventListener("DOMContentLoaded", () => {document.querySelectorAll(".toggle").forEach(el => {el.addEventListener("click", () => {el.classList.toggle("open");const submenu = el.nextElementSibling;submenu?.classList.toggle("show");});});const pages = document.querySelectorAll(".wpage");const activeId = new URLSearchParams(location.search).get("q");if (activeId) {const section = document.getElementById(activeId);section?.scrollIntoView({ behavior: "smooth" });pages.forEach(p => {if (p.getAttribute("data-target") === activeId) p.classList.add("active");else p.classList.remove("active");});}pages.forEach(page => {page.addEventListener("click", () => {const target = page.getAttribute("data-target");if (target) {history.replaceState(null, "", `?q=${target}`);document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });pages.forEach(p => p.classList.remove("active"));page.classList.add("active")</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".toggle").forEach(el => {
+        el.addEventListener("click", () => {
+            el.classList.toggle("open");
+            const submenu = el.nextElementSibling;
+            if (submenu) submenu.classList.toggle("show");
+        });
+    });
+
+    const pages = document.querySelectorAll(".wpage");
+    const activeId = new URLSearchParams(location.search).get("q");
+
+    if (activeId) {
+        const section = document.getElementById(activeId);
+        section?.scrollIntoView({ behavior: "smooth" });
+        pages.forEach(p => {
+            if (p.getAttribute("data-target") === activeId) p.classList.add("active");
+            else p.classList.remove("active");
+        });
+    }
+
+    pages.forEach(page => {
+        page.addEventListener("click", () => {
+            const target = page.getAttribute("data-target");
+            if (target) {
+                history.replaceState(null, "", `?q=${target}`);
+                document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+                pages.forEach(p => p.classList.remove("active"));
+                page.classList.add("active");
+            }
+        });
+    });
+});
+</script>
 </head>
 <body>
 	<div class="sidebar">
