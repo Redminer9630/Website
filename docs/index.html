@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+.*<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta name="google-site-verification" content="gmFmXAdo3TqVXrXHctYX1m1PIEXtpeCAEsuD5MwA9CA" />
@@ -8,27 +8,83 @@
   <link rel="preload" href="index.css" as="style" onload="this.rel='stylesheet'">
   <script src="autoloader.js" type="module"></script>
   <noscript><link rel="stylesheet" href="index.css"></noscript>
+  <style>
+    /* Tooltip container */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    /* Tooltip text */
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: max-content;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 5px 10px;
+      position: absolute;
+      z-index: 1000;
+      white-space: nowrap;
+      font-family: 'Mojangles';
+      font-size: 0.9rem;
+      top: 50%;
+      left: 105%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+    /* Show the tooltip text when hovering */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <nav class="icon-left" aria-label="Hauptnavigation">
-      <div class="logo-static"><img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung"></div>
-      <div class="nav-item" onclick="location.href='projects'"><img src="images/icons/downloads.webp" class="nav-icon" alt="Download"></div>
-      <div class="nav-item" onclick="location.href='tools'"><img src="images/icons/tools.webp" class="nav-icon" alt="Tools"></div>
-      <div class="nav-item" onclick="location.href='linktree'"><img src="images/tree.webp" class="nav-icon" alt="Linktree"></div>
-      <div class="nav-item" onclick="location.href='manual'"><img src="images/icons/about.webp" class="nav-icon" alt="Benutzerhandbuch"></div>
-      <div class="nav-item" onclick="location.href='https://github.com/Redminer9630de/Redminer9630/issues"><img src="images/icons/feedback.webp" class="nav-icon" alt="Feedback geben(GitHub)"></div>
+    <nav class="icon-left" aria-label="Hauptnavigation" style="display: flex; align-items: center; gap: 15px;">
+      <div class="logo-static tooltip" style="cursor: default;">
+        <img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung" />
+        <span class="tooltiptext">Einführung</span>
+      </div>
+      <div class="nav-item tooltip" onclick="location.href='projects'" style="cursor: pointer;">
+        <img src="images/icons/downloads.webp" class="nav-icon" alt="Download" />
+        <span class="tooltiptext">Download</span>
+      </div>
+      <div class="nav-item tooltip" onclick="location.href='tools'" style="cursor: pointer;">
+        <img src="images/icons/tools.webp" class="nav-icon" alt="Tools" />
+        <span class="tooltiptext">Tools</span>
+      </div>
+      <div class="nav-item tooltip" onclick="location.href='linktree'" style="cursor: pointer;">
+        <img src="images/tree.webp" class="nav-icon" alt="Linktree" />
+        <span class="tooltiptext">Linktree</span>
+      </div>
+      <div class="nav-item tooltip" onclick="location.href='manual'" style="cursor: pointer;">
+        <img src="images/icons/about.webp" class="nav-icon" alt="Benutzerhandbuch" />
+        <span class="tooltiptext">Benutzerhandbuch</span>
+      </div>
+      <div class="nav-item tooltip" onclick="location.href='https://github.com/Redminer9630de/Redminer9630/issues'" style="cursor: pointer;">
+        <img src="images/icons/feedback.webp" class="nav-icon" alt="Feedback geben (GitHub)" />
+        <span class="tooltiptext">Feedback geben (GitHub)</span>
+      </div>
     </nav>
-    <div class="icon-right" aria-label="Benutztermenü">
-      <div id="search-section"><input type="text" id="search" placeholder="Suche..." /></div>
-      <img onclick="location.href='settings'" src="images/icons/settings.webp" class="account-icon" style="width: auto;" alt="Einstellungen öffnen">
+    <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; padding-left: 20px;">
+      <div id="search-section"></div>
+      <div class="tooltip" style="cursor: pointer;" onclick="location.href='settings'">
+        <img src="images/icons/settings.webp" class="account-icon" style="width: auto;" alt="Einstellungen öffnen" />
+        <span class="tooltiptext" style="left: auto; right: 105%; top: 50%; transform: translateY(-50%);">Einstellungen öffnen</span>
+      </div>
     </div>
   </header>
 
   <main>
-    <br>
+    <br />
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2></noscript>
-    <br><section id="about">
+    <br />
+    <section id="about">
       <h1 class="h2">Über Redminer9630</h1>
       <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
       <button onclick="location.href='manual?q=about'">Mehr über mich erfahren</button>
@@ -45,6 +101,7 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
@@ -75,29 +132,53 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const params = new URLSearchParams(window.location.search);
-  const source = params.get("source");
+  const referrer = document.referrer.toLowerCase();
+
   const sources = {
-    github: {
-      text: "Zurück zu Github",
-      link: "https://github.com/Redminer9630de/Redminer9630"
-    },
-    github_org-mnpg: {
+    github_web9630: {
       text: "Zurück zu GitHub",
-      link: "https://github.com/Redminer9630"
+      links: [
+        "https://www.github.com/Redminer9630de/Redminer9630",
+        "https://github.com/redminer9630de/redminer9630"
+      ]
     },
-    yt: {
-      text: "Zurück zu Youtube",
-      link: "https://youtube.com/@Redminer9630"
-    },
-    twitch: {
+    twitch_twi9630: {
       text: "Zurück zu Twitch",
-      link: "https://twitch.tv/Redminer9630"
-    }
+      links: [
+        "https://www.twitch.tv/Redminer9630/*",
+        "https://twitch.tv/Redminer9630/*"
+      ]
+    },
   };
 
-  if (source && sources[source]) {
-    const info = sources[source];
+  function matchesWildcard(pattern, url) {
+    if (pattern.includes("*")) {
+      const base = pattern.split("*")[0].toLowerCase();
+      return url.startsWith(base);
+    } else {
+      return url === pattern.toLowerCase() || url.startsWith(pattern.toLowerCase());
+    }
+  }
+
+  let matchedSource = null;
+  for (const key in sources) {
+    if (sources[key].links.some(pattern => matchesWildcard(pattern, referrer))) {
+      matchedSource = sources[key];
+      break;
+    }
+  }
+
+  if (!matchedSource && referrer) {
+    try {
+      const urlObj = new URL(referrer);
+      matchedSource = {
+        text: `Zurück zu ${urlObj.hostname}`,
+        links: [referrer]
+      };
+    } catch {}
+  }
+
+  if (matchedSource) {
     const style = document.createElement("style");
     style.textContent = `
       .source-button {
@@ -109,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background-color: #4CAF50; /* Grün */
+        background-color: #4CAF50;
         color: white;
         cursor: pointer;
         z-index: 9999;
@@ -122,9 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const button = document.createElement("a");
     button.className = "source-button";
-    button.textContent = info.text;
-    button.href = info.link;
-    //button.target = "_blank";
+    button.textContent = matchedSource.text;
+    button.href = matchedSource.links[0].replace("*", "");
     document.body.appendChild(button);
   }
 });
