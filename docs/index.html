@@ -135,25 +135,31 @@ document.addEventListener("DOMContentLoaded", function () {
     github_web9630: {
       text: "Zurück zu GitHub",
       links: [
-        "https://www.github.com/Redminer9630de/Redminer9630",
-        "https://github.com/redminer9630de/redminer9630"
+        "https://www.github.com/Redminer9630de/Redminer9630*",
+        "https://github.com/redminer9630de/redminer9630*"
       ]
     },
     twitch_twi9630: {
       text: "Zurück zu Twitch",
       links: [
-        "https://www.twitch.tv/Redminer9630/*",
-        "https://twitch.tv/Redminer9630/*"
+        "https://twitch.tv/Redminer9630/*",
+        "https://www.twitch.tv/Redminer9630/*"
       ]
     },
   };
 
   function matchesWildcard(pattern, url) {
-    if (pattern.includes("*")) {
-      const base = pattern.split("*")[0].toLowerCase();
-      return url.startsWith(base);
+    const normalizedUrl = url.toLowerCase();
+    if (pattern.startsWith("!")) {
+      const exclusion = pattern.substring(1);
+      if (exclusion.includes("*")) {
+        return normalizedUrl.startsWith(exclusion.split("*")[0]);
+      }
+      return normalizedUrl === exclusion;
+    } else if (pattern.includes("*")) {
+      return normalizedUrl.startsWith(pattern.split("*")[0]);
     } else {
-      return url === pattern.toLowerCase() || url.startsWith(pattern.toLowerCase());
+      return normalizedUrl === pattern;
     }
   }
 
@@ -201,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const button = document.createElement("a");
     button.className = "source-button";
     button.textContent = matchedSource.text;
-    button.href = matchedSource.links[0].replace("*", "");
+    button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
     document.body.appendChild(button);
   }
 });
