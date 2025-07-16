@@ -9,12 +9,10 @@
   <script src="autoloader.js" type="module"></script>
   <noscript><link rel="stylesheet" href="index.css"></noscript>
   <style>
-    /* Tooltip container */
     .tooltip {
       position: relative;
       display: inline-block;
     }
-    /* Tooltip text */
     .tooltip .tooltiptext {
       visibility: hidden;
       width: max-content;
@@ -36,7 +34,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
       pointer-events: none;
     }
-    /* Show the tooltip text when hovering */
     .tooltip:hover .tooltiptext {
       visibility: visible;
       opacity: 1;
@@ -66,8 +63,8 @@
         <img src="images/icons/about.webp" class="nav-icon" alt="Benutzerhandbuch" />
         <span class="tooltiptext">Benutzerhandbuch</span>
       </div>
-      <div class="nav-item tooltip" onclick="location.href='https://github.com/Redminer9630de/Redminer9630/issues'" style="cursor: pointer;">
-        <img src="images/icons/feedback.webp" class="nav-icon" alt="Feedback geben (GitHub)" />
+      <div class="nav-item tooltip" style="cursor: pointer;">
+        <img onclick="location.href='https://github.com/Redminer9630de/Redminer9630/issues'" src="images/icons/feedback.webp" class="nav-icon" alt="Feedback geben (GitHub)" />
         <span class="tooltiptext">Feedback geben (GitHub)</span>
       </div>
     </nav>
