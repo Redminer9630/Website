@@ -83,19 +83,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  function showLeftIcons() {
-    document.querySelectorAll('.icon-left').forEach(el => {
-      el.style.visibility = 'visible';
-      el.style.position = '';
-    });
+function showLeftIcons() {
+  const left = document.getElementById("left-icons");
+  if (left) {
+    left.style.visibility = 'visible';
+    left.style.position = '';
   }
+}
 
-  function hideLeftIcons() {
-    document.querySelectorAll('.icon-left').forEach(el => {
-      el.style.visibility = 'hidden';
-      el.style.position = 'absolute';
-    });
+function hideLeftIcons() {
+  const left = document.getElementById("left-icons");
+  if (left) {
+    left.style.visibility = 'hidden';
+    left.style.position = 'absolute';
   }
+}
 
   function closeSearch() {
     searchOpen = false;
