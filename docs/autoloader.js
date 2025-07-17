@@ -36,9 +36,9 @@ const noti = (type, ...msg) => {
 };
 
 window.CommonVersion = {
-	version: 'v1.0.0',
-	date: '15.7.25',
-	time: '12:47'
+	version: 'v1.0.1',
+	date: '17.7.25',
+	time: '19:57'
 };
 
 Promise.all([
