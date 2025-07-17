@@ -20,7 +20,7 @@ Falls du Verbesserungsvorschläge hast oder Fehler entdeckst, kannst du diese im
 Dieses Repository enthält Dateien, die für den Betrieb der Website notwendig sind. Dazu gehören:
 - HTML-, CSS- und JavaScript-Dateien
 - Automatisierungs- und CI/CD-Setups (mit GitHub Actions)
-- Das Backend wird auf Replit gehostet
+- Das Backend wird auf ###### gehostet
 
 ## ⚙️ Lizenz
 
