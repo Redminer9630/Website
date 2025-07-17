@@ -1,0 +1,23 @@
+name: Sync to Personal Repo
+
+on:
+  push:
+    branches:
+      - main  # Anpassen auf deinen Branch
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Org Repo
+      uses: actions/checkout@v3
+
+    - name: Push to Personal Repo
+      env:
+        PERSONAL_REPO_TOKEN: ${{ secrets.PERSONAL_REPO_TOKEN }}
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git remote add personal https://x-access-token:${PERSONAL_REPO_TOKEN}@github.com/DEIN_USER/DEIN_PERSONAL_REPO.git
+        git push personal HEAD:main --force
