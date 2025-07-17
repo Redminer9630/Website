@@ -36,6 +36,6 @@ Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](
 
 ### Ein Wuffi:
 
-![Wuffi](images/wuffi.jpg)
+![Wuffi](docs/images/wuffi.jpg)
 
 © 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. Seit 29.08.24
