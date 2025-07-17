@@ -34,3 +34,32 @@ input:checked+.slider:before{transform:translateX(22px);}
 .linkbox::-webkit-scrollbar-track{background-color:#f1f1f1;}
 #search-section{display:flex;align-items:center;height:100%;}
 #search{height:30px;padding:0 10px;font-size:14px;border-radius:5px;border:1px solid #aaa;font-family:'Mojangles';line-height:30px;box-sizing:border-box;}
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: max-content;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 5px;
+      padding: 5px 10px;
+      position: absolute;
+      z-index: 1000000000;
+      white-space: nowrap;
+      font-family: 'Mojangles';
+      font-size: 0.9rem;
+      top: 50%;
+      left: 105%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
