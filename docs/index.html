@@ -78,9 +78,9 @@
   </header>
 
   <main>
-    <br />
+    <br>
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2></noscript>
-    <br />
+    <br>
     <section id="about">
       <h1 class="h2">Über Redminer9630</h1>
       <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
@@ -90,7 +90,7 @@
     <section>
       <h2>Schreck um Mitternacht – MC Freunde Fanstory</h2>
       <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
-      <button onclick="location.href='doc/mcfreundefanstory'">Geschichte lesen</button>
+      <button onclick="location.href='mcfreundefanstory'">Geschichte lesen</button>
     </section>
 
     <section>
@@ -105,31 +105,15 @@ document.addEventListener("DOMContentLoaded", function () {
   let initialized = false;
 
   function activateSearch() {
-    if (initialized) return;
-    initialized = true;
-    searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche..."><span style="left: auto; right: 105%; top: 50%; transform: translateY(-50%); class="tooltiptext">Suchleiste anzeigen</span>';
+    if (initialized) return; initialized = true; searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche...">';
     const tooltips = document.querySelectorAll('.tooltip, .tooltiptext'); tooltips.forEach(el => { el.style.visibility = 'hidden'; });
-    const input = document.getElementById("search");
-    input.focus();
-    
-    input.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const query = input.value.trim();
-        if (query) window.location.href = "search?q=" + encodeURIComponent(query);
-      }
-    });
+    const input = document.getElementById("search"); input.focus();
+    input.addEventListener("keypress", function (e) { if (e.key === "Enter") { e.preventDefault(); const query = input.value.trim(); if (query) window.location.href = "search?q=" + encodeURIComponent(query); } });
   }
-
-  function setupSearchIcon() {
-    searchSection.innerHTML = '<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">';
-    document.getElementById("search-icon").addEventListener("click", activateSearch);
-  }
-
+  function setupSearchIcon() {searchSection.innerHTML = '<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">';document.getElementById("search-icon").addEventListener("click", activateSearch);}
   window.innerWidth <= 768 ? setupSearchIcon() : activateSearch();
 });
-</script>
-<script>
+</script><script>
 document.addEventListener("DOMContentLoaded", function () {
   const referrer = document.referrer.toLowerCase();
 
