@@ -83,19 +83,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function showLeftIcons() {
+    document.querySelectorAll('.icon-left').forEach(el => {
+      el.style.visibility = 'visible';
+      el.style.position = '';
+    });
+  }
+
+  function hideLeftIcons() {
+    document.querySelectorAll('.icon-left').forEach(el => {
+      el.style.visibility = 'hidden';
+      el.style.position = 'absolute';
+    });
+  }
+
   function closeSearch() {
     searchOpen = false;
     setupSearchIcon();
     showTooltips();
+    showLeftIcons();
   }
 
   function activateSearch() {
     searchOpen = true;
     searchSection.innerHTML = `
       <img src="images/icons/search.webp" class="invert" alt="Suche schließen" id="search-toggle" style="width:32px;height:32px;cursor:pointer; margin-right:5px;">
-      <input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; max-width: 150px;">
+      <input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; max-width: 150px; min-width: 80px; flex-shrink: 1;">
     `;
     hideTooltips();
+    hideLeftIcons();
 
     document.getElementById("search-toggle").addEventListener("click", closeSearch);
 
@@ -135,9 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  hideTooltips();
 });
-hideTooltips();
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const referrer = document.referrer.toLowerCase();
