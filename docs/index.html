@@ -98,22 +98,39 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button>
     </section>
   </main>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
   let initialized = false;
 
   function activateSearch() {
-    if (initialized) return; initialized = true; searchSection.innerHTML = '<input type="text" id="search" placeholder="Suche...">';
-    const tooltips = document.querySelectorAll('.tooltip, .tooltiptext'); tooltips.forEach(el => { el.style.visibility = 'hidden'; });
-    const input = document.getElementById("search"); input.focus();
-    input.addEventListener("keypress", function (e) { if (e.key === "Enter") { e.preventDefault(); const query = input.value.trim(); if (query) window.location.href = "search?q=" + encodeURIComponent(query); } });
+    if (initialized) return;
+    initialized = true;
+
+    searchSection.innerHTML = `<img src="images/icons/search.webp" class="invert" alt="Suche" style="width:32px;height:32px;cursor:pointer; margin-right:5px;"><input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px;">`;
+
+    const tooltipTexts = document.querySelectorAll('.tooltiptext');
+    tooltipTexts.forEach(el => { el.style.visibility = 'hidden'; });
+
+    const input = document.getElementById("search");
+    input.focus();
+    input.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const query = input.value.trim();
+        if (query) window.location.href = "search?q=" + encodeURIComponent(query);
+      }
+    });
   }
-  function setupSearchIcon() {searchSection.innerHTML = '<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">';document.getElementById("search-icon").addEventListener("click", activateSearch);}
-  window.innerWidth <= 768 ? setupSearchIcon() : activateSearch();
-});
-</script><script>
+
+  function setupSearchIcon() {
+    searchSection.innerHTML = '<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">';
+    document.getElementById("search-icon").addEventListener("click", activateSearch);
+  }
+
+  if (window.innerWidth <= 768) {setupSearchIcon();} else {activateSearch();}});
+</script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   const referrer = document.referrer.toLowerCase();
 
