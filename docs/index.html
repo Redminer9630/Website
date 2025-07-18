@@ -12,37 +12,16 @@
 <body>
 <header>
   <nav class="icon-left" aria-label="Hauptnavigation" style="display: flex; align-items: center; gap: 15px;">
-    <div class="logo-static tooltip" style="cursor: default;">
-      <img src="favicon/apple-touch-icon.webp" class="logo-icon" alt="Einführung" />
-      <span class="tooltiptext">Einführung</span>
-    </div>
-    <div class="nav-item tooltip" onclick="location.href='projects'" style="cursor: pointer;">
-      <img src="images/icons/downloads.webp" class="nav-icon" alt="Download" />
-      <span class="tooltiptext">Download</span>
-    </div>
-    <div class="nav-item tooltip" onclick="location.href='tools'" style="cursor: pointer;">
-      <img src="images/icons/tools.webp" class="nav-icon" alt="Tools" />
-      <span class="tooltiptext">Tools</span>
-    </div>
-    <div class="nav-item tooltip" onclick="location.href='linktree'" style="cursor: pointer;">
-      <img src="images/tree.webp" class="nav-icon" alt="Linktree" />
-      <span class="tooltiptext">Linktree</span>
-    </div>
-    <div class="nav-item tooltip" onclick="location.href='manual'" style="cursor: pointer;">
-      <img src="images/icons/about.webp" class="nav-icon" alt="Benutzerhandbuch" />
-      <span class="tooltiptext">Benutzerhandbuch</span>
-    </div>
-    <div class="nav-item tooltip" style="cursor: pointer;">
-      <img onclick="location.hhttps://play.google.com/store/apps/details?id=com.androidbull.incognito.browserref='https://github.com/Redminer9630de/Redminer9630/issues'" src="images/icons/feedback.webp" class="nav-icon" alt="Feedback geben (GitHub)" />
-      <span class="tooltiptext">Feedback geben (GitHub)</span>
-    </div>
+    <div class="logo-static"><img src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
+    <div class="nav-item" onclick="location.href='projects'" style="cursor: pointer;"><img src="images/icons/downloads.webp" class="nav-icon" mctip="Projekte" /></div>
+    <div class="nav-item" onclick="location.href='tools'" style="cursor: pointer;"><img src="images/icons/tools.webp" class="nav-icon" mctip="Tools" /></div>
+    <div class="nav-item" onclick="location.href='linktree'" style="cursor: pointer;"><img src="images/tree.webp" class="nav-icon" mctip="Linktree" /></div>
+    <div class="nav-item" onclick="location.href='manual'" style="cursor: pointer;"><img src="images/icons/about.webp" class="nav-icon" mctip="Benutzerhandbuch(Bald Wiki)" /></div>
+    <div class="nav-item" onclick="location.href='https://github.com/Redminer9630de/Redminer9630/issues'"><img src="images/icons/feedback.webp" class="nav-icon" mctip="Feedback geben oder Bug melden (GitHub)" /></div>
   </nav>
   <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; padding: 0 20px; max-width: 100%; flex-wrap: wrap;">
     <div id="search-section"></div>
-    <div class="tooltip" style="cursor: pointer;" onclick="location.href='settings'">
-      <img src="images/icons/settings.webp" class="account-icon" style="width: auto;" alt="Einstellungen öffnen" />
-      <span class="tooltiptext" style="left: auto; right: 105%; top: 50%; transform: translateY(-50%);">Einstellungen öffnen</span>
-    </div>
+    <div style="cursor: pointer;" onclick="location.href='settings'"><img src="images/icons/settings.webp" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
   </div>
 </header>
 <main>
@@ -50,7 +29,7 @@
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2></noscript>
     <br>
     <section id="about">
-      <h1 class="h2" mctip="Hallo Welt">Über Redminer9630</h1>
+      <h1 class="h2">Über Redminer9630</h1>
       <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
       <button onclick="location.href='manual?q=about'">Mehr über mich erfahren</button>
     </section>
