@@ -25,6 +25,12 @@ const style = `
 }
 `;
 
+function injectStyle() {
+  const styleElement = document.createElement("style");
+  styleElement.textContent = style;
+  document.head.appendChild(styleElement);
+}
+
 function moveTooltip(x, y) {
   tooltip.style.left = `${x}px`;
   tooltip.style.top = `${y}px`;
