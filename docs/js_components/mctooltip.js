@@ -25,30 +25,28 @@ const style = `
 }
 `;
 
-function injectStyle() {
-  const s = document.createElement('style');
-  s.textContent = style;
-  document.head.appendChild(s);
-}
+function moveTooltip(x, y) {
+  tooltip.style.left = `${x}px`;
+  tooltip.style.top = `${y}px`;
 
-let currentTooltip = null;
-let currentElement = null;
-
-function moveTooltip(e, tooltip) {
   const rect = tooltip.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+
   const margin = 8;
-  const vpW = window.innerWidth;
-  const vpH = window.innerHeight;
 
-  let left = e.clientX + margin;
-  let top = e.clientY - 12;
+  let left = x;
+  let top = y;
 
-  if (left + rect.width > vpW) {
-    left = e.clientX - rect.width - margin;
+  const fitsRight = (x + rect.width + margin) <= vw;
+  const fitsLeft = (x - rect.width - margin) >= 0;
+
+  if (fitsRight) { left = x + margin; } else if (fitsLeft) { left = x - rect.width - margin; } else {
+    left = Math.max(margin, (vw - rect.width) / 2);
+    top = y + rect.height + margin; // weiter nach unten, als "Zeilenumbruch"
+    if (top + rect.height > vh) { top = y - rect.height - margin; }
   }
-  if (top < 0) {
-    top = e.clientY + 12;
-  }
+  if (top < margin) { top = margin; }
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
