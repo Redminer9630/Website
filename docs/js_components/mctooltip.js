@@ -108,5 +108,6 @@ function createTooltip(el, text) {
 export function initMinecraftTooltips() {
   const elements = document.querySelectorAll('[mctip]');
   if (!elements.length) return;
+  injectStyle();
   elements.forEach(el => createTooltip(el, el.getAttribute('mctip')));
 }
