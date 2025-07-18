@@ -46,12 +46,12 @@ Promise.all([
 	//import('/js_components/modals.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
-    import('/js_components/mctooltip.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
 	//import('/js_components/modal9630.js'),
-	import('/js_components/embed.js')
+	import('/js_components/embed.js'),
+    import('/js_components/mctooltip.js')
 ]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip]) => {
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
@@ -69,6 +69,7 @@ Promise.all([
 		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
 	});
+    mctip.initMinecraftTooltips();
 }).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
 document.addEventListener('DOMContentLoaded', () => {
