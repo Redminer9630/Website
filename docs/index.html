@@ -50,18 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
   let searchOpen = false;
 
-  function showTooltips() {
-    document.querySelectorAll('.tooltiptext').forEach(el => {
-      el.style.visibility = 'visible';
-    });
-  }
-
-  function hideTooltips() {
-    document.querySelectorAll('.tooltiptext').forEach(el => {
-      el.style.visibility = 'hidden';
-    });
-  }
-
 function showLeftIcons() {
   const left = document.getElementById("left-icons");
   if (left) {
@@ -91,7 +79,6 @@ function hideLeftIcons() {
       <img src="images/icons/search.webp" class="invert" alt="Suche schließen" id="search-toggle" style="width:32px;height:32px;cursor:pointer; margin-right:5px;">
       <input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; max-width: 150px; min-width: 80px; flex-shrink: 1;">
     `;
-    hideTooltips();
     hideLeftIcons();
 
     document.getElementById("search-toggle").addEventListener("click", closeSearch);
