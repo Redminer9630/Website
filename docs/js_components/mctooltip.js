@@ -6,10 +6,6 @@ export function initMinecraftTooltips() {
 
   const style = document.createElement('style');
   style.textContent = `
-@font-face {
-  font-family: 'Mojangles';
-  src: url('minecraft_font.woff2') format('woff2');
-}
 .mc-tooltip {
   position: fixed;
   display: none;
