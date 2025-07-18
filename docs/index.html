@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    searchSection.innerHTML = `<img src="images/icons/search.webp" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
     document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
-    if (typeof initMCTooltips === "function") initMCTooltips();
+    if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
   function setupDesktopSearchInput() {
