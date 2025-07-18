@@ -51,12 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `
-      <img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">
-    `;
-    document.getElementById("search-icon").addEventListener("click", function () {
-      window.location.href = "search";
-    });
+    searchSection.innerHTML = `<img src="images/icons/search.webp" class="invert" alt="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
+    if (typeof initMCTooltips === "function") initMCTooltips();
   }
 
   function setupDesktopSearchInput() {
@@ -71,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (query) window.location.href = "search?q=" + encodeURIComponent(query);
       }
     });
+    if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
   if (window.innerWidth <= 768) {
