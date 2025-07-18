@@ -11,10 +11,10 @@ export function initMinecraftTooltips() {
   display: none;
   pointer-events: none;
   z-index: 9999;
-  background-color: #150b1a; /* äußerer schwarzer Rahmen */
+  background-color: #150b1a;
 }
 .mc-inner {
-  background-color: #2e0059; /* lila */
+  background-color: #2e0059;
   padding: 3px;
   border-radius: 0;
 }
