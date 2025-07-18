@@ -11,10 +11,10 @@ export function initMinecraftTooltips() {
   display: none;
   pointer-events: none;
   z-index: 9999;
-  background-color: #150b1a; /* äußerer schwarzer Rahmen */
+  background-color: #150b1a;
 }
 .mc-inner {
-  background-color: #2e0059; /* lila */
+  background-color: #2e0059;
   padding: 3px;
   border-radius: 0;
 }
@@ -29,40 +29,48 @@ export function initMinecraftTooltips() {
 `;
   document.head.appendChild(style);
 
-  // Suche alle Elemente mit "mctip"-Attribut
   const elements = document.querySelectorAll('[mctip]');
+  let activeElement = null;
+
+  const show = (text, pageX, pageY) => {
+    tooltip.querySelector('span').textContent = text;
+    tooltip.style.left = `${pageX + 8}px`;
+    tooltip.style.top = `${pageY + 8}px`;
+    tooltip.style.display = 'block';
+  };
+
+  const hide = () => { tooltip.style.display = 'none'; activeElement = null; };
+
+  const onBodyClick = e => { if (!tooltip.contains(e.target) && !activeElement?.contains(e.target)) { hide(); } };
+
   elements.forEach(el => {
-    const show = e => {
-      tooltip.querySelector('span').textContent = el.getAttribute('mctip');
-      tooltip.style.display = 'block';
-      move(e);
-    };
-    const hide = () => tooltip.style.display = 'none';
-    const move = e => {
-      tooltip.style.left = `${e.pageX + 8}px`;
-      tooltip.style.top = `${e.pageY + 8}px`;
-    };
+    const text = el.getAttribute('mctip');
 
-    el.addEventListener('mouseenter', show);
-    el.addEventListener('mousemove', move);
-    el.addEventListener('mouseleave', hide);
-
-    // Touch-Support (antippen → zeigen, zweites Mal → ausblenden)
-    let tooltipVisible = false;
-    el.addEventListener('touchstart', e => {
-      if (tooltipVisible) {
-        hide();
-        tooltipVisible = false;
-      } else {
-        show(e.touches[0]);
-        tooltipVisible = true;
+    el.addEventListener('mouseenter', e => {
+      if (window.innerWidth > 768) {
+        show(text, e.pageX, e.pageY);
+        activeElement = el;
       }
     });
-    el.addEventListener('touchend', () => {
-      setTimeout(() => {
-        hide();
-        tooltipVisible = false;
-      }, 2500); // optional Auto-hide nach 2,5 s
+    el.addEventListener('mousemove', e => {
+      if (window.innerWidth > 768 && tooltip.style.display === 'block') {
+        tooltip.style.left = `${e.pageX + 8}px`;
+        tooltip.style.top = `${e.pageY + 8}px`;
+      }
+    });
+    el.addEventListener('mouseleave', () => { if (window.innerWidth > 768) hide(); });
+
+    el.addEventListener('click', e => {
+      if (window.innerWidth <= 768) {
+        e.stopPropagation();
+        const rect = el.getBoundingClientRect();
+        const pageX = rect.left + rect.width / 2 + window.scrollX;
+        const pageY = rect.top + rect.height / 2 + window.scrollY;
+
+        if (activeElement === el) { hide(); } else { show(text, pageX, pageY); activeElement = el; }
+      }
     });
   });
+
+  document.addEventListener('click', onBodyClick);
 }
