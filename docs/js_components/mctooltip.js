@@ -1,51 +1,72 @@
-const style = `
+export function initMinecraftTooltips() {
+  const tooltip = document.createElement('div');
+  tooltip.className = 'mc-tooltip';
+  tooltip.innerHTML = `<div class="mc-inner"><span></span></div>`;
+  document.body.appendChild(tooltip);
+
+  const style = document.createElement('style');
+  style.textContent = `
+@font-face {
+  font-family: 'Mojangles';
+  src: url('minecraft_font.woff2') format('woff2');
+}
 .mc-tooltip {
-  position: absolute;
+  position: fixed;
   display: none;
   pointer-events: none;
   z-index: 9999;
-
-  font-family: 'Mojangles', monospace;
-  font-size: 16px;
-  line-height: 1;
-  color: #ffffff;
-
-  padding: 4px 6px;
-  background-color: #150b1a;
-
-  box-shadow:
-    -3px 0 #2e0059, -4px 0 #150b1a,
-     3px 0 #2e0059,  4px 0 #150b1a,
-     0 -2px #2e0059, 0 -3px #150b1a,
-     0  3px #2e0059, 0  4px #150b1a;
-
-  white-space: nowrap;
-  user-select: none;
+  background-color: #150b1a; /* äußerer schwarzer Rahmen */
+}
+.mc-inner {
+  background-color: #2e0059; /* lila */
+  padding: 3px;
   border-radius: 0;
 }
+.mc-inner span {
+  display: inline-block;
+  background-color: #150b1a;
+  color: white;
+  font-family: 'Mojangles';
+  font-size: 14px;
+  line-height: 1;
+}
 `;
+  document.head.appendChild(style);
 
-function injectStyle() {
-  const s = document.createElement('style');
-  s.textContent = style;
-  document.head.appendChild(s);
-}
+  // Suche alle Elemente mit "mctip"-Attribut
+  const elements = document.querySelectorAll('[mctip]');
+  elements.forEach(el => {
+    const show = e => {
+      tooltip.querySelector('span').textContent = el.getAttribute('mctip');
+      tooltip.style.display = 'block';
+      move(e);
+    };
+    const hide = () => tooltip.style.display = 'none';
+    const move = e => {
+      tooltip.style.left = `${e.pageX + 8}px`;
+      tooltip.style.top = `${e.pageY + 8}px`;
+    };
 
-function createTooltip(el, text) {
-  const tooltip = document.createElement('div');
-  tooltip.className = 'mc-tooltip';
-  tooltip.textContent = text;
-  document.body.appendChild(tooltip);
+    el.addEventListener('mouseenter', show);
+    el.addEventListener('mousemove', move);
+    el.addEventListener('mouseleave', hide);
 
-  el.addEventListener('mouseenter', () => tooltip.style.display = 'block');
-  el.addEventListener('mouseleave', () => tooltip.style.display = 'none');
-  el.addEventListener('mousemove', e => {
-    tooltip.style.left = `${e.pageX + 8}px`;
-    tooltip.style.top = `${e.pageY - 12}px`; // leicht über Buchstaben
+    // Touch-Support (antippen → zeigen, zweites Mal → ausblenden)
+    let tooltipVisible = false;
+    el.addEventListener('touchstart', e => {
+      if (tooltipVisible) {
+        hide();
+        tooltipVisible = false;
+      } else {
+        show(e.touches[0]);
+        tooltipVisible = true;
+      }
+    });
+    el.addEventListener('touchend', () => {
+      setTimeout(() => {
+        hide();
+        tooltipVisible = false;
+      }, 2500); // optional Auto-hide nach 2,5 s
+    });
   });
-}
-
-export function initMinecraftTooltips() {
-  injectStyle();
-  document.querySelectorAll('[mctip]').forEach(el => { createTooltip(el, el.getAttribute('mctip')); });
 }
