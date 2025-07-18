@@ -31,14 +31,16 @@ function injectStyle() {
   document.head.appendChild(styleElement);
 }
 
-function moveTooltip(x, y) {
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y}px`;
+let currentTooltip = null;
+let currentElement = null;
+
+function moveTooltip(e, tooltip) {
+  const x = e.clientX;
+  const y = e.clientY;
 
   const rect = tooltip.getBoundingClientRect();
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-
   const margin = 8;
 
   let left = x;
@@ -47,12 +49,20 @@ function moveTooltip(x, y) {
   const fitsRight = (x + rect.width + margin) <= vw;
   const fitsLeft = (x - rect.width - margin) >= 0;
 
-  if (fitsRight) { left = x + margin; } else if (fitsLeft) { left = x - rect.width - margin; } else {
+  if (fitsRight) {
+    left = x + margin;
+  } else if (fitsLeft) {
+    left = x - rect.width - margin;
+  } else {
     left = Math.max(margin, (vw - rect.width) / 2);
-    top = y + rect.height + margin; // weiter nach unten, als "Zeilenumbruch"
-    if (top + rect.height > vh) { top = y - rect.height - margin; }
+    top = y + rect.height + margin;
+    if (top + rect.height > vh) {
+      top = y - rect.height - margin;
+    }
   }
-  if (top < margin) { top = margin; }
+  if (top < margin) {
+    top = margin;
+  }
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
@@ -62,32 +72,36 @@ function createTooltip(el, text) {
   const tooltip = document.createElement('div');
   tooltip.className = 'mc-tooltip';
   tooltip.textContent = text;
+  tooltip.style.display = 'none';
   document.body.appendChild(tooltip);
+
+  let visible = false;
 
   const show = e => {
     tooltip.style.display = 'block';
     moveTooltip(e, tooltip);
     currentTooltip = tooltip;
     currentElement = el;
+    visible = true;
   };
 
   const hide = () => {
     tooltip.style.display = 'none';
     currentTooltip = null;
     currentElement = null;
+    visible = false;
   };
+
   el.addEventListener('mouseenter', show);
   el.addEventListener('mousemove', e => moveTooltip(e, tooltip));
   el.addEventListener('mouseleave', hide);
-  let visible = false;
 
   el.addEventListener('touchstart', e => {
     e.stopPropagation();
     if (visible) {
-      moveTooltip(e.touches[0], tooltip);
+      hide();
     } else {
       show(e.touches[0]);
-      visible = true;
     }
   });
 
@@ -97,17 +111,14 @@ function createTooltip(el, text) {
       !currentTooltip.contains(evt.target) &&
       !currentElement?.contains(evt.target)
     ) {
-      currentTooltip.style.display = 'none';
-      currentTooltip = null;
-      currentElement = null;
-      visible = false;
+      hide();
     }
   });
 }
 
 export function initMinecraftTooltips() {
+  injectStyle();
   const elements = document.querySelectorAll('[mctip]');
   if (!elements.length) return;
-  injectStyle();
   elements.forEach(el => createTooltip(el, el.getAttribute('mctip')));
 }
