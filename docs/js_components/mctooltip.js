@@ -1,11 +1,11 @@
 const style = `
 .mc-tooltip {
-  position: absolute;
+  position: fixed;
   display: none;
   pointer-events: none;
   z-index: 9999;
 
-  font-family: 'Mojangles', monospace;
+  font-family: 'Mojangles';
   font-size: 16px;
   line-height: 1;
   color: #ffffff;
@@ -31,37 +31,72 @@ function injectStyle() {
   document.head.appendChild(s);
 }
 
+let currentTooltip = null;
+let currentElement = null;
+
+function moveTooltip(e, tooltip) {
+  const rect = tooltip.getBoundingClientRect();
+  const margin = 8;
+  const vpW = window.innerWidth;
+  const vpH = window.innerHeight;
+
+  let left = e.clientX + margin;
+  let top = e.clientY - 12;
+
+  if (left + rect.width > vpW) {
+    left = e.clientX - rect.width - margin;
+  }
+  if (top < 0) {
+    top = e.clientY + 12;
+  }
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+}
+
 function createTooltip(el, text) {
   const tooltip = document.createElement('div');
   tooltip.className = 'mc-tooltip';
   tooltip.textContent = text;
   document.body.appendChild(tooltip);
 
-  const move = e => {
-    tooltip.style.left = `${e.pageX + 8}px`;
-    tooltip.style.top = `${e.pageY - 12}px`;
+  const show = e => {
+    tooltip.style.display = 'block';
+    moveTooltip(e, tooltip);
+    currentTooltip = tooltip;
+    currentElement = el;
   };
 
-  el.addEventListener('mouseenter', e => {
-    tooltip.style.display = 'block';
-    move(e);
-  });
-  el.addEventListener('mousemove', move);
-  el.addEventListener('mouseleave', () => {
+  const hide = () => {
     tooltip.style.display = 'none';
+    currentTooltip = null;
+    currentElement = null;
+  };
+  el.addEventListener('mouseenter', show);
+  el.addEventListener('mousemove', e => moveTooltip(e, tooltip));
+  el.addEventListener('mouseleave', hide);
+  let visible = false;
+
+  el.addEventListener('touchstart', e => {
+    e.stopPropagation();
+    if (visible) {
+      moveTooltip(e.touches[0], tooltip);
+    } else {
+      show(e.touches[0]);
+      visible = true;
+    }
   });
 
-  let tooltipVisible = false;
-  el.addEventListener('touchstart', e => {
-    if (tooltipVisible) {
-      tooltip.style.display = 'none';
-      tooltipVisible = false;
-    } else {
-      tooltip.textContent = text;
-      tooltip.style.display = 'block';
-      tooltip.style.left = `${e.touches[0].pageX + 8}px`;
-      tooltip.style.top = `${e.touches[0].pageY - 12}px`;
-      tooltipVisible = true;
+  document.addEventListener('touchstart', evt => {
+    if (
+      currentTooltip &&
+      !currentTooltip.contains(evt.target) &&
+      !currentElement?.contains(evt.target)
+    ) {
+      currentTooltip.style.display = 'none';
+      currentTooltip = null;
+      currentElement = null;
+      visible = false;
     }
   });
 }
