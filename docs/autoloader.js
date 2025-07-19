@@ -60,7 +60,7 @@ Promise.all([
 	document.querySelectorAll('[data-modal-open]').forEach(btn => {
 		btn.addEventListener('click', () => {
 			const id = btn.getAttribute('data-modal-open');
-			if (typeof Modal?.open === 'function') Modal.open(id);
+			if (typeof Modal?.open == 'function') Modal.open(id);
 			else noti("error", "Modal.open nicht verfügbar");
 		});
 	});
