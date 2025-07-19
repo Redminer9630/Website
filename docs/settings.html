@@ -158,6 +158,7 @@
       document.getElementById("backColor").value = getCookie("backColor") || "#6c757d";
       document.getElementById("showBack").checked = getCookie("showBack") !== "false";
 
+      const get = (k, d = '') => {const m = document.cookie.match(new RegExp('(^| )' + k + '=([^;]+)'));return m ? decodeURIComponent(m[2]) : d;};
       document.getElementById("backBtnColor").value = getCookie("backBtnColor") || "#ff0000";
       document.getElementById("backBtnHover").value = getCookie("backBtnHover") || "#ff0000";
       document.getElementById("backBtnVisible").checked = getCookie("backBtnVisible") !== "true";
