@@ -124,8 +124,8 @@
       color: white;
     }
   </style>
-  <script type="module">
-    import { setCookie, getCookie } from './autoloader.js';
+  <script type="module" src="autoloader.js" defer>
+    import { setCookie, getCookie } from 'autoloader.js';
 
     function applyTheme(theme) {
       document.documentElement.dataset.theme = theme;
@@ -158,7 +158,10 @@
       document.getElementById("backColor").value = getCookie("backColor") || "#6c757d";
       document.getElementById("showBack").checked = getCookie("showBack") !== "false";
 
-      // Footer Checkbox-Felder laden
+      document.getElementById("backBtnColor").value = getCookie("backBtnColor") || "#ff0000";
+      document.getElementById("backBtnHover").value = getCookie("backBtnHover") || "#ff0000";
+      document.getElementById("backBtnVisible").checked = getCookie("backBtnVisible") !== "true";
+
       document.querySelectorAll('.clickable-field').forEach(label => {
         const field = label.dataset.field;
         if (!field) return;
@@ -175,8 +178,10 @@
       setCookie("btnColor", document.getElementById("btnColor").value);
       setCookie("backColor", document.getElementById("backColor").value);
       setCookie("showBack", document.getElementById("showBack").checked);
-
-      // Footer Checkbox-Felder speichern
+      setCookie("backBtnColor", document.getElementById("backBtnColor").value);
+      setCookie("backBtnHover", document.getElementById('backBtnHover').value);
+      setCookie("backBtnText", document.getElementById('backBtnText').value);
+      setCookie("backBtnVisible", document.getElementById('backBtnVisible').checked);
       document.querySelectorAll('.clickable-field').forEach(label => {
         const field = label.dataset.field;
         if (!field) return;
@@ -246,11 +251,13 @@
         <input type="color" id="backColor" />
       </div>
 
-      <h3>Weitere Optionen</h3>
-      <div class="settings-item">
-        <label for="showBack">Zurück-Button anzeigen</label>
-        <input type="checkbox" id="showBack" />
-      </div>
+<h3>Zurück-Button</h3>
+<div class="setting-group">
+  <label>Button-Farbe: <input type="color" id="backBtnColor"></label>
+  <label>Hover-Farbe: <input type="color" id="backBtnHover"></label>
+  <label>Text-Farbe: <input type="color" id="backBtnText"></label>
+  <label><input type="checkbox" id="backBtnVisible"> Sichtbar</label>
+</div>
     </div>
 
     <div class="settings-group">
