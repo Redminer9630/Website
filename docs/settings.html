@@ -160,8 +160,8 @@
       user-select: text;
     }
   </style>
-  <script type="module">
-    import { setCookie, getCookie } from './autoloader.js';
+  <script src="autoloader.js" type="module" defer>
+    import { setCookie, getCookie } from 'autoloader.js';
 
     const footerFieldsData = [
       { key: "copyright", text: "© ${year}", required: true },
