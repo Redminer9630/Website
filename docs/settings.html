@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Einstellungen</title>
   <style>
     :root[data-theme="white"] {
@@ -11,6 +11,11 @@
       --box: #fff;
       --btn: #007bff;
       --back-btn: #6c757d;
+      --required-color: #666;
+      --field-bg: #ddd;
+      --field-selected-bg: #007bff;
+      --field-required-bg: #0056b3;
+      --field-required-selected-bg: #003d80;
     }
     :root[data-theme="dark"] {
       --bg: #121212;
@@ -18,10 +23,15 @@
       --box: #1e1e1e;
       --btn: #007bff;
       --back-btn: #6c757d;
+      --required-color: #aaa;
+      --field-bg: #333;
+      --field-selected-bg: #3399ff;
+      --field-required-bg: #3366cc;
+      --field-required-selected-bg: #254a99;
     }
-
     body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font, 'Mojangles');
@@ -31,7 +41,7 @@
       margin: 50px auto;
       background: var(--box);
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       padding: 20px;
     }
     .header {
@@ -92,45 +102,226 @@
     .back-button {
       margin-top: 10px;
       background-color: var(--back-btn);
-      display: var(--show-back, block);
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-family: var(--font, 'Mojangles');
+      padding: 10px 20px;
+    }
+
+    /* Footer Feld Auswahl Styles */
+    .footer-fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      user-select: none;
+      margin-top: 10px;
+    }
+    .footer-field {
+      padding: 6px 12px;
+      border-radius: 6px;
+      background-color: var(--field-bg);
+      color: var(--text);
+      cursor: pointer;
+      font-family: var(--font, 'Mojangles');
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      border: 1px solid transparent;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .footer-field.selected {
+      background-color: var(--field-selected-bg);
+      color: #fff;
+      border-color: transparent;
+    }
+    .footer-field.required {
+      background-color: var(--field-required-bg);
+      color: var(--required-color);
+      font-weight: 600;
+    }
+    .footer-field.required.selected {
+      background-color: var(--field-required-selected-bg);
+      color: #fff;
+    }
+
+    /* Footer Vorschau */
+    .footer-preview {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      font-family: var(--font, 'Mojangles');
+      padding: 10px;
+      background-color: var(--box);
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      min-height: 40px;
+      white-space: pre-wrap;
+      user-select: text;
     }
   </style>
   <script type="module">
     import { setCookie, getCookie } from './autoloader.js';
 
+    const footerFieldsData = [
+      { key: "copyright", text: "© ${year}", required: true },
+      { key: "trademark", text: "Offizielle Website von Redminer9630", required: false },
+      { key: "rights", text: "– Alle Rechte vorbehalten.", required: false },
+      { key: "version", text: "${version}", required: false },
+      { key: "date", text: "${date}", required: false },
+      { key: "time", text: "${time}", required: false }
+    ];
+
     function applyTheme(theme) {
-      document.documentElement.dataset.theme = theme;
+      if (theme === "white" || theme === "dark") {
+        document.documentElement.dataset.theme = theme;
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
     }
 
     function applyFont(font) {
       document.documentElement.style.setProperty('--font', font);
     }
 
-    function applySettings() {
-      applyTheme(getCookie("theme9630") || "sys");
-      applyFont(getCookie("font9630") || "Mojangles");
-      document.getElementById("theme").value = getCookie("theme9630") || "sys";
-      document.getElementById("font").value = getCookie("font9630") || "Mojangles";
+    function applyColors(bgWhite, bgDark, btnColor, backColor) {
+      const root = document.documentElement;
+      root.style.setProperty('--bg', getCookie("theme9630") === "dark" ? bgDark : bgWhite);
+      root.style.setProperty('--box', getCookie("theme9630") === "dark" ? '#1e1e1e' : '#fff');
+      root.style.setProperty('--btn', btnColor);
+      root.style.setProperty('--back-btn', backColor);
+    }
 
-      document.getElementById("bgWhite").value = getCookie("bgWhite") || "#f4f4f4";
-      document.getElementById("bgDark").value = getCookie("bgDark") || "#121212";
-      document.getElementById("btnColor").value = getCookie("btnColor") || "#007bff";
-      document.getElementById("backColor").value = getCookie("backColor") || "#6c757d";
-      document.getElementById("showBack").checked = getCookie("showBack") !== "false";
+    function applyShowBack(show) {
+      const backBtn = document.querySelector('.back-button');
+      if (backBtn) backBtn.style.display = show ? "inline-block" : "none";
+    }
+
+function buildFooterPreview(selectedKeys) {
+  const now = new Date();
+  const replacements = {
+    year: now.getFullYear(),
+    version: window.CommonVersion?.version || "Version konnte nicht geladen werden",
+    date: window.CommonVersion?.date || "Datum konnte nicht geladen werden",
+    time: window.CommonVersion?.time || "Uhrzeit konnte nicht geladen werden"
+  };
+
+  return selectedKeys.map(key => {
+    const field = footerFieldsData.find(f => f.key === key);
+    if (!field) return "";
+    let text = field.text;
+    Object.entries(replacements).forEach(([k, v]) => {
+      text = text.replace(`\${${k}}`, v);
+    });
+    return text;
+  }).filter(Boolean).join(" ");
+}
+
+    function updateFooterPreview() {
+      const selectedKeys = getSelectedFooterKeys();
+      const previewText = buildFooterPreview(selectedKeys);
+      document.getElementById("footerPreview").textContent = previewText;
+    }
+
+    function getSelectedFooterKeys() {
+      const saved = getCookie("footerFields");
+      if (saved) return saved.split(",");
+      // Wenn nichts gespeichert, mindestens required-Felder auswählen
+      return footerFieldsData.filter(f => f.required).map(f => f.key);
+    }
+
+    function saveFooterFields(selectedKeys) {
+      setCookie("footerFields", selectedKeys.join(","));
+    }
+
+    function toggleFooterField(key, el) {
+      if (el.classList.contains("required")) return; // required nicht deaktivierbar
+
+      const selected = new Set(getSelectedFooterKeys());
+      if (selected.has(key)) selected.delete(key);
+      else selected.add(key);
+
+      saveFooterFields(Array.from(selected));
+      renderFooterFields();
+      updateFooterPreview();
+    }
+
+    function renderFooterFields() {
+      const container = document.getElementById("footerFieldsContainer");
+      container.innerHTML = "";
+      const selected = new Set(getSelectedFooterKeys());
+
+      footerFieldsData.forEach(({ key, text, required }) => {
+        const el = document.createElement("span");
+        el.textContent = text;
+        el.classList.add("footer-field");
+        if (required) el.classList.add("required");
+        if (selected.has(key)) el.classList.add("selected");
+
+        el.addEventListener("click", () => toggleFooterField(key, el));
+
+        container.appendChild(el);
+      });
+    }
+
+    function applySettings() {
+      const theme = getCookie("theme9630") || "white";
+      const font = getCookie("font9630") || "Mojangles";
+      const bgWhite = getCookie("bgWhite") || "#f4f4f4";
+      const bgDark = getCookie("bgDark") || "#121212";
+      const btnColor = getCookie("btnColor") || "#007bff";
+      const backColor = getCookie("backColor") || "#6c757d";
+      const showBack = getCookie("showBack");
+      const showBackBool = showBack === undefined || showBack === "true";
+
+      applyTheme(theme);
+      applyFont(font);
+      applyColors(bgWhite, bgDark, btnColor, backColor);
+      applyShowBack(showBackBool);
+
+      document.getElementById("theme").value = theme;
+      document.getElementById("font").value = font;
+      document.getElementById("bgWhite").value = bgWhite;
+      document.getElementById("bgDark").value = bgDark;
+      document.getElementById("btnColor").value = btnColor;
+      document.getElementById("backColor").value = backColor;
+      document.getElementById("showBack").checked = showBackBool;
+
+      renderFooterFields();
+      updateFooterPreview();
     }
 
     window.saveSettings = function () {
-      setCookie("theme9630", document.getElementById("theme").value);
-      setCookie("font9630", document.getElementById("font").value);
-      setCookie("bgWhite", document.getElementById("bgWhite").value);
-      setCookie("bgDark", document.getElementById("bgDark").value);
-      setCookie("btnColor", document.getElementById("btnColor").value);
-      setCookie("backColor", document.getElementById("backColor").value);
-      setCookie("showBack", document.getElementById("showBack").checked);
-      location.reload();
-    }
+      const theme = document.getElementById("theme").value;
+      const font = document.getElementById("font").value;
+      const bgWhite = document.getElementById("bgWhite").value;
+      const bgDark = document.getElementById("bgDark").value;
+      const btnColor = document.getElementById("btnColor").value;
+      const backColor = document.getElementById("backColor").value;
+      const showBack = document.getElementById("showBack").checked;
+
+      setCookie("theme9630", theme);
+      setCookie("font9630", font);
+      setCookie("bgWhite", bgWhite);
+      setCookie("bgDark", bgDark);
+      setCookie("btnColor", btnColor);
+      setCookie("backColor", backColor);
+      setCookie("showBack", showBack);
+
+      applyTheme(theme);
+      applyFont(font);
+      applyColors(bgWhite, bgDark, btnColor, backColor);
+      applyShowBack(showBack);
+
+      // Footer wird schon live gespeichert on toggle
+      alert("Einstellungen gespeichert!");
+    };
 
     document.addEventListener("DOMContentLoaded", applySettings);
+
+    document.querySelector('.back-button')?.addEventListener('click', () => {
+      history.back();
+    });
   </script>
 </head>
 <body>
@@ -161,25 +352,34 @@
       <h3>Farben</h3>
       <div class="settings-item">
         <label for="bgWhite">Hintergrund Weiß</label>
-        <input type="color" id="bgWhite">
+        <input type="color" id="bgWhite" />
       </div>
       <div class="settings-item">
         <label for="bgDark">Hintergrund Dunkel</label>
-        <input type="color" id="bgDark">
+        <input type="color" id="bgDark" />
       </div>
       <div class="settings-item">
         <label for="btnColor">Button-Farbe</label>
-        <input type="color" id="btnColor">
+        <input type="color" id="btnColor" />
       </div>
       <div class="settings-item">
         <label for="backColor">Zurück-Button-Farbe</label>
-        <input type="color" id="backColor">
+        <input type="color" id="backColor" />
       </div>
 
       <h3>Weitere Optionen</h3>
       <div class="settings-item">
         <label for="showBack">Zurück-Button anzeigen</label>
-        <input type="checkbox" id="showBack">
+        <input type="checkbox" id="showBack" />
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <h2>Footer Felder auswählen</h2>
+      <div id="footerFieldsContainer" class="footer-fields"></div>
+      <div>
+        <strong>Footer Vorschau:</strong>
+        <div id="footerPreview" class="footer-preview"></div>
       </div>
     </div>
 
