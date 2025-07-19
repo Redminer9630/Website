@@ -1,17 +1,28 @@
 export function initHeaderButton() {
   if (location.hostname === 'redminer9630.ddns.net') {
     if (location.pathname === '/' || location.pathname === '/index.html') return;
-
     const urlParams = new URLSearchParams(location.search);
     if (urlParams.get('showButton') !== '1') return;
   }
 
+  const getCookie = (key) => {
+    const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+  };
+
+  const btnColor = getCookie('backBtnColor') || '#f44336';
+  const btnHoverColor = getCookie('backBtnHover') || '#e53935';
+  const btnTextColor = getCookie('backBtnText') || '#ffffff';
+  const btnVisible = getCookie('backBtnVisible') !== 'false';
+
+  if (!btnVisible) return;
+
   const style = document.createElement('style');
   style.textContent = `
     :root {
-      --btn-color: #f44336;
-      --btn-hover-color: #e53935;
-      --btn-text-color: #fff;
+      --btn-color: ${btnColor};
+      --btn-hover-color: ${btnHoverColor};
+      --btn-text-color: ${btnTextColor};
     }
 
     .header-link {
