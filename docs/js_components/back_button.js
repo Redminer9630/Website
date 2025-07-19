@@ -1,8 +1,5 @@
 export function initHeaderButton() {
-  // Nur auf deiner primären Domain und bei Unterseiten aktivieren
-  if (location.hostname === 'redminer9630.ddns.net') {
-    if (location.pathname === '/' || location.pathname === '/index.html') return;
-  }
+  if (location.hostname === 'redminer9630.ddns.net') {if (location.pathname === '/' || location.pathname === '/index.html') return;}
   
   const getCookie = (key) => {
     const m = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
