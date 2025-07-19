@@ -1,333 +1,101 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Einstellungen</title>
   <style>
-    :root[data-theme="white"] {
-      --bg: #f4f4f4;
-      --text: #000;
-      --box: #fff;
-      --btn: #007bff;
-      --back-btn: #6c757d;
-    }
-    :root[data-theme="dark"] {
-      --bg: #121212;
-      --text: #fff;
-      --box: #1e1e1e;
-      --btn: #007bff;
-      --back-btn: #6c757d;
-    }
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font, 'Mojangles');
-    }
-    .container {
-      max-width: 1000px;
-      margin: 50px auto;
-      background: var(--box);
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-    .header {
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .settings-group {
-      margin-bottom: 30px;
-    }
-    .settings-group h2 {
-      font-size: 1.25rem;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 5px;
-      margin-bottom: 15px;
-    }
-    .settings-group h3 {
-      font-size: 1.1rem;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-    .settings-item {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-      flex-wrap: wrap;
-    }
-    .settings-item label {
-      font-size: 1rem;
-    }
-    .settings-item input,
-    .settings-item select {
-      margin-left: auto;
-      padding: 5px 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: var(--box);
-      color: var(--text);
-      font-family: var(--font, 'Mojangles');
-    }
-    .save-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: var(--btn);
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: var(--font, 'Mojangles');
-    }
-    .save-button:hover {
-      opacity: 0.9;
-    }
-    .back-button {
-      margin-top: 10px;
-      background-color: var(--back-btn);
-      display: var(--show-back, block);
-    }
-
-    /* Neue Styles für Footer Checkbox-ähnliche Felder */
-    .clickable-field {
-      user-select: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      background-color: #777;
-      color: #eee;
-      cursor: pointer;
-      display: inline-block;
-      min-width: 150px;
-      font-weight: normal;
-      transition: background-color 0.3s ease;
-      margin: 5px 0;
-    }
-    .clickable-field:hover,
-    .clickable-field:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px #aaa;
-    }
-    .clickable-field[aria-checked="true"] {
-      background-color: limegreen;
-      color: black;
-      font-weight: bold;
-    }
-    .clickable-field.required[aria-checked="true"] {
-      background-color: green;
-      color: white;
+    body { font-family: 'Mojangles'; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
+    :root[data-theme="white"] { --bg: #f4f4f4; --text: #000; --box: #fff; }
+    :root[data-theme="dark"] { --bg: #121212; --text: #fff; --box: #1e1e1e; }
+    .container { max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
+    .header { font-size: 2rem; font-weight: bold; margin-bottom: 20px; }
+    .settings-group { margin-bottom: 30px; }
+    .settings-group h2 { font-size: 1.25rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+    .settings-item {display: flex;gap: 20px;align-items: center;padding: 10px 0;border-bottom: 1px solid #eee;flex-wrap: wrap;}
+    .settings-item label { font-size: 1rem; }
+    .settings-item input,.settings-item select {margin-left: auto;}
+    .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Mojangles'; }
+    .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Mojangles'; }
+    .save-button:hover { background-color: #0056b3; }
+    @media (min-width: 768px) {
+     body { font-size: 1.2em; }
+     .header { font-size: 2.4rem; }
+     .settings-group h2 { font-size: 1.5rem; }
+     .settings-item label { font-size: 1.2rem; }
+     .settings-item input, .settings-item select { font-size: 1.2rem; max-width: 360px;}
+     .save-button { font-size: 1.2rem; padding: 12px 24px; }
     }
   </style>
-  <script type="module" src="autoloader.js" defer>
+  <script src="autoloader.js" type="module" defer>
     import { setCookie, getCookie } from 'autoloader.js';
 
-    function applyTheme(theme) {
-      document.documentElement.dataset.theme = theme;
-    }
-
-    function applyFont(font) {
-      document.documentElement.style.setProperty('--font', font);
-    }
-
-    function toggleField(event) {
-      const label = event.currentTarget;
-      const isChecked = label.getAttribute('aria-checked') === 'true';
-      label.setAttribute('aria-checked', !isChecked);
-
-      const field = label.dataset.field;
-      if (!field) return;
-      const val = !isChecked ? 'true' : 'false';
-      setCookie(field, val);
-    }
+    function applyTheme(theme) { if (theme === "sys") { const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)"); const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; }; applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme); } else { document.documentElement.dataset.theme = theme; } }
 
     function applySettings() {
-      applyTheme(getCookie("theme9630") || "white");
-      applyFont(getCookie("font9630") || "Mojangles");
-      document.getElementById("theme").value = getCookie("theme9630") || "white";
-      document.getElementById("font").value = getCookie("font9630") || "Mojangles";
+      const theme = getCookie("theme9630") || "sys";
+      const username = getCookie("username") || "";
+      const email = getCookie("email") || "";
 
-      document.getElementById("bgWhite").value = getCookie("bgWhite") || "#f4f4f4";
-      document.getElementById("bgDark").value = getCookie("bgDark") || "#121212";
-      document.getElementById("btnColor").value = getCookie("btnColor") || "#007bff";
-      document.getElementById("backColor").value = getCookie("backColor") || "#6c757d";
-      document.getElementById("showBack").checked = getCookie("showBack") !== "false";
+      applyTheme(theme);
 
-      const get = (k, d = '') => {const m = document.cookie.match(new RegExp('(^| )' + k + '=([^;]+)'));return m ? decodeURIComponent(m[2]) : d;};
-      document.getElementById("backBtnColor").value = getCookie("backBtnColor") || "#ff0000";
-      document.getElementById("backBtnHover").value = getCookie("backBtnHover") || "#ff0000";
-      document.getElementById("backBtnVisible").checked = getCookie("backBtnVisible") !== "true";
-
-      document.querySelectorAll('.clickable-field').forEach(label => {
-        const field = label.dataset.field;
-        if (!field) return;
-        const val = getCookie(field);
-        label.setAttribute('aria-checked', val === 'true' ? 'true' : 'false');
-      });
+      document.getElementById("username").value = username;
+      document.getElementById("email").value = email;
+      document.getElementById("theme").value = theme;
     }
 
-    window.saveSettings = function () {
-      setCookie("theme9630", document.getElementById("theme").value);
-      setCookie("font9630", document.getElementById("font").value);
-      setCookie("bgWhite", document.getElementById("bgWhite").value);
-      setCookie("bgDark", document.getElementById("bgDark").value);
-      setCookie("btnColor", document.getElementById("btnColor").value);
-      setCookie("backColor", document.getElementById("backColor").value);
-      setCookie("showBack", document.getElementById("showBack").checked);
-      setCookie("backBtnColor", document.getElementById("backBtnColor").value);
-      setCookie("backBtnHover", document.getElementById('backBtnHover').value);
-      setCookie("backBtnText", document.getElementById('backBtnText').value);
-      setCookie("backBtnVisible", document.getElementById('backBtnVisible').checked);
-      document.querySelectorAll('.clickable-field').forEach(label => {
-        const field = label.dataset.field;
-        if (!field) return;
-        const val = label.getAttribute('aria-checked') === 'true' ? 'true' : 'false';
-        setCookie(field, val);
-      });
-
-      location.reload();
-    };
+    let isDirty = false;
 
     document.addEventListener("DOMContentLoaded", () => {
       applySettings();
-
-      document.querySelectorAll('.clickable-field').forEach(label => {
-        label.addEventListener('click', toggleField);
-        label.addEventListener('keydown', e => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            toggleField({ currentTarget: e.currentTarget });
-          }
-        });
-      });
+      document.getElementById("username").addEventListener("input", () => isDirty = true);
+      document.getElementById("email").addEventListener("input", () => isDirty = true);
+      document.getElementById("theme").addEventListener("change", () => isDirty = true);
     });
+
+    window.addEventListener("beforeunload", function (e) { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
+
+    window.saveSettings = function () {
+      const theme = document.getElementById("theme").value;
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+
+      setCookie("theme9630", theme);
+      setCookie("username", username);
+      setCookie("email", email);
+
+      applySettings();
+      isDirty = false;
+    };
   </script>
 </head>
 <body>
   <div class="container">
     <div class="header">Einstellungen</div>
-
     <div class="settings-group">
-      <h2>Aussehen</h2>
-
-      <h3>Schrift</h3>
-      <div class="settings-item">
-        <label for="font">Schriftart</label>
-        <select id="font">
-          <option value="Mojangles">Mojangles (Minecraft)</option>
-          <option value="Arial">Arial</option>
-          <option value="sans-serif">Sans Serif</option>
-        </select>
+      <h2>Profil</h2>
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="username">Benutzername</label>
+        <input type="text" id="username" placeholder="Nutzernamen eingeben">
       </div>
-
-      <h3>Theme</h3>
+      <div class="settings-item" title="Achtung! Diese Funktion ist experimentell!">
+        <label for="email">E-Mail</label>
+        <input type="email" id="email" placeholder="E-Mail eingeben">
+      </div>
+    </div>
+    <div class="settings-group">
+      <h2>Allgemein</h2>
       <div class="settings-item">
         <label for="theme">Theme</label>
         <select id="theme">
           <option value="white">Weiß</option>
           <option value="dark">Dunkel</option>
+          <option value="sys">System</option>
         </select>
       </div>
-
-      <h3>Farben</h3>
-      <div class="settings-item">
-        <label for="bgWhite">Hintergrund Weiß</label>
-        <input type="color" id="bgWhite" />
-      </div>
-      <div class="settings-item">
-        <label for="bgDark">Hintergrund Dunkel</label>
-        <input type="color" id="bgDark" />
-      </div>
-      <div class="settings-item">
-        <label for="btnColor">Button-Farbe</label>
-        <input type="color" id="btnColor" />
-      </div>
-      <div class="settings-item">
-        <label for="backColor">Zurück-Button-Farbe</label>
-        <input type="color" id="backColor" />
-      </div>
-
-<h3>Zurück-Button</h3>
-<div class="setting-group">
-  <label>Button-Farbe: <input type="color" id="backBtnColor"></label>
-  <label>Hover-Farbe: <input type="color" id="backBtnHover"></label>
-  <label>Text-Farbe: <input type="color" id="backBtnText"></label>
-  <label><input type="checkbox" id="backBtnVisible"> Sichtbar</label>
-</div>
     </div>
-
-    <div class="settings-group">
-      <h2>Footer Einstellungen</h2>
-
-      <div class="settings-item">
-        <label
-          class="clickable-field required"
-          data-field="footerCopyright"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >© Copyright *</label
-        >
-      </div>
-      <div class="settings-item">
-        <label
-          class="clickable-field"
-          data-field="footerTrademark"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >Trademark</label
-        >
-      </div>
-      <div class="settings-item">
-        <label
-          class="clickable-field"
-          data-field="footerRights"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >Rechte</label
-        >
-      </div>
-      <div class="settings-item">
-        <label
-          class="clickable-field"
-          data-field="footerVersion"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >Version</label
-        >
-      </div>
-      <div class="settings-item">
-        <label
-          class="clickable-field"
-          data-field="footerDate"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >Datum</label
-        >
-      </div>
-      <div class="settings-item">
-        <label
-          class="clickable-field"
-          data-field="footerTime"
-          tabindex="0"
-          role="checkbox"
-          aria-checked="false"
-          >Uhrzeit</label
-        >
-      </div>
-    </div>
-
-    <button class="save-button" onclick="saveSettings()">Speichern</button>
-    <button class="save-button back-button">Zurück</button>
+    <button onclick="saveSettings()" class="save-button">Speichern</button>
   </div>
+  <i color="grey">Einstellungen funktionieren noch nicht richtig!</i>
 </body>
 </html>
