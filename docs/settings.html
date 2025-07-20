@@ -28,12 +28,13 @@
     }
   </style>
   <script src="autoloader.js" type="module" defer>
+  <script type="module">
     import { setCookie, getCookie } from 'autoloader.js';
 
     function applyTheme(theme) { if (theme === "sys") { const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)"); const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; }; applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme); } else { document.documentElement.dataset.theme = theme; } }
 
     function applySettings() {
-      const theme = getCookie("theme9630") || "sys";
+      const theme = localStorage.getItem("theme") || "sys";
       const username = getCookie("username") || "";
       const email = getCookie("email") || "";
 
@@ -60,7 +61,7 @@
       const username = document.getElementById("username").value;
       const email = document.getElementById("email").value;
 
-      setCookie("theme9630", theme);
+      localStorage.setItem("theme", theme);
       setCookie("username", username);
       setCookie("email", email);
 
