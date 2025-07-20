@@ -1,0 +1,81 @@
+version: 2
+updates:
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
+    pull-request-branch-name:
+      separator: "-"
+    groups:
+      js-tools:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+          - "vite*"
+          - "webpack*"
+          - "typescript"
+        update-types:
+          - "minor"
+          - "patch"
+      markdown:
+        patterns:
+          - "markdownlint*"
+      all-others:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "03:00"
+      timezone: "Europe/Berlin"
+    labels:
+      - "ci"
+      - "dependencies"
+    commit-message:
+      prefix: "ci"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker"
+      - "dependencies"
+    commit-message:
+      prefix: "docker"
+    groups:
+      docker-base:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-type: "direct"
+    ignore:
+      - dependency-type: "indirect"
+    security-updates: true
+    commit-message:
+      prefix: "security"
+    labels:
+      - "security"
+      - "dependencies"
+    pull-request-branch-name:
+      separator: "-"
