@@ -2,138 +2,86 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Einstellungen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background: var(--bg, #111);
-      color: var(--fg, #fff);
+      margin: 0;
+      padding: 2rem;
       font-family: Mojangles, Arial, sans-serif;
-      padding: 1em;
     }
-    .custom-select {
-      position: relative;
-      width: 180px;
-      background: #222;
-      border: 1px solid #444;
-      border-radius: 6px;
-      cursor: pointer;
-      color: #fff;
-      user-select: none;
-      margin-bottom: 1em;
+    h1 {
+      margin-bottom: 2rem;
     }
-    .custom-select .selected {
-      padding: 8px;
+    .settings-item {
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    .custom-select .options {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0; right: 0;
-      background: #333;
-      border: 1px solid #444;
-      border-top: none;
-      z-index: 5;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-    .custom-select.open .options {
-      display: block;
-    }
-    .custom-select .options li {
-      padding: 8px;
-      border-top: 1px solid #444;
-    }
-    .custom-select .options li:hover {
-      background: #444;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.3em;
+    select {
+      padding: 0.4rem 0.6rem;
+      font-size: 1rem;
     }
   </style>
+  <script src="autoloader.js" type="module" defer></script>
 </head>
 <body>
-  <h1>Einstellungen</h1>
-  <div class="settings-group">
-    <div class="custom-setting" data-key="theme">
-      <label>Theme</label>
-      <div class="custom-select" data-setting="theme">
-        <div class="selected">–</div>
-        <ul class="options">
-          <li data-value="white">Weiß</li>
-          <li data-value="dark">Dunkel</li>
-          <li data-value="sys">System</li>
-        </ul>
-      </div>
+  <main>
+    <h1>Einstellungen</h1>
+
+    <div class="settings-item">
+      <label for="theme">Design</label>
+      <select id="theme">
+        <option value="dark">Dunkel</option>
+        <option value="light">Hell</option>
+        <option value="sys">System</option>
+      </select>
     </div>
 
-    <div class="custom-setting" data-key="font">
-      <label>Schriftart</label>
-      <div class="custom-select" data-setting="font">
-        <div class="selected">–</div>
-        <ul class="options">
-          <li data-value="Mojangles" mctip="Mojangles ist der offizielle Minecraft Font">Mojangles</li>
-          <li data-value="Arial">Arial</li>
-          <li data-value="sans-serif">Sans Serif</li>
-        </ul>
-      </div>
+    <div class="settings-item">
+      <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
+      <select id="font">
+        <option value="Mojangles">Mojangles</option>
+        <option value="Arial">Arial</option>
+        <option value="Sans-Serif">Sans Serif</option>
+      </select>
     </div>
-  </div>
+  </main>
 
   <script type="module">
-    import { initTooltip } from '/js_components/mctooltip.js';
+    import { applyTheme } from "/js_components/theme.js";
 
-    document.querySelectorAll(".custom-select").forEach(select => {
-      const key = select.dataset.setting;
-      const display = select.querySelector(".selected");
-      const options = select.querySelectorAll("li");
-
-      const saved = localStorage.getItem(key);
-      if (saved) {
-        const match = Array.from(options).find(opt => opt.dataset.value === saved);
-        if (match) display.textContent = match.textContent;
-        select.dataset.value = saved;
-        applySetting(key, saved);
-      }
-
-      select.addEventListener("click", e => {
-        e.stopPropagation();
-        document.querySelectorAll(".custom-select").forEach(s => s.classList.remove("open"));
-        select.classList.add("open");
-      });
-
-      options.forEach(option => {
-        option.addEventListener("click", e => {
-          const val = option.dataset.value;
-          display.textContent = option.textContent;
-          localStorage.setItem(key, val);
-          select.dataset.value = val;
-          select.classList.remove("open");
-          applySetting(key, val);
-        });
-      });
-    });
-
-    document.addEventListener("click", () => {
-      document.querySelectorAll(".custom-select").forEach(s => s.classList.remove("open"));
-    });
-
-    function applySetting(key, value) {
-      if (key === "theme") {
-        if (value === "sys") {
-          const mq = matchMedia("(prefers-color-scheme: dark)");
-          const apply = () => document.documentElement.dataset.theme = mq.matches ? "dark" : "white";
-          apply(); mq.onchange = apply;
-        } else {
-          document.documentElement.dataset.theme = value;
-        }
-      } else if (key === "font") {
-        document.body.style.fontFamily = value + ", Arial, sans-serif";
-      }
+    function applyFont(font) {
+      document.body.style.fontFamily = font;
     }
 
-    initMinecraftTooltip();
+    function applySettings() {
+      const theme = localStorage.getItem("theme") || "sys";
+      const font = localStorage.getItem("font") || "Mojangles";
+
+      document.getElementById("theme").value = theme;
+      document.getElementById("font").value = font;
+
+      applyTheme(theme);
+      applyFont(font);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySettings();
+
+      document.getElementById("theme").addEventListener("change", e => {
+        const theme = e.target.value;
+        localStorage.setItem("theme", theme);
+        applyTheme(theme);
+      });
+
+      document.getElementById("font").addEventListener("change", e => {
+        const font = e.target.value;
+        localStorage.setItem("font", font);
+        applyFont(font);
+      });
+    });
   </script>
 </body>
 </html>
