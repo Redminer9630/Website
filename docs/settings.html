@@ -31,7 +31,13 @@
   <script type="module">
     import { setCookie, getCookie } from 'autoloader.js';
 
-    function applyTheme(theme) { if (theme === "sys") { const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)"); const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; }; applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme); } else { document.documentElement.dataset.theme = theme; } }
+function applyTheme(theme) {
+  if (theme === "sys") {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const applySystemTheme = () => { document.documentElement.dataset.theme = mediaQuery.matches ? "dark" : "white"; };
+    applySystemTheme(); mediaQuery.addEventListener("change", applySystemTheme);
+  } else { document.documentElement.dataset.theme = theme; }
+}
 
     function applySettings() {
       const theme = localStorage.getItem("theme") || "sys";
