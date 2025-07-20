@@ -1,0 +1,35 @@
+name: Convert prefers-color-scheme to data-theme
+on: workflow_dispatch
+
+jobs:
+  convert-theme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y ripgrep
+
+      - name: Replace @media prefers-color-scheme with :root[data-theme]
+        run: |
+          rg -l '@media\s*\(prefers-color-scheme:\s*(dark|light)\)' --glob '**/*.{css,html,js}' | while read -r file; do
+            echo "Converting $file"
+            sed -E -i '
+              /@media[^{]*\(prefers-color-scheme:\s*(dark|light)\)/{
+                :a
+                N
+                /}/!ba
+                s/@media[^{]*\(prefers-color-scheme:\s*(dark|light)\)\s*{([^{}]*{[^{}]*}[^}]*)}/:root[data-theme="\1"] \2/g
+              }
+            ' "$file"
+          done
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git commit -am "Convert prefers-color-scheme to data-theme"
+          git push
