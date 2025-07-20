@@ -43,19 +43,20 @@ window.CommonVersion = {
 
 Promise.all([
 	import('/js_components/elements.js'),
-	//import('/js_components/modals.js'),
 	import('/js_components/tooltip.js'),
 	import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
-	//import('/js_components/modal9630.js'),
 	import('/js_components/embed.js'),
-    import('/js_components/mctooltip.js')
+	import('/js_components/mctooltip.js')
 ]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip]) => {
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
+
+	const savedFont = localStorage.getItem("font") || "Mojangles";
+	document.documentElement.setAttribute("data-font", savedFont);
 
 	document.querySelectorAll('[data-modal-open]').forEach(btn => {
 		btn.addEventListener('click', () => {
@@ -69,7 +70,7 @@ Promise.all([
 		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
 	});
-    mctip.initMinecraftTooltips();
+	mctip.initMinecraftTooltips();
 }).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -80,15 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	footer.classList.add("fixed-footer");
 	document.body.style.paddingBottom = "60px";
 	document.body.appendChild(footer);
-
-    document.querySelectorAll('br[height]').forEach(br => {const height = parseInt(br.getAttribute('height')) || 0;const spacer = document.createElement('div');spacer.style.height = `${height}px`;br.replaceWith(spacer);});
+	document.querySelectorAll('br[height]').forEach(br => {const height = parseInt(br.getAttribute('height')) || 0;const spacer = document.createElement('div');spacer.style.height = `${height}px`;br.replaceWith(spacer);});
 	
-    const footerCSS = document.createElement('style');
+	const footerCSS = document.createElement('style');
 	footerCSS.textContent = `footer .footer-text{font-size:14px;display:block;padding:0 10px;word-wrap:break-word}@media(max-width:480px){footer .footer-text{font-size:11px}}footer.fixed-footer{position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;text-align:center}`;
 	document.head.appendChild(footerCSS);
-    
+	
 	const fontStyle = document.createElement("style");
-	fontStyle.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} body{font-family:'Mojangles', Arial;}`;
+	fontStyle.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontStyle);
 
 	if (location.pathname !== '/' && location.pathname !== '/index.html') {
@@ -118,23 +118,23 @@ function loadCaptcha(callback) {
 }
 
 function adjustContentSpacingGlobally() {
-  if (window.innerWidth > 768) return;
+	if (window.innerWidth > 768) return;
 
-  const content = document.getElementById("content");
-  if (!content) return;
+	const content = document.getElementById("content");
+	if (!content) return;
 
-  while (content.lastChild && content.lastChild.tagName === 'BR') {content.removeChild(content.lastChild);}
+	while (content.lastChild && content.lastChild.tagName === 'BR') {content.removeChild(content.lastChild);}
 
-  const bottomOffset = 65;
-  let contentRect = content.getBoundingClientRect();
-  const viewportHeight = window.innerHeight;
+	const bottomOffset = 65;
+	let contentRect = content.getBoundingClientRect();
+	const viewportHeight = window.innerHeight;
 
-  while (contentRect.bottom > (viewportHeight - bottomOffset)) {
-    content.appendChild(document.createElement('br'));
-    const newRect = content.getBoundingClientRect();
-    if (newRect.bottom === contentRect.bottom) break;
-    contentRect = newRect;
-  }
+	while (contentRect.bottom > (viewportHeight - bottomOffset)) {
+		content.appendChild(document.createElement('br'));
+		const newRect = content.getBoundingClientRect();
+		if (newRect.bottom === contentRect.bottom) break;
+		contentRect = newRect;
+	}
 }
 
 window.addEventListener('load', adjustContentSpacingGlobally);
