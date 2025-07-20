@@ -48,38 +48,39 @@
       </select>
     </div>
   </main>
+<script type="module">
+  import { applyTheme } from "/js_components/theme.js";
 
-  <script type="module">
-    import { applyTheme } from "/js_components/theme.js";
+  function applyFont(font) {
+    document.documentElement.setAttribute("data-font", font);
+  }
 
-    function applyFont(font) {document.documentElement.setAttribute("data-font", font);}
+  function applySettings() {
+    const theme = localStorage.getItem("theme") || "sys";
+    const font = localStorage.getItem("font") || "Mojangles";
 
-    function applySettings() {
-      const theme = localStorage.getItem("theme") || "sys";
-      const font = localStorage.getItem("font") || "Mojangles";
+    document.getElementById("theme").value = theme;
+    document.getElementById("font").value = font;
 
-      document.getElementById("theme").value = theme;
-      document.getElementById("font").value = font;
+    applyTheme(theme);
+    applyFont(font);
+  }
 
+  document.addEventListener("DOMContentLoaded", () => {
+    applySettings();
+
+    document.getElementById("theme").addEventListener("change", e => {
+      const theme = e.target.value;
+      localStorage.setItem("theme", theme);
       applyTheme(theme);
-      applyFont(font);
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      applySettings();
-
-      document.getElementById("theme").addEventListener("change", e => {
-        const theme = e.target.value;
-        localStorage.setItem("theme", theme);
-        applyTheme(theme);
-      });
-
-      document.getElementById("font").addEventListener("change", e => {
-        const font = e.target.value;
-        localStorage.setItem("font", font);
-        applyFont(font);
-      });
     });
-  </script>
+
+    document.getElementById("font").addEventListener("change", e => {
+      const font = e.target.value;
+      localStorage.setItem("font", font);
+      applyFont(font);
+    });
+  });
+</script>
 </body>
 </html>
