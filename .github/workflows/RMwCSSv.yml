@@ -1,17 +1,42 @@
-name: Replace Mojangles with CSS var
+name: Replace Mojangles with CSS var and create PR
 
 on:
   workflow_dispatch:
 
 jobs:
-  font-replace:
+  font-replace-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Replace Mojangles in font-family
+      - name: Set Git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+      - name: Replace Mojangles in CSS, HTML, JS files
         run: |
           find . -type f \( -name '*.css' -o -name '*.html' -o -name '*.js' \) -print0 | while IFS= read -r -d '' file; do
             perl -pi -e 's/(font[- ]*family[^;:\n]*?)["'\''`]Mojangles["'\''`]?(?=[,;])/sprintf("%svar(--font-main)", $1)/ge' "$file"
           done
+
+      - name: Create new branch
+        run: |
+          git checkout -b replace-mojangles-varfont-main
+
+      - name: Commit changes
+        run: |
+          git add .
+          git diff --cached --quiet || git commit -m "Replace Mojangles with var(--font-main)"
+
+      - name: Push branch
+        run: git push --set-upstream origin replace-mojangles-varfont-main
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create --title "Replace Mojangles with CSS var" --body "Automatischer PR: Ersetze alle Mojangles mit var(--font-main) in CSS, HTML und JS." --base main --head replace-mojangles-varfont-main
