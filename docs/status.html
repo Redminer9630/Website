@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Status-Dashboard</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #fff; padding: 2rem; }
+    h1 { font-size: 2rem; margin-bottom: 1.5rem; }
+    .service { margin-bottom: 1.2rem; }
+    .component { display: flex; align-items: center; margin-top: 0.4rem; }
+    .component img { width: 20px; height: 20px; margin-right: 0.6rem; }
+    .status-text { font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Status Dashboard</h1>
+
+  <div class="service" id="gh">
+    <strong>GitHub:</strong>
+    <div class="component" id="gh-api"><img src="images/status/unknown.png"><span class="status-text">API Requests</span></div>
+    <div class="component" id="gh-gitops"><img src="images/status/unknown.png"><span class="status-text">Git Operations</span></div>
+    <div class="component" id="gh-pages"><img src="images/status/unknown.png"><span class="status-text">Pages</span></div>
+  </div>
+
+  <div class="service" id="render">
+    <strong>Render:</strong>
+    <div class="component" id="r-api"><img src="images/status/unknown.png"><span class="status-text">API</span></div>
+    <div class="component" id="r-rest"><img src="images/status/unknown.png"><span class="status-text">REST API</span></div>
+  </div>
+
+  <div class="service" id="discord">
+    <strong>Discord:</strong>
+    <div class="component" id="d-status"><img src="images/status/unknown.png"><span class="status-text">Gateway/API</span></div>
+  </div>
+
+  <div class="service" id="mc">
+    <strong>Minecraft Server:</strong>
+    <div class="component" id="mc-status"><img src="images/status/unknown.png"><span class="status-text">Server Status</span></div>
+  </div>
+
+  <div class="service" id="mojang">
+    <strong>Mojang Authserver:</strong>
+    <div class="component" id="mojang-auth"><img src="images/status/unknown.png"><span class="status-text">authserver</span></div>
+  </div>
+
+  <script>
+    const ICON = {
+      online: 'images/status/online.webp',
+      offline: 'images/status/offline.webp',
+      unknown: 'images/status/unknown.webp'
+    };
+
+    function setStatus(elId, status) {
+      const el = document.getElementById(elId);
+      el.querySelector('img').src = ICON[status] || ICON.unknown;
+      el.querySelector('.status-text').textContent += ` — ${status.replace(/_/g, ' ')}`;
+    }
+
+    fetch('https://www.githubstatus.com/api/v2/components.json')
+      .then(res => res.json())
+      .then(data => {
+        data.components.forEach(c => {
+          if (c.name === 'API Requests') setStatus('gh-api', c.status);
+          if (c.name === 'Git Operations') setStatus('gh-gitops', c.status);
+          if (c.name === 'Pages') setStatus('gh-pages', c.status);
+        });
+      }).catch(() => {
+        ['gh-api','gh-gitops','gh-pages'].forEach(id => setStatus(id, 'unknown'));
+      });
+
+    fetch('https://status.render.com/api/v2/components.json')
+      .then(res => res.json())
+      .then(data => {
+        data.components.forEach(c => {
+          if (c.name === 'API') setStatus('r-api', c.status);
+          if (/REST API/i.test(c.name)) setStatus('r-rest', c.status);
+        });
+      }).catch(() => {
+        ['r-api','r-rest'].forEach(id => setStatus(id, 'unknown'));
+      });
+
+    fetch('https://discordstatus.com/api/v2/status.json')
+      .then(res => res.json())
+      .then(d => setStatus('d-status', d.status.indicator || 'unknown'))
+      .catch(() => setStatus('d-status', 'unknown'));
+
+    fetch('https://api.mcsrvstat.us/3/redminer9630.aternos.me')
+      .then(res => res.json())
+      .then(d => setStatus('mc-status', d.online ? 'online' : 'offline'))
+      .catch(() => setStatus('mc-status', 'unknown'));
+
+    fetch('https://minecraftstatus.net')
+      .then(res => res.text())
+      .then(txt => {
+        const auth = txt.match(/auth(?:session|server).+?Looks Operational|Possible Disruption/i);
+        const st = auth && /Operational/i.test(auth[0]) ? 'online' : (auth ? 'offline' : 'unknown');
+        setStatus('mojang-auth', st);
+      })
+      .catch(() => setStatus('mojang-auth', 'unknown'));
+  </script>
+</body>
+</html>
