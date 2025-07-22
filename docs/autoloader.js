@@ -49,8 +49,9 @@ Promise.all([
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
 	import('/js_components/embed.js'),
-	import('/js_components/mctooltip.js')
-]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip]) => {
+	import('/js_components/mctooltip.js'),
+    import('/js_components/framework.css')
+]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip, framecss]) => {
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
