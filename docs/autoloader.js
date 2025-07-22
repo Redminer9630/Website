@@ -36,9 +36,9 @@ const noti = (type, ...msg) => {
 };
 
 window.CommonVersion = {
-	version: 'v1.0.1',
-	date: '17.7.25',
-	time: '19:57'
+	version: 'v1.0.2',
+	date: '23.7.25',
+	time: '00:34'
 };
 
 Promise.all([
@@ -51,7 +51,7 @@ Promise.all([
 	import('/js_components/embed.js'),
 	import('/js_components/mctooltip.js')
 ]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip]) => {
-    const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
+    //const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
     
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
