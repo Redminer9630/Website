@@ -1,4 +1,4 @@
-button: {
+button {
       font-family: 'Mojangles';
       font-size: 16px;
       text-decoration: none;
@@ -16,4 +16,4 @@ button: {
       justify-content: center;
       z-index: 1000;
 }
-button:hover{ background-color: #558B2F; }
+button:hover { background-color: #558B2F; }
