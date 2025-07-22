@@ -2,11 +2,8 @@ button {
       font-family: 'Mojangles';
       font-size: 16px;
       text-decoration: none;
-      padding: 10px 20px;
       border-radius: 8px;
       position: fixed;
-      top: 20px;
-      right: 20px;
       background-color: #7CB342;
       color: 'white';
       cursor: pointer;
