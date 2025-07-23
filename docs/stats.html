@@ -1,2 +1,87 @@
-<!doctype><html><head><title>GitHub Status</title></head><body><div id="github-container"></div>
-<script>const usernames = ["Redminer9630de", "Redminer9630", "Redminer9630GitHub", "TheAnonym3000"];const container = document.getElementById("github-container");usernames.forEach(user => {const img = document.createElement("img");img.src = `https://github-readme-stats.vercel.app/api?username=${user}&show_icons=true&theme=github_dark`;img.alt = `GitHub Stats von ${user}`;img.style.display = "block";container.appendChild(img);});</script></body></html>
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Status</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card {
+      border: 3px solid transparent;
+      border-radius: 10px;
+      margin: 1rem;
+      overflow: hidden;
+      transition: border 0.3s, transform 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .highlight {
+      border-color: gold;
+      transform: scale(1.03);
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>GitHub Profilstatus</h1>
+  <div id="github-container"></div>
+
+  <script>
+    const usernames = ["Redminer9630de", "Redminer9630GitHub", "TheAnonym3000"];
+    const container = document.getElementById("github-container");
+
+    const rankOrder = ["S+", "S", "A+", "A", "B+", "B", "C"]; // von gut nach schlecht
+    const cards = [];
+
+    function extractRank(svgText) {
+      const match = svgText.match(/>(S\+|S|A\+|A|B\+|B|C)</);
+      return match ? match[1] : "C"; // fallback
+    }
+
+    async function loadUser(user) {
+      const url = `https://github-readme-stats.vercel.app/api?username=${user}&show_icons=true&theme=github_dark`;
+      const response = await fetch(url);
+      const svg = await response.text();
+      const rank = extractRank(svg);
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.dataset.rank = rank;
+
+      const img = document.createElement("img");
+      img.src = url;
+      img.alt = `GitHub Stats von ${user}`;
+      div.appendChild(img);
+
+      cards.push({ rank, div });
+    }
+
+    async function init() {
+      await Promise.all(usernames.map(loadUser));
+
+      cards.sort((a, b) => {
+        return rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank);
+      });
+      if (cards.length > 0) cards[0].div.classList.add("highlight");
+      cards.forEach(c => container.appendChild(c.div));
+    }
+
+    init();
+  </script>
+</body>
+</html>
