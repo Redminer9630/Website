@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function setupDesktopSearchInput() {
     searchSection.innerHTML = `
-      <input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; max-width: 150px;">
+      <input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; max-width: 400px;">
     `;
     const input = document.getElementById("search");
     input.addEventListener("keypress", function (e) {
@@ -71,11 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
-  if (window.innerWidth <= 768) {
-    setupMobileSearchIcon();
-  } else {
-    setupDesktopSearchInput();
-  }
+  if (window.innerWidth <= 400) {setupMobileSearchIcon();} else {setupDesktopSearchInput();}
 });
 </script>
 
