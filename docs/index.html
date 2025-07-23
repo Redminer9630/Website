@@ -161,6 +161,44 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(button);
   }
 });
+
+function detectZoomIssues() {
+  const header = document.querySelector("header");
+  const navLeft = header.querySelector(".icon-left");
+  const navRight = header.querySelector(".icon-right");
+
+  if (!header || !navLeft || !navRight) return;
+
+  const rectLeft = navLeft.getBoundingClientRect();
+  const rectRight = navRight.getBoundingClientRect();
+
+  const overlap = rectLeft.right > rectRight.left;
+
+  if (overlap) {
+    if (!document.getElementById("zoom-warning")) {
+      const warn = document.createElement("div");
+      warn.id = "zoom-warning";
+      warn.textContent = "Bei zu Hohem Zoom kann es zu Layout fehlern kommen!";
+      warn.style = `
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: #d32f2f;
+        color: white;
+        font-family: 'Mojangles';
+        font-size: 16px;
+        padding: 10px;
+        text-align: center;
+        z-index: 9999;
+      `;
+      document.body.appendChild(warn);
+    }
+  } else {
+    const warn = document.getElementById("zoom-warning");
+    if (warn) warn.remove();
+  }
+}
+window.addEventListener("resize", detectZoomIssues);
+document.addEventListener("DOMContentLoaded", detectZoomIssues);
 </script>
 </body>
 </html>
