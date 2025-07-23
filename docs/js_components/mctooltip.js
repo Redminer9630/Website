@@ -105,15 +105,12 @@ function createTooltip(el, text) {
     }
   });
 
-  document.addEventListener('touchstart', evt => {
-    if (
-      currentTooltip &&
-      !currentTooltip.contains(evt.target) &&
-      !currentElement?.contains(evt.target)
-    ) {
-      hide();
-    }
-  });
+document.addEventListener('touchend', evt => {
+  if (
+    currentTooltip &&
+    !currentTooltip.contains(evt.target) &&
+    !currentElement?.contains(evt.target)
+  ) {setTimeout(() => {hide();}, 0);}}, { passive: true });
 }
 
 export function initMinecraftTooltips() {
