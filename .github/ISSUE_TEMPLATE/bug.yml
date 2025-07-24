@@ -1,24 +1,90 @@
-### Beschreibung des Problems:
-<!-- Eine klare und präzise Beschreibung des Problems. -->
+name: Bug melden
+description: Melde einen Fehler im Projekt
+title: "[BUG] "
+labels: [bug]
+assignees: []
 
-### Schritte zur Reproduktion:
-1. Gehe zu '...'
-2. Klicke auf '...'
-3. Sieh das Problem.
+body:
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: Beschreibung des Problems
+      description: Eine klare und präzise Beschreibung des Problems.
+      placeholder: Beschreibe hier das beobachtete Verhalten.
+    validations:
+      required: true
 
-### Erwartetes Verhalten:
-<!-- Beschreibe, was du erwartet hast, dass passiert. -->
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Schritte zur Reproduktion
+      description: Wie kann der Fehler nachgestellt werden?
+      placeholder: |
+        1. Gehe zu '...'
+        2. Klicke auf '...'
+        3. Sieh das Problem.
+    validations:
+      required: true
 
-### Tatsächliches Verhalten:
-<!-- Beschreibe, was tatsächlich passiert ist. -->
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Erwartetes Verhalten
+      description: Was hättest du erwartet, was passieren sollte?
+      placeholder: Beschreibe das erwartete Verhalten.
+    validations:
+      required: true
 
-### Screenshots oder Logs:
-<!-- Falls zutreffend, füge Screenshots oder Protokolle hinzu, um das Problem besser zu verdeutlichen. -->
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Tatsächliches Verhalten
+      description: Was ist tatsächlich passiert?
+      placeholder: Beschreibe das tatsächliche Verhalten.
+    validations:
+      required: true
 
-### Systeminformationen:
-- Betriebssystem: [z.B. Windows 10, macOS 11.2]
-- Browser: [z.B. Chrome, Safari]
-- Version: [z.B. 1.0.0]
+  - type: textarea
+    id: screenshots-logs
+    attributes:
+      label: Screenshots oder Logs
+      description: Falls zutreffend, füge Screenshots oder Protokolle hinzu.
+      placeholder: Hier kannst du Fehlermeldungen oder Screenshots einfügen.
+    validations:
+      required: false
 
-### Weitere Hinweise:
-<!-- Füge weitere Informationen hinzu, die für das Problem relevant sein könnten. -->
+  - type: input
+    id: os
+    attributes:
+      label: Betriebssystem
+      description: Auf welchem Betriebssystem tritt das Problem auf?
+      placeholder: z. B. Windows 10, macOS 11.2
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Welcher Browser wird verwendet?
+      placeholder: z. B. Chrome, Firefox
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Projektversion
+      description: Falls zutreffend – gib die betroffene Version an.
+      placeholder: z. B. 1.0.0
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Weitere Hinweise
+      description: Füge zusätzliche Informationen hinzu, die für das Problem relevant sein könnten.
+      placeholder: Z. B. besondere Konfiguration, Logs, Hintergrundinfos.
+    validations:
+      required: false
