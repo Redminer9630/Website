@@ -24,7 +24,30 @@
     <li><a href="github/issue-labeler">Issue-Labeler</a></li>
     <li><a href="github/contribution-tracker">Contribution-Tracker</a></li>
   </ul>
+<div id="ghstats" class="tool-card">
+  <h3>GitHub Website Repo Stats:</h3>
+  <ul>
+    <li>Stars: <span id="gh-stars">–</span></li>
+    <li>Forks: <span id="gh-forks">–</span></li>
+    <li>Open Issues: <span id="gh-issues">–</span></li>
+    <li>Letzter Build: <span id="gh-build">–</span></li>
+  </ul>
+</div>
+<script>
+async function loadGitHubStats() {
+  const repoRes = await fetch(`https://api.github.com/repos/Redminer9630/Website`);
+  const repoData = await repoRes.json();
 
-  <p style="margin-top:2rem;"><a href="/">Zurück zur Startseite</a></p>
+  const workflowRes = await fetch(`https://api.github.com/repos/Redminer9630/Website/actions/runs`);
+  const workflowData = await workflowRes.json();
+  const lastRun = workflowData.workflow_runs?.[0];
+
+  document.getElementById("gh-stars").textContent = repoData.stargazers_count;
+  document.getElementById("gh-forks").textContent = repoData.forks_count;
+  document.getElementById("gh-issues").textContent = repoData.open_issues_count;
+  document.getElementById("gh-build").textContent = lastRun?.conclusion ?? "unbekannt";
+}
+loadGitHubStats();
+</script>
 </body>
 </html>
