@@ -1,42 +1,25 @@
 # Offizielle Dateien von redminer9630.ddns.net
 
-Willkommen auf dem offiziellen Repository für die Dateien von [redminer9630.ddns.net](https://redminer9630.ddns.net?source=github). Hier findest du alle wichtigen Dateien, die mit der Website und ihren verschiedenen Funktionen verbunden sind.
-
-## 📜 Inhalt
-
-- Website-Dateien
+Willkommen im offiziellen Repository für [redminer9630.ddns.net](https://redminer9630.ddns.net).  
+Hier findest du die zentralen Dateien und Ressourcen der Website.
 
 ## 🚀 Mitwirken
 
-Falls du Verbesserungsvorschläge hast oder Fehler entdeckst, kannst du diese im **Issues**-Tab melden. Dein Feedback ist uns sehr wichtig, um das Projekt weiterzuentwickeln.
-
-### Wie man ein Issue erstellt:
-1. Gehe zum [Issues Tab](https://github.com/Rrdminer9630de/Redminer9630/issues).
-2. Klicke auf "New Issue".
-3. Beschreibe das Problem oder deinen Vorschlag detailliert und füge alle notwendigen Informationen bei.
-
-## 🔧 Technische Details
-
-Dieses Repository enthält Dateien, die für den Betrieb der Website notwendig sind. Dazu gehören:
-- HTML-, CSS- und JavaScript-Dateien
-- Automatisierungs- und CI/CD-Setups (mit GitHub Actions)
-- Das Backend wird auf ###### gehostet
-
-## ⚙️ Lizenz
-
-Dieses Projekt steht unter der [CC BY-ND 4.0 Lizenz](https://github.com/Redminer9630de/Redminer9630/tree/main?tab=License-1-ov-file).  
-Weitere Informationen: [https://creativecommons.org/licenses/by-nd/4.0/](https://creativecommons.org/licenses/by-nd/4.0/)
-
+Fehler oder Verbesserungsvorschläge kannst du im [Issues-Tab](https://github.com/Redminer9630de/Redminer9630/issues) melden.  
+Dein Feedback hilft uns, das Projekt weiterzuentwickeln.
 
 ## 📬 Kontakt
 
-Für Fragen oder Anregungen kannst du uns jederzeit über denn [Discord-Server](https://discord.com/invite/uRNX47tYrX) erreichen.
+Für Fragen oder Anregungen erreichst du uns über unseren [Discord-Server](https://discord.com/invite/uRNX47tYrX).
 
-### Redminer9630 App Repo [Hier Klicken](https://github.com/Redminer9630de/app9630)
+## 🔗 Weitere Links
 
-### Ein Wuffi:
+- [Redminer9630 App Repository](https://github.com/Redminer9630de/app9630)
+
+---
+
+### Ein Wuffi
 
 ![Wuffi](https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/440px-Golde33443.jpg)
 
-
-© 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. Seit 29.08.24
+© 2025 Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. Seit 29.08.2024
