@@ -36,37 +36,51 @@
 	</style>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".toggle").forEach(el => {
-        el.addEventListener("click", () => {
-            el.classList.toggle("open");
-            const submenu = el.nextElementSibling;
-            if (submenu) submenu.classList.toggle("show");
-        });
-    });
+	document.querySelectorAll(".toggle").forEach((el, i) => {
+		const key = "sidebar_toggle_" + i;
 
-    const pages = document.querySelectorAll(".wpage");
-    const activeId = new URLSearchParams(location.search).get("q");
+		if (localStorage.getItem(key) === "open") {
+			el.classList.add("open");
+			const submenu = el.nextElementSibling;
+			if (submenu) submenu.classList.add("show");
+		}
 
-    if (activeId) {
-        const section = document.getElementById(activeId);
-        section?.scrollIntoView({ behavior: "smooth" });
-        pages.forEach(p => {
-            if (p.getAttribute("data-target") === activeId) p.classList.add("active");
-            else p.classList.remove("active");
-        });
-    }
+		el.addEventListener("click", () => {
+			el.classList.toggle("open");
+			const submenu = el.nextElementSibling;
+			if (submenu) submenu.classList.toggle("show");
 
-    pages.forEach(page => {
-        page.addEventListener("click", () => {
-            const target = page.getAttribute("data-target");
-            if (target) {
-                history.replaceState(null, "", `?q=${target}`);
-                document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
-                pages.forEach(p => p.classList.remove("active"));
-                page.classList.add("active");
-            }
-        });
-    });
+			if (el.classList.contains("open")) {
+				localStorage.setItem(key, "open");
+			} else {
+				localStorage.removeItem(key);
+			}
+		});
+	});
+
+	const pages = document.querySelectorAll(".wpage");
+	const activeId = new URLSearchParams(location.search).get("q");
+
+	if (activeId) {
+		const section = document.getElementById(activeId);
+		section?.scrollIntoView({ behavior: "smooth" });
+		pages.forEach(p => {
+			if (p.getAttribute("data-target") === activeId) p.classList.add("active");
+			else p.classList.remove("active");
+		});
+	}
+
+	pages.forEach(page => {
+		page.addEventListener("click", () => {
+			const target = page.getAttribute("data-target");
+			if (target) {
+				history.replaceState(null, "", `?q=${target}`);
+				document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+				pages.forEach(p => p.classList.remove("active"));
+				page.classList.add("active");
+			}
+		});
+	});
 });
 </script>
 </head>
@@ -104,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		</section>
 		<section id="hinweise">
 			<h2>Hinweise</h2>
-			<p>Gebe niemals irgendwo auf unserer Website Persönliche/Private Daten an da diese auf deinem Gerät gespeichert werden! Hacker etc. können sie leicht einsehen!</p>
+			<p>Gebe niemals irgendwo auf unserer Website Persönliche/Private Daten an da diese auf deinem Gerät gespeichert werden! Hacker etc. können sie <u><i>leicht</i></u> einsehen!</p>
 		</section>
         <h1>Redeem</h1>
 		<section id="rdmcd">
@@ -117,11 +131,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		</section>
         <section id="fehler">
 			<h2>404 Seite</h2>
-			<p>404 - Seite nicht gefunden</p>
+			<h3>404 - Seite nicht gefunden</h3>
 			<p>Dieser Fehler kann auftauchen, wenn die URL nicht existiert oder nicht gefunden wurde.</p>
 		</section>
         <section id="ipdata">
-            <p>Abgerufene Daten</p>
+            <h3>Abgerufene Daten</h3>
             <p>Die angezeigten Daten werden an niemand weitergeleitet und sind nur für dich sichtbar. <a href="/thissitedoesnotexsist">Daten einsehen</a></p>
         </section>
 		<section id="imgcrdt">
