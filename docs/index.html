@@ -18,6 +18,7 @@
     <div class="nav-item" onclick="location.href='linktree'" style="cursor: pointer;"><img src="images/tree.webp" class="nav-icon" mctip="Linktree" /></div>
     <div class="nav-item" onclick="location.href='manual'" style="cursor: pointer;"><img src="images/icons/about.webp" class="nav-icon" mctip="Benutzerhandbuch" /></div>
     <div class="nav-item" onclick="location.href='https://github.com/Redminer9630/Website/issues'"><img src="images/icons/feedback.webp" class="nav-icon" mctip="Feedback/Bug melden" /></div>
+    <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
   </nav>
   <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; max-width: 100%; flex-wrap: wrap;">
     <div id="search-section"></div>
@@ -158,6 +159,38 @@ document.addEventListener("DOMContentLoaded", function () {
     button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
     document.body.appendChild(button);
   }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const iconLeft = document.querySelector(".icon-left");
+  const hamburger = document.getElementById("hamburger-menu");
+  const dropdown = document.getElementById("hamburger-dropdown");
+  const originalIcons = [...iconLeft.querySelectorAll(".nav-item")].filter(i => i !== hamburger);
+  const maxWidth = iconLeft.offsetWidth;
+
+  function updateNavigation() {
+    dropdown.innerHTML = "";
+    originalIcons.forEach(icon => icon.classList.remove("hidden"));
+    hamburger.classList.add("hidden");
+
+    let totalWidth = hamburger.offsetWidth;
+    originalIcons.forEach(icon => totalWidth += icon.offsetWidth);
+
+    if (totalWidth > iconLeft.offsetWidth) {
+      hamburger.classList.remove("hidden");
+      for (let i = originalIcons.length - 1; i >= 0; i--) {
+        const icon = originalIcons[i];
+        totalWidth -= icon.offsetWidth;
+        if (totalWidth > iconLeft.offsetWidth) {
+          icon.classList.add("hidden");
+          dropdown.appendChild(icon.cloneNode(true));
+        } else {break;}
+      }
+    }
+  }
+
+  window.addEventListener("resize", updateNavigation);
+  updateNavigation();
+  hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
 });
 </script>
 </body>
