@@ -186,8 +186,11 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {break;}
       }
     }
+    if (dropdown.children.length === 0) {
+      hamburger.classList.add("hidden");
+      dropdown.classList.add("hidden");
+    }
   }
-
   window.addEventListener("resize", updateNavigation);
   updateNavigation();
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
