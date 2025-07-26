@@ -49,20 +49,12 @@ function moveTooltip(e, tooltip) {
   const fitsRight = (x + rect.width + margin) <= vw;
   const fitsLeft = (x - rect.width - margin) >= 0;
 
-  if (fitsRight) {
-    left = x + margin;
-  } else if (fitsLeft) {
-    left = x - rect.width - margin;
-  } else {
+  if (fitsRight) {left = x + margin;} else if (fitsLeft) {left = x - rect.width - margin;} else {
     left = Math.max(margin, (vw - rect.width) / 2);
     top = y + rect.height + margin;
-    if (top + rect.height > vh) {
-      top = y - rect.height - margin;
-    }
+    if (top + rect.height > vh) {top = y - rect.height - margin;}
   }
-  if (top < margin) {
-    top = margin;
-  }
+  if (top < margin) {top = margin;}
 
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
@@ -96,14 +88,7 @@ function createTooltip(el, text) {
   el.addEventListener('mousemove', e => moveTooltip(e, tooltip));
   el.addEventListener('mouseleave', hide);
 
-  el.addEventListener('touchstart', e => {
-    e.stopPropagation();
-    if (visible) {
-      hide();
-    } else {
-      show(e.touches[0]);
-    }
-  });
+  el.addEventListener('touchstart', e => {e.stopPropagation();if (visible) {hide();} else {show(e.touches[0]);}});
 
 document.addEventListener('touchend', evt => {
   if (
@@ -119,3 +104,10 @@ export function initMinecraftTooltips() {
   if (!elements.length) return;
   elements.forEach(el => createTooltip(el, el.getAttribute('mctip')));
 }
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && currentTooltip) {
+    currentTooltip.style.display = 'none';
+    currentTooltip = null;
+    currentElement = null;
+  }
+});
