@@ -42,14 +42,17 @@
             margin-bottom: 10px;
             letter-spacing: 1px;
         }
-        .links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            align-items: center;
-            max-width: 90vw;
-        }
+.links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 90vw;
+}
         .link-icon {
             display: flex;
             flex-direction: column;
