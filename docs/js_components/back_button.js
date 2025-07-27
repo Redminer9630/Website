@@ -6,60 +6,42 @@ export function initHeaderButton() {
     if (urlParams.get('showButton') !== '1') return;
   }
 
-  const style = document.createElement('style');
-  style.textContent = `
-    :root {
-      --btn-color: #f44336;
-      --btn-hover-color: #e53935;
-      --btn-text-color: #fff;
-    }
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.top = '20px';
+  wrapper.style.right = '20px';
+  wrapper.style.zIndex = '999999999'; 
+  const shadow = wrapper.attachShadow({ mode: 'open' });
 
-    .header-link {
-      font-family: 'Mojangles';
-      font-size: 16px;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: var(--btn-color);
-      color: var(--btn-text-color);
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .header-link:hover { background-color: var(--btn-hover-color); transform: scale(1.05); }
-
-    @media (max-width: 768px) {
-      .header-link {
-        font-size: 14px;
-        padding: 8px 16px;
-        top: 12px;
-        right: 12px;
-        border-radius: 6px;
+  shadow.innerHTML = `
+    <style>
+      :host {all: initial;}
+      button {
+        all: unset;
+        font-family: 'Mojangles', sans-serif;
+        font-size: 16px;
+        background-color: #f44336;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
       }
-    }
-
-    @media (max-width: 480px) {
-      .header-link {
-        font-size: 12px;
-        padding: 6px 12px;
-        top: 10px;
-        right: 10px;
+      button:hover {
+        background-color: #e53935;
+        transform: scale(1.05);
       }
-    }
+      @media (max-width: 768px) {
+        button {
+          font-size: 14px;
+          padding: 8px 16px;
+        }
+      }
+      @media (max-width: 480px) {button {font-size: 12px;padding: 6px 12px;}}
+    </style>
+    <button id="backBtn" aria-label="Zurück zur vorherigen Seite">Zurück</button>
   `;
-  document.head.appendChild(style);
 
-  const backButton = document.createElement('button');
-  backButton.className = 'header-link';
-  backButton.textContent = 'Zurück';
-  backButton.setAttribute('aria-label', 'Zurück zur vorherigen Seite');
-  backButton.addEventListener('click', () => history.back());
-  document.body.appendChild(backButton);
+  shadow.querySelector('#backBtn')?.addEventListener('click', () => history.back());
+  document.body.appendChild(wrapper);
 }
