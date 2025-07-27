@@ -69,10 +69,10 @@ Promise.all([
 		});
 	});
 
-	document.querySelectorAll("img").forEach(img => {
+	/*document.querySelectorAll("img").forEach(img => {
 		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
-	});
+	});*/
 	mctip.initMinecraftTooltips();
 }).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
