@@ -60,7 +60,9 @@
   </ul>
 </div>
 <h1>GitHub Profilstatus</h1>
-<div id="github-container"></div>
+<img src="https://github-readme-stats.vercel.app/api?username=Redminer9630de&show_icons=true&theme=github_dark">
+<img src="https://github-readme-stats.vercel.app/api?username=Redminer9630GitHub&show_icons=true&theme=github_dark">
+<img src="https://github-readme-stats.vercel.app/api?username=TheAnonym3000&show_icons=true&theme=github_dark">
 <script>
 async function loadGitHubStats() {
   const repoRes = await fetch(`https://api.github.com/repos/Redminer9630/Website`);
@@ -76,21 +78,6 @@ async function loadGitHubStats() {
   document.getElementById("gh-build").textContent = lastRun?.conclusion ?? "unbekannt";
 }
 loadGitHubStats();
-    
-    const usernames = ["Redminer9630de", "Redminer9630GitHub", "TheAnonym3000"];
-    const container = document.getElementById("github-container");
-
-    usernames.forEach(user => {
-      const div = document.createElement("div");
-      div.className = "card";
-
-      const img = document.createElement("img");
-      img.src = `https://github-readme-stats.vercel.app/api?username=${user}&show_icons=true&theme=github_dark`;
-      img.alt = `GitHub Stats von ${user}`;
-      div.appendChild(img);
-
-      container.appendChild(div);
-    });
 </script>
 </body>
 </html>
