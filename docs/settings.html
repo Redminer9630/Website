@@ -29,28 +29,26 @@
 <body>
   <main>
     <h1>Einstellungen</h1>
+      
+<div class="settings-item">
+  <label>Design</label>
+  <div class="radio-group" id="theme-options">
+    <label><input type="radio" name="theme" value="dark"> Dunkel</label>
+    <label><input type="radio" name="theme" value="light"> Hell</label>
+    <label><input type="radio" name="theme" value="sys"> System</label>
+  </div>
+</div>
 
-    <div class="settings-item">
-      <label for="theme">Design</label>
-      <select id="theme">
-        <option value="dark">Dunkel</option>
-        <option value="light">Hell</option>
-        <option value="sys">System</option>
-      </select>
-    </div>
-
-    <div class="settings-item">
-      <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
-      <select id="font">
-        <option value="Mojangles">Mojangles</option>
-        <option value="Arial">Arial</option>
-        <option value="Sans-Serif">Sans Serif</option>
-      </select>
-    </div>
-  </main>
+<div class="settings-item">
+  <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
+  <div class="radio-group" id="font-options">
+    <label><input type="radio" name="font" value="Mojangles"> Mojangles</label>
+    <label><input type="radio" name="font" value="Arial"> Arial</label>
+    <label><input type="radio" name="font" value="Sans-Serif"> Sans Serif</label>
+  </div>
+</div>
+</main>
 <script type="module">
-  import('/js_components/theme.js');
-
   function applyFont(font) {document.documentElement.setAttribute("data-font", font);}
 
   function applySettings() {
