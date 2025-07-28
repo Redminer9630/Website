@@ -47,6 +47,9 @@
     <label><input type="radio" name="font" value="Sans-Serif"> Sans Serif</label>
   </div>
 </div>
+<div class="settings-item">
+    <button onclick="localStorage.removeItem('onboardingSeen'); this.disabled = true; this.style.backgroundColor = '#888';">Onboarding zurücksetzen</button>
+</div>
 </main>
 <script type="module">
   function applyFont(font) {document.documentElement.setAttribute("data-font", font);}
