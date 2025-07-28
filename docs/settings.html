@@ -5,23 +5,26 @@
   <title>Einstellungen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      font-family: Mojangles, Arial, sans-serif;
-    }
-    h1 {
-      margin-bottom: 2rem;
-    }
-    .settings-item {
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    select {
-      padding: 0.4rem 0.6rem;
-      font-size: 1rem;
+    body { font-family: 'Mojangles'; margin: 0; padding: 0; background-color: var(--bg); color: var(--text); }
+    :root[data-theme="white"] { --bg: #f4f4f4; --text: #000; --box: #fff; }
+    :root[data-theme="dark"] { --bg: #121212; --text: #fff; --box: #1e1e1e; }
+    .container { max-width: 1000px; margin: 50px auto; background: var(--box); border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 20px; }
+    .header { font-size: 2rem; font-weight: bold; margin-bottom: 20px; }
+    .settings-group { margin-bottom: 30px; }
+    .settings-group h2 { font-size: 1.25rem; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; }
+    .settings-item {display: flex;gap: 20px;align-items: center;padding: 10px 0;border-bottom: 1px solid #eee;flex-wrap: wrap;}
+    .settings-item label { font-size: 1rem; }
+    .settings-item input,.settings-item select {margin-left: auto;}
+    .settings-item input, .settings-item select { padding: 5px 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px; background-color: var(--box); color: var(--text); font-family: 'Mojangles'; }
+    .save-button { margin-top: 20px; padding: 10px 20px; font-size: 1rem; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Mojangles'; }
+    .save-button:hover { background-color: #0056b3; }
+    @media (min-width: 768px) {
+     body { font-size: 1.2em; }
+     .header { font-size: 2.4rem; }
+     .settings-group h2 { font-size: 1.5rem; }
+     .settings-item label { font-size: 1.2rem; }
+     .settings-item input, .settings-item select { font-size: 1.2rem; max-width: 360px;}
+     .save-button { font-size: 1.2rem; padding: 12px 24px; }
     }
   </style>
   <script src="autoloader.js" type="module" defer></script>
