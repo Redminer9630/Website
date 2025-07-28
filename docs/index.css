@@ -129,3 +129,9 @@ input:checked+.slider:before{transform:translateX(22px);}
 }
 
 .onboarding-hidden {display: none !important;}
+.onboarding-focused {
+  position: relative;
+  z-index: 10001 !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
