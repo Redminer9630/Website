@@ -46,21 +46,11 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button><br>
     </section>
     
-<div id="onboarding-modal" class="hidden">
-  <div class="onboarding-step" id="step-1">
-    <h2>Willkommen auf Redminer9630.ddns.net!</h2>
-    <p>Hier findest Du Tools, Projekte und mehr rund um Minecraft.</p>
-    <button onclick="nextOnboardingStep(2)">Weiter</button>
-  </div>
-  <div class="onboarding-step hidden" id="step-2">
-    <h2>Projekte & Downloads</h2>
-    <p>Gehe zu <b>Projekte</b>, um Mods und Tools herunterzuladen.</p>
-    <button onclick="nextOnboardingStep(3)">Weiter</button>
-  </div>
-  <div class="onboarding-step hidden" id="step-3">
-    <h2>Benutzerhandbuch</h2>
-    <p>Im <b>Manual</b> findest Du Anleitungen und Tipps zur Nutzung der Website.</p>
-    <button onclick="finishOnboarding()">Fertig</button>
+<div id="onboarding-overlay" class="hidden">
+  <div class="onboarding-highlight" id="highlight-target"></div>
+  <div class="onboarding-tooltip" id="tooltip">
+    <p id="tooltip-text">Das ist der Projekte-Button – hier findest du Projekte mit Downloads.</p>
+    <button onclick="nextOnboardingStep()">Weiter</button>
   </div>
 </div>
 
@@ -213,7 +203,45 @@ document.addEventListener("DOMContentLoaded", function () {
   updateNavigation();
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
 });
+
+let onboardingStep = 0;
+
+function showOnboarding() {
+  if (localStorage.getItem("onboardingSeen")) return;
+
+  const overlay = document.getElementById("onboarding-overlay");
+  overlay.classList.remove("hidden");
+  nextOnboardingStep(); // starte mit Schritt 1
+}
+
+function nextOnboardingStep() {
+  onboardingStep++;
+
+  const highlight = document.getElementById("highlight-target");
+  const tooltip = document.getElementById("tooltip");
+  const tooltipText = document.getElementById("tooltip-text");
+
+  if (onboardingStep === 1) {
+    const target = document.querySelector(".nav-item:nth-child(2)"); // z.B. "Projekte"
+    if (!target) return;
+
+    const rect = target.getBoundingClientRect();
+
+    highlight.style.top = rect.top + "px";
+    highlight.style.left = rect.left + "px";
+    highlight.style.width = rect.width + "px";
+    highlight.style.height = rect.height + "px";
+
+    tooltipText.textContent = "Hier findest du alle Projekte und Downloads.";
+    tooltip.style.top = rect.bottom + 10 + "px";
+    tooltip.style.left = rect.left + "px";
+  } else {
+    document.getElementById("onboarding-overlay").classList.add("hidden");
+    localStorage.setItem("onboardingSeen", "true");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", showOnboarding);
 </script>
-<script>document.addEventListener("DOMContentLoaded", function () {if (!localStorage.getItem("onboardingSeen")) {document.getElementById("onboarding-modal").classList.remove("hidden");}});function nextOnboardingStep(step) {document.querySelectorAll(".onboarding-step").forEach(el => el.classList.add("hidden"));document.getElementById(`step-${step}`).classList.remove("hidden");}function finishOnboarding() {localStorage.setItem("onboardingSeen", "true");document.getElementById("onboarding-modal").classList.add("hidden");}</script>
 </body>
 </html>
