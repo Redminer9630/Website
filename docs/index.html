@@ -45,8 +45,26 @@
       <h2>fatness4...the greedies</h2>
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button><br>
     </section>
-</main>
+    
+<div id="onboarding-modal" class="hidden">
+  <div class="onboarding-step" id="step-1">
+    <h2>Willkommen auf Redminer9630.ddns.net!</h2>
+    <p>Hier findest Du Tools, Projekte und mehr rund um Minecraft.</p>
+    <button onclick="nextOnboardingStep(2)">Weiter</button>
+  </div>
+  <div class="onboarding-step hidden" id="step-2">
+    <h2>Projekte & Downloads</h2>
+    <p>Gehe zu <b>Projekte</b>, um Mods und Tools herunterzuladen.</p>
+    <button onclick="nextOnboardingStep(3)">Weiter</button>
+  </div>
+  <div class="onboarding-step hidden" id="step-3">
+    <h2>Benutzerhandbuch</h2>
+    <p>Im <b>Manual</b> findest Du Anleitungen und Tipps zur Nutzung der Website.</p>
+    <button onclick="finishOnboarding()">Fertig</button>
+  </div>
+</div>
 
+</main>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
@@ -196,5 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
 });
 </script>
+<script>document.addEventListener("DOMContentLoaded", function () {if (!localStorage.getItem("onboardingSeen")) {document.getElementById("onboarding-modal").classList.remove("hidden");}});function nextOnboardingStep(step) {document.querySelectorAll(".onboarding-step").forEach(el => el.classList.add("hidden"));document.getElementById(`step-${step}`).classList.remove("hidden");}function finishOnboarding() {localStorage.setItem("onboardingSeen", "true");document.getElementById("onboarding-modal").classList.add("hidden");}</script>
 </body>
 </html>
