@@ -43,7 +43,7 @@ function getParameterByName(name) {
 function loadVersion(version) {
   const content = document.getElementById("content");
   if (!version) return;
-  fetch(`/versionsdata/${version}.json`)
+  fetch(`/version/${version}.json`)
     .then(res => {
       if (!res.ok) throw new Error("Version nicht gefunden.");
       return res.json();
