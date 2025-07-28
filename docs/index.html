@@ -46,11 +46,11 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?showButton=1'">Offizielle Bandseite anschauen</button><br>
     </section>
     
-<div id="onboarding-overlay" class="hidden">
-  <div class="onboarding-highlight" id="highlight-target"></div>
-  <div class="onboarding-tooltip" id="tooltip">
-    <p id="tooltip-text">Das ist der Projekte-Button – hier findest du Projekte mit Downloads.</p>
-    <button onclick="nextOnboardingStep()">Weiter</button>
+<div id="onboarding-overlay" class="onboarding-hidden">
+  <div id="onboarding-highlight"></div>
+  <div id="onboarding-tooltip">
+    <div id="onboarding-text">...</div>
+    <button id="onboarding-next">Weiter</button>
   </div>
 </div>
 
@@ -203,45 +203,53 @@ document.addEventListener("DOMContentLoaded", function () {
   updateNavigation();
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
 });
-
+</script>
+<script>
 let onboardingStep = 0;
 
-function showOnboarding() {
+function showOnboardingOverlay() {
   if (localStorage.getItem("onboardingSeen")) return;
 
-  const overlay = document.getElementById("onboarding-overlay");
-  overlay.classList.remove("hidden");
-  nextOnboardingStep(); // starte mit Schritt 1
+  document.getElementById("onboarding-overlay").classList.remove("onboarding-hidden");
+  nextOnboardingStep();
 }
 
 function nextOnboardingStep() {
   onboardingStep++;
+  const highlight = document.getElementById("onboarding-highlight");
+  const tooltip = document.getElementById("onboarding-tooltip");
+  const text = document.getElementById("onboarding-text");
 
-  const highlight = document.getElementById("highlight-target");
-  const tooltip = document.getElementById("tooltip");
-  const tooltipText = document.getElementById("tooltip-text");
+  let target = null;
 
   if (onboardingStep === 1) {
-    const target = document.querySelector(".nav-item:nth-child(2)"); // z.B. "Projekte"
-    if (!target) return;
+    target = document.querySelector(".nav-item:nth-child(2)"); // "Projekte"
+    text.textContent = "Hier findest du Projekte, Downloads und Tools!";
+  } else if (onboardingStep === 2) {
+    target = document.querySelector(".nav-item:nth-child(3)"); // "Tools"
+    text.textContent = "Und hier kannst du hilfreiche Minecraft-Tools benutzen!";
+  } else {
+    document.getElementById("onboarding-overlay").classList.add("onboarding-hidden");
+    localStorage.setItem("onboardingSeen", "true");
+    return;
+  }
 
+  if (target) {
     const rect = target.getBoundingClientRect();
-
     highlight.style.top = rect.top + "px";
     highlight.style.left = rect.left + "px";
     highlight.style.width = rect.width + "px";
     highlight.style.height = rect.height + "px";
 
-    tooltipText.textContent = "Hier findest du alle Projekte und Downloads.";
     tooltip.style.top = rect.bottom + 10 + "px";
     tooltip.style.left = rect.left + "px";
-  } else {
-    document.getElementById("onboarding-overlay").classList.add("hidden");
-    localStorage.setItem("onboardingSeen", "true");
   }
 }
 
-document.addEventListener("DOMContentLoaded", showOnboarding);
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("onboarding-next").addEventListener("click", nextOnboardingStep);
+  showOnboardingOverlay();
+});
 </script>
 </body>
 </html>
