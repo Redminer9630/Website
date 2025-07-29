@@ -18,6 +18,8 @@
 	});
 })();
 
+let debug = false;
+
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));
 if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));
 if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
@@ -52,9 +54,7 @@ Promise.all([
 	import('/js_components/mctooltip.js'),
     import('/js_components/cliper.js'),
     import('/js_components/theme.js')
-]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {
-    //const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
-    
+]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {    
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
@@ -69,11 +69,12 @@ Promise.all([
 			else noti("error", "Modal.open nicht verfügbar");
 		});
 	});
-
-	/*document.querySelectorAll("img").forEach(img => {
+    if(debug === true) {
+	  document.querySelectorAll("img").forEach(img => {
 		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
 		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
-	});*/
+	  });
+    }
 	mctip.initMinecraftTooltips();
 }).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const year = new Date().getFullYear();
 	const footer = document.createElement('footer');
 	footer.id = "main-footer";
+    footer.setAttribute("role", "contentinfo");
 	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. ${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</span>`;
 	footer.classList.add("fixed-footer");
 	document.body.style.paddingBottom = "60px";
