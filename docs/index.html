@@ -10,7 +10,7 @@
   <noscript><link rel="stylesheet" href="index.css"></noscript>
 </head>
 <body>
-<header>
+<header role="banner">
   <nav class="icon-left" aria-label="Hauptnavigation" style="display: flex; align-items: center; gap: 15px;">
     <div class="logo-static"><img alt="" src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
     <div class="nav-item" onclick="location.href='projects'" style="cursor: pointer;"><img src="images/icons/downloads.webp" class="nav-icon" mctip="Projekte" /></div>
@@ -25,7 +25,7 @@
     <div onclick="location.href='settings'"><img src="images/icons/settings.webp" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
   </div>
 </header>
-<main>
+<main role="main">
     <br>
     <noscript><h2>Unsere Website benötigt JavaScript. Bitte aktiviere JavaScript, um den Inhalt zu sehen.</h2></noscript>
     <br>
@@ -61,13 +61,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `<img src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    searchSection.innerHTML = `<img role="search" src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
     document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
   function setupDesktopSearchInput() {
-    searchSection.innerHTML = `<input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
+    searchSection.innerHTML = `<input role="search" type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
     const input = document.getElementById("search");
     input.addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
@@ -164,6 +164,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const button = document.createElement("a");
     button.className = "source-button";
+    button.setAttribute("role", "link");
+    button.setAttribute("aria-label", matchedSource.text);
+    button.setAttribute("tabindex", "0");
     button.textContent = matchedSource.text;
     button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
     document.body.appendChild(button);
