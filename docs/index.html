@@ -207,49 +207,42 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 let onboardingStep = 0;
 
-function showOnboardingOverlay() {
+function showOnboarding() {
   if (localStorage.getItem("onboardingSeen")) return;
 
-  document.getElementById("onboarding-overlay").classList.remove("onboarding-hidden");
+  const overlay = document.getElementById("onboarding-overlay");
+  overlay.classList.remove("hidden");
   nextOnboardingStep();
 }
 
 function nextOnboardingStep() {
   onboardingStep++;
-  const highlight = document.getElementById("onboarding-highlight");
-  const tooltip = document.getElementById("onboarding-tooltip");
-  const text = document.getElementById("onboarding-text");
 
-  let target = null;
+  const highlight = document.getElementById("highlight-target");
+  const tooltip = document.getElementById("tooltip");
+  const tooltipText = document.getElementById("tooltip-text");
 
   if (onboardingStep === 1) {
-    target = document.querySelector(".nav-item:nth-child(2)"); // "Projekte"
-    text.textContent = "Hier findest du Projekte, Downloads und Tools!";
-  } else if (onboardingStep === 2) {
-    target = document.querySelector(".nav-item:nth-child(3)"); // "Tools"
-    text.textContent = "Und hier kannst du hilfreiche Minecraft-Tools benutzen!";
-  } else {
-    document.getElementById("onboarding-overlay").classList.add("onboarding-hidden");
-    localStorage.setItem("onboardingSeen", "true");
-    return;
-  }
+    const target = document.querySelector(".nav-item:nth-child(2)");
+    if (!target) return;
 
-  if (target) {
     const rect = target.getBoundingClientRect();
+
     highlight.style.top = rect.top + "px";
     highlight.style.left = rect.left + "px";
     highlight.style.width = rect.width + "px";
     highlight.style.height = rect.height + "px";
 
+    tooltipText.textContent = "Hier findest du alle Projekte und Downloads.";
     tooltip.style.top = rect.bottom + 10 + "px";
     tooltip.style.left = rect.left + "px";
+  } else {
+    document.getElementById("onboarding-overlay").classList.add("hidden");
+    localStorage.setItem("onboardingSeen", "true");
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("onboarding-next").addEventListener("click", nextOnboardingStep);
-  showOnboardingOverlay();
-});
+document.addEventListener("DOMContentLoaded", showOnboarding);
 </script>
 </body>
 </html>
