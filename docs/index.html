@@ -12,17 +12,17 @@
 <body>
 <header>
   <nav class="icon-left" aria-label="Hauptnavigation" style="display: flex; align-items: center; gap: 15px;">
-    <div class="logo-static"><img src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
+    <div class="logo-static"><img alt="" src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
     <div class="nav-item" onclick="location.href='projects'" style="cursor: pointer;"><img src="images/icons/downloads.webp" class="nav-icon" mctip="Projekte" /></div>
-    <div class="nav-item" onclick="location.href='tools'" style="cursor: pointer;"><img src="images/icons/tools.webp" class="nav-icon" mctip="Tools" /></div>
-    <div class="nav-item" onclick="location.href='linktree'" style="cursor: pointer;"><img src="images/tree.webp" class="nav-icon" mctip="Linktree" /></div>
-    <div class="nav-item" onclick="location.href='manual'" style="cursor: pointer;"><img src="images/icons/about.webp" class="nav-icon" mctip="Benutzerhandbuch" /></div>
-    <div class="nav-item" onclick="location.href='https://github.com/Redminer9630/Website/issues'"><img src="images/icons/feedback.webp" class="nav-icon" mctip="Feedback/Bug melden" /></div>
-    <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
+    <div class="nav-item" onclick="location.href='tools'" style="cursor: pointer;"><img src="images/icons/tools.webp" alt="Tools" class="nav-icon" mctip="Tools" /></div>
+    <div class="nav-item" onclick="location.href='linktree'" style="cursor: pointer;"><img src="images/tree.webp" alt="Linktree" class="nav-icon" mctip="Linktree" /></div>
+    <div class="nav-item" onclick="location.href='manual'" style="cursor: pointer;"><img src="images/icons/about.webp" alt="Benutzerhandbuch" class="nav-icon" mctip="Benutzerhandbuch" /></div>
+    <div class="nav-item" onclick="location.href='https://github.com/Redminer9630/Website/issues'"><img src="images/icons/feedback.webp" alt="Feedback/Bugs" class="nav-icon" mctip="Feedback/Bug melden" /></div>
+    <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" alt="Menu" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
   </nav>
   <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; max-width: 100%; flex-wrap: wrap;">
     <div id="search-section"></div>
-    <div onclick="location.href='settings'"><img src="images/icons/settings.webp" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
+    <div onclick="location.href='settings'"><img src="images/icons/settings.webp" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
   </div>
 </header>
 <main>
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `<img src="images/icons/search.webp" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    searchSection.innerHTML = `<img src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
     document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
