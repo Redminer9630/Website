@@ -161,14 +161,16 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.head.appendChild(style);
 
-    const button = document.createElement("a");
-    button.className = "source-button";
-    button.setAttribute("role", "link");
-    button.setAttribute("aria-label", matchedSource.text);
-    button.setAttribute("tabindex", "0");
-    button.textContent = matchedSource.text;
-    button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
-    document.body.appendChild(button);
+const button = document.createElement("a");
+button.className = "source-button";
+button.textContent = matchedSource.text;
+button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
+button.setAttribute("role", "button");
+button.setAttribute("aria-label", matchedSource.text);
+button.setAttribute("tabindex", "0");
+button.addEventListener("keydown", (e) => {
+if (e.key === "Enter" || e.key === " ") {e.preventDefault();window.location.href = button.href;}});
+document.body.appendChild(button);
   }
 });
 document.addEventListener("DOMContentLoaded", function () {
@@ -205,6 +207,16 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", updateNavigation);
   updateNavigation();
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
+
+hamburger.setAttribute("tabindex", "0");
+hamburger.setAttribute("role", "button");
+hamburger.setAttribute("aria-label", "Menü anzeigen");
+hamburger.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    dropdown.classList.toggle("hidden");
+  }
+});
 });
 </script>
 <script type="module"> // onboarding
