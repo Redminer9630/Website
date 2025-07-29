@@ -13,16 +13,16 @@
 <header role="banner">
   <nav class="icon-left" aria-label="Hauptnavigation" style="display: flex; align-items: center; gap: 15px;">
     <div class="logo-static"><img alt="" src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
-    <div class="nav-item" onclick="location.href='projects'" style="cursor: pointer;"><img src="images/icons/downloads.webp" class="nav-icon" mctip="Projekte" /></div>
-    <div class="nav-item" onclick="location.href='tools'" style="cursor: pointer;"><img src="images/icons/tools.webp" alt="Tools" class="nav-icon" mctip="Tools" /></div>
-    <div class="nav-item" onclick="location.href='linktree'" style="cursor: pointer;"><img src="images/tree.webp" alt="Linktree" class="nav-icon" mctip="Linktree" /></div>
-    <div class="nav-item" onclick="location.href='manual'" style="cursor: pointer;"><img src="images/icons/about.webp" alt="Benutzerhandbuch" class="nav-icon" mctip="Benutzerhandbuch" /></div>
-    <div class="nav-item" onclick="location.href='https://github.com/Redminer9630/Website/issues'"><img src="images/icons/feedback.webp" alt="Feedback/Bugs" class="nav-icon" mctip="Feedback/Bug melden" /></div>
+    <div class="nav-item" onclick="location.href='projects'" aria-label="Projekte"><img src="images/icons/downloads.webp" class="nav-icon" mctip="Projekte" /></div>
+    <div class="nav-item" onclick="location.href='tools'" aria-label="Tools"><img src="images/icons/tools.webp" alt="Tools" class="nav-icon" mctip="Tools" /></div>
+    <div class="nav-item" onclick="location.href='linktree'" aria-label="Linktree"><img src="images/tree.webp" alt="Linktree" class="nav-icon" mctip="Linktree" /></div>
+    <div class="nav-item" onclick="location.href='manual'" aria-label="Benutzerhandbuch"><img src="images/icons/about.webp" alt="Benutzerhandbuch" class="nav-icon" mctip="Benutzerhandbuch" /></div>
+    <div class="nav-item" onclick="location.href='https://github.com/Redminer9630/Website/issues'" aria-label="Feedback/Bugs"><img src="images/icons/feedback.webp" alt="Feedback/Bugs" class="nav-icon" mctip="Feedback/Bug melden" /></div>
     <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" alt="Menu" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
   </nav>
   <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; max-width: 100%; flex-wrap: wrap;">
     <div id="search-section"></div>
-    <div onclick="location.href='settings'"><img src="images/icons/settings.webp" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
+    <div onclick="location.href='settings'" aria-label="Einstellungen"><img src="images/icons/settings.webp" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
   </div>
 </header>
 <main role="main">
@@ -55,19 +55,19 @@
 </div>
 
 </main>
-<script>
+<script> // search
 searchmode = true;
 document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `<img role="search" src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    searchSection.innerHTML = `<img aria-label="Suche" role="search" src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
     document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
   function setupDesktopSearchInput() {
-    searchSection.innerHTML = `<input role="search" type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
+    searchSection.innerHTML = `<input aria-label="Suche" role="search" type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
     const input = document.getElementById("search");
     input.addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
@@ -82,8 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (window.innerWidth <= 768) {setupMobileSearchIcon();searchmode = false;} else {setupDesktopSearchInput();searchmode = true;}
 });
 </script>
-
-<script>
+<script> // back button
 document.addEventListener("DOMContentLoaded", function () {
   const referrer = document.referrer.toLowerCase();
 
@@ -208,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
   hamburger.addEventListener("click", () => {dropdown.classList.toggle("hidden");});
 });
 </script>
-<script type="module">
+<script type="module"> // onboarding
   import { startOnboarding } from '.js_components/onboarding.js';
 
   document.addEventListener("DOMContentLoaded", () => {
