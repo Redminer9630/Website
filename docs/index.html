@@ -207,42 +207,78 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 let onboardingStep = 0;
 
-function showOnboarding() {
+function showOnboardingOverlay() {
   if (localStorage.getItem("onboardingSeen")) return;
 
-  const overlay = document.getElementById("onboarding-overlay");
-  overlay.classList.remove("hidden");
-  nextOnboardingStep();
+  document.getElementById("onboarding-overlay").classList.remove("onboarding-hidden");
+  nextOnboardingStep(); 
 }
 
 function nextOnboardingStep() {
   onboardingStep++;
+  const highlight = document.getElementById("onboarding-highlight");
+  const tooltip = document.getElementById("onboarding-tooltip");
+  const text = document.getElementById("onboarding-text");
 
-  const highlight = document.getElementById("highlight-target");
-  const tooltip = document.getElementById("tooltip");
-  const tooltipText = document.getElementById("tooltip-text");
+  let target = null;
 
   if (onboardingStep === 1) {
-    const target = document.querySelector(".nav-item:nth-child(2)");
-    if (!target) return;
+    target = document.querySelector(".nav-item:nth-child(2)");
+    text.textContent = "Hier findest du Projekte, Downloads und Tools!";
+  } else if (onboardingStep === 2) {
+    target = document.querySelector(".nav-item:nth-child(3)");
+    text.textContent = "Und hier kannst du hilfreiche Minecraft-Tools benutzen!";
+  } else if (onboardingStep === 3) {
+    target = document.querySelector(".nav-item:nth-child(4)");
+    text.textContent = "linktree";
+  } else if (onboardingStep === 4) {
+    target = document.querySelector(".nav-item:nth-child(5)");
+    text.textContent = "manual";
+  } else if (onboardingStep === 5) {
+    target = document.querySelector(".nav-item:nth-child(6)");
+    text.textContent = "issues";
+  } else if (onboardingStep === 6) {
+    if (searchmode) {nextOnboardingStep();return;}
+    target = document.querySelector(".nav-item:nth-child(7)");
+    text.textContent = "search";
+  } else if (onboardingStep === 7) {
+    target = document.querySelector(".nav-item:nth-child(8)");
+    text.textContent = "settings";
+  } else {
+    document.getElementById("onboarding-overlay").classList.add("onboarding-hidden");
+    localStorage.setItem("onboardingSeen", "true");
+    return;
+  }
 
+  if (target) {
     const rect = target.getBoundingClientRect();
 
-    highlight.style.top = rect.top + "px";
-    highlight.style.left = rect.left + "px";
-    highlight.style.width = rect.width + "px";
-    highlight.style.height = rect.height + "px";
+    const offset = 10;
+    highlight.style.top = (rect.top - offset) + "px";
+    highlight.style.left = (rect.left - offset) + "px";
+    highlight.style.width = (rect.width + offset * 2) + "px";
+    highlight.style.height = (rect.height + offset * 2) + "px";
 
-    tooltipText.textContent = "Hier findest du alle Projekte und Downloads.";
-    tooltip.style.top = rect.bottom + 10 + "px";
-    tooltip.style.left = rect.left + "px";
-  } else {
-    document.getElementById("onboarding-overlay").classList.add("hidden");
-    localStorage.setItem("onboardingSeen", "true");
+    let tooltipTop = rect.bottom + 10;
+    let tooltipLeft = rect.left;
+
+    if (tooltipLeft + 300 > window.innerWidth) {
+      tooltipLeft = window.innerWidth - 320;
+      if (tooltipLeft < 10) tooltipLeft = 10;
+    }
+
+    tooltip.style.top = tooltipTop + "px";
+    tooltip.style.left = tooltipLeft + "px";
+
+    document.querySelectorAll(".onboarding-focused").forEach(el => el.classList.remove("onboarding-focused"));
+    target.classList.add("onboarding-focused");
   }
 }
 
-document.addEventListener("DOMContentLoaded", showOnboarding);
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("onboarding-next").addEventListener("click", nextOnboardingStep);
+  showOnboardingOverlay();
+});
 </script>
 </body>
 </html>
