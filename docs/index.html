@@ -56,6 +56,7 @@
 
 </main>
 <script>
+searchmode = true;
 document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
-  if (window.innerWidth <= 768) {setupMobileSearchIcon();} else {setupDesktopSearchInput();}
+  if (window.innerWidth <= 768) {setupMobileSearchIcon();searchmode = false;} else {setupDesktopSearchInput();searchmode = true;}
 });
 </script>
 
@@ -238,7 +239,7 @@ function nextOnboardingStep() {
     target = document.querySelector(".nav-item:nth-child(6)");
     text.textContent = "issues";
   } else if (onboardingStep === 6) {
-    if (searchmode) {nextOnboardingStep();return;}
+    if (searchmode === false) {nextOnboardingStep();return;}
     target = document.querySelector(".nav-item:nth-child(7)");
     text.textContent = "search";
   } else if (onboardingStep === 7) {
