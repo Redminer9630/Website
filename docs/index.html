@@ -21,7 +21,7 @@
     <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" alt="Menu" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
   </nav>
   <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px; margin-left: auto; max-width: 100%; flex-wrap: wrap;">
-    <div id="search-section"></div>
+    <div id="search-section" aria-label="Suche" role="search"></div>
     <div onclick="location.href='settings'" aria-label="Einstellungen"><img src="images/icons/settings.webp" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
   </div>
 </header>
@@ -61,13 +61,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchSection = document.getElementById("search-section");
 
   function setupMobileSearchIcon() {
-    searchSection.innerHTML = `<img aria-label="Suche" role="search" src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
+    searchSection.innerHTML = `<img src="images/icons/search.webp" alt="Suche" class="invert" mctip="Suche öffnen" id="search-icon" style="width:32px;height:32px;cursor:pointer;">`;
     document.getElementById("search-icon").addEventListener("click", function () {window.location.href = "search";});
     if (typeof initMinecraftTooltips === "function") initMinecraftTooltips();
   }
 
   function setupDesktopSearchInput() {
-    searchSection.innerHTML = `<input aria-label="Suche" role="search" type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
+    searchSection.innerHTML = `<input type="text" id="search" placeholder="Suche..." style="font-family: Mojangles; font-size: 1rem; padding: 5px; flex: 1; min-width: 150px; max-width: 300px;">`;
     const input = document.getElementById("search");
     input.addEventListener("keypress", function (e) {
       if (e.key === "Enter") {
