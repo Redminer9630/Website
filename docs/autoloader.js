@@ -7,7 +7,7 @@
 		{ tag: 'meta', attrs: { name: 'keywords', content: 'Minecraft, Redminer9630, Mods, Downloads, Tools, Generatoren, Wiki, Server' }},
 		{ tag: 'meta', attrs: { name: 'robots', content: 'index, follow' }},
 		{ tag: 'link', attrs: { rel: 'canonical', href: 'https://redminer9630.ddns.net/' }},
-		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'images/favicon.ico' }}
+		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }}
 	];
 	tags.forEach(({ tag, attrs, text }) => {
 		if (tag === 'title' && !head.querySelector('title')) {
@@ -38,9 +38,9 @@ const noti = (type, ...msg) => {
 };
 
 window.CommonVersion = {
-	version: 'v1.0.2',
-	date: '23.7.25',
-	time: '00:34'
+	version: 'v1.0.3',
+	date: '2.8.25',
+	time: '17:00'
 };
 
 Promise.all([
