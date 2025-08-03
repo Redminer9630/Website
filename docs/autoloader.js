@@ -90,7 +90,7 @@ function applyFont(font) {
   let fontSize = "1em";
 
   switch (font) {
-    case "ojangles":
+    case "mojangles":
       fontFamily = "Mojangles";
       fontSize = "1.05em";
       break;
