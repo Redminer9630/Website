@@ -5,24 +5,44 @@
   <title>Einstellungen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      font-family: Mojangles, Arial, sans-serif;
-    }
-    h1 {margin-bottom: 2rem;}
-    .settings-item {
-      margin-bottom: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    select {
-      padding: 0.4rem 0.6rem;
-      font-size: 1rem;
-    }
+    body { margin: 0; padding: 2rem; font-family: sans-serif; }
+    h1 { margin-bottom: 2rem; }
+    .settings-item { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    label { cursor: pointer; }
   </style>
   <script src="autoloader.js" type="module" defer></script>
+  <script type="module">
+    function setRadioValue(name, value) {
+      const radios = document.querySelectorAll(`input[name="${name}"]`);
+      for (const radio of radios) {
+        radio.checked = (radio.value === value);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const theme = localStorage.getItem("theme") || "sys";
+      const font = localStorage.getItem("font") || "mojangles";
+
+      setRadioValue("theme", theme);
+      setRadioValue("font", font);
+
+      document.querySelectorAll('input[name="theme"]').forEach(radio => {
+        radio.addEventListener("change", e => {
+          const theme = e.target.value;
+          localStorage.setItem("theme", theme);
+          window.applyTheme?.(theme);
+        });
+      });
+
+      document.querySelectorAll('input[name="font"]').forEach(radio => {
+        radio.addEventListener("change", e => {
+          const font = e.target.value;
+          localStorage.setItem("font", font);
+          window.applyFont?.(font);
+        });
+      });
+    });
+  </script>
 </head>
 <body>
   <main>
@@ -38,7 +58,7 @@
     </div>
 
     <div class="settings-item">
-      <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
+      <label for="font">Schriftart</label>
       <div class="radio-group" id="font-options">
         <label><input type="radio" name="font" value="Mojangles"> Mojangles</label>
         <label><input type="radio" name="font" value="Arial"> Arial</label>
@@ -46,65 +66,5 @@
       </div>
     </div>
   </main>
-
-  <script type="module">
-    function applyFont(font) {
-      document.documentElement.setAttribute("data-font", font);
-    }
-
-function applyTheme(theme) {
-  if (window._systemThemeListener) {
-    window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", window._systemThemeListener);
-    window._systemThemeListener = null;
-  }
-
-  if (theme === "sys") {
-    const systemIsDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.setAttribute("data-theme", systemIsDark ? "dark" : "light");
-
-    const listener = e => {const newTheme = e.matches ? "dark" : "light";document.documentElement.setAttribute("data-theme", newTheme);};
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", listener);
-    window._systemThemeListener = listener;
-
-  } else {document.documentElement.setAttribute("data-theme", theme);}
-}
-
-
-    function setRadioValue(name, value) {
-      const radios = document.querySelectorAll(`input[name="${name}"]`);
-      for (const radio of radios) {radio.checked = (radio.value === value);}
-    }
-
-    function applySettings() {
-      const theme = localStorage.getItem("theme") || "sys";
-      const font = localStorage.getItem("font") || "Mojangles";
-
-      setRadioValue("theme", theme);
-      setRadioValue("font", font);
-
-      applyTheme(theme);
-      applyFont(font);
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      applySettings();
-
-      document.querySelectorAll('input[name="theme"]').forEach(radio => {
-        radio.addEventListener("change", e => {
-          const theme = e.target.value;
-          localStorage.setItem("theme", theme);
-          applyTheme(theme);
-        });
-      });
-
-      document.querySelectorAll('input[name="font"]').forEach(radio => {
-        radio.addEventListener("change", e => {
-          const font = e.target.value;
-          localStorage.setItem("font", font);
-          applyFont(font);
-        });
-      });
-    });
-  </script>
 </body>
 </html>
