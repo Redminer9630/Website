@@ -18,6 +18,7 @@ const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: 
 let debug = false;
 window.CommonVersion = {
 	version: 'v1.0.3',
+    key: '1.0.3',
 	date: '2.8.25',
 	time: '17:00'
 };
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const footer = document.createElement('footer');
 	footer.id = "main-footer";
     footer.setAttribute("role", "contentinfo");
-	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. ${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</span>`;
+	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a href="/version?v=${CommonVersion.key}">${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</a></span>`;
 	footer.classList.add("fixed-footer");
 	document.body.style.paddingBottom = "60px";
 	document.body.appendChild(footer);
