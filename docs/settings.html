@@ -10,9 +10,7 @@
       padding: 2rem;
       font-family: Mojangles, Arial, sans-serif;
     }
-    h1 {
-      margin-bottom: 2rem;
-    }
+    h1 {margin-bottom: 2rem;}
     .settings-item {
       margin-bottom: 1.5rem;
       display: flex;
@@ -54,15 +52,27 @@
       document.documentElement.setAttribute("data-font", font);
     }
 
-    function applyTheme(theme) {
-      document.documentElement.setAttribute("data-theme", theme);
-    }
+function applyTheme(theme) {
+  if (window._systemThemeListener) {
+    window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", window._systemThemeListener);
+    window._systemThemeListener = null;
+  }
+
+  if (theme === "sys") {
+    const systemIsDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme", systemIsDark ? "dark" : "light");
+
+    const listener = e => {const newTheme = e.matches ? "dark" : "light";document.documentElement.setAttribute("data-theme", newTheme);};
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", listener);
+    window._systemThemeListener = listener;
+
+  } else {document.documentElement.setAttribute("data-theme", theme);}
+}
+
 
     function setRadioValue(name, value) {
       const radios = document.querySelectorAll(`input[name="${name}"]`);
-      for (const radio of radios) {
-        radio.checked = (radio.value === value);
-      }
+      for (const radio of radios) {radio.checked = (radio.value === value);}
     }
 
     function applySettings() {
