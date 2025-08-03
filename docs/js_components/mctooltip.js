@@ -64,6 +64,14 @@ function createTooltip(el, text) {
   const tooltip = document.createElement('div');
   tooltip.className = 'mc-tooltip';
   tooltip.textContent = text;
+  
+  // Eindeutige ID erzeugen (z. B. mit einem zufälligen Suffix)
+  const id = 'mc-tooltip-' + Math.random().toString(36).slice(2, 10);
+  tooltip.id = id;
+
+  // aria-describedby setzen
+  el.setAttribute('aria-describedby', id);
+
   tooltip.style.display = 'none';
   document.body.appendChild(tooltip);
 
@@ -88,14 +96,22 @@ function createTooltip(el, text) {
   el.addEventListener('mousemove', e => moveTooltip(e, tooltip));
   el.addEventListener('mouseleave', hide);
 
-  el.addEventListener('touchstart', e => {e.stopPropagation();if (visible) {hide();} else {show(e.touches[0]);}});
+  el.addEventListener('touchstart', e => {
+    e.stopPropagation();
+    if (visible) {
+      hide();
+    } else {
+      show(e.touches[0]);
+    }
+  });
 
-document.addEventListener('touchend', evt => {
-  if (
-    currentTooltip &&
-    !currentTooltip.contains(evt.target) &&
-    !currentElement?.contains(evt.target)
-  ) {setTimeout(() => {hide();}, 0);}}, { passive: true });
+  document.addEventListener('touchend', evt => {
+    if (
+      currentTooltip &&
+      !currentTooltip.contains(evt.target) &&
+      !currentElement?.contains(evt.target)
+    ) {setTimeout(() => { hide(); }, 0);}
+  }, { passive: true });
 }
 
 export function initMinecraftTooltips() {
