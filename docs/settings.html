@@ -29,57 +29,72 @@
 <body>
   <main>
     <h1>Einstellungen</h1>
-      
-<div class="settings-item">
-  <label>Design</label>
-  <div class="radio-group" id="theme-options">
-    <label><input type="radio" name="theme" value="dark"> Dunkel</label>
-    <label><input type="radio" name="theme" value="light"> Hell</label>
-    <label><input type="radio" name="theme" value="sys"> System</label>
-  </div>
-</div>
+    
+    <div class="settings-item">
+      <label>Design</label>
+      <div class="radio-group" id="theme-options">
+        <label><input type="radio" name="theme" value="dark"> Dunkel</label>
+        <label><input type="radio" name="theme" value="light"> Hell</label>
+        <label><input type="radio" name="theme" value="sys"> System</label>
+      </div>
+    </div>
 
-<div class="settings-item">
-  <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
-  <div class="radio-group" id="font-options">
-    <label><input type="radio" name="font" value="Mojangles"> Mojangles</label>
-    <label><input type="radio" name="font" value="Arial"> Arial</label>
-    <label><input type="radio" name="font" value="Sans-Serif"> Sans Serif</label>
-  </div>
-</div>
-<div class="settings-item">
-    <button onclick="localStorage.removeItem('onboardingSeen'); this.disabled = true; this.style.backgroundColor = '#888';">Onboarding zurücksetzen</button>
-</div>
-</main>
-<script type="module">
-  function applyFont(font) {document.documentElement.setAttribute("data-font", font);}
+    <div class="settings-item">
+      <label for="font" mctip="Mojangles ist der offizielle Minecraft Font">Schriftart</label>
+      <div class="radio-group" id="font-options">
+        <label><input type="radio" name="font" value="Mojangles"> Mojangles</label>
+        <label><input type="radio" name="font" value="Arial"> Arial</label>
+        <label><input type="radio" name="font" value="Sans-Serif"> Sans Serif</label>
+      </div>
+    </div>
+  </main>
 
-  function applySettings() {
-    const theme = localStorage.getItem("theme") || "sys";
-    const font = localStorage.getItem("font") || "Mojangles";
+  <script type="module">
+    function applyFont(font) {
+      document.documentElement.setAttribute("data-font", font);
+    }
 
-    document.getElementById("theme").value = theme;
-    document.getElementById("font").value = font;
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
 
-    applyTheme(theme);
-    applyFont(font);
-  }
+    function setRadioValue(name, value) {
+      const radios = document.querySelectorAll(`input[name="${name}"]`);
+      for (const radio of radios) {
+        radio.checked = (radio.value === value);
+      }
+    }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    applySettings();
+    function applySettings() {
+      const theme = localStorage.getItem("theme") || "sys";
+      const font = localStorage.getItem("font") || "Mojangles";
 
-    document.getElementById("theme").addEventListener("change", e => {
-      const theme = e.target.value;
-      localStorage.setItem("theme", theme);
+      setRadioValue("theme", theme);
+      setRadioValue("font", font);
+
       applyTheme(theme);
-    });
-
-    document.getElementById("font").addEventListener("change", e => {
-      const font = e.target.value;
-      localStorage.setItem("font", font);
       applyFont(font);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySettings();
+
+      document.querySelectorAll('input[name="theme"]').forEach(radio => {
+        radio.addEventListener("change", e => {
+          const theme = e.target.value;
+          localStorage.setItem("theme", theme);
+          applyTheme(theme);
+        });
+      });
+
+      document.querySelectorAll('input[name="font"]').forEach(radio => {
+        radio.addEventListener("change", e => {
+          const font = e.target.value;
+          localStorage.setItem("font", font);
+          applyFont(font);
+        });
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>
