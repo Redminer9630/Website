@@ -1,18 +1,29 @@
 # Sicherheitsrichtlinie
 
-## Unterstützte Versionen
-## Dieser Beitrag ist nicht aktuell! Bald Aktualiesiert
-Hier siehst du, welche Versionen deines Projekts derzeit mit Sicherheitsupdates unterstützt werden.
+## Allgemeine Informationen
 
-| Version | Unterstützt         |
-| ------- | ------------------- |
-| 5.1.x   | :white_check_mark:  |
-| 5.0.x   | :x:                 |
-| 4.0.x   | :white_check_mark:  |
-| < 4.0   | :x:                 |
+Diese Website verarbeitet keine persönlichen Nutzerdaten und verwendet keine Login-Systeme oder Passwörter.  
+Alle benutzerspezifischen Einstellungen wie Theme oder Schriftart werden ausschließlich lokal im Browser gespeichert (`localStorage`).
 
-## Melden einer Sicherheitslücke
+## Verwendung von APIs
 
-In diesem Abschnitt erfährst du, wie du Sicherheitslücken melden kannst.  
+Diese Website nutzt öffentliche oder clientseitige APIs ausschließlich zur Anzeige von Statusinformationen oder lokalen Tools:
 
-Beschreibe, wohin du dich wenden kannst, wie oft du mit Updates zu einer gemeldeten Sicherheitslücke rechnen kannst und was passiert, wenn die Sicherheitslücke akzeptiert oder abgelehnt wird.
+- GitHub API: Online-Status, PR-Infos
+- Discord API: Online-Status (ohne Login)
+- TOTP-Generator: wird vollständig im Browser berechnet, keine Serveranfragen
+- Weitere kleine Tools
+
+Alle API-Zugriffe erfolgen **ohne Speicherung** und ausschließlich clientseitig.
+
+## Melden von Sicherheitsproblemen
+
+Wenn dir ein sicherheitsrelevantes Problem auffällt, z. B.:
+- Lecks von Tokens oder API-Schlüsseln
+- Missbrauch von API-Raten
+- TOTP-Schwächen
+- Script Injection / XSS
+
+…dann melde es bitte verantwortungsvoll über GitHub Issues oder per E-Mail an: `redminer9630@gmail.com`(nicht empfolen).
+
+Wir bemühen uns, Sicherheitsprobleme zeitnah zu prüfen und zu beheben.
