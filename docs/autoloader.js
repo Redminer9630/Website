@@ -83,12 +83,38 @@ export function applyTheme(theme) {
   } else {document.documentElement.setAttribute("data-theme", theme);}
 }
 
-export function applyFont(font) {
+function applyFont(font) {
   document.documentElement.setAttribute("data-font", font);
 
-  if (font === "mojangles") {document.body.style.fontFamily = "Mojangles";document.documentElement.style.fontSize = "1.05em";} 
-  else if (font === "arial") {document.body.style.fontFamily = "Arial";document.documentElement.style.fontSize = "1em";} 
-  else if (font === "sans-serif") {document.body.style.fontFamily = "sans-serif";document.documentElement.style.fontSize = "1em";}
+  let fontFamily = "sans-serif";
+  let fontSize = "1em";
+
+  switch (font) {
+    case "ojangles":
+      fontFamily = "Mojangles";
+      fontSize = "1.05em";
+      break;
+    case "arial":
+      fontFamily = "Arial, sans-serif";
+      break;
+    case "verdana":
+      fontFamily = "Verdana, sans-serif";
+      fontSize = "0.95em";
+      break;
+    case "georgia":
+      fontFamily = "Georgia, serif";
+      break;
+    case "courier":
+      fontFamily = "'Courier New', monospace";
+      fontSize = "0.95em";
+      break;
+    case "system-ui":
+      fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+      break;
+  }
+
+  document.body.style.fontFamily = fontFamily;
+  document.documentElement.style.fontSize = fontSize;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
