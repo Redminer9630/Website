@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <title>Suche – Redminer9630</title>
   <style>
-    body{font-family:'Mojangles',sans-serif;margin:1rem;}
+    body{font-family:'Mojangles';margin:1rem;}
     h1{margin-bottom:1rem;}
     #search-section{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1rem;}
-    #search-input{flex:1;padding:0.5rem;font-size:1rem;font-family:'Mojangles',Arial;}
+    #search-input{flex:1;padding:0.5rem;font-size:1rem;font-family:'Mojangles';}
     button{background:#2ecc71;color:white;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';font-size:1rem;}
     button:hover{background:#2ecc87;}
     label{display:flex;align-items:center;gap:0.5rem;}
@@ -21,12 +21,12 @@
 <body>
   <h1>Suche</h1>
   <section id="search-section">
-    <input id="search-input" type="search" placeholder="Suchbegriff eingeben" />
+    <input id="search-input" type="search" role="search" placeholder="Suchbegriff eingeben" />
     <button id="search-button">Suchen</button>
     <label><input type="checkbox" id="include-google" /> Auf Google suchen</label>
   </section>
   <div id="results"></div>
-  <i>Die Suche funktioniert noch nicht wie gewollt</i>
+  <i>Die Suche funktioniert noch nicht</i>
 
   <script>
     const input = document.getElementById("search-input")
