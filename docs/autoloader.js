@@ -85,14 +85,15 @@ export function applyTheme(theme) {
 }
 
 function applyFont(font) {
+  localStorage.setItem("font", font);
   document.documentElement.setAttribute("data-font", font);
 
   let fontFamily = "sans-serif";
   let fontSize = "1em";
 
-  switch (font) {
+  switch (font.toLowerCase()) {
     case "mojangles":
-      fontFamily = "Mojangles";
+      fontFamily = "Mojangles, Arial, sans-serif";
       fontSize = "1.05em";
       break;
     case "arial":
@@ -119,10 +120,17 @@ function applyFont(font) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll('[style]').forEach(el => {if (el.style.fontFamily?.includes("Mojangles")) {el.style.fontFamily = el.style.fontFamily.replace(/Mojangles/gi, "sans-serif");}});
-  document.querySelectorAll("style").forEach(styleTag => {styleTag.textContent = styleTag.textContent.replace(/font-family:\s*["']?Mojangles["']?/gi, "font-family: sans-serif");});
-  for (const sheet of document.styleSheets) {try {const rules = sheet.cssRules || sheet.rules;for (const rule of rules) {if (rule.style && rule.style.fontFamily?.includes("Mojangles")) {rule.style.fontFamily = rule.style.fontFamily.replace(/Mojangles/gi, "sans-serif");}}} catch (e) {continue;}}
+  const activeFont = localStorage.getItem("font") || "Mojangles";
+
+  if (activeFont.toLowerCase() !== "mojangles") {
+    document.querySelectorAll('[style]').forEach(el => {if (el.style.fontFamily?.includes("Mojangles")) {el.style.fontFamily = el.style.fontFamily.replace(/Mojangles/gi, "sans-serif");} });
+
+    document.querySelectorAll("style").forEach(styleTag => {styleTag.textContent = styleTag.textContent.replace(/font-family:\s*["']?Mojangles["']?/gi, "font-family: sans-serif");});
+
+    for (const sheet of document.styleSheets) {try {const rules = sheet.cssRules || sheet.rules;for (const rule of rules) {if (rule.style && rule.style.fontFamily?.includes("Mojangles")) {rule.style.fontFamily = rule.style.fontFamily.replace(/Mojangles/gi, "sans-serif");}}} catch (e) {continue; }}
+  }
 });
+
 
 function loadCaptcha(callback) {
 	if (window.grecaptcha) {if (callback) callback(window.grecaptcha);return;}
