@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
-<head><style>body{font-family:'Mojangles', Arial;}</style>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seite nicht gefunden</title>
 <style>
-body { font-family: 'Minecraft', sans-serif; text-align: center; margin: 0; padding-bottom: 80px; background-color: #f4f4f4; }
+body { font-family: 'Mojangles', sans-serif; text-align: center; margin: 0; padding-bottom: 80px; background-color: #f4f4f4; }
 h1 { font-size: 3em; color: #333; margin-top: 50px; }
 p { font-size: 1.2em; color: #666; }
 a { color: #1a73e8; text-decoration: none; }
@@ -19,7 +19,7 @@ progress::-webkit-progress-bar { background-color: #eee; border-radius: 10px; }
 progress::-webkit-progress-value { background-color: #1a73e8; border-radius: 10px; }
 progress::-moz-progress-bar { background-color: #1a73e8; border-radius: 10px; }
 </style>
-<script src="/autoloader.js" type="module" defer></script>
+<script src="autoloader.js" type="module" defer></script>
 </head>
 <body>
 <h1>404 - Seite nicht gefunden</h1>
@@ -54,7 +54,6 @@ if (window.location.pathname.endsWith('404')) {
     }, 1000);
 }
 
-// Lokale IP holen via WebRTC
 function getLocalIP(callback) {
     const pc = new RTCPeerConnection({iceServers:[]});
     pc.createDataChannel('');
