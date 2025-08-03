@@ -9,34 +9,13 @@
 		{ tag: 'link', attrs: { rel: 'canonical', href: 'https://redminer9630.ddns.net/' }},
 		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }}
 	];
-	tags.forEach(({ tag, attrs, text }) => {
-		if (tag === 'title' && !head.querySelector('title')) {
-			const el = document.createElement('title'); el.textContent = text; head.appendChild(el);
-		} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {
-			const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);
-		}
-	});
+	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
 
+if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
+const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
+
 let debug = false;
-
-if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));
-if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));
-if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
-
-const noti = (type, ...msg) => {
-	const txt = msg.join(' ');
-	const types = {
-		error: console.error,
-		warn: console.warn,
-		info: console.info,
-		log: console.log,
-		debug: console.debug
-	};
-	(types[type] || console.debug)(txt);
-	alert(txt);
-};
-
 window.CommonVersion = {
 	version: 'v1.0.3',
 	date: '2.8.25',
@@ -59,22 +38,10 @@ Promise.all([
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
 
-	const savedFont = localStorage.getItem("font") || "Mojangles";
-	document.documentElement.setAttribute("data-font", savedFont);
+	const savedFont = localStorage.getItem("font") || "Mojangles";document.documentElement.setAttribute("data-font", savedFont);
 
-	document.querySelectorAll('[data-modal-open]').forEach(btn => {
-		btn.addEventListener('click', () => {
-			const id = btn.getAttribute('data-modal-open');
-			if (typeof Modal?.open == 'function') Modal.open(id);
-			else noti("error", "Modal.open nicht verfügbar");
-		});
-	});
-    if(debug === true) {
-	  document.querySelectorAll("img").forEach(img => {
-		if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);
-		if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");
-	  });
-    }
+	document.querySelectorAll('[data-modal-open]').forEach(btn => {btn.addEventListener('click', () => {const id = btn.getAttribute('data-modal-open');if (typeof Modal?.open == 'function') Modal.open(id);else noti("error", "Modal.open nicht verfügbar");});});
+    if(debug === true) {document.querySelectorAll("img").forEach(img => {if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte in WebP vorliegen:", img.src);if (img.naturalWidth > 800) noti("warn", "Bild eventuell zu groß geladen:", img.src, img.naturalWidth + "px");});}
 	mctip.initMinecraftTooltips();
 }).catch(err => {noti("error", "Fehler beim Laden der Komponenten:", err);});
 
@@ -97,24 +64,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	fontStyle.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2'),url('minecraft_font.woff') format('woff'),url('minecraft_font.ttf') format('truetype');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontStyle);
 
-	if (location.pathname !== '/' && location.pathname !== '/index.html') {
-		const backCSS = document.createElement('style');
+	if (location.pathname !== '/' && location.pathname !== '/index.html') {const backCSS = document.createElement('style');
 		backCSS.textContent = `.header-link{font-family:'Mojangles';font-size:16px;text-decoration:none;padding:10px 20px;border-radius:8px;position:absolute;top:20px;right:20px;background-color:#f44336;color:white;cursor:pointer}.header-link:hover{background-color:#e53935}`;
-		document.head.appendChild(backCSS);
-
-		const backButton = document.createElement('div');
-		backButton.className = 'header-link';
-		backButton.textContent = 'Zurück';
-		backButton.addEventListener('click', () => history.back());
-		document.body.appendChild(backButton);
+		document.head.appendChild(backCSS);const backButton = document.createElement('div');backButton.className = 'header-link';backButton.textContent = 'Zurück';backButton.addEventListener('click', () => history.back());document.body.appendChild(backButton);
 	}
 });
 
+export function applyTheme(theme) {
+  if (window._systemThemeListener) {window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", window._systemThemeListener);window._systemThemeListener = null;}
+
+  if (theme === "sys") {
+    const systemIsDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme", systemIsDark ? "dark" : "light");
+      
+    const listener = e => {document.documentElement.setAttribute("data-theme", e.matches ? "dark" : "light");};
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", listener);
+    window._systemThemeListener = listener;
+  } else {document.documentElement.setAttribute("data-theme", theme);}
+}
+
+export function applyFont(font) {
+  document.documentElement.setAttribute("data-font", font);
+
+  if (font === "mojangles") {document.body.style.fontFamily = "Mojangles";document.documentElement.style.fontSize = "1.05em";} 
+  else if (font === "arial") {document.body.style.fontFamily = "Arial";document.documentElement.style.fontSize = "1em";} 
+  else if (font === "sans-serif") {document.body.style.fontFamily = "sans-serif";document.documentElement.style.fontSize = "1em";}
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const theme = localStorage.getItem("theme") || "sys";
+  const font = localStorage.getItem("font") || "mojangles";
+
+  applyTheme(theme);
+  applyFont(font);
+
+  window.applyTheme = applyTheme;
+  window.applyFont = applyFont;
+});
+
+
 function loadCaptcha(callback) {
-	if (window.grecaptcha) {
-		if (callback) callback(window.grecaptcha);
-		return;
-	}
+	if (window.grecaptcha) {if (callback) callback(window.grecaptcha);return;}
 	const script = document.createElement('script');
 	script.src = 'https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit';
 	script.async = true;
