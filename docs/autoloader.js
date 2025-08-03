@@ -17,10 +17,10 @@ const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: 
 
 let debug = false;
 window.CommonVersion = {
-	version: 'v1.0.3',
-    key: '1.0.3',
-	date: '2.8.25',
-	time: '17:00'
+	version: 'v1.1.0',
+    key: '1.1.0',
+	date: '3.8.25',
+	time: '22:30'
 };
 
 Promise.all([
