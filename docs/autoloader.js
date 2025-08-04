@@ -7,9 +7,7 @@
 		{ tag: 'meta', attrs: { name: 'keywords', content: 'Minecraft, Redminer9630, Mods, Downloads, Tools, Generatoren, Wiki, Server' }},
 		{ tag: 'meta', attrs: { name: 'robots', content: 'index, follow' }},
 		{ tag: 'link', attrs: { rel: 'canonical', href: 'https://redminer9630.ddns.net/' }},
-		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }},
-        { tag: 'meta', attrs: { http-equiv=: 'Cache-Control', content: 'max-age=3600' }},
-        { tag: 'meta', attrs: { http-equiv=: 'Expires', content: 'Wed, 21 Oct 2025 07:28:00 GMT' }}
+		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }}
 	];
 	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
