@@ -26,7 +26,7 @@ window.CommonVersion = {
 Promise.all([
 	import('/js_components/elements.js'),
 	import('/js_components/tooltip.js'),
-	import('/js_components/firebase.js'),
+	//import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
@@ -34,7 +34,7 @@ Promise.all([
 	import('/js_components/mctooltip.js'),
     import('/js_components/cliper.js'),
     import('/js_components/theme.js')
-]).then(([elements, tooltip, firebase, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {    
+]).then(([elements, tooltip, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {    
     const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
