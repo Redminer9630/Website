@@ -52,17 +52,26 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?from=main'">Offizielle Bandseite anschauen</button><br>
     </section>
 </main>
-<script> // high res
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   if (window.innerWidth < 800) {
     const imgs = document.querySelectorAll("img[src]");
     imgs.forEach(img => {
       const src = img.getAttribute("src");
+
       if (src.includes("/high/")) return;
+
       const parts = src.split('/');
       const filename = parts.pop();
-      const newSrc = [...parts, "high", filename].join('/');
-      img.setAttribute("src", newSrc);
+      const parent = parts.pop();
+
+      if (parent && parent !== "images") {
+        const newSrc = `images/${parent}/high/${filename}`;
+        img.setAttribute("src", newSrc);
+      } else {
+        const newSrc = `images/high/${filename}`;
+        img.setAttribute("src", newSrc);
+      }
     });
   }
 });
