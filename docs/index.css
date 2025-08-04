@@ -91,47 +91,8 @@ input:checked+.slider:before{transform:translateX(22px);}
   align-items: center;
   cursor: pointer;
 }
-
+nav {min-height:50px;}
 #hamburger-dropdown img {width: 30px;height: 30px;}
 .hidden {display: none !important;}
-
-#onboarding-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 9999;
-  pointer-events: all;
-}
-
-#onboarding-highlight {
-  position: absolute;
-  border: 3px solid #00ffff;
-  border-radius: 8px;
-  box-shadow: 0 0 15px #00ffff;
-  pointer-events: none;
-  z-index: 10000;
-}
-
-#onboarding-tooltip {
-  position: absolute;
-  background: white;
-  color: black;
-  padding: 12px 16px;
-  border-radius: 10px;
-  max-width: 300px;
-  z-index: 10001;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-}
-
-#onboarding-tooltip button {
-  margin-top: 10px;
-  padding: 5px 10px;
-}
-
-.onboarding-hidden {display: none !important;}
-.onboarding-focused {
-  position: relative;
-  z-index: 10001 !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
+.nav-icon,.account-icon,.logo-icon,.logo-static img,#hamburger-dropdown img {width:30px;height:30px;}
+.nav-item,.icon-left,.icon-right,section {transition: all 0.2s ease;}
