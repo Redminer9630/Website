@@ -55,24 +55,20 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   if (window.innerWidth < 800) {
+    const replacements = {
+      "images/tree.webp": "images/high/tree.webp",
+      "images/main.webp": "images/high/main.webp",
+      "images/icons/tools.webp": "images/icons/high/tools.webp",
+      "images/icons/about.webp": "images/icons/high/about.webp",
+      "images/icons/downloads.webp": "images/icons/high/downloads.webp",
+      "images/icons/search.webp": "images/icons/high/search.webp",
+      "images/icons/settings.webp": "images/icons/high/settings.webp",
+      "images/icons/menu.webp": "images/icons/high/menu.webp",
+      "images/icons/feedback.webp": "images/icons/high/feedback.webp"
+    };
+
     const imgs = document.querySelectorAll("img[src]");
-    imgs.forEach(img => {
-      const src = img.getAttribute("src");
-
-      if (src.includes("/high/")) return;
-
-      const parts = src.split('/');
-      const filename = parts.pop();
-      const parent = parts.pop();
-
-      if (parent && parent !== "images") {
-        const newSrc = `images/${parent}/high/${filename}`;
-        img.setAttribute("src", newSrc);
-      } else {
-        const newSrc = `images/high/${filename}`;
-        img.setAttribute("src", newSrc);
-      }
-    });
+    imgs.forEach(img => {const src = img.getAttribute("src");if (replacements[src]) {img.setAttribute("src", replacements[src]);}});
   }
 });
 </script>
