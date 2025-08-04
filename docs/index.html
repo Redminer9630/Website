@@ -183,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function getAvailableWidth() {return nav.offsetWidth - iconRight.offsetWidth - 40;}
 
   function updateNavigation() {
+    [...dropdown.children].forEach(icon => {iconLeft.insertBefore(icon, hamburger);});dropdown.innerHTML = "";
     dropdown.innerHTML = "";
     originalIcons.forEach(icon => icon.classList.remove("hidden"));
     hamburger.classList.add("hidden");
