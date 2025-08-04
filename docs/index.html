@@ -192,15 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const maxWidth = getAvailableWidth();
 
-    if (totalWidth > maxWidth) {
-      hamburger.classList.remove("hidden");
-      for (let i = originalIcons.length - 1; i >= 0; i--) {
-        const icon = originalIcons[i];
-        totalWidth -= icon.offsetWidth;
-        if (totalWidth > maxWidth) {icon.classList.add("hidden");dropdown.appendChild(icon.cloneNode(true));
-        } else {break;}
-      }
-    }
+    if (totalWidth > maxWidth) {hamburger.classList.remove("hidden");for (let i = originalIcons.length - 1; i >= 0; i--) {const icon = originalIcons[i];totalWidth -= icon.offsetWidth;if (totalWidth > maxWidth) {dropdown.appendChild(icon);} } else {break;}}}
     if (dropdown.children.length === 0) {hamburger.classList.add("hidden");dropdown.classList.add("hidden");}
   }
 
