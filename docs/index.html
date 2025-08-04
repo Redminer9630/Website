@@ -178,21 +178,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function getAvailableWidth() {return nav.offsetWidth - iconRight.offsetWidth - 40;}
 
-  function updateNavigation() {
-    [...dropdown.children].forEach(icon => {iconLeft.insertBefore(icon, hamburger);});dropdown.innerHTML = "";
-    dropdown.innerHTML = "";
-    originalIcons.forEach(icon => icon.classList.remove("hidden"));
-    hamburger.classList.add("hidden");
+function updateNavigation() {
+  [...dropdown.children].forEach(icon => {iconLeft.insertBefore(icon, hamburger);});
+  dropdown.innerHTML = "";
+  originalIcons.forEach(icon => icon.classList.remove("hidden"));
+  hamburger.classList.add("hidden");
 
-    let totalWidth = hamburger.offsetWidth;
-    originalIcons.forEach(icon => totalWidth += icon.offsetWidth);
+  let totalWidth = hamburger.offsetWidth;
+  originalIcons.forEach(icon => totalWidth += icon.offsetWidth);
 
-    const maxWidth = getAvailableWidth();
+  const maxWidth = getAvailableWidth();
 
-    if (totalWidth > maxWidth) {hamburger.classList.remove("hidden");for (let i = originalIcons.length - 1; i >= 0; i--) {const icon = originalIcons[i];totalWidth -= icon.offsetWidth;if (totalWidth > maxWidth) {dropdown.appendChild(icon);} } else {break;}}}
-    if (dropdown.children.length === 0) {hamburger.classList.add("hidden");dropdown.classList.add("hidden");}
-  }
-
+  if (totalWidth > maxWidth) {hamburger.classList.remove("hidden");for (let i = originalIcons.length - 1; i >= 0; i--) {const icon = originalIcons[i];totalWidth -= icon.offsetWidth;if (totalWidth > maxWidth) {dropdown.appendChild(icon);} else {break;}}}if (dropdown.children.length === 0) {hamburger.classList.add("hidden");dropdown.classList.add("hidden");}}
+    
   window.addEventListener("resize", updateNavigation);
   updateNavigation();
 
