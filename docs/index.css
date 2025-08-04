@@ -6,7 +6,7 @@ h1{margin:0;display:flex;align-items:center;width:auto;white-space:nowrap;}
 main{flex:1;padding:20px;margin-top:0;}
 section{margin-bottom:20px;}
 h2,.h2{color:black;}
-button{background-color:#7CB342;color:#fff;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';z-index:9999;}
+button{background-color:#1a1a1a;color:#fff;padding:10px 20px;border:none;cursor:pointer;font-family:'Mojangles';z-index:9999;}
 button:hover{background-color:#1a1a7a;}
 @media(prefers-color-scheme:dark){body{background-color:#1a1a1a;color:#f5f5f5;}header,footer{background-color:#1c2a34;}h2,.h2{color:white;}button{background-color:#363e39;}button:hover{background-color:#5c6a61;}}
 @media(max-width:768px)and(orientation:portrait){header{flex-direction:column;align-items:center;justify-content:center;}.logo-container{flex-direction:column;align-items:center;}.logo{width:180px;}.hiddenItem{visibility:hidden;color:gray;background-color:gray;}footer{padding:20px;font-size:14px;}}
