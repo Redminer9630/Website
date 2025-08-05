@@ -1,0 +1,40 @@
+name: CDN Replace und Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  replace-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Node.js installieren
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Abhängigkeiten installieren (falls nötig)
+        run: npm install
+
+      - name: CDN Replace Skript ausführen
+        run: node cdn-replacer.js
+
+      - name: Commit und Push Änderungen
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git commit -m "CDN Links automatisch ersetzt"
+          git push
+
+      # Optional: GitHub Pages deployen (falls docs/ als Pages-Source benutzt wird)
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
