@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
     footer.setAttribute("role", "contentinfo");
 	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a href="/version?v=${CommonVersion.key}">${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</a></span>`;
 	footer.classList.add("fixed-footer");
-	document.body.style.paddingBottom = "60px";
 	document.body.appendChild(footer);
 	document.querySelectorAll('br[height]').forEach(br => {const height = parseInt(br.getAttribute('height')) || 0;const spacer = document.createElement('div');spacer.style.height = `${height}px`;br.replaceWith(spacer);});
 	
