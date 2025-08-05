@@ -96,14 +96,15 @@ function createTooltip(el, text) {
   el.addEventListener('mousemove', e => moveTooltip(e, tooltip));
   el.addEventListener('mouseleave', hide);
 
-  el.addEventListener('touchstart', e => {
-    e.stopPropagation();
-    if (visible) {
-      hide();
-    } else {
-      show(e.touches[0]);
-    }
-  });
+el.addEventListener('touchstart', e => {
+  e.stopPropagation();
+  if (visible) {
+    hide();
+  } else {
+    show(e.touches[0]);
+  }
+}, { passive: true });
+
 
   document.addEventListener('touchend', evt => {
     if (
