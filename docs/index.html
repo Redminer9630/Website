@@ -17,17 +17,17 @@
   <nav style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
     <div class="icon-left" style="display: flex; align-items: center; gap: 15px;">
       <div class="logo-static"><img alt="" width="30" height="30" src="favicon/apple-touch-icon.webp" class="logo-icon"></div>
-      <div class="nav-item" tabindex="1" onclick="location.href='projects'" aria-label="Projekte"><img width="30" height="30" src="images/icons/downloads.webp" class="nav-icon" alt="Projekte" mctip="Projekte" /></div>
-      <div class="nav-item" tabindex="2" onclick="location.href='tools'" aria-label="Tools"><img width="30" height="30" src="images/icons/tools.webp" class="nav-icon" alt="Tools" mctip="Tools" /></div>
-      <div class="nav-item" tabindex="3" onclick="location.href='linktree'" aria-label="Linktree"><img width="30" height="30" src="images/tree.webp" class="nav-icon" alt="Linktree" mctip="Linktree" /></div>
-      <div class="nav-item" tabindex="4" onclick="location.href='manual'" aria-label="Benutzerhandbuch"><img width="30" height="30" src="images/icons/about.webp" alt="Benutzerhandbuch" class="nav-icon" mctip="Benutzerhandbuch" /></div>
-      <div class="nav-item" tabindex="5" onclick="location.href='https://github.com/Redminer9630/Website/issues'" aria-label="Feedback/Bugs"><img width="30" height="30" src="images/icons/feedback.webp" alt="Feedback/Bugs" class="nav-icon" mctip="Feedback/Bug melden" /></div>
+      <div class="nav-item" tabindex="0" onclick="location.href='projects'" aria-label="Projekte"><img width="30" height="30" src="images/icons/downloads.webp" class="nav-icon" alt="Projekte" mctip="Projekte" /></div>
+      <div class="nav-item" tabindex="0" onclick="location.href='tools'" aria-label="Tools"><img width="30" height="30" src="images/icons/tools.webp" class="nav-icon" alt="Tools" mctip="Tools" /></div>
+      <div class="nav-item" tabindex="0" onclick="location.href='linktree'" aria-label="Linktree"><img width="30" height="30" src="images/tree.webp" class="nav-icon" alt="Linktree" mctip="Linktree" /></div>
+      <div class="nav-item" tabindex="0" onclick="location.href='manual'" aria-label="Benutzerhandbuch"><img width="30" height="30" src="images/icons/about.webp" alt="Benutzerhandbuch" class="nav-icon" mctip="Benutzerhandbuch" /></div>
+      <div class="nav-item" tabindex="0" onclick="location.href='https://github.com/Redminer9630/Website/issues'" aria-label="Feedback/Bugs"><img width="30" height="30" src="images/icons/feedback.webp" alt="Feedback/Bugs" class="nav-icon" mctip="Feedback/Bug melden" /></div>
       <div class="nav-item hidden" id="hamburger-menu"><img src="images/icons/menu.webp" width="30" height="30" alt="Menu" class="nav-icon" mctip="Mehr" /><div id="hamburger-dropdown" class="dropdown hidden"></div></div>
     </div>
 
     <div class="icon-right" aria-label="Benutztermenü" style="display: flex; align-items: center; gap: 15px;">
       <div id="search-section" aria-label="Suche" role="search"></div>
-      <div onclick="location.href='settings'" tabindex="6" aria-label="Einstellungen"><img src="images/icons/settings.webp" width="30" height="30" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
+      <div onclick="location.href='settings'" tabindex="0" aria-label="Einstellungen"><img src="images/icons/settings.webp" width="30" height="30" alt="Einstellungen" class="account-icon" style="width: auto;" mctip="Einstellungen"></div>
     </div>
   </nav>
 </header>
@@ -38,18 +38,18 @@
     <section id="about">
       <h1 class="h2">Über Redminer9630</h1>
       <p>Ich bin ein Minecraft-YouTuber und Streamer. Mein Kanal ist neu und spannende Inhalte folgen bald. Sei von Anfang an dabei!</p>
-      <button onclick="location.href='manual?q=about'">Mehr über mich erfahren</button><br>
+      <button tabindex="1" onclick="location.href='manual?q=about'">Mehr über mich erfahren</button><br>
     </section>
 
     <section>
       <h2>Schreck um Mitternacht – MC Freunde Fanstory</h2>
       <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
-      <button onclick="location.href='mcfreundefanstory'">Geschichte lesen</button><br>
+      <button tabindex="2" onclick="location.href='mcfreundefanstory'">Geschichte lesen</button><br>
     </section>
 
     <section>
       <h2>fatness4...the greedies</h2>
-      <button onclick="location.href='https://fatness4thegreedies.github.io?from=main'">Offizielle Bandseite anschauen</button><br>
+      <button tabindex="3" onclick="location.href='https://fatness4thegreedies.github.io?from=main'">Offizielle Bandseite anschauen</button><br>
     </section>
 </main>
 <script>
