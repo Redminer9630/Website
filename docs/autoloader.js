@@ -14,7 +14,7 @@
 function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/minecraft_font");
 
 (function () {
-	const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/";
+	const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs";
 	const isSmallScreen = window.innerWidth < 800;
     
 	const mainImages = ["main", "tree"];
