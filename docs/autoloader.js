@@ -12,15 +12,13 @@
 	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
 
-(function preloadFontWoff2(fontBasePath) {
-  const link = document.createElement("link");
-  link.rel = "preload";
-  link.href = fontBasePath + ".woff2";
-  link.as = "font";
-  link.type = "font/woff2";
-  link.crossOrigin = "anonymous";
-  document.head.appendChild(link);
-})("https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/minecraft_font");
+function loadMinecraftFont(fontName, fontBaseURL) {
+	const formats = [{ ext: ".woff2", type: "font/woff2", format: "woff2" },{ ext: ".woff", type: "font/woff", format: "woff" },{ ext: ".ttf", type: "font/ttf", format: "truetype" }];
+	formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBaseURL + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});
+	const fontFace = `@font-face {font-family: "${fontName}";src: ${formats.map(({ ext, format }) => `url("${fontBaseURL + ext}") format("${format}")`).join(",\n\t\t")};font-display: swap;}`;
+	const style = document.createElement("style");style.textContent = fontFace;document.head.appendChild(style);
+}
+loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/minecraft_font");
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
