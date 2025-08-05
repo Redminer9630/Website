@@ -32,7 +32,7 @@ window.CommonVersion = {
 };
 
 Promise.all([
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/elements.js'),
+	//import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/elements.js'),
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/need_confirm.js'),
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/back_button.js'),
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/download.js'),
@@ -40,7 +40,7 @@ Promise.all([
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/mctooltip.js'),
     import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/cliper.js'),
     import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/theme.js')
-]).then(([elements, need_confirm, back_button, download, embed, mctip, cliper, theme]) => {    
+]).then(([need_confirm, back_button, download, embed, mctip, cliper, theme]) => {    
     const css = document.createElement('link');css.rel = 'stylesheet';css.href = 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
