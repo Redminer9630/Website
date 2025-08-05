@@ -96,3 +96,4 @@ nav {min-height:50px;}
 .hidden {display: none !important;}
 .nav-icon,.account-icon,.logo-icon,.logo-static img,#hamburger-dropdown img {width:30px;height:30px;}
 .nav-item,.icon-left,.icon-right,section {transition: all 0.2s ease;}
+section.fanstory {min-height: 500px;}
