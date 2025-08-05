@@ -13,33 +13,61 @@
 })();
 function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/minecraft_font");
 
-(async function(){
-	const CDN_BASE = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs";
-	const TEST_FILE = "autoloader.js";
-	const LOCAL_HOSTS = ["", location.hostname];
+(function () {
+	const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/";
+	const isSmallScreen = window.innerWidth < 800;
+    
+	const mainImages = ["main", "tree"];
+	const icons = ["about", "downloads", "feedback", "menu", "search", "settings", "team", "tools"];
+	const fonts = ["woff2", "woff", "ttf"];
+	const scripts = [
+		"autoloader.js",
+		"js_components/back_button.js",
+		"js_components/mctooltip.js",
+		"js_components/theme.js",
+		"js_components/cliper.js",
+		"js_components/embed.js",
+		"js_components/download.js",
+		"js_components/elements.js",
+		"js_components/need_confirm.js"
+	];
+	const stylesheets = [
+		"index.css",
+		"js_components/framework.css"
+	];
 
-	function toCDN(path) {if (path.startsWith("/") || path.startsWith("./") || !path.includes("://")) {return CDN_BASE + path.replace(/^\/+/, "");}return path;}
+	const replaceImage = (name, basePath = "") => {
+		const path = `images/${basePath}${name}.webp`;
+		const cdn = cdnBase + path;
+		document.querySelectorAll(`img[src*="${name}.webp"]`).forEach(img => img.src = cdn);
+	};
 
-	function rewriteAttribute(elements, attr) {
-		elements.forEach(el => {
-			const val = el.getAttribute(attr);
-			if (!val) return;
-			const url = new URL(val, location.href);
-			if (LOCAL_HOSTS.includes(url.hostname)) {el.setAttribute(attr, toCDN(url.pathname));}
-		});
-	}
+	mainImages.forEach(name => replaceImage(name, isSmallScreen ? "high/" : ""));
+	icons.forEach(name => replaceImage(name, `icons/${isSmallScreen ? "high/" : ""}`));
 
-	try {
-		const testURL = CDN_BASE + TEST_FILE;
-		const res = await fetch(testURL, { method: "HEAD", cache: "no-store" });
-		if (res.ok) {
-			rewriteAttribute(document.querySelectorAll("script[src]"), "src");
-			rewriteAttribute(document.querySelectorAll("link[rel=stylesheet][href]"), "href");
-			rewriteAttribute(document.querySelectorAll("img[src]"), "src");
-			rewriteAttribute(document.querySelectorAll("source[src], source[srcset]"), "src");
-			rewriteAttribute(document.querySelectorAll("video[src], audio[src]"), "src");
-			console.log("[CDN] Umschreibung aktiv");
-		} else {console.warn("[CDN] Antwortfehler: ", res.status);}} catch (err) {console.warn("[CDN] Nicht erreichbar:", err);}
+	fonts.forEach(type => {
+		const link = document.createElement("link");
+		link.rel = "preload";
+		link.as = "font";
+		link.type = `font/${type}`;
+		link.href = cdnBase + `minecraft_font.${type}`;
+		link.crossOrigin = "anonymous";
+		document.head.appendChild(link);
+	});
+
+	stylesheets.forEach(file => {
+		const link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = cdnBase + file;
+		document.head.appendChild(link);
+	});
+
+	scripts.forEach(file => {
+		const script = document.createElement("script");
+		script.src = cdnBase + file;
+		script.defer = true;
+		document.body.appendChild(script);
+	});
 })();
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
