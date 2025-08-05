@@ -1,39 +1,39 @@
-import JSZip from "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
-
 export async function download(DATA) {
-	// Unterstützte Optionen: filename, filedata, encoding, multiple (Array)
-	const encoding = DATA.encoding || "utf-8";
+  const encoding = DATA.encoding || "utf-8";
+  showDownloadModal("Download läuft...", DATA.filename || "Kein Name");
 
-	showDownloadModal("Download läuft...", DATA.filename || "Kein Name");
+  if (Array.isArray(DATA.multiple)) {
+    // JSZip dynamisch importieren, nur bei Bedarf
+    const JSZip = (await import("https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm")).default;
+    const zip = new JSZip();
 
-	if (Array.isArray(DATA.multiple)) {
-		const zip = new JSZip();
-		DATA.multiple.forEach(file => {
-			let content = typeof file.filedata === "object" ? JSON.stringify(file.filedata, null, 2) : file.filedata;
-			zip.file(file.filename || `file_${Date.now()}.txt`, content);
-		});
-		const blob = await zip.generateAsync({ type: "blob" }, updateProgress);
-		triggerDownload(blob, DATA.filename || `download_${Date.now()}.zip`);
-	} else {
-		let filename = DATA.filename || `download_${Date.now()}.txt`;
-		let filedata = typeof DATA.filedata === "object" ? JSON.stringify(DATA.filedata, null, 2) : DATA.filedata;
-		const mimeType = getMimeType(filename, encoding);
-		const blob = new Blob([filedata], { type: mimeType });
-		triggerDownload(blob, filename);
-	}
+    DATA.multiple.forEach(file => {
+      let content = typeof file.filedata === "object" ? JSON.stringify(file.filedata, null, 2) : file.filedata;
+      zip.file(file.filename || `file_${Date.now()}.txt`, content);
+    });
 
-	hideDownloadModal();
+    const blob = await zip.generateAsync({ type: "blob" }, updateProgress);
+    triggerDownload(blob, DATA.filename || `download_${Date.now()}.zip`);
+  } else {
+    let filename = DATA.filename || `download_${Date.now()}.txt`;
+    let filedata = typeof DATA.filedata === "object" ? JSON.stringify(DATA.filedata, null, 2) : DATA.filedata;
+    const mimeType = getMimeType(filename, encoding);
+    const blob = new Blob([filedata], { type: mimeType });
+    triggerDownload(blob, filename);
+  }
+
+  hideDownloadModal();
 }
 
 function triggerDownload(blob, filename) {
-	const url = URL.createObjectURL(blob);
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = filename;
-	document.body.appendChild(a);
-	a.click();
-	document.body.removeChild(a);
-	URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function getMimeType(filename, encoding = "utf-8") {
@@ -92,33 +92,33 @@ function getMimeType(filename, encoding = "utf-8") {
 }
 
 function updateProgress(metadata) {
-	const modal = document.getElementById("download-modal");
-	if (modal) modal.querySelector(".progress").textContent = `Fortschritt: ${Math.floor(metadata.percent)}%`;
+  const modal = document.getElementById("download-modal");
+  if (modal) modal.querySelector(".progress").textContent = `Fortschritt: ${Math.floor(metadata.percent)}%`;
 }
 
 function showDownloadModal(title, filename) {
-	let modal = document.getElementById("download-modal");
-	if (!modal) {
-		modal = document.createElement("div");
-		modal.id = "download-modal";
-		modal.style.cssText = `
-			position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-			background: rgba(0,0,0,0.5); color: #fff; display: flex; justify-content: center; align-items: center;
-			font-family: sans-serif; z-index: 9999; pointer-events: none;
-		`;
-		modal.innerHTML = `<div style="background:#222; padding:20px; border-radius:8px; text-align:center;">
-			<h2>${title}</h2>
-			<p>Datei: ${filename}</p>
-			<p class="progress">Wird vorbereitet...</p>
-		</div>`;
-		document.body.appendChild(modal);
-	} else {
-		modal.querySelector("h2").textContent = title;
-		modal.querySelector("p").textContent = `Datei: ${filename}`;
-	}
+  let modal = document.getElementById("download-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "download-modal";
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); color: #fff; display: flex; justify-content: center; align-items: center;
+      font-family: sans-serif; z-index: 9999; pointer-events: none;
+    `;
+    modal.innerHTML = `<div style="background:#222; padding:20px; border-radius:8px; text-align:center;">
+      <h2>${title}</h2>
+      <p>Datei: ${filename}</p>
+      <p class="progress">Wird vorbereitet...</p>
+    </div>`;
+    document.body.appendChild(modal);
+  } else {
+    modal.querySelector("h2").textContent = title;
+    modal.querySelector("p").textContent = `Datei: ${filename}`;
+  }
 }
 
 function hideDownloadModal() {
-	const modal = document.getElementById("download-modal");
-	if (modal) modal.remove();
+  const modal = document.getElementById("download-modal");
+  if (modal) modal.remove();
 }
