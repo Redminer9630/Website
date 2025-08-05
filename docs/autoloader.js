@@ -11,7 +11,36 @@
 	];
 	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
-function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("/minecraft_font");
+function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/minecraft_font");
+
+(async function(){
+	const CDN_BASE = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs";
+	const TEST_FILE = "autoloader.js";
+	const LOCAL_HOSTS = ["", location.hostname];
+
+	function toCDN(path) {if (path.startsWith("/") || path.startsWith("./") || !path.includes("://")) {return CDN_BASE + path.replace(/^\/+/, "");}return path;}
+
+	function rewriteAttribute(elements, attr) {
+		elements.forEach(el => {
+			const val = el.getAttribute(attr);
+			if (!val) return;
+			const url = new URL(val, location.href);
+			if (LOCAL_HOSTS.includes(url.hostname)) {el.setAttribute(attr, toCDN(url.pathname));}
+		});
+	}
+
+	try {
+		const testURL = CDN_BASE + TEST_FILE;
+		const res = await fetch(testURL, { method: "HEAD", cache: "no-store" });
+		if (res.ok) {
+			rewriteAttribute(document.querySelectorAll("script[src]"), "src");
+			rewriteAttribute(document.querySelectorAll("link[rel=stylesheet][href]"), "href");
+			rewriteAttribute(document.querySelectorAll("img[src]"), "src");
+			rewriteAttribute(document.querySelectorAll("source[src], source[srcset]"), "src");
+			rewriteAttribute(document.querySelectorAll("video[src], audio[src]"), "src");
+			console.log("[CDN] Umschreibung aktiv");
+		} else {console.warn("[CDN] Antwortfehler: ", res.status);}} catch (err) {console.warn("[CDN] Nicht erreichbar:", err);}
+})();
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
@@ -26,8 +55,6 @@ window.CommonVersion = {
 
 Promise.all([
 	import('/js_components/elements.js'),
-	import('/js_components/tooltip.js'),
-	//import('/js_components/firebase.js'),
 	import('/js_components/need_confirm.js'),
 	import('/js_components/back_button.js'),
 	import('/js_components/download.js'),
@@ -35,7 +62,7 @@ Promise.all([
 	import('/js_components/mctooltip.js'),
     import('/js_components/cliper.js'),
     import('/js_components/theme.js')
-]).then(([elements, tooltip, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {    
+]).then(([elements, need_confirm, back_button, download, embed, mctip, cliper, theme]) => {    
     const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
