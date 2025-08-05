@@ -34,9 +34,8 @@ Promise.all([
 	import('/js_components/embed.js'),
 	import('/js_components/mctooltip.js'),
     import('/js_components/cliper.js'),
-    import('/js_components/framework.css'),
     import('/js_components/theme.js')
-]).then(([elements, tooltip, back_button, need_confirm, framework, download, embed, mctip, cliper, theme]) => {    
+]).then(([elements, tooltip, back_button, need_confirm, download, embed, mctip, cliper, theme]) => {    
     const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
