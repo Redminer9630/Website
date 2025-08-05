@@ -13,63 +13,6 @@
 })();
 function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/minecraft_font");
 
-(function () {
-	const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/";
-	const isSmallScreen = window.innerWidth < 800;
-    
-	const mainImages = ["main", "tree"];
-	const icons = ["about", "downloads", "feedback", "menu", "search", "settings", "team", "tools"];
-	const fonts = ["woff2", "woff", "ttf"];
-	const scripts = [
-		"autoloader.js",
-		"js_components/back_button.js",
-		"js_components/mctooltip.js",
-		"js_components/theme.js",
-		"js_components/cliper.js",
-		"js_components/embed.js",
-		"js_components/download.js",
-		"js_components/elements.js",
-		"js_components/need_confirm.js"
-	];
-	const stylesheets = [
-		"index.css",
-		"js_components/framework.css"
-	];
-
-	const replaceImage = (name, basePath = "") => {
-		const path = `images/${basePath}${name}.webp`;
-		const cdn = cdnBase + path;
-		document.querySelectorAll(`img[src*="${name}.webp"]`).forEach(img => img.src = cdn);
-	};
-
-	mainImages.forEach(name => replaceImage(name, isSmallScreen ? "high/" : ""));
-	icons.forEach(name => replaceImage(name, `icons/${isSmallScreen ? "high/" : ""}`));
-
-	fonts.forEach(type => {
-		const link = document.createElement("link");
-		link.rel = "preload";
-		link.as = "font";
-		link.type = `font/${type}`;
-		link.href = cdnBase + `minecraft_font.${type}`;
-		link.crossOrigin = "anonymous";
-		document.head.appendChild(link);
-	});
-
-	stylesheets.forEach(file => {
-		const link = document.createElement("link");
-		link.rel = "stylesheet";
-		link.href = cdnBase + file;
-		document.head.appendChild(link);
-	});
-
-	scripts.forEach(file => {
-		const script = document.createElement("script");
-		script.src = cdnBase + file;
-		script.defer = true;
-		document.body.appendChild(script);
-	});
-})();
-
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
 
@@ -82,16 +25,16 @@ window.CommonVersion = {
 };
 
 Promise.all([
-	import('/js_components/elements.js'),
-	import('/js_components/need_confirm.js'),
-	import('/js_components/back_button.js'),
-	import('/js_components/download.js'),
-	import('/js_components/embed.js'),
-	import('/js_components/mctooltip.js'),
-    import('/js_components/cliper.js'),
-    import('/js_components/theme.js')
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/elements.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/need_confirm.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/back_button.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/download.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/embed.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/mctooltip.js'),
+    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/cliper.js'),
+    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/theme.js')
 ]).then(([elements, need_confirm, back_button, download, embed, mctip, cliper, theme]) => {    
-    const css = document.createElement('link');css.rel = 'stylesheet';css.href = '/js_components/framework.css';document.head.appendChild(css);
+    const css = document.createElement('link');css.rel = 'stylesheet';css.href = 'https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
