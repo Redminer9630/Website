@@ -11,7 +11,7 @@
 	];
 	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
-function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/minecraft_font");
+function preloadFonts(fontBasePath) {const formats = [{ ext: ".woff2", type: "font/woff2" },{ ext: ".woff", type: "font/woff" },{ ext: ".ttf", type: "font/ttf" }];formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBasePath + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});}preloadFonts("https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/minecraft_font");
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
@@ -25,16 +25,16 @@ window.CommonVersion = {
 };
 
 Promise.all([
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/elements.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/need_confirm.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/back_button.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/download.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/embed.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/mctooltip.js'),
-    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/cliper.js'),
-    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/theme.js')
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/elements.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/need_confirm.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/back_button.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/download.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/embed.js'),
+	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/mctooltip.js'),
+    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/cliper.js'),
+    import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/theme.js')
 ]).then(([elements, need_confirm, back_button, download, embed, mctip, cliper, theme]) => {    
-    const css = document.createElement('link');css.rel = 'stylesheet';css.href = 'https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/js_components/framework.css';document.head.appendChild(css);
+    const css = document.createElement('link');css.rel = 'stylesheet';css.href = 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/framework.css';document.head.appendChild(css);
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
