@@ -18,9 +18,6 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Abhängigkeiten installieren (falls nötig)
-        run: npm install
-
       - name: CDN Replace Skript ausführen
         run: node cdn-replacer.js
 
@@ -29,10 +26,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/
-          git commit -m "CDN Links automatisch ersetzt"
+          git commit -m "CDN Links automatisch ersetzt" || echo "Keine Änderungen zum committen"
           git push
 
-      # Optional: GitHub Pages deployen (falls docs/ als Pages-Source benutzt wird)
+      # Optional: GitHub Pages deployen
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
