@@ -6,3 +6,4 @@
 	     url("/minecraft_font.ttf") format("truetype");
 	font-display: swap;
 }
+a { color: inherit; text-decoration: underline; }
