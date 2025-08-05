@@ -13,11 +13,34 @@
 })();
 
 function loadMinecraftFont(fontName, fontBaseURL) {
-	const formats = [{ ext: ".woff2", type: "font/woff2", format: "woff2" },{ ext: ".woff", type: "font/woff", format: "woff" },{ ext: ".ttf", type: "font/ttf", format: "truetype" }];
-	formats.forEach(({ ext, type }) => {const link = document.createElement("link");link.rel = "preload";link.href = fontBaseURL + ext;link.as = "font";link.type = type;link.crossOrigin = "anonymous";document.head.appendChild(link);});
-	const fontFace = `@font-face {font-family: "${fontName}";src: ${formats.map(({ ext, format }) => `url("${fontBaseURL + ext}") format("${format}")`).join(",\n\t\t")};font-display: swap;}`;
-	const style = document.createElement("style");style.textContent = fontFace;document.head.appendChild(style);
+  const formats = [
+    { ext: ".woff2", type: "font/woff2", format: "woff2" },
+    { ext: ".woff", type: "font/woff", format: "woff" },
+    { ext: ".ttf", type: "font/ttf", format: "truetype" }
+  ];
+  formats.forEach(({ ext, type }) => {
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.href = fontBaseURL + ext;
+    link.as = "font";
+    link.type = type;
+    link.crossOrigin = "anonymous";
+    document.head.appendChild(link);
+  });
+
+  const fontFace = `@font-face {
+    font-family: "${fontName}";
+    src: ${formats.map(({ ext, format }) =>
+      `url("${fontBaseURL + ext}") format("${format}")`
+    ).join(",\n\t\t")};
+    font-display: swap;
+  }`;
+
+  const style = document.createElement("style");
+  style.textContent = fontFace;
+  document.head.appendChild(style);
 }
+
 loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.2.0/docs/minecraft_font");
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
