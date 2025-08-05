@@ -19,7 +19,7 @@ jobs:
           node-version: '18'
 
       - name: CDN Replace Skript ausführen
-        run: node cdn-replacer.js
+        run: node cdn-rplc.js
 
       - name: Commit und Push Änderungen
         run: |
