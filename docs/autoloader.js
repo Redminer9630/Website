@@ -11,37 +11,7 @@
 	];
 	tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag); Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v)); head.appendChild(el);}});
 })();
-
-function loadMinecraftFont(fontName, fontBaseURL) {
-  const formats = [
-    { ext: ".woff2", type: "font/woff2", format: "woff2" },
-    { ext: ".woff", type: "font/woff", format: "woff" },
-    { ext: ".ttf", type: "font/ttf", format: "truetype" }
-  ];
-  formats.forEach(({ ext, type }) => {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = fontBaseURL + ext;
-    link.as = "font";
-    link.type = type;
-    link.crossOrigin = "anonymous";
-    document.head.appendChild(link);
-  });
-
-  const fontFace = `@font-face {
-    font-family: "${fontName}";
-    src: ${formats.map(({ ext, format }) =>
-      `url("${fontBaseURL + ext}") format("${format}")`
-    ).join(",\n\t\t")};
-    font-display: swap;
-  }`;
-
-  const style = document.createElement("style");
-  style.textContent = fontFace;
-  document.head.appendChild(style);
-}
-
-loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.2.0/docs/minecraft_font");
+async function loadMinecraftFont(fontName, basePath) {const formats = [{ ext: ".woff2", format: "woff2" },{ ext: ".woff", format: "woff" },{ ext: ".ttf", format: "truetype" }];for (let { ext, format } of formats) {const url = `${basePath}${ext}`;try {const res = await fetch(url, { method: "HEAD" });if (res.ok) {const font = new FontFace(fontName, `url(${url}) format("${format}")`);await font.load();document.fonts.add(font);console.log("Font geladen:", fontName, ext);return;}} catch (e) {console.warn(`Fehler beim Prüfen von ${url}:`, e);}}console.error("Kein gültiges Font-Format gefunden für", fontName);}loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.2.0/docs/minecraft_font");
 
 if (location.hostname.startsWith('www.')) location.replace(location.href.replace('//www.', '//'));if (location.protocol !== 'https:') location.replace(location.href.replace('http:', 'https:'));if (location.pathname.endsWith('index.html')) location.replace(location.href.replace(/index\.html$/, ''));
 const noti = (type, ...msg) => {const txt = msg.join(' ');const types = {error: console.error,warn: console.warn,info: console.info,log: console.log,debug: console.debug};(types[type] || console.debug)(txt);alert(txt);};
