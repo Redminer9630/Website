@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /CNAME
 Disallow: /robots.txt
-Sitemap: /sitemaps.xml
+Sitemap: https://redminer9630.ddns.net/sitemaps.xml
