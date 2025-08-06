@@ -25,9 +25,9 @@ window.CommonVersion = {
 
 Promise.all([
 	//import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/elements.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/need_confirm.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/back_button.js'),
-	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/download.js'),
+	import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/need_confirm.js',
+	import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/back_button.js'),
+	import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/download.js'),
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/embed.js'),
 	import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/mctooltip.js'),
     import('https://cdn.jsdelivr.net/gh/Redminer9630/Website@latest/docs/js_components/cliper.js'),
