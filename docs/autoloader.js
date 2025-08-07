@@ -57,7 +57,7 @@ loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
 if (location.pathname.endsWith("index.html")) location.replace(location.href.replace(/index\.html$/, ""));
-window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt)alert(txt);};
+window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt);alert(txt);};
 
 window.debug = false;
 window.CommonVersion = { 
