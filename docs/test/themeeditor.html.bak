@@ -1,0 +1,119 @@
+---
+layout: default
+---
+<!DOCTYPE html>
+<html lang="de">
+<head><style>body{font-family:'Mojangles', Arial;}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Editor</title>
+<style>
+  body { font-family: sans-serif; background: var(--bg, #f4f4f4); color: var(--text, #000); margin: 0; padding: 1em; }
+  h1 { margin-top: 0; }
+  .themes { display: flex; gap: 2em; flex-wrap: wrap; }
+  .section { flex: 1; min-width: 300px; }
+  .theme-box { border: 1px solid #ccc; border-radius: 5px; padding: 1em; margin-bottom: 1em; background: var(--box, #fff); }
+  .theme-box input[type="color"], .theme-box input[type="text"] { width: 120px; margin-right: .5em; }
+  .theme-box button { margin-right: .5em; }
+  .section-title { font-weight: bold; font-size: 1.2em; margin-bottom: .5em; }
+</style>
+</head>
+<body>
+<h1>Theme-Editor</h1>
+<div class="themes">
+  <div class="section" id="lightThemes">
+    <div class="section-title">Helle Themes</div>
+  </div>
+  <div class="section" id="darkThemes">
+    <div class="section-title">Dunkle Themes</div>
+  </div>
+</div>
+<button onclick="addTheme('light')">Neues Helles Theme</button>
+<button onclick="addTheme('dark')">Neues Dunkles Theme</button>
+
+<script>
+const themesKey = 'customThemes9630';
+const maxPerType = 3;
+const defaultVars = getComputedStyle(document.documentElement);
+const defaultThemeVars = {};
+for (const prop of defaultVars) if (prop.startsWith('--')) defaultThemeVars[prop] = defaultVars.getPropertyValue(prop).trim();
+
+let themes = JSON.parse(localStorage.getItem(themesKey) || '[]');
+renderThemes();
+
+function renderThemes() {
+  document.getElementById('lightThemes').innerHTML = '<div class="section-title">Helle Themes</div>';
+  document.getElementById('darkThemes').innerHTML = '<div class="section-title">Dunkle Themes</div>';
+
+  themes.forEach((theme, index) => {
+    const box = document.createElement('div');
+    box.className = 'theme-box';
+
+    const title = document.createElement('input');
+    title.type = 'text';
+    title.value = theme.name || `Theme ${index + 1}`;
+    title.oninput = () => { theme.name = title.value; saveThemes(); };
+    box.appendChild(title);
+
+    for (const [key, value] of Object.entries(theme.vars)) {
+      const label = document.createElement('label');
+      label.style.display = 'block';
+      
+      const name = document.createElement('span');
+      name.textContent = key + ': ';
+      
+      const input = document.createElement('input');
+      input.type = key.includes('color') || /^#/.test(value) ? 'color' : 'text';
+      input.value = value;
+      input.oninput = () => { theme.vars[key] = input.value; saveThemes(); applyTheme(theme); };
+
+      const del = document.createElement('button');
+      del.textContent = '⨉';
+      del.title = 'Variable löschen';
+      del.onclick = () => { delete theme.vars[key]; saveThemes(); renderThemes(); };
+
+      label.append(name, input, del);
+      box.appendChild(label);
+    }
+
+    const addVarBtn = document.createElement('button');
+    addVarBtn.textContent = '+ Variable hinzufügen';
+    addVarBtn.onclick = () => {
+      const key = prompt('Name der CSS-Variable (z.B. --bg):');
+      if (key && key.startsWith('--')) {
+        theme.vars[key] = '#000000';
+        saveThemes();
+        renderThemes();
+      }
+    };
+    box.appendChild(addVarBtn);
+
+    const applyBtn = document.createElement('button');
+    applyBtn.textContent = 'Anwenden';
+    applyBtn.onclick = () => applyTheme(theme);
+    box.appendChild(applyBtn);
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Theme löschen';
+    deleteBtn.onclick = () => { themes.splice(index, 1); saveThemes(); renderThemes(); };
+    box.appendChild(deleteBtn);
+
+    document.getElementById(theme.type === 'light' ? 'lightThemes' : 'darkThemes').appendChild(box);
+  });
+}
+
+function saveThemes() { localStorage.setItem(themesKey, JSON.stringify(themes)); }
+
+function applyTheme(theme) { for (const [key, value] of Object.entries(theme.vars)) { document.documentElement.style.setProperty(key, value); } }
+
+function addTheme(type = 'light') {
+  const count = themes.filter(t => t.type === type).length;
+  if (count >= maxPerType) return alert(`Maximal ${maxPerType} ${type === 'light' ? 'helle' : 'dunkle'} Themes erlaubt!`);
+  const newTheme = { name: `${type === 'light' ? 'Hell' : 'Dunkel'} ${count + 1}`, type, vars: {...defaultThemeVars} };
+  themes.push(newTheme);
+  saveThemes();
+  renderThemes();
+}
+</script>
+</body>
+</html>

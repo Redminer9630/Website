@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><style>body{font-family:'Mojangles', Arial;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials und Anleitungen - Redminer9630</title>
+    <style>
+        body {
+            font-family: 'MinecraftFont', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .video-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .video-container video {
+            width: 80%;
+            padding-left: 10%;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .video-container h3 { margin: 10px 0; }
+        .header-link {
+            color: white;
+            font-size: 16px;
+            text-decoration: none;
+            background-color: #f44336;
+            padding: 10px 20px;
+            border-radius: 8px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .header-link:hover { background-color: #e53935; }
+        @media (prefers-color-scheme: dark) { body { background-color: #121212; color: #f5f5f5; } h1, h3{ color: #fff; } }
+    </style>
+</head>
+<body>
+    <h1>Tutorials und Anleitungen</h1>
+
+    <div class="video-container">
+        <h3>Datapacks/Resourcepacks anwenden</h3>
+        <video controls>
+            <source src="https://redminer9630de.github.io/videos/usepacks-tutorial.mp4" type="video/mp4">
+            Dein Browser unterstuetzt das Video-Element nicht.
+        </video>
+    </div>
+
+    <div class="video-container">
+        <h3>Datapack/Resourcepack erstellen - Schritt fuer Schritt</h3>
+        <video id="packcreation" controls>
+            <source src="https://redminer9630de.github.io/videos/packcreation-tutorial.mp4" type="video/mp4">
+            Dein Browser unterstuetzt das Video-Element nicht.
+        </video>
+        <button id="sourcedownloadButton" style="display: none;" onclick="window.location.href='templatedownload.html?id=source';">Resourcepack Template</button>
+        <button id="datadownloadButton" style="display: none;" onclick="window.location.href='templatedownload.html?id=data';">Datapack Template</button>
+    </div>
+    <script>
+        document.getElementById('packcreation').addEventListener('play', function() { this.addEventListener('timeupdate', function() { if (this.currentTime >= 10) { document.getElementById('datadownloadButton').style.display = 'block'; } }); });
+        
+        document.getElementById('packcreation').addEventListener('play', function() {
+            this.addEventListener('timeupdate', function() {
+                if (this.currentTime >= 20) {
+                    document.getElementById('datadownloadbutton').style.display = 'none';
+                    document.getElementById('sourcedownloadButton').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+---
+layout: default
+---
+<!DOCTYPE html>
+<html lang="de">
+<head><style>body{font-family:'Mojangles', Arial;}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutzerklärung für den Discord-Bot Redminer9630 Manager</title>
+    <style>
+        @font-face { font-family: 'Minecraft'; src: url('minecraft_font.woff') format('woff'), url('minecraft_font.ttf') format('truetype'); }
+        body { font-family: 'Minecraft', Arial, sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; }
+        h1 { text-align: center; }
+        .section { background-color: #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+    <script src="common.js"></script>
+    <script src="back-button.js"></script>
+</head>
+<body>
+
+    <h1>Datenschutzerklärung für den Discord-Bot Redminer9630 Manager</h1>
+
+    <div class="section">
+        <h2>1. Verantwortlicher</h2>
+        <p>Verantwortlich für die Datenverarbeitung ist <a href="/linktree">Redminer9630</a>. Kontakt: <a href="mailto:redminer9630@gmail.com">redminer9630@gmail.com</a>.</p>
+    </div>
+
+    <div class="section">
+        <h2>2. Erhobene Daten</h2>
+        <p>Der Bot kann folgende personenbezogene Daten erfassen und verarbeiten:</p>
+        <ul>
+            <li>Discord-Benutzer-ID</li>
+            <li>Nachrichteninhalte (sofern notwendig für Funktionen)</li>
+            <li>Serverinformationen (Name, ID, Einstellungen)</li>
+            <li>Rollen- und Channel-Daten für serverseitige Befehle</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>3. Zweck der Verarbeitung</h2>
+        <p>Die Daten werden ausschließlich zur Bereitstellung der Bot-Funktionalität verwendet, darunter Befehle, Statistiken, Rollenmanagement und Logging von Aktionen (z.B. Moderation).</p>
+    </div>
+
+    <div class="section">
+        <h2>4. Weitergabe der Daten</h2>
+        <p>Es erfolgt keine Weitergabe der Daten an Dritte. Alle Daten bleiben auf Servern, die ausschließlich vom Betreiber kontrolliert werden.</p>
+    </div>
+
+    <div class="section">
+        <h2>5. Speicherdauer</h2>
+        <p>Daten werden nur so lange gespeichert, wie sie für die Erfüllung der Bot-Funktionen erforderlich sind. Auf Anfrage können personenbezogene Daten gelöscht werden.</p>
+    </div>
+
+    <div class="section">
+        <h2>6. Rechte der Nutzer</h2>
+        <p>Du hast das Recht auf:</p>
+        <ul>
+            <li>Auskunft über die gespeicherten Daten</li>
+            <li>Berichtigung falscher Daten</li>
+            <li>Löschung deiner Daten</li>
+            <li>Widerspruch gegen die Verarbeitung</li>
+        </ul>
+        <p>Dazu genügt eine Kontaktaufnahme per E-Mail.</p>
+    </div>
+
+    <div class="section">
+        <h2>7. Änderungen</h2>
+        <p>Diese Datenschutzerklärung kann jederzeit angepasst werden. Änderungen treten mit Veröffentlichung in Kraft.</p>
+    </div>
+
+</body>
+</html>

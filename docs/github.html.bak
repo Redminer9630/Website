@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {background: #0d1117; color: #c9d1d9; font-family: sans-serif; margin: 0; padding: 2rem;}
+    h1 {font-size: 2rem; margin-bottom: 1rem;}
+    ul {list-style: none; padding: 0;}
+    li {margin: 0.5rem 0;}
+    a {color: #58a6ff; text-decoration: none; font-weight: bold;}
+    a:hover {text-decoration: underline;}
+.tool-card {
+  background: #111;
+  border: 1px solid #333;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 1em;
+  color: white;
+}
+.tool-card h3 { margin-top: 0; }
+.tool-card ul { list-style: none; padding-left: 0; }
+
+    .card {
+      border: 3px solid #30363d;
+      border-radius: 10px;
+      margin: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s;
+    }
+    .card:hover {transform: scale(1.02);}
+    .card img {
+      display: block;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/autoloader.js" type="module" defer></script>
+</head>
+<body>
+  <!--<h1>GitHub Tools</h1>
+  <p>Nützliche Helfer für deine GitHub-Projekte:</p>
+
+  <ul>
+    <li><a href="github/profile-stats">Profil-Statistiken anzeigen</a></li>
+    <li><a href="github/pr-generator">Pull-Request Generator</a></li>
+    <li><a href="github/issue-labeler">Issue-Labeler</a></li>
+    <li><a href="github/contribution-tracker">Contribution-Tracker</a></li>
+  </ul>-->
+<div id="ghstats" class="tool-card">
+  <h3>GitHub Website Repo Stats:</h3>
+  <ul>
+    <li>Stars: <span id="gh-stars">–</span></li>
+    <li>Forks: <span id="gh-forks">–</span></li>
+    <li>Open Issues: <span id="gh-issues">–</span></li>
+    <li>Letzter Build: <span id="gh-build">–</span></li>
+  </ul>
+</div>
+<h1>GitHub Profilstatus</h1>
+<img alt="Redminer9630de" aria-label="Redminer9630de's Status" src="https://github-readme-stats.vercel.app/api?username=Redminer9630de&show_icons=true&theme=github_dark">
+<img alt="Redminer9630GitHub" aria-label="Redminer9630GitHub's Status" src="https://github-readme-stats.vercel.app/api?username=Redminer9630GitHub&show_icons=true&theme=github_dark">
+<img alt="TheAnonym3000" aria-label="TheAnonym3000's Status" src="https://github-readme-stats.vercel.app/api?username=TheAnonym3000&show_icons=true&theme=github_dark">
+<script>
+async function loadGitHubStats() {
+  const repoRes = await fetch(`https://api.github.com/repos/Redminer9630/Website`);
+  const repoData = await repoRes.json();
+
+  const workflowRes = await fetch(`https://api.github.com/repos/Redminer9630/Website/actions/runs`);
+  const workflowData = await workflowRes.json();
+  const lastRun = workflowData.workflow_runs?.[0];
+
+  document.getElementById("gh-stars").textContent = repoData.stargazers_count;
+  document.getElementById("gh-forks").textContent = repoData.forks_count;
+  document.getElementById("gh-issues").textContent = repoData.open_issues_count;
+  document.getElementById("gh-build").textContent = lastRun?.conclusion ?? "unbekannt";
+}
+loadGitHubStats();
+</script>
+</body>
+</html>

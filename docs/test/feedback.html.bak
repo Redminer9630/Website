@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback</title>
+    <style>
+        body { font-family: 'Minecraft', sans-serif; background-color: #f0f0f0; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 8px; }
+        h1 { text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type="text"], input[type="email"], textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ddd; box-sizing: border-box; }
+        select { font-family: 'Mojangles', sans-serif; background-color: #4CAF50; color: #fff; padding: 10px; border: none; border-radius: 4px; cursor: pointer; display: block; margin-top: 5px; width: 100%; }
+        select:hover { background-color: #45a049; }
+        textarea { resize: vertical; min-height: 290px; }
+        button { margin-top: 20px; padding: 10px 20px; background-color: #4CAF50; color: #fff; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-family: 'Minecraft', sans-serif; }
+        button:hover { background-color: #45a049; }
+        .header-link { font-size: 16px; text-decoration: none; padding: 10px 20px; border-radius: 8px; position: absolute; top: 20px; right: 20px; background-color: #f44336; color: white; }
+        .honeypot { display: none; }
+        @media (prefers-color-scheme: dark) { body { background-color: #121212; color: #f5f5f5; } .container { background-color: #1e1e1e; border-color: #333; } input, textarea { background-color: #2c2c2c; color: #e5e5e5; border-color: #444; } button { background-color: #3b82f6; color: #f5f5f5; } h1, label, p, .note { color: #fff; } }
+    </style>
+    <script src="autoloader.js" type="module" defer></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>.grecaptcha-badge { bottom: 45px !important; }</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Feedback geben</h1>
+        <form id="feedbackForm">
+            <label for="email" title="Deine E-Mail wird nicht weitergegeben und nur für die Erreichbarkeit verwendet">E-Mail:</label>
+            <input type="email" id="email" name="email" placeholder="Deine E-Mail-Adresse" required>
+            <label for="website">Website-Part:</label>
+            <select id="website" name="website">
+                <option value="Home Page">Home-Page</option>
+                <option value="Discord Server">Discord Server</option>
+                <option value="Wiki">Wiki</option>
+                <option value="Tools">Tools</option>
+                <option value="Downloads">Downloads</option>
+                <option value="Generators">Generatoren</option>
+                <option value="Server/Team">Server/Team</option>
+                <option value="Feedback">Feedback</option>
+                <option value="Einstellungen">Einstellungen</option>
+                <option value="Benutzerhandbuch">Benutzerhandbuch</option>
+            </select>
+            <label for="feedback">Feedback:</label>
+            <textarea id="feedback" name="feedback" placeholder="Feedback..." required></textarea>
+            <input type="text" name="websiteField" class="honeypot" autocomplete="off">
+            <button class="g-recaptcha" data-sitekey="6LeXyrEqAAAAAM6Qfnwx_skzMwIP7oxCfZSWn-5E" data-callback="onSubmit" data-action="submit">Feedback senden</button>
+        </form>
+    </div>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('email').value = localStorage.getItem('email') || '';
+        document.getElememtById('website').value = localStorage.getItem('website') || '';
+        document.getElememtById('webversion').value = localStorage.getItem('webversion') || '';
+        document.getElementById('feedback').value = localStorage.getItem('feedback') || '';
+    });
+
+    function onSubmit(token) {
+        grecaptcha.execute
+        const email = document.getElementById('email').value;
+        const website = document.getElementById('website').value || "Nicht angegeben";
+        const webversion = document.getElementById('webversion').value || "Nicht angegeben";
+        const feedback = document.getElementById('feedback').value;
+        const honeypot = document.querySelector('input[name="websiteField"]').value;
+
+        localStorage.setItem('email', email);
+        localStorage.setItem('feedback', feedback);
+        localStorage.setItem('webversion', webversion);
+        localStorage.setItem('website', website);
+        
+        if (honeypot !== '') { alert('Bot erkannt. Feedback wurde blockiert.'); return; }
+
+        const now = Date.now();
+        const lastSubmit = parseInt(localStorage.getItem('lastSubmit')) || 0;
+        const feedbacksToday = JSON.parse(localStorage.getItem('feedbacksToday') || '[]');
+
+        if (now - lastSubmit < 30000) { alert('Du kannst nur alle 30 Sekunden Feedback senden.'); return; }
+        const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+        const todayEntries = feedbacksToday.filter(entry => entry.date === today);
+
+        if (todayEntries.length >= 5) { alert('Du hast heute bereits 5 Feedbacks gesendet. Bitte versuche es morgen erneut.'); return; }
+
+        const webhookUrl = "https://discord.com/api/webhooks/1296903270702514289/zGu17OTxNO_mQ13j4-QkonuoDeECvdqTqCzeRq6rMxJSEMW0V9xnpRU8DjSuE7wnsiDf";
+        const payload = { content: `Feedback:\n**E-Mail:** ${email}\n**Website-Teil:** ${website}\n**Website-Version:** ${webversion}\n**Feedback:**\n${feedback}` };
+
+        fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            if (res.ok) {
+                alert('Dein Feedback wurde erfolgreich gesendet!');
+                document.getElementById('feedbackForm').reset();
+                localStorage.removeItem('feedback');
+                localStorage.setItem('lastSubmit', now.toString());
+                feedbacksToday.push({ date: today });
+                localStorage.setItem('feedbacksToday', JSON.stringify(feedbacksToday));
+            } else { alert('Fehler beim Senden. Bitte versuche es später erneut.'); }
+        })
+        .catch(err => { alert('Es gab einen Fehler: ' + err.message + '\nFalls dieser Fehler erneut erscheint, bitte kontaktiere unseren Discord.'); });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><style>body{font-family:'Mojangles', Arial;}</style>
+  <meta charset="UTF-8">
+  <title>SGA Übersetzer</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin: 2em; }
+    .block { width: 90%; display: flex; flex-direction: column; align-items: stretch; margin: 1em 0; }
+    .row { display: flex; align-items: center; gap: 0.5em; }
+    textarea { flex: 1; height: 150px; font-size: 1.2em; }
+    label { font-weight: bold; margin-bottom: 0.3em; }
+    button { padding: 0.4em 0.8em; font-size: 1.1em; cursor: pointer; }
+    #swapBtn { margin: 1em 0; }
+  </style>
+    <script src="common.js"></script>
+    <script src="back-button.js"></script>
+</head>
+<body>
+  <h1>Standard Galactic Alphabet Übersetzer</h1>
+
+  <div class="block">
+    <label for="inputText" id="inputLabel">Klartext</label>
+    <div class="row">
+      <textarea id="inputText" placeholder="Input"></textarea>
+      <button id="pasteBtn" title="Aus Zwischenablage einfügen">📋</button>
+    </div>
+  </div>
+
+  <button id="swapBtn" title="Sprache wechseln">⇄</button>
+
+  <div class="block">
+    <label for="outputText" id="outputLabel">SGA</label>
+    <div class="row">
+      <textarea id="outputText" placeholder="Output" readonly></textarea>
+      <button id="copyBtn" title="In Zwischenablage kopieren">📤</button>
+    </div>
+  </div>
+
+<script>
+const input = document.getElementById("inputText")
+const output = document.getElementById("outputText")
+const swapBtn = document.getElementById("swapBtn")
+const pasteBtn = document.getElementById("pasteBtn")
+const copyBtn = document.getElementById("copyBtn")
+const inputLabel = document.getElementById("inputLabel")
+const outputLabel = document.getElementById("outputLabel")
+
+const sgaMap = {
+  A:"ᔑ",B:"ʖ",C:"ᓵ",D:"↸",E:"ᒷ",F:"⎓",G:"⊣",H:"⍑",I:"╎",J:"⋮",
+  K:"ꖌ",L:"ꖎ",M:"ᒲ",N:"リ",O:"𝙹",P:"!¡",Q:"ᑑ",R:"∷",S:"ᓭ",
+  T:"ℸ",U:"⚍",V:"⍊",W:"∴",X:"̇/",Y:"||",Z:"⨅"
+}
+
+const reverseMap = {}; for (let k in sgaMap) reverseMap[sgaMap[k]] = k
+let direction = "toSGA"
+
+function translate(t) {
+  if (direction === "toSGA") return t.toUpperCase().split('').map(c => sgaMap[c] || c).join('')
+  return t.split(/(?=.)/u).map(c => reverseMap[c] || c).join('')
+}
+
+function update() {
+  output.value = translate(input.value)
+  localStorage.setItem("inputText", input.value)
+  localStorage.setItem("outputText", output.value)
+}
+
+input.addEventListener("input", update)
+
+swapBtn.addEventListener("click", () => {
+  direction = direction === "toSGA" ? "toText" : "toSGA"
+  const temp = input.value
+  input.value = output.value
+  output.value = temp
+  inputLabel.textContent = direction === "toSGA" ? "Klartext" : "SGA"
+  outputLabel.textContent = direction === "toSGA" ? "SGA" : "Klartext"
+  update()
+})
+
+pasteBtn.addEventListener("click", async () => {
+  try { input.value = await navigator.clipboard.readText(); update() }
+  catch (e) { alert("Zugriff auf Zwischenablage verweigert.\nNutze HTTPS oder einen lokalen Server.") }
+})
+
+copyBtn.addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText(output.value) }
+  catch (e) { alert("Konnte nicht kopieren.") }
+})
+
+window.addEventListener("DOMContentLoaded", () => {
+  input.value = localStorage.getItem("inputText") || ""
+  output.value = localStorage.getItem("outputText") || ""
+})
+</script>
+</body>
+</html>

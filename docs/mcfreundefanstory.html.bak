@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schreck um Mitternacht</title>
+    <style>
+        body { font-family: 'Mojangles'; background: #f4f4f4; padding: 40px; line-height: 1.6; }
+        h1 { color: #333; }
+        .story { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .dialog { color: #444; }
+        .info { font-size: 0.9em; color: #333; margin-bottom; }
+        .name { font-weight: bold; } .logo{color: pink;} .ryan{color: brown;} .benx{color: red;} .flo{color: green;} .gambo{color: blue;}
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/autoloader.js" type="module" defer></script>
+</head>
+<body>
+    <div class="story">
+        <h1>Schreck um Mitternacht - Minecraft Freunde Fanstory</h1>
+        <p class="info">Eine unheimliche Geschichte, inspiriert von Minecraft Freunde<br>Von: Redminer9630</p>
+        <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
+        <p>Plötzlich wurde Gambo wach. Ein leises Rascheln drang an sein Ohr.</p>
+        <div class="dialog"><span class="name gambo">Gambo:</span> Habt ihr das gehört?</div>
+        <p>Er weckte die anderen, und gemeinsam krochen sie aus dem Zelt.</p>
+        <p>Ryan starrte in die Ferne.</p>
+        <div class="dialog"><span class="name ryan">Ryan:</span> Da ist ein Licht... es pulsiert!</div>
+        <p>Neugierig gingen sie dem Licht entgegen und entdeckten einen hohen Turm.</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Das könnte ein Leuchtturm sein. Ich suche einen Eingang.</div>
+        <p>Als er zurückkam, sagte Flo:</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Ich hab ein offenes Fenster gefunden.</div>
+        <p>Sie kletterten nacheinander hinein – Flo, Ryan und Gambo. Doch Gambo blieb stecken.</p>
+        <div class="dialog"><span class="name gambo">Gambo:</span> Ich bleib draußen und halte Schmiere.</div>
+        <p>Drinnen teilten sie sich auf. Ryan fand Proviant, Logo legte sich im Keller zur Ruhe, Flo entdeckte eine Karte auf dem Balkon.</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Hier ist eine Karte! Ein Kreuz ist markiert.</div>
+        <p>Sie liefen zurück zu Gambo. Der zeigte ihnen eine Taschenuhr: 23:36.</p>
+        <p>Gemeinsam machten sie sich auf den Weg zum Kreuz. In der Ferne sahen sie eine verlassene Fabrik mit dem Schriftzug „Dr. Binty“.</p>
+        <p>Gambo öffnete die Tür, und sie traten ein. Logo griff zu einer Flasche mit der Aufschrift „Dr. Binty“ und trank.</p>
+        <div class="dialog"><span class="name logo">Logo:</span> Mich... dreht's.</div>
+        <p>Er fiel um. Flo eilte zu ihm.</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Logo! Alles okay?</div>
+        <p>Ryan las die Zutaten:</p>
+        <div class="dialog"><span class="name ryan">Ryan:</span> Alkohol, Zucker, Cola, Kaffee... das ist ja eine Zuckerbombe!</div>
+        <p>Flo rannte los und fand ein Büro – darin saß Dr. Benx.</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Wir zelten im Wald, haben einen Leuchtturm entdeckt und sind dann hier gelandet.</div>
+        <div class="dialog"><span class="name benx">Dr. Benx:</span> Ich war früher Leuchtturmwächter. Die Karte brachte mich hierher.</div>
+        <p>Ryan stürmte herein.</p>
+        <div class="dialog"><span class="name flo">Flo:</span> Dr. Benx, Logo hat Dr. Binty getrunken!</div>
+        <div class="dialog"><span class="name benx">Dr. Benx:</span> Oh nein! Die sind nicht zum Trinken gedacht! Ihr braucht heißes Hühnchen und Minze.</div>
+        <div class="dialog"><span class="name ryan">Ryan:</span> Ich hol die Minze aus dem Leuchtturm.</div>
+        <div class="dialog"><span class="name gambo">Gambo:</span> Ich hab Hühnchen – ich mach's heiß.</div>
+        <p>Später kamen sie zurück. Ryan mit Minze, Gambo mit dampfendem Hühnchen. Flo schnitt es, Gambo klebte Minze darum, Ryan gab es Logo.</p>
+        <p>Logo begann zu husten – dann öffnete er die Augen.</p>
+        <div class="dialog"><span class="name logo">Logo:</span> Wo bin ich?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> In der Dr. Binty Fabrik.</div>
+        <div class="dialog"><span class="name benx">Dr. Benx:</span> Ihr dürft eine Flasche als Andenken mitnehmen.</div>
+        <p>Zurück am Zelt zeigte Gambo Flo die Uhr: 03:47. Ryan streckte sich und sagte:</p>
+        <div class="dialog"><span class="name ryan">Ryan:</span> Jetzt können wir endlich schlafen.</div>
+
+        <p><strong>ENDE</strong></p>
+    </div>
+</body>
+</html>

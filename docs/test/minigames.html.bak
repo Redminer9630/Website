@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head><style>body{font-family:'Mojangles', Arial;}</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minigames</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 0; }
+    h1 { text-align: center; padding: 20px; background: #333; color: white; margin: 0; }
+    .game-list { display: flex; flex-direction: column; gap: 40px; padding: 40px; max-width: 1200px; margin: auto; }
+    .game-entry { display: flex; align-items: center; gap: 20px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .game-entry:nth-child(even) { flex-direction: row-reverse; }
+    .game-text { flex: 1; }
+    .game-text h2 { margin-top: 0; }
+    .game-img { width: 300px; height: 180px; background: #ccc center/cover no-repeat; border-radius: 10px; }
+  </style>
+  <script src="autoloader.js" type="module" defer></script>
+</head>
+<body>
+  <h1>Minigames Übersicht</h1>
+  <div class="game-list">
+    <div class="game-entry">
+      <div class="game-text">
+        <h2>Sudoku</h2>
+        <p>Sudoku aber mit Items/Mobs</p>
+        <button>Spielen</button>
+      </div>
+      <div class="game-img" style="background-image: url('https://via.placeholder.com/300x180?text=Minigame+1');"></div>
+    </div>
+    <div class="game-entry">
+      <div class="game-text">
+        <h2>Minigame 2</h2>
+        <p>Das zweite Minigame bringt ein neues Gameplay mit sich und ist perfekt für Multiplayer-Partien.</p>
+      </div>
+      <div class="game-img" style="background-image: url('https://via.placeholder.com/300x180?text=Minigame+2');"></div>
+    </div>
+  </div>
+</body>
+</html>

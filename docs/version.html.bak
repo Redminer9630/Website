@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website-Versionen</title>
+  <style>
+    body { font-family: 'Mojangles'; background: #f4f4f4; color: #333; margin: 0; padding: 20px; }
+    .version-list { font-family: 'Mojangles'; list-style: none; padding: 0; }
+    .version-list li { font-family: 'Mojangles'; margin: 10px 0; }
+    .version-list a { font-family: 'Mojangles'; text-decoration: none; color: #007bff; background: #fff; padding: 10px 15px; border-radius: 5px; display: inline-block; transition: background 0.2s; }
+    .version-list a:hover { background: #eaeaea; }
+    #content { margin-top: 30px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .back-button { font-family: 'Mojangles'; text-decoration: none; color: #fff; background: #007bff; padding: 10px 15px; border-radius: 5px; display: inline-block; margin-top: 20px; transition: background 0.2s; }
+    .back-button:hover { background: #0056b3; }
+  </style>
+    <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/autoloader.js"></script>
+</head>
+<body>
+<div id="content"></div>
+  <script>
+const versionListHTML = `
+  <h2>Website-Versionen</h2>
+  <ul class="version-list" id="versionList">
+    <li><a href="?v=v1.0.0">Pre v1.0.0</a></li>
+    <li><a href="?v=v1.0.1">Pre v1.0.1</a></li>
+    <li><a href="?v=v1.0.2">Pre v1.0.2</a></li>
+    <li><a href="?v=v1.0.3">Pre v1.0.3</a></li>
+    <li><a href="?v=1.0.0">v1.0.0</a></li>
+    <li><a href="?v=1.0.1">v1.0.1</a></li>
+    <li><a href="?v=1.0.2">v1.0.2</a></li>   
+    <li><a href="?v=1.0.3">v1.0.3</a></li> 
+    <li><a href="?v=1.1.0">v1.1.0</a></li>    
+  </ul>
+  <h3>Info</h3>
+  <p mctip="Wir befinden uns im Release">Versionen Zeitstrahl: <span style='color: grey;'>Indev(Indev) v1.8.4 </span>|<span style='color:grey;'> Alpha(Alpha) v1.4.2 </span>| <span style='color: grey;'>Beta(Beta) v1.6.7 </span>| <span style='color: grey;'>Pre Release(Pre) </span>| <span color="yellow">Release( )</span></p>
+`;
+
+function getParameterByName(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
+}
+
+function loadVersion(version) {
+  const content = document.getElementById("content");
+  if (!version) return;
+  fetch(`/version/${version}.json`)
+    .then(res => {
+      if (!res.ok) throw new Error("Version nicht gefunden.");
+      return res.json();
+    })
+    .then(data => {
+      content.innerHTML = `
+        <h2>Version: ${data.version}</h2>
+        <p><strong>Veröffentlicht:</strong> ${data.date}</p>
+        <h3>Änderungen:</h3>
+        <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
+      `;
+    })
+    .catch(err => { content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; });
+}
+
+const version = getParameterByName("v");
+if (version && version !== 'info') {
+  loadVersion(version);
+} else {
+const isMobileWidth = window.innerWidth <= 768;
+let adjustedVersionListHTML = versionListHTML;
+if (isMobileWidth) {adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');}
+document.getElementById("content").innerHTML = adjustedVersionListHTML;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+// ARIA LABEL
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Status Dashboard</title>
+  <link rel="stylesheet" href="autoloader.js">
+  <style>
+    body { font-family: Mojangles; background: #0d1117; color: #c9d1d9; margin: 0; padding: 1.5rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 2rem; }
+    .service { margin-bottom: 2rem; }
+    .service strong { font-size: 1.2rem; display: block; margin-bottom: 0.5rem; }
+    .component { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
+    .component img { width: 16px; height: 16px; }
+    .status-text { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Status Dashboard</h1>
+
+  <div class="service" id="gh">
+    <strong>GitHub</strong>
+    <div class="component" id="gh-api"><img src="images/status/unknown.png"><span class="status-text">API Requests</span></div>
+    <div class="component" id="gh-gitops"><img src="images/status/unknown.png"><span class="status-text">Git Operations</span></div>
+    <div class="component" id="gh-pages"><img src="images/status/unknown.png"><span class="status-text">Pages</span></div>
+  </div>
+
+  <div class="service" id="render">
+    <strong>Render</strong>
+    <div class="component" id="r-api"><img src="images/status/unknown.png"><span class="status-text">API</span></div>
+    <div class="component" id="r-rest"><img src="images/status/unknown.png"><span class="status-text">REST API</span></div>
+  </div>
+
+  <div class="service" id="discord">
+    <strong>Discord</strong>
+    <div class="component" id="d-status"><img src="images/status/unknown.png"><span class="status-text">Gateway/API</span></div>
+  </div>
+
+  <div class="service" id="mc">
+    <strong>Minecraft Server</strong>
+    <div class="component" id="mc-status"><img src="images/status/unknown.png"><span class="status-text">Server Status</span></div>
+  </div>
+
+  <div class="service" id="mojang">
+    <strong>Mojang Authserver</strong>
+    <div class="component" id="mojang-auth"><img src="images/status/unknown.png"><span class="status-text">Authserver</span></div>
+  </div>
+
+  <script type="module">
+    import('/autoloader.js').then(() => {
+      const ICON = {
+        operational: 'images/status/online.webp',
+        degraded_performance: 'images/status/unknown.webp',
+        partial_outage: 'images/status/unknown.webp',
+        major_outage: 'images/status/offline.webp',
+        under_maintenance: 'images/status/unknown.webp',
+        unknown: 'images/status/unknown.webp',
+        offline: 'images/status/offline.webp',
+        online: 'images/status/online.wenp'
+      };
+
+      function setStatus(elId, status, label = '') {
+        const el = document.getElementById(elId);
+        const icon = ICON[status] || ICON.unknown;
+        el.querySelector('img').src = icon;
+        if (label) el.querySelector('.status-text').textContent = label;
+      }
+
+      fetch('https://www.githubstatus.com/api/v2/components.json')
+        .then(res => res.json())
+        .then(data => {
+          data.components.forEach(c => {
+            if (c.name === 'API Requests') setStatus('gh-api', c.status, 'API Requests');
+            if (c.name === 'Git Operations') setStatus('gh-gitops', c.status, 'Git Operations');
+            if (c.name === 'Pages') setStatus('gh-pages', c.status, 'Pages');
+          });
+        });
+
+      fetch('https://status.render.com/api/v2/components.json')
+        .then(res => res.json())
+        .then(data => {
+          data.components.forEach(c => {
+            if (c.name === 'API') setStatus('r-api', c.status, 'API');
+            if (/REST API/i.test(c.name)) setStatus('r-rest', c.status, 'REST API');
+          });
+        });
+
+      fetch('https://discordstatus.com/api/v2/status.json')
+        .then(res => res.json())
+        .then(d => setStatus('d-status', d.status.indicator, 'Gateway/API'));
+
+      fetch('https://api.mcsrvstat.us/3/redminer9630.aternos.me')
+        .then(res => res.json())
+        .then(d => setStatus('mc-status', d.online ? 'online' : 'offline', 'Server Status'));
+
+      fetch('https://minecraftstatus.net')
+        .then(res => res.text())
+        .then(txt => {
+          const authMatch = txt.match(/auth\w+?\s*.*?(Operational|Disruption|Outage|Unknown)/i);
+          const status = authMatch ? authMatch[1].toLowerCase().replace(/ /g, '_') : 'unknown';
+          setStatus('mojang-auth', status, 'authserver');
+        });
+    });
+  </script>
+</body>
+</html>
