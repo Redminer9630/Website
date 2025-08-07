@@ -1,0 +1,68 @@
+name: Update CDN Tags in Files
+
+on:
+  workflow_dispatch:
+    inputs:
+      new_tag:
+        description: 'Neuer Tag'
+        required: true
+        default: 't2'
+      old_tags:
+        description: 'Komma-getrennte alte Tags (z.B. t1,u1,v1)'
+        required: true
+        default: 't1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0'
+
+jobs:
+  replace-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup variables
+        id: vars
+        run: |
+          echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
+          echo "OLD_TAGS=${{ github.event.inputs.old_tags }}" >> $GITHUB_ENV
+
+      - name: Find and replace tags in files
+        run: |
+          # Alte Tags als Array
+          IFS=',' read -ra TAGS <<< "$OLD_TAGS"
+          echo "Alte Tags: ${TAGS[@]}"
+          echo "Neuer Tag: $NEW_TAG"
+
+          # Zielverzeichnisse und Dateiendungen
+          DIRS=("docs" "docs/js_components")
+          EXTENSIONS=("css" "html" "js")
+
+          # Für jede Datei in den Verzeichnissen mit den Extensions
+          for dir in "${DIRS[@]}"; do
+            for ext in "${EXTENSIONS[@]}"; do
+              # Finde Dateien
+              find "$dir" -type f -name "*.$ext" | while read -r file; do
+                # Backup der Datei (optional, kann entfernt werden)
+                cp "$file" "$file.bak"
+                # Für jeden alten Tag suchen und ersetzen
+                for old_tag in "${TAGS[@]}"; do
+                  # Ersetze jsDelivr-Versionstags in URLs, z.B. @t1 zu @t2
+                  sed -i "s/@${old_tag}/@${NEW_TAG}/g" "$file"
+                done
+              done
+            done
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [[ -n $(git status -s) ]]; then
+            git add docs
+            git commit -m "Update CDN tags to @$NEW_TAG"
+            git push
+          else
+            echo "No changes to commit."
+          fi
