@@ -1,3 +1,5 @@
+// autoloader.js
+
 // Kopf-Meta & Title
 (function () {
 	const head = document.head;
@@ -21,7 +23,7 @@
 	});
 })();
 
-// Load Font über CDN
+// Load Minecraft Font über CDN
 function loadMinecraftFont(fontName, baseUrl) {
 	const formats = [
 		{ ext: ".woff2", format: "woff2" },
@@ -48,35 +50,45 @@ if (location.protocol !== "https:") location.replace(location.href.replace("http
 if (location.pathname.endsWith("index.html")) location.replace(location.href.replace(/index\.html$/, ""));
 
 // Logging & Version
-const noti = (type, ...msg) => { const txt = msg.join(" "); const log = console[type] || console.log; log(txt); alert(txt); };
-let debug = false;
+window.noti = (type, ...msg) => {
+	const txt = msg.join(" ");
+	const log = console[type] || console.log;
+	log(txt);
+	alert(txt);
+};
+window.debug = false;
 window.CommonVersion = { version: "v1.1.0", key: "1.1.0", date: "3.8.25", time: "22:30" };
 
-// CDN-Komponenten laden
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/need_confirm.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/back_button.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/download.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/embed.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/mctooltip.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/cliper.js';
-import 'https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/theme.js';
+// CDN-Komponenten laden (dynamisch per import())
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/";
+[
+	"need_confirm.js",
+	"back_button.js",
+	"download.js",
+	"embed.js",
+	"mctooltip.js",
+	"cliper.js",
+	"theme.js"
+].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
-// CSS preload
-const preload = document.createElement("link");
-preload.rel = "preload";
-preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/framework.css";
-preload.as = "style";
-preload.onload = () => { preload.rel = "stylesheet"; };
-document.head.appendChild(preload);
+// CSS preload & laden
+(function() {
+	const preload = document.createElement("link");
+	preload.rel = "preload";
+	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1/docs/js_components/framework.css";
+	preload.as = "style";
+	preload.onload = () => { preload.rel = "stylesheet"; };
+	document.head.appendChild(preload);
+})();
 
-// DOMContentLoaded
+// DOMContentLoaded Initialisierung
 document.addEventListener("DOMContentLoaded", () => {
 	const year = new Date().getFullYear();
 	const footer = document.createElement("footer");
 	footer.id = "main-footer";
 	footer.setAttribute("role", "contentinfo");
 	footer.className = "fixed-footer";
-	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a href="/version?v=${CommonVersion.key}">${CommonVersion.version} ${CommonVersion.date} ${CommonVersion.time}</a></span>`;
+	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a></span>`;
 	document.body.appendChild(footer);
 
 	const css = document.createElement("style");
@@ -87,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontCSS);
 
+	// Theme & Font aus localStorage holen
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
@@ -94,19 +107,25 @@ document.addEventListener("DOMContentLoaded", () => {
 	const savedFont = localStorage.getItem("font") || "Mojangles";
 	document.documentElement.setAttribute("data-font", savedFont);
 
-	if (typeof mctip?.initMinecraftTooltips === "function") mctip.initMinecraftTooltips();
+	// Init Minecraft Tooltips falls vorhanden
+	if (typeof window.mctip?.initMinecraftTooltips === "function") window.mctip.initMinecraftTooltips();
+
+	// Modal-Buttons initialisieren
 	document.querySelectorAll('[data-modal-open]').forEach(btn => btn.addEventListener('click', () => {
 		const id = btn.getAttribute('data-modal-open');
-		if (typeof Modal?.open === 'function') Modal.open(id); else noti("error", "Modal.open nicht verfügbar");
+		if (typeof window.Modal?.open === 'function') window.Modal.open(id);
+		else window.noti("error", "Modal.open nicht verfügbar");
 	}));
 
-	if (debug) {
+	// Debug Checks
+	if (window.debug) {
 		document.querySelectorAll("img").forEach(img => {
-			if (!img.src.endsWith(".webp")) noti("warn", "Bild sollte WebP sein:", img.src);
-			if (img.naturalWidth > 800) noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");
+			if (!img.src.endsWith(".webp")) window.noti("warn", "Bild sollte WebP sein:", img.src);
+			if (img.naturalWidth > 800) window.noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");
 		});
 	}
 
+	// Back Button falls nicht Startseite
 	if (location.pathname !== '/' && location.pathname !== '/index.html') {
 		const backBtn = document.createElement("div");
 		backBtn.className = "header-link";
@@ -117,8 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 });
 
-// Theme-System
-export function applyTheme(theme) {
+// Theme-System global verfügbar machen
+window.applyTheme = function(theme) {
 	if (window._systemThemeListener) {
 		window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", window._systemThemeListener);
 		window._systemThemeListener = null;
@@ -132,10 +151,10 @@ export function applyTheme(theme) {
 	} else {
 		document.documentElement.setAttribute("data-theme", theme);
 	}
-}
+};
 
-// Font-Wechsler
-function applyFont(font) {
+// Font-Wechsler global verfügbar machen
+window.applyFont = function(font) {
 	localStorage.setItem("font", font);
 	document.documentElement.setAttribute("data-font", font);
 	let family = "sans-serif", size = "1em";
@@ -149,31 +168,24 @@ function applyFont(font) {
 	}
 	document.body.style.fontFamily = family;
 	document.documentElement.style.fontSize = size;
-}
+};
 
-// Optional: Captcha & Mobile-Footer-Space
-function loadCaptcha(callback) {
+// Optional: Captcha laden
+window.loadCaptcha = function(callback) {
 	if (window.grecaptcha) return callback?.(window.grecaptcha);
 	const s = document.createElement('script');
 	s.src = 'https://www.google.com/recaptcha/api.js?onload=onCaptchaLoad&render=explicit';
 	s.async = s.defer = true;
 	window.onCaptchaLoad = () => callback?.(window.grecaptcha);
 	document.head.appendChild(s);
-}
+};
 
-function adjustContentSpacingGlobally() {
+// Content-Abstand für Mobile anpassen
+window.adjustContentSpacingGlobally = function() {
 	if (window.innerWidth > 768) return;
-	const content = document.getElementById("content");
-	if (!content) return;
-	while (content.lastChild?.tagName === 'BR') content.removeChild(content.lastChild);
-	const bottomOffset = 65;
-	let rect = content.getBoundingClientRect(), h = window.innerHeight;
-	while (rect.bottom > h - bottomOffset) {
-		content.appendChild(document.createElement('br'));
-		const newRect = content.getBoundingClientRect();
-		if (newRect.bottom === rect.bottom) break;
-		rect = newRect;
-	}
-}
-window.addEventListener("load", adjustContentSpacingGlobally);
-window.addEventListener("resize", adjustContentSpacingGlobally);
+	const content = document.getElementById('main-content') || document.body;
+	content.style.paddingBottom = "4rem";
+};
+window.addEventListener("resize", window.adjustContentSpacingGlobally);
+window.adjustContentSpacingGlobally();
+
