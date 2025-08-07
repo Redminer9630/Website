@@ -1,6 +1,3 @@
-// autoloader.js
-
-// Kopf-Meta & Title
 (function () {
 	const head = document.head;
 	const tags = [
@@ -23,43 +20,53 @@
 	});
 })();
 
-// Load Minecraft Font über CDN
 function loadMinecraftFont(fontName, baseUrl) {
 	const formats = [
 		{ ext: ".woff2", format: "woff2" },
 		{ ext: ".woff",  format: "woff" },
 		{ ext: ".ttf",   format: "truetype" }
 	];
-	(function tryNext(index = 0) {
-		if (index >= formats.length) return console.error("Minecraft-Font konnte nicht geladen werden.");
+
+	(function tryLoad(index = 0) {
+		if (index >= formats.length) {
+			console.error("Minecraft-Font konnte in keinem Format geladen werden.");
+			return;
+		}
+
 		const { ext, format } = formats[index];
 		const url = baseUrl + ext;
+
+		if (!CSS.supports("font-format", format)) {
+			console.warn(`Fontformat ${format} wird nicht unterstützt. Versuche nächstes.`);
+			return tryLoad(index + 1);
+		}
+
 		const font = new FontFace(fontName, `url(${url}) format('${format}')`, { display: "swap" });
 		font.load().then(f => {
 			document.fonts.add(f);
 			document.body.style.fontFamily = `'${fontName}', sans-serif`;
 			console.log(`Minecraft-Font (${format}) geladen.`);
-		}).catch(() => tryNext(index + 1));
+		}).catch(() => {
+			console.warn(`Laden von ${format} fehlgeschlagen. Versuche anderes Format.`);
+			tryLoad(index + 1);
+		});
 	})();
 }
 loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1.1/docs/minecraft_font");
 
-// Umleitungen
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
 if (location.pathname.endsWith("index.html")) location.replace(location.href.replace(/index\.html$/, ""));
+window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt)alert(txt);};
 
-// Logging & Version
-window.noti = (type, ...msg) => {
-	const txt = msg.join(" ");
-	const log = console[type] || console.log;
-	log(txt);
-	alert(txt);
-};
 window.debug = false;
-window.CommonVersion = { version: "v1.1.0", key: "1.1.0", date: "3.8.25", time: "22:30" };
+window.CommonVersion = { 
+    version: "v1.1.0", 
+    key: "1.1.0", 
+    date: "3.8.25", 
+    time: "22:30" 
+};
 
-// CDN-Komponenten laden (dynamisch per import())
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1.1/docs/js_components/";
 [
 	"need_confirm.js",
@@ -71,7 +78,6 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1.1/docs/
 	"theme.js"
 ].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
-// CSS preload & laden
 (function() {
 	const preload = document.createElement("link");
 	preload.rel = "preload";
@@ -81,7 +87,6 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@v1.1.1.1/docs/
 	document.head.appendChild(preload);
 })();
 
-// DOMContentLoaded Initialisierung
 document.addEventListener("DOMContentLoaded", () => {
 	const year = new Date().getFullYear();
 	const footer = document.createElement("footer");
@@ -99,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontCSS);
 
-	// Theme & Font aus localStorage holen
 	const savedTheme = localStorage.getItem("theme");
 	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
 	else document.documentElement.removeAttribute("data-theme");
@@ -107,17 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	const savedFont = localStorage.getItem("font") || "Mojangles";
 	document.documentElement.setAttribute("data-font", savedFont);
 
-	// Init Minecraft Tooltips falls vorhanden
 	if (typeof window.mctip?.initMinecraftTooltips === "function") window.mctip.initMinecraftTooltips();
 
-	// Modal-Buttons initialisieren
 	document.querySelectorAll('[data-modal-open]').forEach(btn => btn.addEventListener('click', () => {
 		const id = btn.getAttribute('data-modal-open');
 		if (typeof window.Modal?.open === 'function') window.Modal.open(id);
 		else window.noti("error", "Modal.open nicht verfügbar");
 	}));
 
-	// Debug Checks
 	if (window.debug) {
 		document.querySelectorAll("img").forEach(img => {
 			if (!img.src.endsWith(".webp")) window.noti("warn", "Bild sollte WebP sein:", img.src);
@@ -125,7 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	}
 
-	// Back Button falls nicht Startseite
 	if (location.pathname !== '/' && location.pathname !== '/index.html') {
 		const backBtn = document.createElement("div");
 		backBtn.className = "header-link";
@@ -136,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 });
 
-// Theme-System global verfügbar machen
 window.applyTheme = function(theme) {
 	if (window._systemThemeListener) {
 		window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", window._systemThemeListener);
@@ -153,7 +152,6 @@ window.applyTheme = function(theme) {
 	}
 };
 
-// Font-Wechsler global verfügbar machen
 window.applyFont = function(font) {
 	localStorage.setItem("font", font);
 	document.documentElement.setAttribute("data-font", font);
@@ -170,7 +168,6 @@ window.applyFont = function(font) {
 	document.documentElement.style.fontSize = size;
 };
 
-// Optional: Captcha laden
 window.loadCaptcha = function(callback) {
 	if (window.grecaptcha) return callback?.(window.grecaptcha);
 	const s = document.createElement('script');
@@ -180,7 +177,6 @@ window.loadCaptcha = function(callback) {
 	document.head.appendChild(s);
 };
 
-// Content-Abstand für Mobile anpassen
 window.adjustContentSpacingGlobally = function() {
 	if (window.innerWidth > 768) return;
 	const content = document.getElementById('main-content') || document.body;
@@ -188,4 +184,3 @@ window.adjustContentSpacingGlobally = function() {
 };
 window.addEventListener("resize", window.adjustContentSpacingGlobally);
 window.adjustContentSpacingGlobally();
-
