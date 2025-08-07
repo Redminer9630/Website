@@ -6,11 +6,11 @@ on:
       new_tag:
         description: 'Neuer Tag (z.B. t2)'
         required: true
-        default: 't2'
+        default: 't4'
       old_tags:
         description: 'Komma-getrennte alte Tags (z.B. t1,u1,v1)'
         required: true
-        default: 't1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0'
+        default: 't1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0,t3,t4'
 
 jobs:
   replace-tags:
@@ -22,12 +22,11 @@ jobs:
           fetch-depth: 0
 
       - name: Setup variables
-        id: vars
         run: |
           echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
           echo "OLD_TAGS=${{ github.event.inputs.old_tags }}" >> $GITHUB_ENV
 
-      - name: Find and replace tags in files (no .bak files)
+      - name: Find and replace tags in files
         run: |
           IFS=',' read -ra TAGS <<< "$OLD_TAGS"
           DIRS=("docs" "docs/js_components")
@@ -59,3 +58,12 @@ jobs:
           else
             echo "No changes to commit."
           fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.NEW_TAG }}
+          name: ${{ env.NEW_TAG }}
+          body: "Automatisches Release für den Tag **${{ env.NEW_TAG }}**"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
