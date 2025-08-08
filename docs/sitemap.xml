@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,23 +7,28 @@
 
 <url>
   <loc>https://redminer9630.ddns.net/</loc>
-  <lastmod>2025-06-27T19:00:00+00:00</lastmod>
+  <lastmod>2025-08-08T19:00:00+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://redminer9630.ddns.net/downloads</loc>
-  <lastmod>2024-10-12T15:01:49+00:00</lastmod>
+  <loc>https://redminer9630.ddns.net/projects</loc>
+  <lastmod>2025-08-08T19:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://redminer9630.ddns.net/generators</loc>
-  <lastmod>2024-10-12T15:01:49+00:00</lastmod>
+  <loc>https://redminer9630.ddns.net/linktree</loc>
+  <lastmod>2025-08-08T19:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://redminer9630.ddns.net/calculator</loc>
-  <lastmod>2024-10-12T15:01:49+00:00</lastmod>
+  <loc>https://redminer9630.ddns.net/tools</loc>
+  <lastmod>2025-08-08T19:00:00+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-
+<url>
+  <loc>https://redminer9630.ddns.net/manual</loc>
+  <lastmod>2025-08-08T19:00:00+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
 </urlset>
+
