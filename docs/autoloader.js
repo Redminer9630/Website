@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.head.appendChild(css);
 
 	const fontCSS = document.createElement("style");
-	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
+	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontCSS);
 
 	const savedTheme = localStorage.getItem("theme");
