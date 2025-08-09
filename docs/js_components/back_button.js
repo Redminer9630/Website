@@ -1,9 +1,8 @@
 export function initHeaderButton() {
-  const ref = document.referrer;
   const urlParams = new URLSearchParams(location.search);
   const fromParam = urlParams.get('from');
 
-  if (!ref.includes('redminer9630.ddns.net') && fromParam !== 'main') return;
+  if (fromParam !== 'main') return;
 
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
@@ -15,10 +14,11 @@ export function initHeaderButton() {
   shadow.innerHTML = `
     <style>
       :host {all: initial;}
-      button {all: unset;font-family: Arial;font-size: 16px;background-color: #f44336;color: white;padding: 10px 20px;border-radius: 8px;cursor: pointer;transition: background-color 0.2s ease, transform 0.2s ease;}
-      button:hover {background-color: #e53935;transform: scale(1.05);}
+      button {all: unset;font-family: Mojangles;font-size: 16px;background-color: #1a1a1a;color: white;padding: 10px 20px;border-radius: 8px;cursor: pointer;transition: background-color 0.2s ease, transform 0.2s ease;}
+      button:hover {background-color: #323232;transform: scale(1.05);}
       @media (max-width: 768px) {button {font-size: 14px;padding: 8px 16px;}}
       @media (max-width: 480px) {button {font-size: 12px;padding: 6px 12px;}}
+      @media(prefers-color-scheme:dark){body {background-color: #eaeaea;}body:hover {background-color: #;c8c8c8}
     </style>
     <button id="backBtn" aria-label="Zurück zur vorherigen Seite">Zurück</button>
   `;
