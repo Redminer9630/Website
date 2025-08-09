@@ -1,5 +1,5 @@
 // ======== Global Event Dispatcher ========
-const Globals9Events = {
+const GameEvents = {
     emit(eventName, detail = {}) {
         window.dispatchEvent(new CustomEvent(eventName, { detail }));
     }
@@ -23,12 +23,12 @@ class Embed9 extends HTMLElement {
             if (showLines) cell.style.border = "1px solid black";
             cell.dataset.index = i + 1;
             cell.addEventListener("click", () => {
-                Globals9Events.emit("embed9:click", { cell: cell.dataset.index, element: this });
+                GameEvents.emit("embed9:click", { cell: cell.dataset.index, element: this });
             });
             this.appendChild(cell);
         }
 
-        Globals9Events.emit("embed9:created", { rows, cols, lines: showLines, element: this });
+        GameEvents.emit("embed9:created", { rows, cols, lines: showLines, element: this });
     }
 }
 customElements.define("embed9", Embed9);
@@ -40,10 +40,11 @@ class Imgd9 extends HTMLElement {
         const img = document.createElement("img");
         img.style.width = "100%";
         img.style.height = "100%";
+        img.style.imageRendering = "pixelated";
 
         if (src.startsWith("minecraft:")) {
             const item = src.replace("minecraft:", "");
-            img.src = `https://mcasset.cloud/1.20.4/assets/minecraft/textures/item/${item}.png`;
+            img.src = `https://mcasset.cloud/latest/assets/minecraft/textures/item/${item}.png`;
         } else if (src.startsWith("#") || /^[a-z]+$/i.test(src)) {
             img.remove();
             this.style.background = src;
@@ -53,10 +54,10 @@ class Imgd9 extends HTMLElement {
 
         this.appendChild(img);
         this.addEventListener("click", () => {
-            Globals9Events.emit("imgd9:click", { src, element: this });
+            GameEvents.emit("imgd9:click", { src, element: this });
         });
 
-        Globals9Events.emit("imgd9:created", { src, element: this });
+        GameEvents.emit("imgd9:created", { src, element: this });
     }
 }
 customElements.define("imgd9", Imgd9);
@@ -95,11 +96,10 @@ class Craftipe9 extends HTMLElement {
         container.appendChild(resultImg);
         this.appendChild(container);
 
-        this.addEventListener("click", () => {
-            Globals9Events.emit("craftipe9:click", { result, element: this });
-        });
-
-        Globals9Events.emit("craftipe9:created", { result, element: this });
+        this.addEventListener("click", () => {GameEvents.emit("craftipe9:click", { result, element: this });});
+        GameEvents.emit("craftipe9:created", { result, element: this });
     }
 }
 customElements.define("craftipe9", Craftipe9);
+
+export { GameEvents, Embed9, Imgd9, Craftipe9 };
