@@ -18,7 +18,7 @@ export function initHeaderButton() {
       button:hover {background-color: #323232;transform: scale(1.05);}
       @media (max-width: 768px) {button {font-size: 14px;padding: 8px 16px;}}
       @media (max-width: 480px) {button {font-size: 12px;padding: 6px 12px;}}
-      @media(prefers-color-scheme:dark){body {background-color: #eaeaea;}body:hover {background-color: #;c8c8c8}
+      @media(prefers-color-scheme:dark){body {background-color: #eaeaea;}body:hover {background-color: #;c8c8c8}}
     </style>
     <button id="backBtn" aria-label="Zurück zur vorherigen Seite">Zurück</button>
   `;
