@@ -1,0 +1,3 @@
+embed9 { width: 150px; height: 150px; }
+embed9 > div { display: flex; align-items: center; justify-content: center; }
+imgd9 img { image-rendering: pixelated; }
