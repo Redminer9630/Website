@@ -7,10 +7,6 @@ on:
         description: 'Neuer Tag (z.B. t2)'
         required: true
         default: 't4'
-      old_tags:
-        description: 'Komma-getrennte alte Tags (z.B. t1,u1,v1)'
-        required: true
-        default: 't1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0,t3,t4'
 
 jobs:
   replace-tags:
@@ -21,10 +17,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup variables
+      - name: Load old tags from file or set default
+        id: load_old_tags
         run: |
-          echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
-          echo "OLD_TAGS=${{ github.event.inputs.old_tags }}" >> $GITHUB_ENV
+          if [[ -f old_tags.txt ]]; then
+            OLD_TAGS=$(cat old_tags.txt)
+            echo "Old tags loaded from file: $OLD_TAGS"
+          else
+            OLD_TAGS="t1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0,t3,t4"
+            echo "No old_tags.txt found, using default: $OLD_TAGS"
+          fi
+          echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
+
+      - name: Set new tag variable
+        run: echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
 
       - name: Find and replace tags in files
         run: |
@@ -46,14 +52,17 @@ jobs:
         run: |
           find docs docs/js_components -type f -name "*.bak" -delete
 
-      - name: Commit and push changes
+      - name: Commit and push changes (inkl. update old_tags.txt)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Alte Tags für nächsten Lauf updaten
+          echo "$NEW_TAG" > old_tags.txt
+          git add docs old_tags.txt
+
           if [[ -n $(git status -s) ]]; then
-            git add docs
-            git commit -m "Update CDN tags to @$NEW_TAG"
+            git commit -m "Update CDN tags to @$NEW_TAG and update old_tags.txt"
             git push
           else
             echo "No changes to commit."
