@@ -49,7 +49,7 @@ function loadMinecraftFont(fontName, baseUrl) {
 		});
 	})();
 }
-loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/minecraft_font");
+loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t9/docs/minecraft_font");
 
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
@@ -64,7 +64,7 @@ window.CommonVersion = {
     time: "22:30" 
 };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/js_components/";
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t9/docs/js_components/";
 [
 	//"need_confirm.js",
 	"back_button.js",
@@ -78,7 +78,7 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/js_com
 (function() {
 	const preload = document.createElement("link");
 	preload.rel = "preload";
-	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/js_components/framework.css";
+	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t9/docs/js_components/framework.css";
 	preload.as = "style";
 	preload.onload = () => { preload.rel = "stylesheet"; };
 	document.head.appendChild(preload);
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.head.appendChild(css);
 
 	const fontCSS = document.createElement("style");
-	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t8/docs/minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
+	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t9/docs/minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
 	document.head.appendChild(fontCSS);
 
 	const savedTheme = localStorage.getItem("theme");
