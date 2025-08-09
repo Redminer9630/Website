@@ -28,10 +28,7 @@ function loadMinecraftFont(fontName, baseUrl) {
 	];
 
 	(function tryLoad(index = 0) {
-		if (index >= formats.length) {
-			console.error("Minecraft-Font konnte in keinem Format geladen werden.");
-			return;
-		}
+		if (index >= formats.length) {return;}
 
 		const { ext, format } = formats[index];
 		const url = baseUrl + ext;
