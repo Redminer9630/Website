@@ -105,6 +105,22 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 });
+
+function updateSidebarLabels() {
+    const allgemeinEl = document.querySelector('.element2.toggle[mctip="Allgemein expandieren"]');
+    const technischesEl = document.querySelector('.element2.toggle[mctip="Technisches expandieren"]');
+
+    if (window.innerWidth <= 600) {
+        if (allgemeinEl) allgemeinEl.textContent = "Allgemein";
+        if (technischesEl) technischesEl.textContent = "Technis.";
+    } else {
+        if (allgemeinEl) allgemeinEl.textContent = "Allgemeines";
+        if (technischesEl) technischesEl.textContent = "Technisches";
+    }
+}
+
+window.addEventListener("resize", updateSidebarLabels);
+document.addEventListener("DOMContentLoaded", updateSidebarLabels);
 </script>
 </head>
 <body>
