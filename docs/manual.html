@@ -33,7 +33,25 @@
 	    #imgcrdt a { display: inline-block; margin: 8px; padding: 6px 10px; background: #f4f4f4; border-radius: 6px; color: #007BFF; text-decoration: none; transition: background 0.2s, color 0.2s; }
 	    #imgcrdt a:hover { background: #007BFF; color: #fff; }
 	    #imgcrdt { display: flex; flex-wrap: wrap; gap: 8px; }
-	</style>
+@media (max-width: 600px) {
+    body { font-size: 0.9em; }
+    .element1 { font-size: 1.3em; }
+    .element2 { font-size: 1.2em; }
+    .element3 { font-size: 1.1em; }
+    .element4 { font-size: 1em; }
+    .element5 { font-size: 0.95em; }
+    .element6 { font-size: 0.9em; }
+}
+@media (max-width: 350px) {
+    body { font-size: 0.8em; }
+    .element1 { font-size: 1.1em; }
+    .element2 { font-size: 1em; }
+    .element3 { font-size: 0.95em; }
+    .element4 { font-size: 0.9em; }
+    .element5 { font-size: 0.85em; }
+    .element6 { font-size: 0.8em; }
+}
+    </style>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 	document.querySelectorAll(".toggle").forEach((el, i) => {
