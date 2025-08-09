@@ -28,95 +28,110 @@
   <div id="results"></div>
   <i>Die Suche funktioniert noch nicht</i>
 
-  <script>
-    const input = document.getElementById("search-input")
-    const results = document.getElementById("results")
-    const fallbackCheck = document.getElementById("include-google")
+<script>
+  const input = document.getElementById("search-input")
+  const results = document.getElementById("results")
+  const fallbackCheck = document.getElementById("include-google")
 
-    const urlParams = new URLSearchParams(location.search)
-    const q = urlParams.get("q")
-    if(q){
-      input.value = q
-      fallbackCheck.checked = true // Checkbox aktivieren bei direktem Link mit ?q
-      runSearch(q)
+  const urlParams = new URLSearchParams(location.search)
+  const q = urlParams.get("q")
+  if(q){
+    input.value = q
+    fallbackCheck.checked = true // Checkbox aktivieren bei direktem Link mit ?q
+    runSearch(q)
+  }
+
+  document.getElementById("search-button").addEventListener("click",()=>{
+    const term = input.value.trim()
+    if(term){
+      history.replaceState(null,"","?q="+encodeURIComponent(term))
+      runSearch(term)
+    }
+  })
+
+  input.addEventListener("keypress",e=>{
+    if(e.key==="Enter"){
+      e.preventDefault()
+      document.getElementById("search-button").click()
+    }
+  })
+
+  async function runSearch(term){
+    results.innerHTML = ""
+    const includeGoogle = fallbackCheck.checked
+
+    // Hier die JSON-Indexdateien definieren
+    const jsonFiles = [
+      "search/index.json",
+      "search/index2.json",
+      "search/index3.json"
+      // weitere Dateien können hier hinzugefügt werden
+    ]
+
+    let data = []
+    try {
+      // Alle JSON-Dateien parallel laden und zusammenführen
+      const fetches = jsonFiles.map(file => fetch(file).then(res=>res.json()).catch(e=>{
+        console.warn(`Fehler beim Laden von ${file}:`, e)
+        return []
+      }))
+      const resultsArrays = await Promise.all(fetches)
+      resultsArrays.forEach(arr => { if(Array.isArray(arr)) data.push(...arr) })
+    } catch(e){
+      console.error("Fehler beim Laden der JSON-Dateien:", e)
     }
 
-    document.getElementById("search-button").addEventListener("click",()=>{
-      const term = input.value.trim()
-      if(term){
-        history.replaceState(null,"","?q="+encodeURIComponent(term))
-        runSearch(term)
-      }
+    const normalized = txt => txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
+    const words = normalized(term).split(" ").filter(w=>w)
+    const found = data.filter(e=>{
+      const combined = [e.title, e.desc, ...(e.alias||[])].join(" ")
+      const flat = normalized(combined)
+      return words.every(w => flat.includes(w))
     })
 
-    input.addEventListener("keypress",e=>{
-      if(e.key==="Enter"){
-        e.preventDefault()
-        document.getElementById("search-button").click()
-      }
-    })
-
-    async function runSearch(term){
-      results.innerHTML = ""
-      const includeGoogle = fallbackCheck.checked
-
-      let data = []
-      try{
-        const res = await fetch("search/index.json")
-        data = await res.json()
-      }catch(e){console.error("Fehler beim Laden der JSON:",e)}
-
-      const normalized = txt => txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
-      const words = normalized(term).split(" ").filter(w=>w)
-      const found = data.filter(e=>{
-        const combined = [e.title, e.desc, ...(e.alias||[])].join(" ")
-        const flat = normalized(combined)
-        return words.every(w => flat.includes(w))
+    if(found.length > 0){
+      results.innerHTML += `<h2>Lokale Ergebnisse</h2>`
+      found.forEach(e=>{
+        const div = document.createElement("div")
+        div.innerHTML = `<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
+        results.appendChild(div)
+        if(typeof e.special_feature === "function"){e.special_feature()}
       })
+    }
 
-      if(found.length > 0){
-        results.innerHTML += `<h2>Lokale Ergebnisse</h2>`
-        found.forEach(e=>{
-          const div = document.createElement("div")
-          div.innerHTML = `<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
-          results.appendChild(div)
-          if(typeof e.special_feature === "function"){e.special_feature()}
-        })
-      }
+    if(includeGoogle){
+      try{
+        const gRes = await fetch("https://backend9630.onrender.com/api/search/google?q="+encodeURIComponent(term))
+        const gData = await gRes.json()
+        const gResults = gData.results || []
 
-      if(includeGoogle){
-        try{
-          const gRes = await fetch("https://backend9630.onrender.com/api/search/google?q="+encodeURIComponent(term))
-          const gData = await gRes.json()
-          const gResults = gData.results || []
+        if(gResults.length){
+          results.innerHTML += `<h2>Google-Ergebnisse</h2>`
+          gResults.forEach(g=>{
+            const div = document.createElement("div")
+            div.innerHTML = `<strong><a href="${g.url}" target="_blank">${g.title}</a></strong><br><small>${g.desc}</small><hr>`
+            results.appendChild(div)
+          })
 
-          if(gResults.length){
-            results.innerHTML += `<h2>Google-Ergebnisse</h2>`
-            gResults.forEach(g=>{
-              const div = document.createElement("div")
-              div.innerHTML = `<strong><a href="${g.url}" target="_blank">${g.title}</a></strong><br><small>${g.desc}</small><hr>`
-              results.appendChild(div)
-            })
+          // Google-Logo unten rechts einfügen
+          const logoBox = document.createElement("div")
+          logoBox.className = "google-logo"
+          logoBox.innerHTML = `<a href="https://www.google.com/search?q=${encodeURIComponent(term)}" target="_blank"><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google Logo" /></a>`
+          results.appendChild(logoBox)
 
-            // Google-Logo unten rechts einfügen
-            const logoBox = document.createElement("div")
-            logoBox.className = "google-logo"
-            logoBox.innerHTML = `<a href="https://www.google.com/search?q=${encodeURIComponent(term)}" target="_blank"><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google Logo" /></a>`
-            results.appendChild(logoBox)
-
-          }else{
-            results.innerHTML += `<div class="no-results">Keine Google-Ergebnisse</div>`
-          }
-        }catch(err){
-          results.innerHTML += `<div class="no-results">Fehler bei Google-Suche</div>`
-          console.error(err)
+        }else{
+          results.innerHTML += `<div class="no-results">Keine Google-Ergebnisse</div>`
         }
-      }
-
-      if(results.innerHTML.trim() === ""){
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`
+      }catch(err){
+        results.innerHTML += `<div class="no-results">Fehler bei Google-Suche</div>`
+        console.error(err)
       }
     }
-  </script>
+
+    if(results.innerHTML.trim() === ""){
+      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`
+    }
+  }
+</script>
 </body>
 </html>
