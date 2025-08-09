@@ -49,7 +49,7 @@ function loadMinecraftFont(fontName, baseUrl) {
 		});
 	})();
 }
-loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t5/docs/minecraft_font");
+loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t7/docs/minecraft_font");
 
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
@@ -64,7 +64,7 @@ window.CommonVersion = {
     time: "22:30" 
 };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t5/docs/js_components/";
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t7/docs/js_components/";
 [
 	//"need_confirm.js",
 	"back_button.js",
@@ -78,7 +78,7 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t5/docs/js_com
 (function() {
 	const preload = document.createElement("link");
 	preload.rel = "preload";
-	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t5/docs/js_components/framework.css";
+	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t7/docs/js_components/framework.css";
 	preload.as = "style";
 	preload.onload = () => { preload.rel = "stylesheet"; };
 	document.head.appendChild(preload);
