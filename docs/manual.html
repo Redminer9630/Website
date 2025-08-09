@@ -41,7 +41,10 @@
     .element4 { font-size: 1em; }
     .element5 { font-size: 0.95em; }
     .element6 { font-size: 0.9em; }
+    .sidebar { padding-left: 0; }
+    [class^="element"]::before { content: none; }
 }
+
 @media (max-width: 350px) {
     body { font-size: 0.8em; }
     .element1 { font-size: 1.1em; }
@@ -50,6 +53,8 @@
     .element4 { font-size: 0.9em; }
     .element5 { font-size: 0.85em; }
     .element6 { font-size: 0.8em; }
+    .sidebar { padding-left: 0; }
+    [class^="element"]::before { content: none; }
 }
     </style>
 <script>
