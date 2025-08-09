@@ -69,12 +69,12 @@ window.CommonVersion = {
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t4/docs/js_components/";
 [
-	"need_confirm.js",
+	//"need_confirm.js",
 	"back_button.js",
-	"download.js",
-	"embed.js",
+	//"download.js",
+	//"embed.js",
 	"mctooltip.js",
-	"cliper.js",
+	//"cliper.js",
 	"theme.js"
 ].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
