@@ -58,10 +58,10 @@ window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[t
 
 window.debug = false;
 window.CommonVersion = { 
-    version: "v1.1.0", 
-    key: "1.1.0", 
-    date: "3.8.25", 
-    time: "22:30" 
+    version: "v1.2.0", 
+    key: "1.2.0", 
+    date: "10.8.25", 
+    time: "14:00" 
 };
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/js_components/";
