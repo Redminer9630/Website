@@ -29,6 +29,9 @@
       setRadioValue("theme", theme);
       setRadioValue("font", font);
 
+      window.applyTheme?.(theme);
+      window.applyFont?.(font);
+        
       document.querySelectorAll('input[name="theme"]').forEach(radio => {
         radio.addEventListener("change", e => {
           const theme = e.target.value;
