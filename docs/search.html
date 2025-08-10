@@ -16,7 +16,7 @@
     .google-logo{display:flex;justify-content:flex-end;margin-top:0.5rem;}
     .google-logo img{height:24px;opacity:0.8;}
   </style>
-  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/autoloader.js" type="module" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/autoloader.js" type="module" defer></script>
 </head>
 <body>
   <h1>Suche</h1>
@@ -60,12 +60,9 @@
     results.innerHTML = ""
     const includeGoogle = fallbackCheck.checked
 
-    // Hier die JSON-Indexdateien definieren
     const jsonFiles = [
       "search/index.json",
-      "search/index2.json",
-      "search/index3.json"
-      // weitere Dateien können hier hinzugefügt werden
+      "search/discord.json"
     ]
 
     let data = []
