@@ -1,53 +1,117 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Website-Versionen</title>
   <style>
-    body { font-family: 'Mojangles'; background: #f4f4f4; color: #333; margin: 0; padding: 20px; }
-    .version-list { font-family: 'Mojangles'; list-style: none; padding: 0; }
-    .version-list li { font-family: 'Mojangles'; margin: 10px 0; }
-    .version-list a { font-family: 'Mojangles'; text-decoration: none; color: #007bff; background: #fff; padding: 10px 15px; border-radius: 5px; display: inline-block; transition: background 0.2s; }
-    .version-list a:hover { background: #eaeaea; }
-    #content { margin-top: 30px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .back-button { font-family: 'Mojangles'; text-decoration: none; color: #fff; background: #007bff; padding: 10px 15px; border-radius: 5px; display: inline-block; margin-top: 20px; transition: background 0.2s; }
-    .back-button:hover { background: #0056b3; }
+    :root {
+      --bg: #f4f4f4;
+      --card: #ffffff;
+      --text: #222222;
+      --link: #007bff;
+      --muted: #777777;
+      --shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f0f11;
+        --card: #121214;
+        --text: #e6e6e6;
+        --link: #66aaff;
+        --muted: #9a9a9a;
+        --shadow: 0 2px 8px rgba(0,0,0,0.6);
+      }
+    }
+    body { font-family: 'Mojangles'; background: var(--bg); color: var(--text); margin:0; padding:20px; transition:background .18s,color .18s; }
+    #wrapper { max-width:980px; margin:0 auto; }
+    header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; gap:12px; }
+    h1 { font-size:1.4rem; margin:0; }
+    .version-list { list-style:none; padding:0; margin:0 0 18px 0; display:flex; flex-wrap:wrap; gap:8px; }
+    .version-list a { font-family:'Mojangles'; text-decoration:none; color:var(--link); background:var(--card); padding:10px 14px; border-radius:8px; display:inline-block; transition:background .12s,transform .08s; box-shadow:var(--shadow); }
+    .version-list a:hover { transform:translateY(-2px); }
+    #content { margin-top: 10px; background: var(--card); padding: 20px; border-radius: 12px; box-shadow: var(--shadow); }
+    .info { margin-top:12px; color:var(--muted); }
+    footer { margin-top:14px; color:var(--muted); font-size:0.95rem; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .current { font-weight:700; }
+    @media (max-width:768px) {
+      .version-list { gap:6px; }
+      header { flex-direction:column; align-items:flex-start; gap:10px; }
+    }
   </style>
-    <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/autoloader.js"></script>
+  <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/autoloader.js"></script>
 </head>
 <body>
-<div id="content"></div>
-  <script>
-const versionListHTML = `
-  <h2>Website-Versionen</h2>
-  <ul class="version-list" id="versionList">
-    <li><a href="?v=v1.0.0">Pre v1.0.0</a></li>
-    <li><a href="?v=v1.0.1">Pre v1.0.1</a></li>
-    <li><a href="?v=v1.0.2">Pre v1.0.2</a></li>
-    <li><a href="?v=v1.0.3">Pre v1.0.3</a></li>
-    <li><a href="?v=1.0.0">v1.0.0</a></li>
-    <li><a href="?v=1.0.1">v1.0.1</a></li>
-    <li><a href="?v=1.0.2">v1.0.2</a></li>   
-    <li><a href="?v=1.0.3">v1.0.3</a></li> 
-    <li><a href="?v=1.1.0">v1.1.0</a></li>
-    <li><a href="?v=1.2.0">v1.2.0</a></li>
-  </ul>
-  <h3>Info</h3>
-  <p mctip="Wir befinden uns im Release">Versionen Zeitstrahl: <span style='color: grey;'>Indev(Indev) v1.8.4 </span>|<span style='color:grey;'> Alpha(Alpha) v1.4.2 </span>| <span style='color: grey;'>Beta(Beta) v1.6.7 </span>| <span style='color: grey;'>Pre Release(Pre) </span>| <span color="yellow">Release( )</span></p>
-`;
+  <div id="wrapper">
+    <header>
+      <h1>Website-Versionen</h1>
+    </header>
+
+    <div id="content"></div>
+
+    <script>
+const versions = [
+  {label:'Pre v1.0.0', param:'v=v1.0.0'},
+  {label:'Pre v1.0.1', param:'v=v1.0.1'},
+  {label:'Pre v1.0.2', param:'v=v1.0.2'},
+  {label:'Pre v1.0.3', param:'v=v1.0.3'},
+  {label:'v1.0.0', param:'v=1.0.0'},
+  {label:'v1.0.1', param:'v=1.0.1'},
+  {label:'v1.0.2', param:'v=1.0.2'},
+  {label:'v1.0.3', param:'v=1.0.3'},
+  {label:'v1.1.0', param:'v=1.1.0'},
+  {label:'v1.2.0', param:'v=1.2.0'}
+];
+
+function normalizeVersionStr(s) {
+  const m = s && s.match(/(\d+\.\d+\.\d+)/);
+  return m ? m[1] : null;
+}
+
+function semverCompare(a,b) {
+  const pa = a.split('.').map(n=>parseInt(n,10)||0);
+  const pb = b.split('.').map(n=>parseInt(n,10)||0);
+  for (let i=0;i<3;i++) {
+    if (pa[i] > pb[i]) return 1;
+    if (pa[i] < pb[i]) return -1;
+  }
+  return 0;
+}
+
+function findLatestVersion() {
+  let latest = null;
+  for (const v of versions) {
+    if (v.label.startsWith('Pre ')) continue; // Pre-Versionen überspringen
+    const n = normalizeVersionStr(v.param);
+    if (!n) continue;
+    if (!latest || semverCompare(n, latest) === 1) latest = n;
+  }
+  return latest;
+}
+
+function buildListHTML() {
+  return `
+    <ul class="version-list" id="versionList">
+      ${versions.map(v => `<li><a href="?${v.param}">${v.label}</a></li>`).join('')}
+    </ul>
+    <div class="info" mctip="Wir befinden uns im Release">Versionen Zeitstrahl: <span style="color:var(--muted)">Indev v1.8.4</span> | <span style="color:var(--muted)">Alpha v1.4.2</span> | <span style="color:var(--muted)">Beta v1.6.7</span> | <span style="color:var(--muted)">Pre Release</span> | <span style="color:var(--muted)">Release</span></div>
+  `;
+}
 
 function getParameterByName(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-function loadVersion(version) {
-  const content = document.getElementById("content");
-  if (!version) return;
-  fetch(`/version/${version}.json`)
+function loadVersion(versionParam) {
+  const content = document.getElementById('content');
+  if (!versionParam) {
+    content.innerHTML = buildListHTML() + buildFooterHTML(null);
+    return;
+  }
+  fetch(`/version/${versionParam}.json`)
     .then(res => {
-      if (!res.ok) throw new Error("Version nicht gefunden.");
+      if (!res.ok) throw new Error('Version nicht gefunden.');
       return res.json();
     })
     .then(data => {
@@ -55,21 +119,30 @@ function loadVersion(version) {
         <h2>Version: ${data.version}</h2>
         <p><strong>Veröffentlicht:</strong> ${data.date}</p>
         <h3>Änderungen:</h3>
-        <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
-      `;
+        <ul>${data.changes.map(c => `<li>${c}</li>`).join('')}</ul>
+      ` + buildFooterHTML(data.version);
     })
-    .catch(err => { content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; });
+    .catch(() => {
+      content.innerHTML = `<p style="color:red;">Fehler beim Laden der Version. Liste anzeigen.</p>` + buildListHTML() + buildFooterHTML(null);
+    });
 }
 
-const version = getParameterByName("v");
-if (version && version !== 'info') {
-  loadVersion(version);
+function buildFooterHTML(shownVersion) {
+  const latest = findLatestVersion();
+  const shown = shownVersion || (getParameterByName('v') ? getParameterByName('v') : null);
+  const shownNice = shown ? (normalizeVersionStr(shown) || shown) : '—';
+  return `<footer><div>angezeigte Version: <span class="current">${shownNice}</span></div><div>aktuelle Version: <span class="current">${latest || 'unbekannt'}</span></div></footer>`;
+}
+
+const contentRoot = document.getElementById('content');
+const urlVersion = getParameterByName('v');
+if (urlVersion && urlVersion !== 'info') {
+  const paramForFetch = normalizeVersionStr(urlVersion) || urlVersion;
+  loadVersion(paramForFetch);
 } else {
-const isMobileWidth = window.innerWidth <= 768;
-let adjustedVersionListHTML = versionListHTML;
-if (isMobileWidth) {adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');}
-document.getElementById("content").innerHTML = adjustedVersionListHTML;
+  contentRoot.innerHTML = buildListHTML() + buildFooterHTML(null);
 }
 </script>
+  </div>
 </body>
 </html>
