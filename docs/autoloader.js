@@ -20,36 +20,20 @@
 	});
 })();
 
-function loadMinecraftFont(fontName, baseUrl) {
-	const formats = [
-		{ ext: ".woff2", format: "woff2" },
-		{ ext: ".woff",  format: "woff" },
-		{ ext: ".ttf",   format: "truetype" }
-	];
+function loadMinecraftFontMiniFirst() {
+	const fontMiniURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/mcmini.woff2";
+	const fontFullURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/minecraft_font.woff2";
+	const fontMini = new FontFace("Minecraft",`url(${fontMiniURL}) format('woff2')`,{ display: "swap", unicodeRange: "U+0020-007E" });
+	fontMini.load().then(f => {
+		document.fonts.add(f);
+		document.documentElement.style.fontFamily = "'Minecraft', sans-serif";
+		console.log("Minecraft Mini-Font geladen (CLS-minimiert).");
 
-	(function tryLoad(index = 0) {
-		if (index >= formats.length) {return;}
-
-		const { ext, format } = formats[index];
-		const url = baseUrl + ext;
-
-		if (!CSS.supports("font-format", format)) {
-			console.warn(`Fontformat ${format} wird nicht unterstützt. Versuche nächstes.`);
-			return tryLoad(index + 1);
-		}
-
-		const font = new FontFace(fontName, `url(${url}) format('${format}')`, { display: "swap" });
-		font.load().then(f => {
-			document.fonts.add(f);
-			document.body.style.fontFamily = `'${fontName}', sans-serif`;
-			console.log(`Minecraft-Font (${format}) geladen.`);
-		}).catch(() => {
-			console.warn(`Laden von ${format} fehlgeschlagen. Versuche anderes Format.`);
-			tryLoad(index + 1);
-		});
-	})();
+		const fontFull = new FontFace("Minecraft",`url(${fontFullURL}) format('woff2')`,{ display: "swap" });
+		fontFull.load().then(f2 => {document.fonts.add(f2);console.log("Minecraft Voll-Font geladen.");}).catch(err => console.warn("Fehler beim Laden des Voll-Fonts", err));
+	}).catch(err => console.warn("Fehler beim Laden des Mini-Fonts", err));
 }
-loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/minecraft_font");
+loadMinecraftFontMiniFirst();
 
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
