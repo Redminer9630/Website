@@ -1,8 +1,12 @@
 export function initHeaderButton() {
+  const hostname = location.hostname.toLowerCase();
+  const pathname = location.pathname.toLowerCase();
   const urlParams = new URLSearchParams(location.search);
   const fromParam = urlParams.get('from');
 
-  if (fromParam !== 'main') return;
+  if (hostname === 'redminer9630.ddns.net') {
+
+    if (pathname === '' || pathname === '/' || pathname === '/index' || pathname === '/index.html') return;} else {if (fromParam !== 'main') return;}
 
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
