@@ -5,12 +5,13 @@
   <title>Einstellungen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { margin: 0; padding: 2rem; font-family: sans-serif; }
-    h1 { margin-bottom: 2rem; }
+    body { margin: 0; background-color:#eaeaea; color: #000;padding: 2rem; font-family: sans-serif; }
+    h1 { margin-bottom: 2rem; color:#000; }
+    :root[data-theme="dark"]{body{background-color:#1a1a1a;color:#fff;}{h1{color:#fff;}
     .settings-item { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
     label { cursor: pointer; }
   </style>
-  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/autoloader.js" type="module" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/autoloader.js" type="module" defer></script>
   <script type="module">
     if (window.performance && performance.navigation.type === 2) {location.reload();}
     function setRadioValue(name, value) {
