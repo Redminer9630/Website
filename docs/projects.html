@@ -15,16 +15,12 @@
             --border-color-dark: white;
             --border-color-light: black;
         }
-        @media (prefers-color-scheme: dark) {
-            body { background-color: var(--bg-color-dark); color: var(--text-color-dark); }
-            table, th, td { border: 1px solid var(--border-color-dark); }
-            th { background-color: var(--button-bg-color); }
-        }
-        @media (prefers-color-scheme: light) {
-            body { background-color: var(--bg-color-light); color: var(--text-color-light); }
-            table, th, td { border: 1px solid var(--border-color-light); }
-            th { background-color: var(--button-bg-color); }
-        }
+        :root[data-theme="dark"] body { background-color: var(--bg-color-dark); color: var(--text-color-dark); }
+        :root[data-theme="dark"] table, th, td { border: 1px solid var(--border-color-dark); }
+        :root[data-theme="dark"] th { background-color: var(--button-bg-color); }
+        :root[data-theme="light"] body { background-color: var(--bg-color-light); color: var(--text-color-light); }
+        :root[data-theme="light"] table, th, td { border: 1px solid var(--border-color-light); }
+        :root[data-theme="light"] th { background-color: var(--button-bg-color); }
         h1 {
             font-size: 30px;
             margin-bottom: 20px;
