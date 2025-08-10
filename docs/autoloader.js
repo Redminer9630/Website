@@ -85,52 +85,96 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/js_co
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
-	const year = new Date().getFullYear();
-	const footer = document.createElement("footer");
-	footer.id = "main-footer";
-	footer.setAttribute("role", "contentinfo");
-	footer.className = "fixed-footer";
-	footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a></span>`;
-	document.body.appendChild(footer);
+    const year = new Date().getFullYear();
+    const footer = document.getElementById("main-footer");
 
-	const css = document.createElement("style");
-	css.textContent = `footer .footer-text{font-size:14px;padding:0 10px}@media(max-width:480px){footer .footer-text{font-size:11px}}footer.fixed-footer{position:fixed;bottom:0;width:100%;background:#222;color:#fff;text-align:center}`;
-	document.head.appendChild(css);
+    if (footer) {
+        footer.innerHTML = `
+            <span class="footer-text">
+                © ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten.
+                <a href="/version?v=${window.CommonVersion.key}">
+                    ${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}
+                </a>
+            </span>
+        `;
+    }
 
-	const fontCSS = document.createElement("style");
-	fontCSS.textContent = `@font-face{font-family:'Mojangles';src:url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font.woff2') format('woff2');font-display:swap;} html[data-font="Mojangles"] body{font-family:'Mojangles', Arial;} html[data-font="Arial"] body{font-family:Arial, sans-serif;} html[data-font="Sans Serif"] body{font-family:sans-serif;}`;
-	document.head.appendChild(fontCSS);
+    const css = document.createElement("style");
+    css.textContent = `
+        footer .footer-text {
+            font-size: 14px;
+            padding: 0 10px;
+        }
+        @media(max-width: 480px) {
+            footer .footer-text {
+                font-size: 11px;
+            }
+        }
+        footer.fixed-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #222;
+            color: #fff;
+            text-align: center;
+        }
+        body {
+            padding-bottom: 4rem; /* Platz von Anfang an reserviert */
+        }
+    `;
+    document.head.appendChild(css);
 
-	const savedTheme = localStorage.getItem("theme");
-	if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
-	else document.documentElement.removeAttribute("data-theme");
+    const fontPreload = document.createElement("link");
+    fontPreload.rel = "preload";
+    fontPreload.as = "font";
+    fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font.woff2";
+    fontPreload.type = "font/woff2";
+    fontPreload.crossOrigin = "anonymous";
+    document.head.appendChild(fontPreload);
 
-	const savedFont = localStorage.getItem("font") || "Mojangles";
-	document.documentElement.setAttribute("data-font", savedFont);
+    const fontCSS = document.createElement("style");
+    fontCSS.textContent = `
+        @font-face {
+            font-family: 'Mojangles';
+            src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font.woff2') format('woff2');
+            font-display: swap;
+        }
+        html[data-font="Mojangles"] body {
+            font-family: 'Mojangles', Arial;
+        }
+        html[data-font="Arial"] body {
+            font-family: Arial, sans-serif;
+        }
+        html[data-font="Sans Serif"] body {
+            font-family: sans-serif;
+        }
+    `;
+    document.head.appendChild(fontCSS);
 
-	if (typeof window.mctip?.initMinecraftTooltips === "function") window.mctip.initMinecraftTooltips();
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+    }
 
-	document.querySelectorAll('[data-modal-open]').forEach(btn => btn.addEventListener('click', () => {
-		const id = btn.getAttribute('data-modal-open');
-		if (typeof window.Modal?.open === 'function') window.Modal.open(id);
-		else window.noti("error", "Modal.open nicht verfügbar");
-	}));
+    const savedFont = localStorage.getItem("font") || "Mojangles";
+    document.documentElement.setAttribute("data-font", savedFont);
 
-	if (window.debug) {
-		document.querySelectorAll("img").forEach(img => {
-			if (!img.src.endsWith(".webp")) window.noti("warn", "Bild sollte WebP sein:", img.src);
-			if (img.naturalWidth > 800) window.noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");
-		});
-	}
+    if (typeof window.mctip?.initMinecraftTooltips === "function") {window.mctip.initMinecraftTooltips();}
 
-	if (location.pathname !== '/' && location.pathname !== '/index.html') {
-		const backBtn = document.createElement("div");
-		backBtn.className = "header-link";
-		backBtn.textContent = "Zurück";
-		backBtn.style = "font-family:'Mojangles';font-size:16px;position:absolute;top:20px;right:20px;background:#f44336;color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer";
-		backBtn.addEventListener("click", () => history.back());
-		document.body.appendChild(backBtn);
-	}
+    document.querySelectorAll('[data-modal-open]').forEach(btn =>
+        btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-modal-open');
+            if (typeof window.Modal?.open === 'function') {
+                window.Modal.open(id);
+            } else {
+                window.noti("error", "Modal.open nicht verfügbar");
+            }
+        })
+    );
+
+    if (window.debug) {document.querySelectorAll("img").forEach(img => {if (!img.src.endsWith(".webp")) {window.noti("warn", "Bild sollte WebP sein:", img.src);}if (img.naturalWidth > 800) {window.noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");}});}
 });
 
 window.applyTheme = function(theme) {
