@@ -49,7 +49,7 @@ function loadMinecraftFont(fontName, baseUrl) {
 		});
 	})();
 }
-loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font");
+loadMinecraftFont("Minecraft", "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/minecraft_font");
 
 if (location.hostname.startsWith("www.")) location.replace(location.href.replace("//www.", "//"));
 if (location.protocol !== "https:") location.replace(location.href.replace("http:", "https:"));
@@ -64,7 +64,7 @@ window.CommonVersion = {
     time: "14:00" 
 };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/js_components/";
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/js_components/";
 [
 	//"need_confirm.js",
 	"back_button.js",
@@ -78,7 +78,7 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/js_co
 (function() {
 	const preload = document.createElement("link");
 	preload.rel = "preload";
-	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/js_components/framework.css";
+	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/js_components/framework.css";
 	preload.as = "style";
 	preload.onload = () => { preload.rel = "stylesheet"; };
 	document.head.appendChild(preload);
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fontPreload = document.createElement("link");
     fontPreload.rel = "preload";
     fontPreload.as = "font";
-    fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font.woff2";
+    fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/minecraft_font.woff2";
     fontPreload.type = "font/woff2";
     fontPreload.crossOrigin = "anonymous";
     document.head.appendChild(fontPreload);
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fontCSS.textContent = `
         @font-face {
             font-family: 'Mojangles';
-            src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t12/docs/minecraft_font.woff2') format('woff2');
+            src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t13/docs/minecraft_font.woff2') format('woff2');
             font-display: swap;
         }
         html[data-font="Mojangles"] body {
