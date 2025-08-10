@@ -5,13 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redminer9630 Linktree</title>
     <style>
+        :root {
+            --background-light: #eaeaea;
+            --background-dark: #1a1a1a;
+            --button-light: #1a1a1a;
+            --button-dark: #eaeaea;
+            --button-light-hover: #323232;
+            --button-dark-hover: #c8c8c8;
+            --text-light: #000000;
+            --text-dark: #ffffff;
+            --link-color: #0000ff;
+        }
+        :root[data-theme="dark"] {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+        :root[data-theme="light"] {
+            background-color: var(--background-light);
+            color: var(--text-light);
+        }
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: 'Mojangles';
-            background: #23272a;
-            color: #fff;
+            background: var(--background-dark);
+            color: var(--text-dark);
         }
         .container {
             width: 100vw;
@@ -33,7 +52,7 @@
             display: flex;
             flex-direction: column;
             border-radius: 10px;
-            background-color: #333;
+            background-color: var(--button-dark);
             align-items: center;
         }
         .person-name {
@@ -42,23 +61,23 @@
             margin-bottom: 10px;
             letter-spacing: 1px;
         }
-.links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 30px;
-    justify-items: center;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 90vw;
-}
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 30px;
+            justify-items: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 90vw;
+        }
         .link-icon {
             display: flex;
             flex-direction: column;
             align-items: center;
             border-radius: 6px;
-            background-color: #444;
+            background-color: var(--button-dark);
             text-align: center;
             gap: 6px;
             min-width: 90px;
@@ -69,18 +88,17 @@
             width: auto;
             height: auto;
             aspect-ratio: 1/1;
-            /*box-shadow: 0 2px 10px #0008;*/
             transition: transform 0.2s;
             object-fit: contain;
             display: block;
         }
         .link-icon img:hover {
             transform: scale(1.15);
-            box-shadow: 0 4px 16px #0079ff99;
+            box-shadow: 0 4px 16px var(--button-light-hover);
         }
         .link-label {
             font-size: 1em;
-            color: #fff;
+            color: var(--text-dark);
             font-family: inherit;
             margin-top: 4px;
             letter-spacing: 0.5px;
@@ -100,19 +118,19 @@
         <div class="person-name">Redminer9630</div>
         <div class="links">
             <a class="link-icon" href="https://github.com/Redminer9630de" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/github.webp" alt="GitHub">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/github.webp" alt="GitHub">
                 <span class="link-label">GitHub</span>
             </a>
             <a class="link-icon" href="https://discord.gg/uRNX47tYrX" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/discord.webp" alt="Discord">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/discord.webp" alt="Discord">
                 <span class="link-label">Discord</span>
             </a>
             <a class="link-icon" href="https://www.youtube.com/@Redminer9630" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/youtube.webp" alt="YouTube">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/youtube.webp" alt="YouTube">
                 <span class="link-label">YouTube</span>
             </a>
             <a class="link-icon" href="https://www.twitch.tv/Redminer9630" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/twitch.webp" alt="Twitch">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/twitch.webp" alt="Twitch">
                 <span class="link-label">Twitch</span>
             </a>
         </div>            
@@ -121,7 +139,7 @@
         <div class="person-name">TheAnonym3000</div>
         <div class="links">
             <a class="link-icon" href="https://github.com/TheAnonym3000" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/github.webp" alt="Github">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/github.webp" alt="Github">
                 <span class="link-label">GitHub</span>
             </a>
         </div>
@@ -130,11 +148,11 @@
         <div class="person-name">vanilla_cookies</div>
         <div class="links">
             <a class="link-icon" href="#" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/youtube.webp" alt="YouTube">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/youtube.webp" alt="YouTube">
                 <span class="link-label">YouTube</span>
             </a>
             <a class="link-icon" href="#" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/twitch.webp" alt="Twitch">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/twitch.webp" alt="Twitch">
                 <span class="link-label">Twitch</span>
             </a>
         </div>
@@ -143,7 +161,7 @@
         <div class="person-name">Firefly the Phnix</div>
         <div class="links">
             <a class="link-icon" href="https://twitch.tv/firefly_the_phnix" target="_blank" rel="noopener">
-                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/twitch.webp" alt="Twitch">
+                <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t16/docs/images/twitch.webp" alt="Twitch">
                 <span class="link-label">Twitch</span>
             </a>
         </div>
