@@ -2,7 +2,9 @@ export function initHeaderButton() {
   const hostname = location.hostname.toLowerCase();
   const pathname = location.pathname.toLowerCase();
   const fromParam = urlParams.get('from');
-  if (pathname === '' || pathname === '/' || pathname === '/index' || pathname === '/index.html') return;} else {if (fromParam !== 'main') return;}
+  const urlParams = new URLSearchParams(location.search);
+
+  if (pathname === '' || pathname === '/' || pathname === '/index' || pathname === '/index.html') return;
 
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
