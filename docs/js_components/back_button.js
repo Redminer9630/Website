@@ -4,7 +4,7 @@ export function initHeaderButton() {
   const fromParam = urlParams.get('from');
   const urlParams = new URLSearchParams(location.search);
 
-  if (pathname === '' || pathname === '/' || pathname === '/index' || pathname === '/index.html') return;
+  //if (pathname === '' || pathname === '/' || pathname === '/index' || pathname === '/index.html') return;
 
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
