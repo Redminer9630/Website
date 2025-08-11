@@ -56,6 +56,33 @@
     .sidebar { padding-left: 0; }
     [class^="element"]::before { content: none; }
 }
+html[data-theme="dark"] body { background: #121212; color: #ddd; }
+html[data-theme="dark"] .sidebar {
+    background: #222;
+    border-color: #444;
+}
+html[data-theme="dark"] .sidebar a {
+    color: #ccc;
+}
+html[data-theme="dark"] .sidebar a:hover {
+    color: #66aaff;
+}
+html[data-theme="dark"] .content {
+    background: #181818;
+    color: #ddd;
+}
+html[data-theme="dark"] .wpage.active {
+    background: #3399ff;
+    color: #fff;
+}
+html[data-theme="dark"] #imgcrdt a {
+    background: #222;
+    color: #66aaff;
+}
+html[data-theme="dark"] #imgcrdt a:hover {
+    background: #3399ff;
+    color: #fff;
+}
     </style>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
