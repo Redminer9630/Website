@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Farben umrechnen - Redminer9630</title>
+<style>
+body { font-family:Mojangles; background:#eaeaea; color:black; padding:20px; }
+:root[data-theme="dark"] body { background:#1a1a1a; color:white; }
+h1 { font-size:28px; }
+code { background:rgba(0,0,0,0.1); padding:2px 5px; border-radius:4px; }
+.example { margin-top:15px; padding:10px; border:1px solid #999; border-radius:8px; }
+button { font-family:Mojangles; padding:5px 10px; cursor:pointer; margin:3px; }
+.correct { color:green; font-weight:bold; }
+.wrong { color:red; font-weight:bold; }
+</style>
+<script src="../autoloader.js" type="module" defer></script>
+</head>
+<body>
+<h1>Farben umrechnen: HEX ↔ RGB</h1>
+
+<h2>1. HEX → RGB</h2>
+<div class="example">
+    <p id="task1"></p>
+    <input id="ex1" placeholder="z.B. 76, 175, 80">
+    <button onclick="checkEx(1)">Prüfen</button>
+    <button onclick="newTask(1)">Neue Aufgabe</button>
+    <span id="res1"></span>
+</div>
+
+<h2>2. RGB → HEX</h2>
+<div class="example">
+    <p id="task2"></p>
+    <input id="ex2" placeholder="#....">
+    <button onclick="checkEx(2)">Prüfen</button>
+    <button onclick="newTask(2)">Neue Aufgabe</button>
+    <span id="res2"></span>
+</div>
+
+<h2>3. HEX (Kurzform) → RGB</h2>
+<div class="example">
+    <p id="task3"></p>
+    <input id="ex3" placeholder="z.B. 255, 0, 170">
+    <button onclick="checkEx(3)">Prüfen</button>
+    <button onclick="newTask(3)">Neue Aufgabe</button>
+    <span id="res3"></span>
+</div>
+
+<h2>4. RGB → HEX (Kurzform)</h2>
+<div class="example">
+    <p id="task4"></p>
+    <input id="ex4" placeholder="#...">
+    <button onclick="checkEx(4)">Prüfen</button>
+    <button onclick="newTask(4)">Neue Aufgabe</button>
+    <span id="res4"></span>
+</div>
+
+<script>
+let solutions = {};
+
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function toHex(n) {
+    return n.toString(16).padStart(2, '0');
+}
+
+function newTask(num) {
+    let q = document.getElementById('task' + num);
+    let input = document.getElementById('ex' + num);
+    let res = document.getElementById('res' + num);
+    res.textContent = "";
+    input.value = "";
+
+    if (num === 1) { // HEX -> RGB
+        let r = rand(0,255), g = rand(0,255), b = rand(0,255);
+        let hex = "#" + toHex(r) + toHex(g) + toHex(b);
+        q.innerHTML = `Rechne um: <code>${hex}</code>`;
+        solutions[num] = `${r}, ${g}, ${b}`;
+    }
+    if (num === 2) { // RGB -> HEX
+        let r = rand(0,255), g = rand(0,255), b = rand(0,255);
+        let hex = "#" + toHex(r) + toHex(g) + toHex(b);
+        q.innerHTML = `Rechne um: <code>rgb(${r}, ${g}, ${b})</code>`;
+        solutions[num] = hex;
+    }
+    if (num === 3) { // HEX3 -> RGB
+        let r = rand(0,15), g = rand(0,15), b = rand(0,15);
+        let hex3 = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+        q.innerHTML = `Rechne um: <code>${hex3}</code>`;
+        solutions[num] = `${r*17}, ${g*17}, ${b*17}`;
+    }
+    if (num === 4) { // RGB -> HEX3
+        let r = rand(0,15), g = rand(0,15), b = rand(0,15);
+        let rgb = `rgb(${r*17}, ${g*17}, ${b*17})`;
+        let hex3 = "#" + r.toString(16) + g.toString(16) + b.toString(16);
+        q.innerHTML = `Rechne um: <code>${rgb}</code>`;
+        solutions[num] = hex3;
+    }
+}
+function checkEx(num) {
+    let val = document.getElementById('ex' + num).value.trim().toLowerCase();
+    let res = document.getElementById('res' + num);
+    let correct = solutions[num].toLowerCase();
+    if (val.replace(/\s+/g,'') === correct.replace(/\s+/g,'')) {
+        res.textContent = "✅ Richtig!";
+        res.className = "correct";
+    } else {
+        res.textContent = "❌ Falsch. Richtige Lösung: " + solutions[num];
+        res.className = "wrong";
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    newTask(1);
+    newTask(2);
+    newTask(3);
+    newTask(4);
+});
+</script>
+</body>
+</html>
