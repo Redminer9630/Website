@@ -89,22 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
             font-size: 14px;
             padding: 0 10px;
         }
-        @media(max-width: 480px) {
-            footer .footer-text {
-                font-size: 11px;
-            }
-        }
+        @media(max-width: 480px) {footer .footer-text {font-size: 11px;}}
         footer.fixed-footer {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: #222;
+            background: #1a1a1a;
             color: #fff;
             text-align: center;
         }
-        body {
-            padding-bottom: 4rem; /* Platz von Anfang an reserviert */
-        }
+        :root[data-theme="dark] footer.fixed-footer { background: #eaeaea; color: #000;}
     `;
     document.head.appendChild(css);
 
