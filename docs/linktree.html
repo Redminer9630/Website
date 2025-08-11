@@ -5,22 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redminer9630 Linktree</title>
     <style>
-        :root {
-            --background-light: #eaeaea;
-            --background-dark: #1a1a1a;
-            --button-light: #1a1a1a;
-            --button-dark: #eaeaea;
-            --button-light-hover: #323232;
-            --button-dark-hover: #c8c8c8;
-            --text-light: #000000;
-            --text-dark: #ffffff;
-            --link-color: #0000ff;
-        }
-        :root[data-theme="dark"] body {
+        :root[data-theme="dark"] html, body {
             background-color: #1a1a1a;
             color: #fff;
         }
-        body {
+        html, body {
             background-color: #eaeaea;
             color: #000;
         }
@@ -29,8 +18,6 @@
             padding: 0;
             height: 100%;
             font-family: 'Mojangles';
-            background-color: #eaeaea;
-            color: #000;
         }
         .container {
             width: 100vw;
@@ -43,18 +30,20 @@
             margin: 32px 0 28px 0;
             font-size: 2em;
             letter-spacing: 2px;
-            text-shadow: 1px 1px 10px #111;
+            text-shadow: 1px 1px 10px #eee;
             text-align: center;
             width: 100%;
         }
+        :root[data-theme="dark"] h1{text-shadow: 1px 1px 10px #111;}
         .person-block {
             margin-bottom: 32px;
             display: flex;
             flex-direction: column;
             border-radius: 10px;
-            background-color: #121212;
+            background-color: #ededed;
             align-items: center;
         }
+        :root[data-theme="dark"] .person-block{ background-color: #121212;}
         .person-name {
             font-size: 1.1em;
             font-weight: bold;
@@ -77,11 +66,12 @@
             flex-direction: column;
             align-items: center;
             border-radius: 6px;
-            background-color: #141414;
+            background-color: #ebebeb;
             text-align: center;
             gap: 6px;
             min-width: 90px;
         }
+        :root[data-theme="dark"] .limk-icon{background-color: #141414;}
         .link-icon img {
             max-width: 64px;
             max-height: 64px;
@@ -94,15 +84,17 @@
         }
         .link-icon img:hover {
             transform: scale(1.15);
-            box-shadow: 0 4px 16px #161616;
+            box-shadow: 0 4px 16px #eaeaea;
         }
+        :root[data-theme="dark"] .link-icon img:hover {box-shadow: 0 4px 16px #161616;}
         .link-label {
             font-size: 1em;
-            color: #1111ee;
+            color: #eeeeee;
             font-family: inherit;
             margin-top: 4px;
             letter-spacing: 0.5px;
         }
+        :root[data-theme="dark"] .link-label { color: #11e;}
         @media (max-width: 600px) {
             .links {gap: 10px;}
             .link-icon img {width: 48px;height: 48px;}
