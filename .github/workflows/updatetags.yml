@@ -1,12 +1,12 @@
-name: Update CDN Tags in Files
+name: Update Website Version Tag
 
 on:
   workflow_dispatch:
     inputs:
       new_tag:
-        description: 'Neuer Tag (z.B. t2)'
+        description: 'Neuer Tag'
         required: true
-        default: 't4'
+        default: 't'
 
 jobs:
   replace-tags:
