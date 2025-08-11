@@ -115,7 +115,52 @@
             <button onclick="calc()" class="equal">=</button>
         </div>
     </div>
+<hr style="margin:30px 0;">
 
+<h2>HEX / RGB Umrechner</h2>
+<div style="margin-bottom:10px;">
+    <label>HEX: <input type="text" id="hexInput" placeholder="#ff00ff"></label>
+    <button onclick="hexToRgb()">→ RGB</button>
+</div>
+<div style="margin-bottom:10px;">
+    <label>RGB: <input type="text" id="rgbInput" placeholder="255,0,255"></label>
+    <button onclick="rgbToHex()">→ HEX</button>
+</div>
+<div id="hexrgbResult" style="font-weight:bold;margin-bottom:15px;"></div>
+
+<p>
+    Du willst HEX oder RGB umrechnen im Kopf?  
+    <a href="/tutorials/farben-rechnen" style="color:hsl(206,90%,55%);text-decoration:underline;cursor:pointer;">Hier klicken</a>
+</p>
+
+<script>
+function hexToRgb() {
+    let hex = document.getElementById('hexInput').value.trim();
+    if (hex.startsWith('#')) hex = hex.slice(1);
+    if (hex.length === 3) {
+        hex = hex.split('').map(c => c + c).join('');
+    }
+    if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
+        document.getElementById('hexrgbResult').innerText = "Ungültiges HEX";
+        return;
+    }
+    let r = parseInt(hex.substring(0, 2), 16);
+    let g = parseInt(hex.substring(2, 4), 16);
+    let b = parseInt(hex.substring(4, 6), 16);
+    document.getElementById('hexrgbResult').innerText = `RGB: ${r}, ${g}, ${b}`;
+}
+
+function rgbToHex() {
+    let rgb = document.getElementById('rgbInput').value.trim();
+    let parts = rgb.split(',').map(v => parseInt(v.trim(), 10));
+    if (parts.length !== 3 || parts.some(v => isNaN(v) || v < 0 || v > 255)) {
+        document.getElementById('hexrgbResult').innerText = "Ungültiges RGB";
+        return;
+    }
+    let hex = parts.map(v => v.toString(16).padStart(2, '0')).join('');
+    document.getElementById('hexrgbResult').innerText = `HEX: #${hex}`;
+}
+</script>
     <script>
         const display = document.getElementById('display');
         const advToggle = document.getElementById('advancedToggle');
