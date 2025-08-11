@@ -16,21 +16,21 @@
             --text-dark: #ffffff;
             --link-color: #0000ff;
         }
-        :root[data-theme="dark"] {
-            background-color: var(--background-dark);
-            color: var(--text-dark);
+        :root[data-theme="dark"] body {
+            background-color: #1a1a1a;
+            color: #fff;
         }
-        :root[data-theme="light"] {
-            background-color: var(--background-light);
-            color: var(--text-light);
+        body {
+            background-color: #eaeaea;
+            color: #000;
         }
         html, body {
             margin: 0;
             padding: 0;
             height: 100%;
             font-family: 'Mojangles';
-            background: var(--background-dark);
-            color: var(--text-dark);
+            background-color: #eaeaea;
+            color: #000;
         }
         .container {
             width: 100vw;
@@ -52,7 +52,7 @@
             display: flex;
             flex-direction: column;
             border-radius: 10px;
-            background-color: var(--button-dark);
+            background-color: #121212;
             align-items: center;
         }
         .person-name {
@@ -77,7 +77,7 @@
             flex-direction: column;
             align-items: center;
             border-radius: 6px;
-            background-color: var(--button-dark);
+            background-color: #141414;
             text-align: center;
             gap: 6px;
             min-width: 90px;
@@ -94,11 +94,11 @@
         }
         .link-icon img:hover {
             transform: scale(1.15);
-            box-shadow: 0 4px 16px var(--button-light-hover);
+            box-shadow: 0 4px 16px #161616;
         }
         .link-label {
             font-size: 1em;
-            color: var(--text-dark);
+            color: #1111ee;
             font-family: inherit;
             margin-top: 4px;
             letter-spacing: 0.5px;
