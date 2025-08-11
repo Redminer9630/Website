@@ -12,8 +12,6 @@
         html, body {
             background-color: #eaeaea;
             color: #000;
-        }
-        html, body {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -30,11 +28,11 @@
             margin: 32px 0 28px 0;
             font-size: 2em;
             letter-spacing: 2px;
-            text-shadow: 1px 1px 10px #eee;
+            color: #000;
             text-align: center;
             width: 100%;
         }
-        :root[data-theme="dark"] h1{text-shadow: 1px 1px 10px #111;}
+        :root[data-theme="dark"] h1{color: #fff;}
         .person-block {
             margin-bottom: 32px;
             display: flex;
@@ -71,7 +69,7 @@
             gap: 6px;
             min-width: 90px;
         }
-        :root[data-theme="dark"] .limk-icon{background-color: #141414;}
+        :root[data-theme="dark"] .link-icon{background-color: #141414;}
         .link-icon img {
             max-width: 64px;
             max-height: 64px;
@@ -94,7 +92,6 @@
             margin-top: 4px;
             letter-spacing: 0.5px;
         }
-        :root[data-theme="dark"] .link-label { color: #1111ee;}
         @media (max-width: 600px) {
             .links {gap: 10px;}
             .link-icon img {width: 48px;height: 48px;}
