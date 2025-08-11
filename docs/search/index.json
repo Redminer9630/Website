@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Projekte",
+    "desc": "Unsere Projekte wie MC is Bones findest du unter den <a href="/projects">Projekten</a>",
+    "url": "/projects",
+    "alias": ["Projects", "Downloads"]
+  },
+  {
+    "title": "Tools",
+    "desc": "Hier kannst du du Tools wie ein Taschenrechner oder Hex Rechner benutzten",
+    "url": "/tools",
+    "alias": ["rechner", "calc", "hex"]
+  },
+  {
+    "title": "Linktree",
+    "desc": "Im Linktree findest du Links zu unseren Social Media Kanälen etc.",
+    "url": "/linktree",
+    "alias": ["links", "baum", ]
+  },
+  {
+    "title": "Benutzerhandbuch",
+    "desc": "Hier findest du viele Infos und Hinweise über die Seite",
+    "url": "/manual",
+    "alias": ["manual", "wiki"]
+  },
+  {
+    "title": "Feedback/Bugs Melden",
+    "desc": "Hier kannst du Feedback geben und Bugs melden",
+    "url": "https://github.com/Redminer9630/Website/issues",
+    "alias": ["report"]
+  },
+  {
+    "title": "Einstellung",
+    "desc": "Hier kannst du das Theme und Font einstellen",
+    "url": "/settings",
+    "alias": ["settings", "ändern", "light", "white", "dark", "schrift", "minecraft", "mojangles", "arial", "sans serif"]
+  },
+  {
+    "title": "Minecraft Freunde Fanstory",
+    "desc": "Eine Geschichte basierend auf 4 Karakteren aus Minecraft Freunde(Youtube Projekt)",
+    "url": "/mcffs",
+    "alias": ["flo", "gambo", "logo", "ryan", "benx", "binty"]
+  },
+  {
+    "title": "fatness4...the greedies",
+    "desc": "Die offiziele Bandseite(gemacht von uns)",
+    "url": "https://fatness4thegreedies.github.io",
+    "alias": ["band"]
+  },
+  {
+    "title": "Website Versionen",
+    "desc": "Hier findest du die Changelogs der Website",
+    "url": "/version"
+]
