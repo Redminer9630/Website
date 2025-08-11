@@ -85,7 +85,7 @@
       const found = data.filter(e=>{
         const combined = [e.title, e.desc, ...(e.alias||[])].join(" ")
         const flat = normalized(combined)
-        return words.every(w => flat.includes(w))
+        return words.some(w => flat.includes(w))
       })
 
       if(found.length > 0){
