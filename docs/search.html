@@ -40,7 +40,7 @@
     <label><input type="checkbox" id="include-google" /> Auf Google suchen</label>
   </section>
   <div id="results"></div>
-  <i>Die Suche funktioniert noch nicht</i>
+  <i>Die Google Suche funktioniert noch nicht</i>
 
 <script>
   const input = document.getElementById("search-input")
@@ -51,7 +51,7 @@
   const q = urlParams.get("q")
   if(q){
     input.value = q
-    fallbackCheck.checked = true // Checkbox aktivieren bei direktem Link mit ?q
+    fallbackCheck.checked = false // Checkbox aktivieren bei direktem Link mit ?q
     runSearch(q)
   }
 
