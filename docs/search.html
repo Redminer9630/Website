@@ -37,21 +37,20 @@
   <section id="search-section">
     <input id="search-input" type="search" aria-label="Suche..." role="search" placeholder="Suchbegriff eingeben" />
     <button id="search-button">Suchen</button>
-    <label><input type="checkbox" id="include-google" /> Auf Google suchen</label>
+  <!--  <label><input type="checkbox" id="include-google" /> Auf Google suchen</label> -->
   </section>
   <div id="results"></div>
-  <i>Die Google Suche funktioniert noch nicht</i>
 
 <script>
   const input = document.getElementById("search-input")
   const results = document.getElementById("results")
-  const fallbackCheck = document.getElementById("include-google")
+//  const fallbackCheck = document.getElementById("include-google")
 
   const urlParams = new URLSearchParams(location.search)
   const q = urlParams.get("q")
   if(q){
     input.value = q
-    fallbackCheck.checked = false // Checkbox aktivieren bei direktem Link mit ?q
+ //   fallbackCheck.checked = false // Checkbox aktivieren bei direktem Link mit ?q
     runSearch(q)
   }
 
@@ -101,7 +100,7 @@
     })
 
     if(found.length > 0){
-      results.innerHTML += `<h2>Lokale Ergebnisse</h2>`
+      results.innerHTML += `<h2>Ergebnisse</h2>`
       found.forEach(e=>{
         const div = document.createElement("div")
         div.innerHTML = `<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
@@ -110,6 +109,7 @@
       })
     }
 
+    /*
     if(includeGoogle){
       try{
         const gRes = await fetch("https://backend9630.onrender.com/api/search/google?q="+encodeURIComponent(term))
@@ -138,6 +138,7 @@
         console.error(err)
       }
     }
+    */
 
     if(results.innerHTML.trim() === ""){
       results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`
