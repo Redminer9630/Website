@@ -1,121 +1,179 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Farben umrechnen - Redminer9630</title>
 <style>
-body { font-family:Mojangles; background:#eaeaea; color:black; padding:20px; }
-:root[data-theme="dark"] body { background:#1a1a1a; color:white; }
-h1 { font-size:28px; }
-code { background:rgba(0,0,0,0.1); padding:2px 5px; border-radius:4px; }
-.example { margin-top:15px; padding:10px; border:1px solid #999; border-radius:8px; }
-button { font-family:Mojangles; padding:5px 10px; cursor:pointer; margin:3px; }
-.correct { color:green; font-weight:bold; }
-.wrong { color:red; font-weight:bold; }
+body { font-family:Mojangles; background:#eaeaea; color:#111; padding:20px; line-height:1.5; }
+:root[data-theme="dark"] body { background:#111; color:#eee; }
+h1 { font-size:28px; margin-bottom:8px; }
+h2 { margin-top:18px; }
+code { background:rgba(0,0,0,0.06); padding:2px 6px; border-radius:6px; font-family:monospace; }
+.example { margin-top:12px; padding:10px; border:1px solid rgba(0,0,0,0.12); border-radius:8px; background:rgba(255,255,255,0.4); }
+button { font-family:Mojangles; padding:8px 12px; cursor:pointer; margin:6px 6px 6px 0; border-radius:8px; border:none; background:hsl(206,90%,55%); color:white; }
+.hidden { display:none; }
+.correct { color:green; font-weight:700; margin-left:8px; }
+.wrong { color:red; font-weight:700; margin-left:8px; }
+.small { font-size:0.95rem; color:inherit; }
+.tip { margin-top:6px; font-size:0.95rem; color:#444; }
+:root[data-theme="dark"] .example { background:rgba(255,255,255,0.02); border-color:rgba(255,255,255,0.06); }
 </style>
-<script src="../autoloader.js" type="module" defer></script>
+
+<script src=".autoloader.js" type="module" defer></script>
 </head>
 <body>
 <h1>Farben umrechnen: HEX ↔ RGB</h1>
 
-<h2>1. HEX → RGB</h2>
-<div class="example">
+<h2>Kurze Erklärung (was ist das?)</h2>
+<p class="small">HEX-Farben sind hexadezimale Codes, zwei Stellen pro Farbkanal (Rot, Grün, Blau). Beispiel: <code>#4CAF50</code>. RGB schreibt die drei Werte als Dezimalzahlen: <code>rgb(76, 175, 80)</code>.</p>
+
+<hr>
+
+<h2>Genau & einfach: Schritt-für-Schritt Anleitungen</h2>
+
+<h3>1) HEX → RGB — Schritt für Schritt</h3>
+<ol>
+  <li>Entferne führendes <code>#</code> (z. B. <code>#4CAF50</code> → <code>4CAF50</code>).</li>
+  <li>Wenn der Code nur 3 Zeichen hat (Kurzform), erweitere jede Ziffer, indem du sie verdoppelst:
+      <code>f0a</code> → <code>ff</code>, <code>00</code>, <code>aa</code>.</li>
+  <li>Teile den 6-stelligen String in drei Paare: <code>4C</code> / <code>AF</code> / <code>50</code>.</li>
+  <li>Wandle jedes Paar von Hex nach Dezimal: rechne <em>erste Ziffer × 16 + zweite Ziffer</em>.
+      Beispiel: <code>4C</code> = 4×16 = 64 + 12 = <b>76</b>.</li>
+  <li>Ergebnis: <code>rgb(76, 175, 80)</code>.</li>
+</ol>
+<p class="tip"><b>Tipp:</b> Hex-Ziffern: <code>a=10, b=11, c=12, d=13, e=14, f=15</code>. Für <code>AF</code>: A=10 → 10×16 + 15 = 175.</p>
+
+<hr>
+
+<h3>2) RGB → HEX — Schritt für Schritt</h3>
+<ol>
+  <li>Beginne mit drei Dezimalwerten zwischen 0 und 255, z. B. <code>76, 175, 80</code>.</li>
+  <li>Wandle jede Dezimalzahl nach Hexadezimal um: rechne (Zahl ÷ 16 für die erste Ziffer, Rest für die zweite) oder benutze einen Taschenrechner. Beispiel: 76 → <code>4C</code>.</li>
+  <li>Wenn eine Hex-Zahl nur eine Stelle hat (z. B. 10 → <code>a</code>), füge eine führende Null hinzu: <code>0a</code>.</li>
+  <li>Setze die drei Hex-Paare zusammen und setze ein <code>#</code> davor → <code>#4caf50</code> (Kleinschreibung ist ok).</li>
+</ol>
+<p class="tip">Kurz: <code>n → n.toString(16).padStart(2,'0')</code> (für Entwickler). Fürs Kopf-Rechnen: 175 ÷ 16 = 10 Rest 15 → <code>AF</code>.</p>
+
+<hr>
+
+<h3>3) HEX (Kurzform, 3 Zeichen) → RGB — Schritt für Schritt</h3>
+<ol>
+  <li>Entferne <code>#</code> (z. B. <code>#f0a</code> → <code>f0a</code>).</li>
+  <li>Verdopple jede Ziffer: <code>f</code>→<code>ff</code>, <code>0</code>→<code>00</code>, <code>a</code>→<code>aa</code>.</li>
+  <li>Wandle jede Zweiergruppe nach Dezimal um (wie bei Punkt 1). Beispiel: <code>ff</code>=255, <code>aa</code>=170.</li>
+  <li>Ergebnis: <code>rgb(255, 0, 170)</code>.</li>
+</ol>
+<p class="tip">Schnelltrick: statt zu verdoppeln kannst du auch die einzelne Hex-Ziffer mit 17 multiplizieren: z = hexDigit (0–15) → Dezimal = z × 17. Beispiel: a (10) → 10×17 = 170.</p>
+
+<hr>
+
+<h3>4) RGB → HEX (Kurzform, 3 Zeichen) — Schritt für Schritt</h3>
+<ol>
+  <li>Prüfe, ob jeder RGB-Wert ein Vielfaches von 17 ist (0, 17, 34, …, 255). Nur dann ist Kurzform exakt möglich.</li>
+  <li>Teile jeden Wert durch 17 → ergibt eine Zahl 0–15 (z. B. 204 ÷ 17 = 12).</li>
+  <li>Wandle diese Zahl in eine einzelne Hex-Ziffer um (0–9, a–f).</li>
+  <li>Setze die drei Ziffern zusammen mit <code>#</code> → z. B. <code>#fcf</code>.</li>
+</ol>
+<p class="tip">Wichtig: Wenn eine Komponente nicht durch 17 teilbar ist, **gibt es keine exakte 3-stellige Kurzform** — dann nur die 6-stellige Variante ist korrekt.</p>
+
+<hr>
+
+<button onclick="showExercises()">🎯 Du willst dein Wissen testen?</button>
+
+<div id="exercises" class="hidden">
+  <h2>Teste dein Wissen</h2>
+
+  <h3>1. HEX → RGB</h3>
+  <div class="example">
     <p id="task1"></p>
-    <input id="ex1" placeholder="z.B. 76, 175, 80">
+    <input id="ex1" placeholder="z.B. 76, 175, 80" aria-label="Antwort 1">
     <button onclick="checkEx(1)">Prüfen</button>
     <button onclick="newTask(1)">Neue Aufgabe</button>
     <span id="res1"></span>
-</div>
+  </div>
 
-<h2>2. RGB → HEX</h2>
-<div class="example">
+  <h3>2. RGB → HEX</h3>
+  <div class="example">
     <p id="task2"></p>
-    <input id="ex2" placeholder="#....">
+    <input id="ex2" placeholder="#...." aria-label="Antwort 2">
     <button onclick="checkEx(2)">Prüfen</button>
     <button onclick="newTask(2)">Neue Aufgabe</button>
     <span id="res2"></span>
-</div>
+  </div>
 
-<h2>3. HEX (Kurzform) → RGB</h2>
-<div class="example">
+  <h3>3. HEX (Kurzform) → RGB</h3>
+  <div class="example">
     <p id="task3"></p>
-    <input id="ex3" placeholder="z.B. 255, 0, 170">
+    <input id="ex3" placeholder="z.B. 255, 0, 170" aria-label="Antwort 3">
     <button onclick="checkEx(3)">Prüfen</button>
     <button onclick="newTask(3)">Neue Aufgabe</button>
     <span id="res3"></span>
-</div>
+  </div>
 
-<h2>4. RGB → HEX (Kurzform)</h2>
-<div class="example">
+  <h3>4. RGB → HEX (Kurzform)</h3>
+  <div class="example">
     <p id="task4"></p>
-    <input id="ex4" placeholder="#...">
+    <input id="ex4" placeholder="#..." aria-label="Antwort 4">
     <button onclick="checkEx(4)">Prüfen</button>
     <button onclick="newTask(4)">Neue Aufgabe</button>
     <span id="res4"></span>
+  </div>
 </div>
 
 <script>
+/* keine Kommentare (Datei soll sauber sein) */
 let solutions = {};
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function toHex(n){return n.toString(16).padStart(2,'0');}
 
-function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function toHex(n) {
-    return n.toString(16).padStart(2, '0');
-}
-
-function newTask(num) {
-    let q = document.getElementById('task' + num);
-    let input = document.getElementById('ex' + num);
-    let res = document.getElementById('res' + num);
-    res.textContent = "";
-    input.value = "";
-
-    if (num === 1) { // HEX -> RGB
-        let r = rand(0,255), g = rand(0,255), b = rand(0,255);
-        let hex = "#" + toHex(r) + toHex(g) + toHex(b);
-        q.innerHTML = `Rechne um: <code>${hex}</code>`;
-        solutions[num] = `${r}, ${g}, ${b}`;
-    }
-    if (num === 2) { // RGB -> HEX
-        let r = rand(0,255), g = rand(0,255), b = rand(0,255);
-        let hex = "#" + toHex(r) + toHex(g) + toHex(b);
-        q.innerHTML = `Rechne um: <code>rgb(${r}, ${g}, ${b})</code>`;
-        solutions[num] = hex;
-    }
-    if (num === 3) { // HEX3 -> RGB
-        let r = rand(0,15), g = rand(0,15), b = rand(0,15);
-        let hex3 = "#" + r.toString(16) + g.toString(16) + b.toString(16);
-        q.innerHTML = `Rechne um: <code>${hex3}</code>`;
-        solutions[num] = `${r*17}, ${g*17}, ${b*17}`;
-    }
-    if (num === 4) { // RGB -> HEX3
-        let r = rand(0,15), g = rand(0,15), b = rand(0,15);
-        let rgb = `rgb(${r*17}, ${g*17}, ${b*17})`;
-        let hex3 = "#" + r.toString(16) + g.toString(16) + b.toString(16);
-        q.innerHTML = `Rechne um: <code>${rgb}</code>`;
-        solutions[num] = hex3;
-    }
-}
-function checkEx(num) {
-    let val = document.getElementById('ex' + num).value.trim().toLowerCase();
-    let res = document.getElementById('res' + num);
-    let correct = solutions[num].toLowerCase();
-    if (val.replace(/\s+/g,'') === correct.replace(/\s+/g,'')) {
-        res.textContent = "✅ Richtig!";
-        res.className = "correct";
-    } else {
-        res.textContent = "❌ Falsch. Richtige Lösung: " + solutions[num];
-        res.className = "wrong";
-    }
+function newTask(num){
+  let q=document.getElementById('task'+num), input=document.getElementById('ex'+num), res=document.getElementById('res'+num);
+  if(!q||!input||!res) return;
+  res.textContent=''; input.value='';
+  if(num===1){
+    let r=rand(0,255), g=rand(0,255), b=rand(0,255);
+    let hex = '#'+toHex(r)+toHex(g)+toHex(b);
+    q.innerHTML = `Rechne um: <code>${hex}</code>`;
+    solutions[num] = `${r}, ${g}, ${b}`;
+  }
+  if(num===2){
+    let r=rand(0,255), g=rand(0,255), b=rand(0,255);
+    let hex = '#'+toHex(r)+toHex(g)+toHex(b);
+    q.innerHTML = `Rechne um: <code>rgb(${r}, ${g}, ${b})</code>`;
+    solutions[num] = hex;
+  }
+  if(num===3){
+    let r=rand(0,15), g=rand(0,15), b=rand(0,15);
+    let hex3 = '#'+r.toString(16)+g.toString(16)+b.toString(16);
+    q.innerHTML = `Rechne um: <code>${hex3}</code>`;
+    solutions[num] = `${r*17}, ${g*17}, ${b*17}`;
+  }
+  if(num===4){
+    let r=rand(0,15), g=rand(0,15), b=rand(0,15);
+    let rgb = `rgb(${r*17}, ${g*17}, ${b*17})`;
+    let hex3 = '#'+r.toString(16)+g.toString(16)+b.toString(16);
+    q.innerHTML = `Rechne um: <code>${rgb}</code>`;
+    solutions[num] = hex3;
+  }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    newTask(1);
-    newTask(2);
-    newTask(3);
-    newTask(4);
-});
+function checkEx(num){
+  let val=document.getElementById('ex'+num).value.trim().toLowerCase();
+  let res=document.getElementById('res'+num);
+  let correct = (solutions[num]||'').toLowerCase();
+  if(!correct){ res.textContent='Bitte zuerst "Neue Aufgabe" oder den Test starten.'; res.className='wrong'; return; }
+  if(val.replace(/\s+/g,'')===correct.replace(/\s+/g,'')){
+    res.textContent='✅ Richtig!'; res.className='correct';
+  } else {
+    res.textContent='❌ Falsch. Richtige Lösung: '+correct; res.className='wrong';
+  }
+}
+
+function showExercises(){
+  document.getElementById('exercises').classList.remove('hidden');
+  newTask(1); newTask(2); newTask(3); newTask(4);
+}
 </script>
 </body>
 </html>
