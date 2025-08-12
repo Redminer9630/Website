@@ -21,8 +21,8 @@
 })();
 
 function loadMinecraftFontMiniFirst() {
-	const fontMiniURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/mcmini.woff2";
-	const fontFullURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/minecraft_font.woff2";
+	const fontMiniURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/mcmini.woff2";
+	const fontFullURL = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/minecraft_font.woff2";
 	const fontMini = new FontFace("Minecraft",`url(${fontMiniURL}) format('woff2')`,{ display: "swap", unicodeRange: "U+0020-007E" });
 	fontMini.load().then(f => {
 		document.fonts.add(f);
@@ -48,7 +48,7 @@ window.CommonVersion = {
     time: "14:00" 
 };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/js_components/";
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/js_components/";
 [
 	//"need_confirm.js",
 	"back_button.js",
@@ -62,7 +62,7 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/js_co
 (function() {
 	const preload = document.createElement("link");
 	preload.rel = "preload";
-	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/js_components/framework.css";
+	preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/js_components/framework.css";
 	preload.as = "style";
 	preload.onload = () => { preload.rel = "stylesheet"; };
 	document.head.appendChild(preload);
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fontPreload = document.createElement("link");
     fontPreload.rel = "preload";
     fontPreload.as = "font";
-    fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/minecraft_font.woff2";
+    fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/minecraft_font.woff2";
     fontPreload.type = "font/woff2";
     fontPreload.crossOrigin = "anonymous";
     document.head.appendChild(fontPreload);
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fontCSS.textContent = `
         @font-face {
             font-family: 'Mojangles';
-            src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t17/docs/minecraft_font.woff2') format('woff2');
+            src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t18/docs/minecraft_font.woff2') format('woff2');
             font-display: swap;
         }
         html[data-font="Mojangles"] body {
