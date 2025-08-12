@@ -90,12 +90,13 @@
 
       if(found.length > 0){
         results.innerHTML += `<h2>Ergebnisse</h2>`
-        found.forEach(e=>{
-          const div = document.createElement("div")
-          div.innerHTML = `<strong><a href="${e.url}" target="_blank">${e.title}</a></strong><br><small>${e.desc}</small><hr>`
-          results.appendChild(div)
-          if(typeof e.special_feature === "function"){e.special_feature()}
-        })
+found.forEach(e=>{
+  const div = document.createElement("div")
+  const isExternal = e.url.startsWith("http") && !e.url.includes(location.hostname)
+  if(isExternal){div.innerHTML = `<strong><a href="${e.url}" onclick="leaveSite(event, this)"${e.safe ? ' safe' : ''}>${e.title}</a></strong><br><small>${e.desc}</small><hr>`} else {div.innerHTML = `<strong><a href="${e.url}">${e.title}</a></strong><br><small>${e.desc}</small><hr>`}
+  results.appendChild(div)
+  if(typeof e.special_feature === "function"){ e.special_feature() }
+})
       }
 
       if(results.innerHTML.trim() === ""){
