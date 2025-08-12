@@ -187,6 +187,48 @@ window.applyFont = function(font) {
 	document.documentElement.style.fontSize = size;
 };
 
+(function(){
+  const style = document.createElement("style")
+  style.textContent = `
+    #leave-modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:10000;}
+    #leave-modal .box {background:#fff;color:#000;padding:1rem;border-radius:8px;max-width:400px;text-align:center;font-family:Mojangles,sans-serif;}
+    #leave-modal button {margin-top:1rem;padding:0.4rem 0.8rem;border:none;cursor:pointer;font-family:Mojangles,sans-serif;}
+    #leave-modal .danger {background:#e74c3c;color:#fff;}
+    #leave-modal .safe {background:#27ae60;color:#fff;}
+  `
+  document.head.appendChild(style)
+
+  const modal = document.createElement("div")
+  modal.id = "leave-modal"
+  modal.innerHTML = `
+    <div class="box">
+      <div id="leave-message"></div>
+      <button id="leave-continue" class="danger">Trotzdem fortfahren</button>
+      <button id="leave-cancel">Abbrechen</button>
+    </div>
+  `
+  document.body.appendChild(modal)
+
+  let leaveTarget = null
+
+  window.leaveSite = function(e, el){
+    e.preventDefault()
+    leaveTarget = el.href
+    const isSafe = el.hasAttribute("safe")
+    const msg = isSafe 
+      ? `Du verlässt unsere Website und gehst auf eine von uns genehmigte Seite:<br><strong>${el.href}</strong>`
+      : `Achtung! Du verlässt unsere Website und gehst auf eine möglicherweise unsichere Seite:<br><strong>${el.href}</strong>`
+    document.getElementById("leave-message").innerHTML = msg
+    const contBtn = document.getElementById("leave-continue")
+    contBtn.className = isSafe ? "safe" : "danger"
+    contBtn.textContent = isSafe ? "Fortfahren" : "Trotzdem fortfahren"
+    modal.style.display = "flex"
+  }
+
+  document.getElementById("leave-continue").addEventListener("click", ()=>{if(leaveTarget) location.href = leaveTarget})
+  document.getElementById("leave-cancel").addEventListener("click", ()=>{modal.style.display = "none"leaveTarget = null})
+})();
+
 window.loadCaptcha = function(callback) {
 	if (window.grecaptcha) return callback?.(window.grecaptcha);
 	const s = document.createElement('script');
