@@ -105,7 +105,7 @@
       <div id="news-list"></div>
     </section>
 </main>
-<script>(async()=>{try {const res = await fetch("index.json")const news = await res.json()const sorted = [...news].reverse()const container = document.getElementById("news-list")sorted.forEach(n=>{const item = document.createElement("div")item.innerHTML = `<strong>${n.title}</strong><br><small>${n.desc}</small><hr>`container.appendChild(item)})} catch(e){console.error("Fehler beim Laden der Neuigkeiten:", e)document.getElementById("news-list").textContent = "Keine Neuigkeiten verfügbar."}})();</script>
+<script>(async()=>{try {const res = await fetch("news.json")const news = await res.json()const sorted = [...news].reverse()const container = document.getElementById("news-list")sorted.forEach(n=>{const item = document.createElement("div")item.innerHTML = `<strong>${n.title}</strong><br><small>${n.desc}</small><hr>`container.appendChild(item)})} catch(e){console.error("Fehler beim Laden der Neuigkeiten:", e)document.getElementById("news-list").textContent = "Keine Neuigkeiten verfügbar."}})();</script>
 <script> // search
 searchmode = true;
 document.addEventListener("DOMContentLoaded", function () {
