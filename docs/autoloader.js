@@ -187,7 +187,7 @@ window.applyFont = function(font) {
 	document.documentElement.style.fontSize = size;
 };
 
-(function(){
+/*(function(){
   const style = document.createElement("style")
   style.textContent = `
     #leave-modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:10000;}
@@ -227,7 +227,7 @@ window.applyFont = function(font) {
 
   document.getElementById("leave-continue").addEventListener("click", ()=>{if(leaveTarget) location.href = leaveTarget})
   document.getElementById("leave-cancel").addEventListener("click", ()=>{modal.style.display = "none"leaveTarget = null})
-})();
+})();*/
 
 window.loadCaptcha = function(callback) {
 	if (window.grecaptcha) return callback?.(window.grecaptcha);
