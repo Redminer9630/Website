@@ -1,4 +1,7 @@
 [
   {
+    "title": "Deine Daten",
+    "desc": "Die angezeigten Daten werden an niemand weitergeleitet und sind nur für dich sichtbar",
+    "url": "/manual?q=ipdata"
   }
 ]
