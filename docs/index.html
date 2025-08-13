@@ -100,12 +100,15 @@
       <button onclick="location.href='https://fatness4thegreedies.github.io?from=main'">Offizielle Bandseite anschauen</button><br>
     </section>
 
-    <section id="news-section">
+    <section class="news-section">
       <h2>Neuigkeiten</h2>
-      <div id="news-list"></div>
+          <article>
+              <h3>Wir machen Coole Wallpaper</h3>
+              <p>Wir machen grad ein cooles Wallpaper, ein Youtube Intro und ein paar Easter Eggs, voraussichtlich noch 18 Stunden Arbeitszeit</p>
+          </article>
+      </div>
     </section>
 </main>
-<script>(async()=>{try {const res = await fetch("news.json")const news = await res.json()const sorted = [...news].reverse()const container = document.getElementById("news-list")sorted.forEach(n=>{const item = document.createElement("div")item.innerHTML = `<strong>${n.title}</strong><br><small>${n.desc}</small><hr>`container.appendChild(item)})} catch(e){console.error("Fehler beim Laden der Neuigkeiten:", e)document.getElementById("news-list").textContent = "Keine Neuigkeiten verfügbar."}})();</script>
 <script> // search
 searchmode = true;
 document.addEventListener("DOMContentLoaded", function () {
