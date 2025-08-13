@@ -95,3 +95,8 @@ nav {min-height:50px;}
 .hidden {display: none !important;}
 .nav-icon,.account-icon,.logo-icon,.logo-static img,#hamburger-dropdown img {width:30px;height:30px;}
 .nav-item,.icon-left,.icon-right,section {transition: all 0.2s ease;}
+
+.news-section, .news-section article {border:5px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0;box-shadow:0 2px 5px rgba(0,0,0,0.1);background:#eaeaea;color:#000000;}
+.news-section article {background:#ffffff;}
+:root[data-theme="dark"] .news-section, :root[data-theme="dark"] .news-section article {border:5px solid #444;box-shadow:0 2px 5px rgba(0,0,0,0.5);background:#1a1a1a;color:#ffffff;}
+:root[data-theme="dark"] .news-section article {background:#323232;}
