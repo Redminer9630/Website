@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
             color: #fff;
             text-align: center;
         }
-        :root[data-theme="dark] footer.fixed-footer { background: #eaeaea; color: #000;}
+        :root[data-theme="dark"] footer.fixed-footer { background: #eaeaea; color: #000;}
     `;
     document.head.appendChild(css);
 
