@@ -1,6 +1,15 @@
 export function initHeaderButton() {
-  const pathname = location.pathname.toLowerCase();
-  if (pathname === '/' || pathname === '/index.html' || pathname === '/index') return;
+  const pathname = location.pathname.toLowerCase().replace(/\/+$/, ''); // Slashes am Ende entfernen
+
+  // Domainspezifische Startseiten-Erkennung:
+  const isRoot = (
+    pathname === '' ||
+    pathname === '/' ||
+    pathname.endsWith('/index') ||
+    pathname.endsWith('/index.html')
+  );
+
+  if (isRoot) return; // Abbrechen, wenn Startseite
 
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
@@ -12,12 +21,27 @@ export function initHeaderButton() {
   shadow.innerHTML = `
     <style>
       :host {all: initial;}
-      button {all: unset;font-family: Mojangles;font-size: 16px;background-color: #1a1a1a;color: white;padding: 10px 20px;border-radius: 8px;cursor: pointer;transition: background-color 0.2s ease, transform 0.2s ease;}
-      button:hover {background-color: #323232;transform: scale(1.05);}
-      @media (max-width: 768px) {button {font-size: 14px;padding: 8px 16px;}}
-      @media (max-width: 480px) {button {font-size: 12px;padding: 6px 12px;}}
-      :root[data-theme="dark"] body {background-color: #eaeaea;}
-      :root[data-theme="dark"] body:hover {background-color: #c8c8c8;}
+      button {
+        all: unset;
+        font-family: Mojangles;
+        font-size: 16px;
+        background-color: #1a1a1a;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background-color: #323232;
+        transform: scale(1.05);
+      }
+      @media (max-width: 768px) {
+        button {font-size: 14px; padding: 8px 16px;}
+      }
+      @media (max-width: 480px) {
+        button {font-size: 12px; padding: 6px 12px;}
+      }
     </style>
     <button id="backBtn" aria-label="Zurück zur vorherigen Seite">Zurück</button>
   `;
