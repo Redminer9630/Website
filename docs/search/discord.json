@@ -3,7 +3,6 @@
     "title": "Discord",
     "desc": "Unter Discord ist unter <a href='https://discord.gg/uRNX47tYrX'>discord.gg/uRNX47tYrX</a> erreichbar",
     "url": "/discord",
-    "alias": ["dc", "server"],
-    "special_features": ""
+    "alias": ["dc", "server"]
   }
 ]
