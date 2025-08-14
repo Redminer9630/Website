@@ -1,19 +1,23 @@
 [
   {
     "title": "MC is Bones - Pack",
-    "desc": "Verändert End Game Items zur Knochen Textur und hat Support für ein paar Mods"
+    "desc": "Verändert End Game Items zur Knochen Textur und hat Support für ein paar Mods",
+    "url": "/projects"
   },
   {
     "title": "MC is Bones - Mod",
-    "desc": "Fügt Verschiedene Knochenarten und Blöcke hinzu"
+    "desc": "Fügt Verschiedene Knochenarten und Blöcke hinzu",
+    "url": "/projects"
   },
   {
     "title": "Higher Enchantments - Pack",
-    "desc": "Verändert die höchste Stufe von den meisten Verzauberungen"
+    "desc": "Verändert die höchste Stufe von den meisten Verzauberungen",
+    "url": "/projects"
   },
   {
     "title": "Katzenhausen - Pack",
     "desc": "Ein Pack gemacht für Katzenhausen",
-    "alias": ["kths"]
+    "alias": ["kths"],
+    "url": "/projects"
   }
 ]
