@@ -7,22 +7,53 @@
     body { font-family: 'Mojangles'; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
     #search-section { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-    #search-input { flex: 1; padding: 0.5rem; font-size: 1rem; font-family: 'Mojangles'; }
-    button { background: #2ecc71; color: white; padding: 10px 20px; border: none; cursor: pointer; font-family: 'Mojangles'; font-size: 1rem; }
+    #search-input {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 1rem;
+      font-family: 'Mojangles';
+    }
+    button {
+      background: #2ecc71;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Mojangles';
+      font-size: 1rem;
+    }
     button:hover { background: #2ecc87; }
     label { display: flex; align-items: center; gap: 0.5rem; }
     #results { margin-top: 1rem; }
     .no-results { color: #888; font-style: italic; margin-top: 1rem; }
-    
-    :root[data-theme="dark"] body { background-color: #121212; color: #eee; font-family: 'Mojangles'; margin: 1rem; }
-    :root[data-theme="dark"] h1 { color: #eee; margin-bottom: 1rem; }
-    :root[data-theme="dark"] #search-section { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-    :root[data-theme="dark"] #search-input { background-color: #222; color: #eee; border: 1px solid #444; flex: 1; padding: 0.5rem; font-size: 1rem; font-family: 'Mojangles'; }
-    :root[data-theme="dark"] button { background: #27ae60; color: white; padding: 10px 20px; border: none; cursor: pointer; font-family: 'Mojangles'; font-size: 1rem; }
+
+    .result-item {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.4s ease forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    :root[data-theme="dark"] body { background-color: #121212; color: #eee; }
+    :root[data-theme="dark"] h1 { color: #eee; }
+    :root[data-theme="dark"] #search-input {background-color: #222;color: #eee;border: 1px solid #444;}
+    :root[data-theme="dark"] button { background: #27ae60; }
     :root[data-theme="dark"] button:hover { background: #219150; }
-    :root[data-theme="dark"] label { display: flex; align-items: center; gap: 0.5rem; color: #ddd; }
-    :root[data-theme="dark"] #results { margin-top: 1rem; color: #ccc; }
-    :root[data-theme="dark"] .no-results { color: #666; font-style: italic; margin-top: 1rem; }
+    :root[data-theme="dark"] label { color: #ddd; }
+    :root[data-theme="dark"] #results { color: #ccc; }
+    :root[data-theme="dark"] .no-results { color: #666; }
+
+    #search-input::-webkit-search-decoration {
+      -webkit-appearance: searchfield-decoration;
+    }
+    :root[data-theme="dark"] #search-input::-webkit-search-decoration {
+      filter: invert(1) brightness(1.5);
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t28/docs/autoloader.js" type="module" defer></script>
 </head>
@@ -35,33 +66,33 @@
   <div id="results"></div>
 
   <script>
-    const input = document.getElementById("search-input")
-    const results = document.getElementById("results")
+    const input = document.getElementById("search-input");
+    const results = document.getElementById("results");
 
-    const urlParams = new URLSearchParams(location.search)
-    const q = urlParams.get("q")
+    const urlParams = new URLSearchParams(location.search);
+    const q = urlParams.get("q");
     if(q){
-      input.value = q
-      runSearch(q)
+      input.value = q;
+      runSearch(q);
     }
 
     document.getElementById("search-button").addEventListener("click",()=>{
-      const term = input.value.trim()
+      const term = input.value.trim();
       if(term){
-        history.replaceState(null,"","?q="+encodeURIComponent(term))
-        runSearch(term)
+        history.replaceState(null,"","?q="+encodeURIComponent(term));
+        runSearch(term);
       }
-    })
+    });
 
     input.addEventListener("keypress",e=>{
       if(e.key==="Enter"){
-        e.preventDefault()
-        document.getElementById("search-button").click()
+        e.preventDefault();
+        document.getElementById("search-button").click();
       }
-    })
+    });
 
     async function runSearch(term){
-      results.innerHTML = ""
+      results.innerHTML = "";
 
       const jsonFiles = [
         "search/index.json",
@@ -70,41 +101,59 @@
         "search/projects.json",
         "search/linktree.json",
         "search/manual.json"
-      ]
+      ];
 
-      let data = []
+      let data = [];
       try {
-        const fetches = jsonFiles.map(file => fetch(file).then(res=>res.json()).catch(e=>{
-          console.warn(`Fehler beim Laden von ${file}:`, e)
-          return []
-        }))
-        const resultsArrays = await Promise.all(fetches)
-        resultsArrays.forEach(arr => { if(Array.isArray(arr)) data.push(...arr) })
+        const fetches = jsonFiles.map(file =>
+          fetch(file)
+            .then(res=>res.json())
+            .catch(e=>{
+              console.warn(`Fehler beim Laden von ${file}:`, e);
+              return [];
+            })
+        );
+        const resultsArrays = await Promise.all(fetches);
+        resultsArrays.forEach(arr => { if(Array.isArray(arr)) data.push(...arr) });
       } catch(e){
-        console.error("Fehler beim Laden der JSON-Dateien:", e)
+        console.error("Fehler beim Laden der JSON-Dateien:", e);
       }
 
-      const normalized = txt => txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9äöüß ]/gi,"")
-      const words = normalized(term).split(" ").filter(w=>w)
+      const normalized = txt => txt.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+        .replace(/[^a-z0-9äöüß ]/gi,"");
+
+      const words = normalized(term).split(" ").filter(w=>w);
       const found = data.filter(e=>{
-        const combined = [e.title, e.desc, ...(e.alias||[])].join(" ")
-        const flat = normalized(combined)
-        return words.some(w => flat.includes(w))
-      })
+        const combined = [e.title, e.desc, ...(e.alias||[])].join(" ");
+        const flat = normalized(combined);
+        return words.some(w => flat.includes(w));
+      });
 
       if(found.length > 0){
-        results.innerHTML += `<h2>Ergebnisse</h2>`
-found.forEach(e=>{
-  const div = document.createElement("div")
-  const isExternal = e.url.startsWith("http") && !e.url.includes(location.hostname)
-  if(isExternal){div.innerHTML = `<strong><a href="${e.url}" onclick="leaveSite(event, this)"${e.safe ? ' safe' : ''}>${e.title}</a></strong><br><small>${e.desc}</small><hr>`} else {div.innerHTML = `<strong><a href="${e.url}">${e.title}</a></strong><br><small>${e.desc}</small><hr>`}
-  results.appendChild(div)
-  if(typeof e.special_feature === "function"){ e.special_feature() }
-})
-      }
+        const h2 = document.createElement("h2");
+        h2.textContent = "Ergebnisse";
+        results.appendChild(h2);
 
-      if(results.innerHTML.trim() === ""){
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`
+        found.forEach((e,i)=>{
+          const div = document.createElement("div");
+          div.classList.add("result-item");
+          div.style.animationDelay = `${i*0.05}s`;
+
+          if(!e.url) e.url = "#"; // Fallback
+
+          const isExternal = e.url.startsWith("http") && !e.url.includes(location.hostname);
+          if(isExternal){
+            div.innerHTML = `<strong><a href="${e.url}" onclick="leaveSite(event, this)"${e.safe ? ' safe' : ''}>${e.title}</a></strong><br><small>${e.desc}</small><hr>`;
+          } else {
+            div.innerHTML = `<strong><a href="${e.url}">${e.title}</a></strong><br><small>${e.desc}</small><hr>`;
+          }
+          results.appendChild(div);
+
+          if(typeof e.special_feature === "function"){ e.special_feature() }
+        });
+      } else {
+        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
       }
     }
   </script>
