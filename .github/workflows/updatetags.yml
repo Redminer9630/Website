@@ -28,6 +28,9 @@ jobs:
               --json status,number \
               --jq '[.[] | select(.status=="in_progress" or .status=="queued") | select(.number != ${{ github.run_number }})] | length')
 
+            if [ "$running" -gt 0 ]; then
+              echo "$running andere Workflows laufen noch..."
+            fi
             if [ "$running" -eq 0 ]; then
               echo "Keine anderen laufenden Workflows gefunden."
               break
