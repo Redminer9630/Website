@@ -4,7 +4,6 @@
 		{ tag: 'meta', attrs: { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }},
 		{ tag: 'meta', attrs: { name: 'keywords', content: 'Minecraft, Redminer9630, Mods, Downloads, Tools, Generatoren, Wiki, Server' }},
 		{ tag: 'meta', attrs: { name: 'robots', content: 'index, follow' }},
-		{ tag: 'link', attrs: { rel: 'canonical', href: 'https://redminer9630.ddns.net/' }},
 		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }}
 	];tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag);Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));head.appendChild(el);}});})();
 
@@ -22,7 +21,7 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t34/docs/js_co
 
 document.addEventListener("DOMContentLoaded", () => {
     const year = new Date().getFullYear();const footer = document.createElement("div");footer.id = "main-footer";footer.className = "fixed-footer";
-    footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten.<a href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a></span>`;
+    footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;"href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a></span>`;
 
     document.body.appendChild(footer);const css = document.createElement("style");css.textContent = `
         #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
