@@ -20,15 +20,36 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t35/docs/js_co
 (function(){const canonical=document.querySelector('link[rel="canonical"]')||document.createElement('link');canonical.rel="canonical";canonical.href=location.origin+location.pathname;if(!canonical.parentNode)document.head.appendChild(canonical);})();
 
 document.addEventListener("DOMContentLoaded", () => {
-    const year = new Date().getFullYear();const footer = document.createElement("div");footer.id = "main-footer";footer.className = "fixed-footer";
-    footer.innerHTML = `<span class="footer-text">© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;"href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a></span>`;
+    const year = new Date().getFullYear();
+    const footer = document.createElement("div");
+    footer.id = "main-footer";
+    footer.className = "fixed-footer";
 
-    document.body.appendChild(footer);const css = document.createElement("style");css.textContent = `
+    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. 
+        <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a>`;
+
+    footer.innerHTML = `<span class="footer-text">${footerText}</span>`;
+    document.body.appendChild(footer);
+
+    const css = document.createElement("style");
+    css.textContent = `
         #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
-        @media(max-width: 480px) { #main-footer .footer-text { font-size: 11px; } }
-        .fixed-footer {position: fixed;bottom: 0;width: 100%;background: #1a1a1a;color: #fff;text-align: center;padding: 5px 0;}
-        :root[data-theme="dark"] .fixed-footer { background: #eaeaea; color: #1a1a1a; }
-    `;
+        @media(max-width: 480px) { 
+            #main-footer .footer-text {font-size: 11px;}
+            #main-footer .footer-text {display: inline-block;}
+            #main-footer .footer-text:before {content: "";}
+            #main-footer .footer-text {white-space: normal;}
+            #main-footer .footer-text {display: block;text-align: center;}
+        }
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+        }`;
     document.head.appendChild(css);
     const fontPreload = document.createElement("link");fontPreload.rel = "preload";fontPreload.as = "font";fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t35/docs/minecraft_font.woff2";fontPreload.type = "font/woff2";fontPreload.crossOrigin = "anonymous";document.head.appendChild(fontPreload);
 
