@@ -1,4 +1,4 @@
-name: Update Website Version Tag
+name: Tag Updaten
 
 on:
   workflow_dispatch:
@@ -12,27 +12,43 @@ jobs:
   replace-tags:
     runs-on: ubuntu-latest
     steps:
+      - name: Auf Workflows Warten
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Prüfe laufende Workflows im gesamten Repo..."
+          while true; do
+            running=$(gh run list \
+              --limit 100 \
+              --json status,number \
+              --jq '[.[] | select(.status=="in_progress" or .status=="queued") | select(.number != ${{ github.run_number }})] | length')
+
+            if [ "$running" -eq 0 ]; then
+              echo "Keine anderen laufenden Workflows gefunden."
+              break
+            fi
+            
+            sleep 30
+          done
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Load old tags from file or set default
+      - name: Tags Abrufen
         id: load_old_tags
         run: |
           if [[ -f old_tags.txt ]]; then
             OLD_TAGS=$(cat old_tags.txt)
-            echo "Old tags loaded from file: $OLD_TAGS"
           else
-            OLD_TAGS="t1,latest,v1.1.1,v1.1.1.1,v1.2.0,v1.3.0,t3,t4"
-            echo "No old_tags.txt found, using default: $OLD_TAGS"
+            exit 1
           fi
           echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
 
-      - name: Set new tag variable
+      - name: Tag Var Updaten
         run: echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
 
-      - name: Find and replace tags in files
+      - name: Tags in Dateien ersetzten
         run: |
           IFS=',' read -ra TAGS <<< "$OLD_TAGS"
           DIRS=("docs" "docs/js_components")
@@ -48,31 +64,30 @@ jobs:
             done
           done
 
-      - name: Remove any leftover .bak files
+      - name: .bak Dateien Entfernen
         run: |
           find docs docs/js_components -type f -name "*.bak" -delete
 
-      - name: Commit and push changes (inkl. update old_tags.txt)
+      - name: Commiten und Pushen
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Alte Tags für nächsten Lauf updaten
           echo "$NEW_TAG" > old_tags.txt
           git add docs old_tags.txt
 
           if [[ -n $(git status -s) ]]; then
-            git commit -m "Update CDN tags to @$NEW_TAG and update old_tags.txt"
+            git commit -m "Update CDN tags to @$NEW_TAG"
             git push
           else
             echo "No changes to commit."
           fi
 
-      - name: Create GitHub Release
+      - name: GH Release Erstellen
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.NEW_TAG }}
           name: ${{ env.NEW_TAG }}
-          body: "Automatisches Release für den Tag **${{ env.NEW_TAG }}**"
+          body: "Automatischer Release für den Tag **${{ env.NEW_TAG }}**"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
