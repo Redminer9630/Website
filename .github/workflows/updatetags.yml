@@ -1,4 +1,4 @@
-name: Tag Updaten ${{ github.event.inputs.new_tag }}
+name: Tag Updaten
 
 on:
   workflow_dispatch:
