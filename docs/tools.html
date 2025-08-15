@@ -19,7 +19,7 @@
         }
         button, .button {
             font-weight: bold;
-            background-color: hsl(122, 40%, 45%);
+            background: #1a1a1a;
             color: white;
             padding: 15px;
             margin: 5px;
@@ -32,8 +32,11 @@
             min-width: 0;
             word-break: break-word;
         }
-        button:hover, .button:hover {background-color: hsl(122, 40%, 55%);}
-        button:active, .button:active {background-color: hsl(122, 40%, 65%);}
+        button:hover, .button:hover {background: #1c1c1c;}
+        button:active, .button:active {background-color: #1a6c1a;}
+        :root[data-theme="dark"] button, :root[data-theme="dark"] .button { background: #eaeaea;}
+        :root[data-theme="dark"] button:hover, :root[data-theme="dark"] .button:hover { background: #e8e8e8;}
+        :root[data-theme="dark"] button:active, :root[data-theme="dark"] .button:active { background: #ea6cea;}
         .op-btn {background-color: hsl(35, 100%, 60%) !important;}
         .op-btn:hover {background-color: hsl(35, 100%, 70%) !important;}
         .op-btn:active {background-color: hsl(35, 100%, 80%) !important;}
