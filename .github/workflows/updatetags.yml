@@ -12,6 +12,11 @@ jobs:
   replace-tags:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
       - name: Auf Workflows Warten
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -30,10 +35,6 @@ jobs:
             
             sleep 30
           done
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Tags Abrufen
         id: load_old_tags
