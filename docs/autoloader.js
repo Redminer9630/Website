@@ -42,10 +42,10 @@ window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[t
 
 window.debug = false;
 window.CommonVersion = { 
-    version: "v1.2.0", 
-    key: "1.2.0", 
-    date: "10.8.25", 
-    time: "14:00" 
+    version: "v1.3.0", 
+    key: "1.3.0", 
+    date: "15.8.25", 
+    time: "18:30" 
 };
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t32/docs/js_components/";
