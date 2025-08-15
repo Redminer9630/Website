@@ -18,6 +18,7 @@ window.CommonVersion = { version: "v1.3.0", key: "1.3.0", date: "15.8.25", time:
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t33/docs/js_components/";["back_button.js","mctooltip.js","theme.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t33/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
+(function(){const canonical=document.querySelector('link[rel="canonical"]')||document.createElement('link');canonical.rel="canonical";canonical.href=location.origin+location.pathname;if(!canonical.parentNode)document.head.appendChild(canonical);})();
 
 document.addEventListener("DOMContentLoaded", () => {
     const year = new Date().getFullYear();const footer = document.createElement("div");footer.id = "main-footer";footer.className = "fixed-footer";
