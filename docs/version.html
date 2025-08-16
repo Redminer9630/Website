@@ -24,7 +24,7 @@ body {
 .version-list a {
     font-family: 'Mojangles';
     text-decoration: none;
-    color: #007bff;
+    color: #000; /* schwarz für besseren Kontrast */
     background: #fff;
     padding: 10px 15px;
     border-radius: 5px;
@@ -61,7 +61,7 @@ body {
     color: #e0e0e0;
 }
 :root[data-theme="dark"] .version-list a {
-    color: #66aaff;
+    color: #fff; /* Links im Dark Mode hell */
     background: #1e1e1e;
 }
 :root[data-theme="dark"] .version-list a:hover {
@@ -78,11 +78,11 @@ body {
     background: #2277cc;
 }    
   </style>
-    <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t40/docs/autoloader.js"></script>
+  <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t40/docs/autoloader.js"></script>
 </head>
 <body>
 <div id="content"></div>
-  <script>
+<script>
 const versionListHTML = `
   <h2>Website-Versionen</h2>
   <ul class="version-list" id="versionList">
@@ -99,7 +99,15 @@ const versionListHTML = `
     <li><a href="?v=1.3.0">v1.3.0</a></li>
   </ul>
   <h3>Info</h3>
-  <p mctip="Wir befinden uns im Release">Versionen Zeitstrahl: <span style='color: grey;'>Indev(Indev) v1.8.4 </span>|<span style='color:grey;'> Alpha(Alpha) v1.4.2 </span>| <span style='color: grey;'>Beta(Beta) v1.6.7 </span>| <span style='color: grey;'>Pre Release(Pre) v1.0.3</span>| <span color="yellow">Release( )</span>| <span color="#006600">Full Release( )</span></p>
+  <p mctip="Wir befinden uns im Release">
+    Versionen Zeitstrahl: 
+    <span style='color: grey;'>Indev(Indev) v1.8.4 </span>|
+    <span style='color: grey;'> Alpha(Alpha) v1.4.2 </span>|
+    <span style='color: grey;'>Beta(Beta) v1.6.7 </span>|
+    <span style='color: grey;'>Pre Release(Pre) v1.0.3</span>|
+    <span style='color: yellow;'>Release( )</span>|
+    <span style='color:#006600;'>Full Release( )</span>
+  </p>
 `;
 
 function getParameterByName(name) {
@@ -130,10 +138,12 @@ const version = getParameterByName("v");
 if (version && version !== 'info') {
   loadVersion(version);
 } else {
-const isMobileWidth = window.innerWidth <= 768;
-let adjustedVersionListHTML = versionListHTML;
-if (isMobileWidth) {adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');}
-document.getElementById("content").innerHTML = adjustedVersionListHTML;
+  const isMobileWidth = window.innerWidth <= 768;
+  let adjustedVersionListHTML = versionListHTML;
+  if (isMobileWidth) {
+    adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');
+  }
+  document.getElementById("content").innerHTML = adjustedVersionListHTML;
 }
 </script>
 </body>
