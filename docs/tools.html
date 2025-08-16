@@ -82,7 +82,8 @@
 
     <div id="calculator" class="mode">
         <label mctip="Zeigt Fortgeschrittes Mathe"><input type="checkbox" id="advancedToggle" onchange="toggleAdvanced()"> Erweitert</label>
-        <input id="display">
+        <label for="display" style="display:none;">Output</label>
+        <input id="display" aria-label="Output" />
         <div id="keys">
             <button onclick="appendToDisplay('7')">7</button>
             <button onclick="appendToDisplay('8')">8</button>
