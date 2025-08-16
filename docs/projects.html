@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <script>(function() {var w = window.innerWidth || document.documentElement.clientWidth;var meta = document.querySelector('meta[name="viewport"]');if (!meta) {meta = document.createElement('meta');meta.name = "viewport";document.head.appendChild(meta);}if (w < 480) {meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0"; document.documentElement.style.setProperty('--img-size', '40px');} else if (w < 1024) {meta.content = "width=device-width, initial-scale=1.0";document.documentElement.style.setProperty('--img-size', '60px');} else {meta.content = "width=device-width, initial-scale=1.0";document.documentElement.style.setProperty('--img-size', '80px');}})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projekte - Redminer9630</title>
@@ -16,6 +15,16 @@
             --border-color-dark: white;
             --border-color-light: black;
         }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+th, td { padding: 8px; text-align: left; }
+th:nth-child(1), td:nth-child(1) { width: 100px; }
+th:nth-child(2), td:nth-child(2) { width: 150px; }
+th:nth-child(3), td:nth-child(3) { width: 300px; }
+th:nth-child(4), td:nth-child(4) { width: 150px; }
+th:nth-child(5), td:nth-child(5) { width: 80px; text-align: center; }
+    @media (max-width: 480px) { td img { width: 40px; } }
+    @media (max-width: 1024px) and (min-width: 481px) { td img { width: 60px; } }
+    @media (min-width: 1025px) { td img { width: 80px; } }
         :root[data-theme="dark"] body { background-color: var(--bg-color-dark); color: var(--text-color-dark); }
         :root[data-theme="dark"] table, th, td { border: 1px solid var(--border-color-dark); }
         :root[data-theme="dark"] th { background-color: var(--button-bg-color); }
