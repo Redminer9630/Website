@@ -128,48 +128,14 @@
         RGB: <input type="text" id="rgbInput" placeholder="255,0,255" style="width:100%;" autocomplete="off" spellcheck="false">
     </label>
 </div>
+
 <script>
-const hexInput = document.getElementById('hexInput');
-const rgbInput = document.getElementById('rgbInput');
-
-function hexToRgb(hex) {
-    let c = hex.replace('#','');
-    if (c.length === 3) c = c.split('').map(ch => ch+ch).join('');
-    const r = parseInt(c.substr(0,2),16);
-    const g = parseInt(c.substr(2,2),16);
-    const b = parseInt(c.substr(4,2),16);
-    return [r,g,b];
-}
-
-function rgbToHex(r,g,b){
-    return "#"+[r,g,b].map(v => v.toString(16).padStart(2,"0")).join("");
-}
-
-function handleHexInput() {
-    let v = hexInput.value.toLowerCase();
-    v = v.replace(/[^#0-9a-f]/g,"");
-    if (!v.startsWith("#")) v = "#"+v;
-    if (v.length > 7) v = v.slice(0,7);
-    hexInput.value = v;
-
-    if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/.test(v)){
-        const [r,g,b] = hexToRgb(v);
-        rgbInput.value = `${r}, ${g}, ${b}`;
-    }
-}
-
-function handleRgbInput() {
-    let parts = rgbInput.value.split(",").map(x => x.trim());
-    if (parts.length!==3) {result.textContent=""; return;}
-    let nums = parts.map(x=>parseInt(x,10));
-    if (nums.some(n=>isNaN(n)||n<0||n>255)) {result.textContent=""; return;}
-    let hex = rgbToHex(...nums);
-    hexInput.value = hex;
-}
-setInterval(handleHexInput, 25);
-setInterval(handleRgbInput, 25);
-hexInput.addEventListener("input", handleHexInput);
-rgbInput.addEventListener("input", handleRgbInput);
+const hexInput=document.getElementById('hexInput');const rgbInput=document.getElementById('rgbInput');let updating=false;
+function hexToRgbStr(hex){let c=hex.replace('#','').toLowerCase();if(c.length===3)c=c.split('').map(ch=>ch+ch).join('');const r=parseInt(c.slice(0,2),16),g=parseInt(c.slice(2,4),16),b=parseInt(c.slice(4,6),16);return `${r}, ${g}, ${b}`;}
+function rgbToHexStr(v){let parts=v.replace(/[^0-9,\s]/g,'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);if(parts.length!==3)return null;let nums=parts.map(n=>{n=parseInt(n,10);if(isNaN(n))return NaN;return Math.max(0,Math.min(255,n));});if(nums.some(n=>isNaN(n)))return null;return '#'+nums.map(n=>n.toString(16).padStart(2,'0')).join('');}
+function onHex(){if(updating)return;let v=hexInput.value.toLowerCase().replace(/[^#0-9a-f]/g,'');if(!v.startsWith('#'))v='#'+v;if(v.length>7)v=v.slice(0,7);hexInput.value=v;if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/.test(v)){const rgb=hexToRgbStr(v);if(rgbInput.value!==rgb){updating=true;rgbInput.value=rgb;updating=false;}}}
+function onRgb(){if(updating)return;let cleaned=rgbInput.value.replace(/[^0-9,\s]/g,'');let parts=cleaned.split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);parts=parts.map(s=>{let n=parseInt(s,10);if(isNaN(n))return '';n=Math.max(0,Math.min(255,n));return String(n);});rgbInput.value=parts.join(', ');const hex=rgbToHexStr(rgbInput.value);if(hex&&hexInput.value!==hex){updating=true;hexInput.value=hex;updating=false;}}
+hexInput.addEventListener('input',onHex);rgbInput.addEventListener('input',onRgb);
 </script>
     <script>
         const display = document.getElementById('display');
