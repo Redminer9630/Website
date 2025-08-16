@@ -83,71 +83,53 @@ body {
 <body>
 <div id="content"></div>
 <script>
-const versionListHTML = `
-  <h2>Website-Versionen</h2>
-  <div id="currentVersionBox"></div>
-  <ul class="version-list" id="versionList">
-    <li><a href="?v=1.3.1">v1.3.1</a></li>
-    <li><a href="?v=1.3.0">v1.3.0</a></li>
-    <li><a href="?v=1.2.0">v1.2.0</a></li>
-    <li><a href="?v=1.1.0">v1.1.0</a></li>
-    <li><a href="?v=1.0.3">v1.0.3</a></li>
-    <li><a href="?v=1.0.2">v1.0.2</a></li>
-    <li><a href="?v=1.0.1">v1.0.1</a></li>
-    <li><a href="?v=1.0.0">v1.0.0</a></li>   
-    <li><a href="?v=v1.0.3">Pre v1.0.3</a></li> 
-    <li><a href="?v=v1.0.2">Pre v1.0.2</a></li>   
-    <li><a href="?v=v1.0.1">Pre v1.0.1</a></li>
-    <li><a href="?v=v1.0.0">Pre v1.0.0</a></li>
-  </ul>
-  <h3>Info</h3>
-  <p mctip="Wir befinden uns im Release">
-    Versionen Zeitstrahl: <br>
-    <span style='color: grey;'>Indev v1.8.4</span><br>
-    <span style='color: grey;'>Alpha v1.4.2</span><br>
-    <span style='color: grey;'>Beta v1.6.7</span><br>
-    <span style='color: grey;'>Pre Release v1.0.3</span><br>
-    <span style='color: yellow;'>Release</span><br>
-    <span style='color:#006600;'>Full Release</span>
-  </p>
-`;
-
 function getParameterByName(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
 function loadVersion(version) {
-  const content = document.getElementById("content");
-  if (!version) return;
+  document.body.innerHTML = ""; 
   fetch(`https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/version/${version}.json`)
     .then(res => {
       if (!res.ok) throw new Error("Version nicht gefunden.");
       return res.json();
     })
-    .then(data => renderVersion(data))
-    .catch(err => { content.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; });
-}
-
-function renderVersion(data) {
-  document.getElementById("content").innerHTML = `
-    <h2>Version: ${data.version}</h2>
-    <p><strong>Veröffentlicht:</strong> ${data.date}</p>
-    <h3>Änderungen:</h3>
-    <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
-  `;
+    .then(data => {
+      document.body.innerHTML = `
+        <div id="content">
+          <h2>Version: ${data.version}</h2>
+          <p><strong>Veröffentlicht:</strong> ${data.date}</p>
+          <h3>Änderungen:</h3>
+          <ul>${data.changes.map(c => `<li>${c}</li>`).join("")}</ul>
+          <a href="versions.html" class="back-button">Zurück zur Übersicht</a>
+        </div>
+      `;
+    })
+    .catch(err => {
+      document.body.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`;
+    });
 }
 
 const version = getParameterByName("v");
-if (version && version !== 'info') {
+if (version) {
   loadVersion(version);
 } else {
-  const isMobileWidth = window.innerWidth <= 768;
-  let adjustedVersionListHTML = versionListHTML;
-  if (isMobileWidth) {
-    adjustedVersionListHTML = versionListHTML.replace(/\s*\|\s*/g, '<br>');
-  }
-  document.getElementById("content").innerHTML = adjustedVersionListHTML;
+  const versionListHTML = `
+    <h2>Website-Versionen</h2>
+    <div id="currentVersionBox"></div>
+    <ul class="version-list" id="versionList">
+      <li><a href="?v=1.3.1">v1.3.1</a></li>
+      <li><a href="?v=1.3.0">v1.3.0</a></li>
+      <li><a href="?v=1.2.0">v1.2.0</a></li>
+      <li><a href="?v=1.1.0">v1.1.0</a></li>
+      <li><a href="?v=1.0.3">v1.0.3</a></li>
+      <li><a href="?v=1.0.2">v1.0.2</a></li>
+      <li><a href="?v=1.0.1">v1.0.1</a></li>
+      <li><a href="?v=1.0.0">v1.0.0</a></li>
+    </ul>
+  `;
+  document.getElementById("content").innerHTML = versionListHTML;
 
   if (window.CommonVersion) {
     const box = document.getElementById("currentVersionBox");
@@ -155,7 +137,7 @@ if (version && version !== 'info') {
       <div style="padding:10px;background:#e0ffe0;border:1px solid #0a0;border-radius:5px;margin-bottom:15px;">
         <strong>Aktuelle Version:</strong> ${window.CommonVersion.version}<br>
         <em>Veröffentlicht:</em> ${window.CommonVersion.date}
-        <ul>${window.CommonVersion.changes.map(c => `<li>${c}</li>`).join("")}</ul>
+        ${window.CommonVersion.changes ? `<ul>${window.CommonVersion.changes.map(c => `<li>${c}</li>`).join("")}</ul>` : ""}
       </div>
     `;
   }
