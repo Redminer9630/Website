@@ -132,39 +132,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 });
-
-function updateSidebarLabels() {
-    const allgemeinEl = document.querySelector('.element2.toggle[mctip="Allgemein expandieren"]');
-    const technischesEl = document.querySelector('.element2.toggle[mctip="Technisches expandieren"]');
-
-    if (window.innerWidth <= 600) {
-        if (allgemeinEl) allgemeinEl.textContent = "Allgemein";
-        if (technischesEl) technischesEl.textContent = "Technis.";
-    } else {
-        if (allgemeinEl) allgemeinEl.textContent = "Allgemeines";
-        if (technischesEl) technischesEl.textContent = "Technisches";
-    }
-}
-
-window.addEventListener("resize", updateSidebarLabels);
-document.addEventListener("DOMContentLoaded", updateSidebarLabels);
 </script>
 </head>
 <body>
 	<div class="sidebar">
 		<div class="nav-group">
-			<div class="element2 toggle" mctip="Allgemein expandieren">Allgemeines</div>
+			<div class="element2 toggle" mctip="Allgemein expandieren">Allgemein</div>
 			<ul class="submenu">
 				<li class="wpage" data-target="impressum">Impressum</li>
 				<li class="wpage" data-target="about">Mehr über mich</li>
 				<li class="wpage" data-target="hinweise">Hinweise</li>
 			</ul>
-			<div class="element2 toggle" mctip="Redeem expandieren">Redeem</div>
+			<!--<div class="element2 toggle" mctip="Redeem expandieren">Redeem</div>
 			<ul class="submenu">
 				<li class="wpage" data-target="rdmcd">Code Redeem</li>
 				<li class="wpage" data-target="rdmml">Redeem Mail</li>
-			</ul>
-            <div class="element2 toggle" mctip="Technisches expandieren">Technisches</div>
+			</ul>-->
+            <div class="element2 toggle" mctip="Technisches expandieren">Technisch</div>
             <ul class="submenu">
                 <li class="wpage" data-target="fehler">Fehler</li>
                 <li class="wpage" data-target="ipdata">Deine Daten</li>
@@ -186,7 +170,7 @@ document.addEventListener("DOMContentLoaded", updateSidebarLabels);
 			<h2>Hinweise</h2>
 			<p>Gebe niemals irgendwo auf unserer Website Persönliche/Private Daten an da diese auf deinem Gerät gespeichert werden! Hacker etc. können sie <u><i>leicht</i></u> einsehen!</p>
 		</section>
-        <h1>Redeem</h1>
+        <!--<h2>Redeem</h2>
 		<section id="rdmcd">
 			<h3>Redeem Code</h3>
 			<p>Du kannst diesen Code von einem Discord oder Minecraft Server Giveaway bekommen.</p>
@@ -194,7 +178,7 @@ document.addEventListener("DOMContentLoaded", updateSidebarLabels);
 		<section id="rdmml">
 			<h3>Redeem Email</h3>
 			<p>Gebe deine Email oder die Email von jemand anderem, falls du die Belohnung verschenken möchtest.</p>
-		</section>
+		</section>-->
         <section id="fehler">
 			<h2>404 Seite</h2>
 			<h3>404 - Seite nicht gefunden</h3>
