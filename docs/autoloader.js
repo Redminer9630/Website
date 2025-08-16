@@ -40,7 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
             #main-footer .footer-text:before {content: "";}
             #main-footer .footer-text {white-space: normal;}
             #main-footer .footer-text {display: block;text-align: center;}
+            #main-footer .footer-text {font-size: 11px;display: block;text-align: center;white-space: normal;}
         }
+        #main-footer {position: fixed;left: 0;right: 0;bottom: 0;z-index: 1000;}
+        #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
         .fixed-footer {
             position: fixed;
             bottom: 0;
