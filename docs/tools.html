@@ -166,8 +166,8 @@ function handleRgbInput() {
     let hex = rgbToHex(...nums);
     hexInput.value = hex;
 }
-setInterval(updateHexToRgb, 25);
-setInterval(updateRgbToHex, 25);
+setInterval(handleHexInput, 25);
+setInterval(handleRgbInput, 25);
 hexInput.addEventListener("input", handleHexInput);
 rgbInput.addEventListener("input", handleRgbInput);
 </script>
