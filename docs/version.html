@@ -120,7 +120,7 @@ function getParameterByName(name) {
 function loadVersion(version) {
   const content = document.getElementById("content");
   if (!version) return;
-  fetch(`/version/${version}.json`)
+  fetch(`https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/version/${version}.json`)
     .then(res => {
       if (!res.ok) throw new Error("Version nicht gefunden.");
       return res.json();
