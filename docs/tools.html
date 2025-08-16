@@ -121,46 +121,59 @@
 
 <h2>HEX / RGB Umrechner</h2>
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-    <label style="flex:1;">HEX: <input type="text" id="hexInput" placeholder="#ff00ff" style="width:100%;"></label>
-    <button onclick="convertHexRgb()" style="flex:0;">⇆</button>
-    <label style="flex:1;">RGB: <input type="text" id="rgbInput" placeholder="255,0,255" style="width:100%;"></label>
+    <label style="flex:1;">
+        HEX: <input type="text" id="hexInput" placeholder="#ff00ff" style="width:100%;" maxlength="7" autocomplete="off" spellcheck="false">
+    </label>
+    <label style="flex:1;">
+        RGB: <input type="text" id="rgbInput" placeholder="255,0,255" style="width:100%;" autocomplete="off" spellcheck="false">
+    </label>
 </div>
 <div id="hexrgbResult" style="font-weight:bold;margin-bottom:15px;"></div>
 
-<p><a href="/tutorials/farben-rechnen" style="color:hsl(206,90%,55%);text-decoration:underline;cursor:pointer;">Du willst HEX oder RGB umrechnen im Kopf?</a></p>
-
 <script>
-function convertHexRgb() {
-    let hex = document.getElementById('hexInput').value.trim();
-    let rgb = document.getElementById('rgbInput').value.trim();
+const hexInput = document.getElementById('hexInput');
+const rgbInput = document.getElementById('rgbInput');
+const result   = document.getElementById('hexrgbResult');
 
-    if (hex) {
-        if (hex.startsWith('#')) hex = hex.slice(1);
-        if (hex.length === 3) {
-            hex = hex.split('').map(c => c + c).join('');
-        }
-        if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
-            document.getElementById('hexrgbResult').innerText = "Ungültiges HEX";
-            return;
-        }
-        let r = parseInt(hex.substring(0, 2), 16);
-        let g = parseInt(hex.substring(2, 4), 16);
-        let b = parseInt(hex.substring(4, 6), 16);
-        document.getElementById('rgbInput').value = `${r}, ${g}, ${b}`;
-        document.getElementById('hexrgbResult').innerText = `RGB: ${r}, ${g}, ${b}`;
-    } else if (rgb) {
-        let parts = rgb.split(',').map(v => parseInt(v.trim(), 10));
-        if (parts.length !== 3 || parts.some(v => isNaN(v) || v < 0 || v > 255)) {
-            document.getElementById('hexrgbResult').innerText = "Ungültiges RGB";
-            return;
-        }
-        let hexVal = parts.map(v => v.toString(16).padStart(2, '0')).join('');
-        document.getElementById('hexInput').value = `#${hexVal}`;
-        document.getElementById('hexrgbResult').innerText = `HEX: #${hexVal}`;
-    } else {
-        document.getElementById('hexrgbResult').innerText = "Bitte HEX oder RGB eingeben";
+function hexToRgb(hex) {
+    let c = hex.replace('#','');
+    if (c.length === 3) c = c.split('').map(ch => ch+ch).join('');
+    const r = parseInt(c.substr(0,2),16);
+    const g = parseInt(c.substr(2,2),16);
+    const b = parseInt(c.substr(4,2),16);
+    return [r,g,b];
+}
+
+function rgbToHex(r,g,b){
+    return "#"+[r,g,b].map(v => v.toString(16).padStart(2,"0")).join("");
+}
+
+function handleHexInput() {
+    let v = hexInput.value.toLowerCase();
+    v = v.replace(/[^#0-9a-f]/g,"");       // nur # und hex-Zeichen
+    if (!v.startsWith("#")) v = "#"+v;
+    if (v.length > 7) v = v.slice(0,7);
+    hexInput.value = v;
+
+    if(/^#([0-9a-f]{3}|[0-9a-f]{6})$/.test(v)){
+        const [r,g,b] = hexToRgb(v);
+        rgbInput.value = `${r}, ${g}, ${b}`;
+        result.textContent = `RGB: ${r}, ${g}, ${b}`;
     }
 }
+
+function handleRgbInput() {
+    let parts = rgbInput.value.split(",").map(x => x.trim());
+    if (parts.length!==3) {result.textContent=""; return;}
+    let nums = parts.map(x=>parseInt(x,10));
+    if (nums.some(n=>isNaN(n)||n<0||n>255)) {result.textContent=""; return;}
+    let hex = rgbToHex(...nums);
+    hexInput.value = hex;
+    result.textContent = `HEX: ${hex}`;
+}
+
+hexInput.addEventListener("input", handleHexInput);
+rgbInput.addEventListener("input", handleRgbInput);
 </script>
     <script>
         const display = document.getElementById('display');
