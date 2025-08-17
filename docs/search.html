@@ -156,6 +156,77 @@
         results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
       }
     }
+
+// Such emphelungen und Query Speicherung
+const SEARCH_KEY = "searchHistory";
+const maxStored = 15;
+const defaultShow = 4;
+
+function getHistory(){ 
+  return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); 
+}
+
+function saveHistory(term){
+  if(!term) return;
+  let arr = getHistory();
+  arr = arr.filter(t => t !== term);
+  arr.push(term);
+  if(arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
+  localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
+}
+
+function renderSuggestions(focus=false){
+  let arr = getHistory();
+  const containerId = "search-suggestions";
+  let container = document.getElementById(containerId);
+  if(!container){
+    container = document.createElement("div");
+    container.id = containerId;
+    container.style.position = "relative";
+    container.style.marginTop = "0.3rem";
+    document.getElementById("search-section").appendChild(container);
+  }
+  container.innerHTML = "";
+  if(!arr.length) return;
+
+  let show = focus ? arr : arr.slice(-defaultShow);
+  const list = document.createElement("div");
+  list.style.border = "1px solid #ccc";
+  list.style.background = "#fff";
+  list.style.position = "absolute";
+  list.style.top = "100%";
+  list.style.left = "0";
+  list.style.right = "0";
+  list.style.zIndex = "10";
+  list.style.maxHeight = focus ? "450px" : "auto";
+  list.style.overflowY = focus ? "auto" : "visible";
+
+  show.reverse().forEach(term=>{
+    const div = document.createElement("div");
+    div.textContent = term;
+    div.style.padding = "0.3rem 0.5rem";
+    div.style.cursor = "pointer";
+    div.addEventListener("click",()=>{ input.value = term; document.getElementById("search-button").click(); });
+    div.addEventListener("mouseover",()=>{ div.style.background="#eee"; });
+    div.addEventListener("mouseout",()=>{ div.style.background=""; });
+    list.appendChild(div);
+  });
+  container.appendChild(list);
+}
+
+input.addEventListener("focus",()=>{ renderSuggestions(true); });
+
+input.addEventListener("blur",()=>{
+  setTimeout(()=>{ renderSuggestions(false); }, 100);
+});
+      
+document.getElementById("search-button").addEventListener("click",()=>{
+  const term = input.value.trim();
+  if(term) saveHistory(term);
+  renderSuggestions(false);
+});
+
+renderSuggestions(false);
   </script>
 </body>
 </html>
