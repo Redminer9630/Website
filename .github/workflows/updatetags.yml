@@ -40,29 +40,17 @@ jobs:
             sleep 30
           done
 
-      - name: Tags Abrufen
-        id: load_old_tags
+      - name: Alten Tag laden
         run: |
           if [[ -f old_tags.txt ]]; then
             OLD_TAGS=$(cat old_tags.txt)
+            echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
           else
             echo "old_tags.txt fehlt!"
             exit 1
           fi
-          echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
 
-      - name: Tags Abrufen
-        id: load_old_tags
-        run: |
-          if [[ -f old_tags.txt ]]; then
-            OLD_TAGS=$(cat old_tags.txt)
-          else
-            echo "old_tags.txt fehlt!"
-            exit 1
-          fi
-          echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
-
-      - name: Tag bestimmen (+1 falls nötig)
+      - name: Neuen Tag bestimmen
         run: |
           INPUT="${{ github.event.inputs.new_tag }}"
           LAST=$(head -n1 old_tags.txt | tr -d '\r' | cut -d',' -f1)
@@ -88,7 +76,22 @@ jobs:
               core=${ver#v}
               IFS='.' read -r -a parts <<< "$core"
               last_index=$((${#parts[@]}-1))
-              parts[$last_ind_]()
+              parts[$last_index]=$(( ${parts[$last_index]} + 1 ))
+              echo "v$(IFS=.; echo "${parts[*]}")"
+              return 0
+            fi
+            return 1
+          }
+
+          if new=$(bump_t "$CAND"); then
+            :
+          elif new=$(bump_semver "$CAND"); then
+            :
+          else
+            new="$CAND"
+          fi
+
+          echo "NEW_TAG=$new" >> $GITHUB_ENV
 
       - name: Tags in Dateien ersetzen
         run: |
@@ -122,7 +125,7 @@ jobs:
             git commit -m "Update CDN tags to @$NEW_TAG"
             git push
           else
-            echo "No changes to commit."
+            echo "Keine Änderungen zum Commit."
           fi
 
       - name: GH Release Erstellen
