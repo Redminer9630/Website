@@ -59,19 +59,33 @@ function loadVersion(version) {
   fetch(`https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/version/${version}.json`)
     .then(res => { if(!res.ok) throw new Error("Version nicht gefunden."); return res.json(); })
     .then(data => {
+      let changesHTML = "";
+      if (Array.isArray(data.changes)) {
+        changesHTML = "<h3>Änderungen</h3><ul>";
+        data.changes.forEach(change => {
+          changesHTML += `<li>${change}</li>`;
+        });
+        changesHTML += "</ul>";
+      }
+
       document.body.innerHTML = `
-        <h2>Version: ${data.version}</h2>
-        <p><strong>Veröffentlicht:</strong> ${data.date}</p>
-        <pre>${JSON.stringify(data,null,2)}</pre>
+        <div id="content">
+          <h2>Version: ${data.version}</h2>
+          <p><strong>Veröffentlicht:</strong> ${data.date}</p>
+          ${changesHTML}
+          <a href="versions.html" class="back-button">Zurück</a>
+        </div>
       `;
     })
-    .catch(err => { document.body.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; });
+    .catch(err => { 
+      document.body.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; 
+    });
 }
 
 const version = getParameterByName("v");
 
 if(version){
-  loadVersion(version); // Ganze Seite ersetzen
+  loadVersion(version);
 } else {
   document.getElementById("content").innerHTML = versionListHTML;
   if(window.CommonVersion){
