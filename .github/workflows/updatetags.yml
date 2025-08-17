@@ -6,7 +6,7 @@ on:
       new_tag:
         description: 'Neuer Tag'
         required: true
-        default: 't'
+        default: 'from-file'
 
 jobs:
   replace-tags:
@@ -24,6 +24,7 @@ jobs:
           echo "Prüfe laufende Workflows im gesamten Repo..."
           while true; do
             running=$(gh run list \
+              --repo "${{ github.repository }}" \
               --limit 100 \
               --json status,number \
               --jq '[.[] | select(.status=="in_progress" or .status=="queued") | select(.number != ${{ github.run_number }})] | length')
@@ -45,14 +46,21 @@ jobs:
           if [[ -f old_tags.txt ]]; then
             OLD_TAGS=$(cat old_tags.txt)
           else
+            echo "old_tags.txt fehlt!"
             exit 1
           fi
           echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
 
-      - name: Tag Var Updaten
-        run: echo "NEW_TAG=${{ github.event.inputs.new_tag }}" >> $GITHUB_ENV
+      - name: Tag bestimmen
+        run: |
+          if [ "${{ github.event.inputs.new_tag }}" = "from-file" ]; then
+            NEW_TAG=$(cat old_tags.txt | head -n 1)
+          else
+            NEW_TAG="${{ github.event.inputs.new_tag }}"
+          fi
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
-      - name: Tags in Dateien ersetzten
+      - name: Tags in Dateien ersetzen
         run: |
           IFS=',' read -ra TAGS <<< "$OLD_TAGS"
           DIRS=("docs" "docs/js_components")
@@ -68,7 +76,7 @@ jobs:
             done
           done
 
-      - name: .bak Dateien Entfernen
+      - name: .bak Dateien entfernen
         run: |
           find docs docs/js_components -type f -name "*.bak" -delete
 
