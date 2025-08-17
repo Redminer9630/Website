@@ -18,10 +18,10 @@
     "alias": ["links", "baum"]
   },
   {
-    "title": "Benutzerhandbuch",
+    "title": "Dokumentation",
     "desc": "Hier findest du viele Infos und Hinweise über die Seite",
-    "url": "/manual",
-    "alias": ["manual", "wiki"]
+    "url": "/docs",
+    "alias": ["manual", "wiki", "benutzerhandbuch", "docs"]
   },
   {
     "title": "Feedback/Bugs Melden",
