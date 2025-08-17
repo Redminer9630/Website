@@ -51,15 +51,49 @@ jobs:
           fi
           echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
 
-      - name: Tag bestimmen
-        run: |
-          if [ "${{ github.event.inputs.new_tag }}" = "from-file" ]; then
-            NEW_TAG=$(cat old_tags.txt | head -n 1)
-          else
-            NEW_TAG="${{ github.event.inputs.new_tag }}"
-          fi
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+          - name: Tag bestimmen
+            run: |
+              INPUT="${{ github.event.inputs.new_tag }}"
+              LAST=$(head -n1 old_tags.txt | tr -d '\r' | cut -d',' -f1)
 
+              if [ -z "$INPUT" ] || [ "$INPUT" = "from-file" ]; then
+                CAND="$LAST"
+              else
+                CAND="$INPUT"
+              fi
+
+              bump_t() {
+                if [[ "$1" =~ ^t([0-9]+)$ ]]; then
+                  n=${BASH_REMATCH[1]}
+                  echo "t$((n+1))"
+                  return 0
+                fi
+                return 1
+              }
+
+              bump_semver() {
+                ver="$1"
+                if [[ "$ver" =~ ^v([0-9]+(\.[0-9]+)*)$ ]]; then
+                  core=${ver#v}
+                  IFS='.' read -r -a parts <<< "$core"
+                  last_index=$((${#parts[@]}-1))
+                  parts[$last_index]=$(( ${parts[$last_index]} + 1 ))
+                  echo "v$(IFS=.; echo "${parts[*]}")"
+                  return 0
+                fi
+                return 1
+              }
+
+              if new=$(bump_t "$CAND"); then
+                :
+              elif new=$(bump_semver "$CAND"); then
+                :
+              else
+                new="$CAND"
+              fi
+
+              echo "NEW_TAG=$new" >> $GITHUB_ENV
+    
       - name: Tags in Dateien ersetzen
         run: |
           IFS=',' read -ra TAGS <<< "$OLD_TAGS"
