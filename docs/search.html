@@ -176,7 +176,6 @@ function saveHistory(term){
 }
 
 function renderSuggestions(focus=false){
-  let arr = getHistory();
   const containerId = "search-suggestions";
   let container = document.getElementById(containerId);
   if(!container){
@@ -187,6 +186,11 @@ function renderSuggestions(focus=false){
     document.getElementById("search-section").appendChild(container);
   }
   container.innerHTML = "";
+
+  const term = input.value.trim();
+  if(term) return; // <-- nur anzeigen, wenn Input leer
+
+  let arr = getHistory();
   if(!arr.length) return;
 
   let show = focus ? arr : arr.slice(-defaultShow);
