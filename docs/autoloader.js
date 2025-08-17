@@ -87,21 +87,24 @@ window.applyTheme = function(theme) {
 	}
 };
 
-window.applyFont = function(font) {
-	localStorage.setItem("font", font);
-	document.documentElement.setAttribute("data-font", font);
-	let family = "sans-serif", size = "1em";
-	switch (font.toLowerCase()) {
-		case "mojangles": family = "Mojangles, Arial"; size = "1.05em"; break;
-		case "arial": family = "Arial"; break;
-		case "verdana": family = "Verdana"; size = "0.95em"; break;
-		case "georgia": family = "Georgia"; break;
-		case "courier": family = "'Courier New', monospace"; size = "0.95em"; break;
-		case "system-ui": family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"; break;
-	}
-	document.body.style.fontFamily = family;
-	document.documentElement.style.fontSize = size;
-};
+function applyFont(font) {
+    const html = document.documentElement;
+    switch(font.toLowerCase()) {
+        case "mojangles": html.setAttribute("data-font", "Mojangles"); break;
+        case "arial": html.setAttribute("data-font", "Arial"); break;
+        case "verdana": html.setAttribute("data-font", "Verdana"); break;
+        case "georgia": html.setAttribute("data-font", "Georgia"); break;
+        case "courier": html.setAttribute("data-font", "Courier"); break;
+        case "system-ui": html.setAttribute("data-font", "Sans Serif"); break;
+        default: html.setAttribute("data-font", "Mojangles");
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedFont = localStorage.getItem("font") || "mojangles";
+    applyFont(savedFont);
+    window.applyFont = applyFont;
+});
 
 window.loadCaptcha = function(callback) {
 	if (window.grecaptcha) return callback?.(window.grecaptcha);
