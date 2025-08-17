@@ -4,64 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projekte - Redminer9630</title>
-    <style>
-        :root {
-            --bg-color-dark: #282c34;
-            --text-color-dark: white;
-            --bg-color-light: #f4f4f4;
-            --text-color-light: black;
-            --button-bg-color: #4CAF50;
-            --button-hover-color: #45a049;
-            --border-color-dark: white;
-            --border-color-light: black;
-        }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
-th, td { padding: 8px; text-align: left; }
-th:nth-child(1), td:nth-child(1) { width: 100px; }
-th:nth-child(2), td:nth-child(2) { width: 150px; }
-th:nth-child(3), td:nth-child(3) { width: 300px; }
-th:nth-child(4), td:nth-child(4) { width: 150px; }
-th:nth-child(5), td:nth-child(5) { width: 80px; text-align: center; }
-    @media (max-width: 480px) { td img { width: 40px; height: 40px;} }
-    @media (max-width: 1024px) and (min-width: 481px) { td img { width: 60px; height: 60px; } }
-    @media (min-width: 1025px) { td img { width: 80px; height: 80px; } }
-        :root[data-theme="dark"] body { background-color: var(--bg-color-dark); color: var(--text-color-dark); }
-        :root[data-theme="dark"] table, th, td { border: 1px solid var(--border-color-dark); }
-        :root[data-theme="dark"] th { background-color: var(--button-bg-color); }
-        :root[data-theme="dark"] table, th, td {border: 1px solid #fff;border-collapse: collapse;} 
-        :root[data-theme="dark"] th, td {padding: 8px;}
-        :root[data-theme="light"] body { background-color: var(--bg-color-light); color: var(--text-color-light); }
-        :root[data-theme="light"] table, th, td { border: 1px solid var(--border-color-light); }
-        :root[data-theme="light"] th { background-color: var(--button-bg-color); }
-        h1 {
-            font-size: 30px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td { padding: 8px; text-align: left; }
-        .download-button { background-color: var(--button-bg-color);}
-        .download-button:hover { background-color: var(--button-hover-color); }
-        .state-active {background-color: green;}
-        .state {
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .state-edit {background-color: blue;}
-        .img { color: grey; }
-        .state-error {background-color: red;}
-        .state-closed {background-color: grey; }
-        img { width: 50px; height: 50px; }
-        .table-responsive {width: 100%;overflow-x: auto;-webkit-overflow-scrolling: touch;}
-        .table-responsive table { min-width: 600px; }
-    </style>
+<style>
+:root {
+    --bg-dark: #282c34;
+    --text-dark: #ffffff;
+    --bg-light: #f4f4f4;
+    --text-light: #000000;
+    --button-bg: #4CAF50;
+    --button-hover: #45a049;
+    --border-dark: #ffffff;
+    --border-light: #000000;
+}
+.table-responsive {width: 100%;overflow-x: auto;-webkit-overflow-scrolling: touch;}
+.table-responsive table {width: 100%;min-width: 600px;border-collapse: collapse;margin-top: 20px;table-layout: fixed;}
+th, td {padding: 8px;text-align: left;border: 1px solid;}
+th:nth-child(1), td:nth-child(1) {width: 100px;}
+th:nth-child(2), td:nth-child(2) {width: 150px;}
+th:nth-child(3), td:nth-child(3) {width: 300px;}
+th:nth-child(4), td:nth-child(4) {width: 150px;}
+th:nth-child(5), td:nth-child(5) {width: 80px;text-align: center;}
+td img {display: block;margin: 0 auto;}
+@media (max-width: 480px) { td img {width: 40px;height: 40px;} }
+@media (min-width: 481px) and (max-width: 1024px) { td img {width: 60px;height: 60px;} }
+@media (min-width: 1025px) { td img {width: 80px;height: 80px;} }
+:root[data-theme="dark"] body {background-color: var(--bg-dark);color: var(--text-dark);}
+:root[data-theme="dark"] table, :root[data-theme="dark"] th, :root[data-theme="dark"] td {border: 1px solid var(--border-dark);}
+:root[data-theme="dark"] th {background-color: var(--button-bg);}
+:root[data-theme="light"] body {background-color: var(--bg-light);color: var(--text-light);}
+:root[data-theme="light"] table, :root[data-theme="light"] th, :root[data-theme="light"] td {border: 1px solid var(--border-light);}
+:root[data-theme="light"] th {background-color: var(--button-bg);}
+.download-button {background-color: var(--button-bg);}
+.download-button:hover {background-color: var(--button-hover);}
+.state {color: white;padding: 10px;font-size: 10px;cursor: pointer;text-align: center;display: inline-block;}
+.state-active {background-color: green;}
+.state-edit {background-color: blue;}
+.state-error {background-color: red;}
+.state-closed {background-color: grey;}
+h1 {font-size: 30px;margin-bottom: 20px;text-align: center;}
+</style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t42/docs/autoloader.js" type="module" defer></script>
 </head>
 <body>
