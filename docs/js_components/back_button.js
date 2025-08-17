@@ -12,7 +12,7 @@
       color: white;
       padding: 10px 20px;
       border-radius: 8px;
-      border: #eaeaea;
+      border-color: #eaeaea;
       cursor: pointer;
       transition: background-color 0.2s ease, transform 0.2s ease;
       position: fixed;
@@ -24,7 +24,7 @@
       background-color: #323232;
       transform: scale(1.05);
     }
-    :root[data-theme="dark"] .global-back-btn { background: #eaeaea; color: #000; border: #1a1a1a;}
+    :root[data-theme="dark"] .global-back-btn { background: #eaeaea; color: #000; border-color: #1a1a1a;}
     @media (max-width: 768px) {.global-back-btn {font-size: 14px; padding: 8px 16px;}}@media (max-width: 480px) {.global-back-btn {font-size: 12px; padding: 6px 12px;}}
   `;
   document.head.appendChild(style);
