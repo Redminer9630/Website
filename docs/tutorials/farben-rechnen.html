@@ -25,7 +25,7 @@ button { font-family:Mojangles; padding:8px 12px; cursor:pointer; margin:6px 6px
 <body>
 <h1>Farben umrechnen: HEX ↔ RGB</h1>
 
-<h2>Kurze Erklärung (was ist das?)</h2>
+<h2>Was sind HEX-Farben?</h2>
 <p class="small">HEX-Farben sind hexadezimale Codes, zwei Stellen pro Farbkanal (Rot, Grün, Blau). Beispiel: <code>#4CAF50</code>. RGB schreibt die drei Werte als Dezimalzahlen: <code>rgb(76, 175, 80)</code>.</p>
 
 <hr>
@@ -35,8 +35,6 @@ button { font-family:Mojangles; padding:8px 12px; cursor:pointer; margin:6px 6px
 <h3>1) HEX → RGB — Schritt für Schritt</h3>
 <ol>
   <li>Entferne führendes <code>#</code> (z. B. <code>#4CAF50</code> → <code>4CAF50</code>).</li>
-  <li>Wenn der Code nur 3 Zeichen hat (Kurzform), erweitere jede Ziffer, indem du sie verdoppelst:
-      <code>f0a</code> → <code>ff</code>, <code>00</code>, <code>aa</code>.</li>
   <li>Teile den 6-stelligen String in drei Paare: <code>4C</code> / <code>AF</code> / <code>50</code>.</li>
   <li>Wandle jedes Paar von Hex nach Dezimal: rechne <em>erste Ziffer × 16 + zweite Ziffer</em>.
       Beispiel: <code>4C</code> = 4×16 = 64 + 12 = <b>76</b>.</li>
@@ -75,7 +73,7 @@ button { font-family:Mojangles; padding:8px 12px; cursor:pointer; margin:6px 6px
   <li>Wandle diese Zahl in eine einzelne Hex-Ziffer um (0–9, a–f).</li>
   <li>Setze die drei Ziffern zusammen mit <code>#</code> → z. B. <code>#fcf</code>.</li>
 </ol>
-<p class="tip">Wichtig: Wenn eine Komponente nicht durch 17 teilbar ist, **gibt es keine exakte 3-stellige Kurzform** — dann nur die 6-stellige Variante ist korrekt.</p>
+<p class="tip">Wichtig: Wenn eine Komponente nicht durch 17 teilbar ist, gibt es keine exakte 3-stellige Kurzform — dann ist nur die 6-stellige Variante korrekt.</p>
 
 <hr>
 
