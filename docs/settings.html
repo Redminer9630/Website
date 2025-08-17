@@ -24,13 +24,13 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const theme = localStorage.getItem("theme") || "sys";
-      const font = localStorage.getItem("font") || "mojangles";
+      //const font = localStorage.getItem("font") || "mojangles";
 
       setRadioValue("theme", theme);
-      setRadioValue("font", font);
+      //setRadioValue("font", font);
 
       window.applyTheme?.(theme);
-      window.applyFont?.(font);
+      //window.applyFont?.(font);
         
       document.querySelectorAll('input[name="theme"]').forEach(radio => {
         radio.addEventListener("change", e => {
@@ -39,7 +39,7 @@
           window.applyTheme?.(theme);
         });
       });
-
+/*
       document.querySelectorAll('input[name="font"]').forEach(radio => {
         radio.addEventListener("change", e => {
           const font = e.target.value;
@@ -47,7 +47,7 @@
           window.applyFont?.(font);
         });
       });
-    });
+    });*/
   </script>
 </head>
 <body>
@@ -62,7 +62,7 @@
         <label><input type="radio" name="theme" value="sys"> System</label>
       </div>
     </div>
-
+<!--
     <div class="settings-item">
       <label for="font">Schriftart</label>
       <div class="radio-group" id="font-options">
@@ -73,7 +73,7 @@
         <label><input type="radio" name="font" id="font-courier" value="courier"> Courier New</label>
         <label><input type="radio" name="font" id="font-system-ui" value="system-ui"> System UI</label>
       </div>
-   </div>
+   </div>-->
   </main>
 </body>
 </html>
