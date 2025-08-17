@@ -141,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script> // back button
 document.addEventListener("DOMContentLoaded", function () {
   const referrer = document.referrer.toLowerCase();
+  const myDomain = window.location.hostname.toLowerCase();
 
   const sources = {
     github_web9630: {
@@ -168,7 +169,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const exclusion = pattern.substring(1);
       if (exclusion.includes("*")) {
         return normalizedUrl.startsWith(exclusion.split("*")[0]);
-      } return normalizedUrl === exclusion;
+      } 
+      return normalizedUrl === exclusion;
     } else if (pattern.includes("*")) {
       return normalizedUrl.startsWith(pattern.split("*")[0]);
     } else {
@@ -177,21 +179,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   let matchedSource = null;
-  for (const key in sources) {
-    if (sources[key].links.some(pattern => matchesWildcard(pattern, referrer))) {
-      matchedSource = sources[key];
-      break;
-    }
-  }
 
-  if (!matchedSource && referrer) {
-    try {
-      const urlObj = new URL(referrer);
-      matchedSource = {
-        text: `Zurück zu ${urlObj.hostname}`,
-        links: [referrer]
-      };
-    } catch {}
+  // nur prüfen, wenn Referrer existiert UND nicht von eigener Domain kommt
+  if (referrer && !referrer.includes(myDomain)) {
+    for (const key in sources) {
+      if (sources[key].links.some(pattern => matchesWildcard(pattern, referrer))) {
+        matchedSource = sources[key];
+        break;
+      }
+    }
+
+    if (!matchedSource) {
+      try {
+        const urlObj = new URL(referrer);
+        matchedSource = {
+          text: `Zurück zu ${urlObj.hostname}`,
+          links: [referrer]
+        };
+      } catch {}
+    }
   }
 
   if (matchedSource) {
@@ -217,19 +223,24 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
     document.head.appendChild(style);
 
-const button = document.createElement("a");
-button.className = "source-button";
-button.textContent = matchedSource.text;
-button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
-button.setAttribute("role", "button");
-button.setAttribute("aria-label", matchedSource.text);
-button.setAttribute("tabindex", "0");
-button.addEventListener("keydown", (e) => {
-if (e.key === "Enter" || e.key === " ") {e.preventDefault();window.location.href = button.href;}});
-document.body.appendChild(button);
+    const button = document.createElement("a");
+    button.className = "source-button";
+    button.textContent = matchedSource.text;
+    button.href = matchedSource.target || matchedSource.links.find(link => !link.startsWith("!")).replace("*", "");
+    button.setAttribute("role", "button");
+    button.setAttribute("aria-label", matchedSource.text);
+    button.setAttribute("tabindex", "0");
+    button.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        window.location.href = button.href;
+      }
+    });
+    document.body.appendChild(button);
   }
 });
-
+</script>
+<script> //menu
 document.addEventListener("DOMContentLoaded", function () {
   const nav = document.querySelector("header nav");
   const iconLeft = document.querySelector(".icon-left");
