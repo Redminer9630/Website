@@ -140,7 +140,7 @@
           div.classList.add("result-item");
           div.style.animationDelay = `${i*0.05}s`;
 
-          if(!e.url) e.url = "#"; // Fallback
+          if(!e.url) e.url = "#";
 
           const isExternal = e.url.startsWith("http") && !e.url.includes(location.hostname);
           if(isExternal){
@@ -155,6 +155,7 @@
       } else {
         results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
       }
+      results.innerHTML += "<br><br><br>";
     }
 
 // Such emphelungen und Query Speicherung
