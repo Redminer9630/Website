@@ -53,14 +53,18 @@ th:nth-child(5), td:nth-child(5) { width: 80px; text-align: center; }
         .state-closed {background-color: grey; }
         img { width: 1em; height: 1em; }
 .project {
-    width: 45%;
-    margin: 20px 2%;
+    width: 100%;
+    margin: 20px 0;
     padding: 15px;
     border: 1px solid var(--border-color-light);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: inline-block;
-    vertical-align: top;
+    display: block;
+}
+
+.left, .right {
+    float: none;
+    clear: both;
 }
 .left { float: left; clear: left; }
 .right { float: right; clear: right; }
