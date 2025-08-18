@@ -3,5 +3,25 @@
     "title": "Deine Daten",
     "desc": "Die angezeigten Daten werden an niemand weitergeleitet und sind nur für dich sichtbar",
     "url": "/docs?q=ipdata"
+  },
+  {
+    "title": "Impressum",
+    "desc": "Impressum halt :/",
+    "url": "/docs?q=impressum"
+  },
+  {
+    "title": "Hinweise",
+    "desc": "Gebe niemals irgendwo auf unserer Website Persönliche/Private Daten an da diese auf deinem Gerät gespeichert werden! Hacker etc. können sie leicht einsehen!",
+    "url": "/docs?q=hinweise"
+  },
+  {
+    "title": "404 - Seite nicht gefunden",
+    "desc": "Dieser Fehler kann auftauchen, wenn die URL nicht existiert oder nicht gefunden wurde",
+    "url": "/docs?q=fehler"
+  },
+  {
+    "title": "Mehr über mich",
+    "desc": "Ich bin ein FED(Front End Developer) und Minecraft Pro, der fleißig Programmiert und Minecraft Spielt",
+    "url": "/docs?q=about"
   }
 ]
