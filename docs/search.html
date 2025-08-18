@@ -100,10 +100,7 @@
 
     const urlParams = new URLSearchParams(location.search);
     const q = urlParams.get("q");
-    if(q){
-      input.value = q;
-      runSearch(q);
-    }
+    if(q){input.value = q;runSearch(q);saveHistory(q);}
 
     document.getElementById("search-button").addEventListener("click",()=>{
       const term = input.value.trim();
