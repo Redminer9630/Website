@@ -229,13 +229,14 @@
           document.getElementById("search-button").click(); 
         });
 
-        const remove = document.createElement("span");
-        remove.textContent = "×";
-        remove.classList.add("remove");
-        remove.addEventListener("click",(e)=>{
-          e.stopPropagation();
-          deleteHistory(term);
-        });
+const remove = document.createElement("span");
+remove.textContent = "×";
+remove.classList.add("remove");
+remove.addEventListener("mousedown",(e)=>{
+  e.preventDefault();
+  e.stopPropagation();
+  deleteHistory(term);
+});
 
         div.appendChild(text);
         div.appendChild(remove);
