@@ -7,11 +7,13 @@
     body { font-family: 'Mojangles'; background: #eaeaea; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
     #search-section { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    #search-wrapper { flex: 1; position: relative; }
     #search-input {
-      flex: 1;
+      width: 100%;
       padding: 0.5rem;
       font-size: 1rem;
       font-family: 'Mojangles';
+      box-sizing: border-box;
     }
     button {
       background: #eaeaea;
@@ -39,6 +41,23 @@
       }
     }
 
+    /* Suggestions */
+    #search-suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #ccc;
+      background: #fff;
+      z-index: 10;
+    }
+    #search-suggestions div {
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+    }
+    #search-suggestions div:hover { background: #eee; }
+
+    /* Dark Mode */
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
     :root[data-theme="dark"] h1 { color: #eee; }
     :root[data-theme="dark"] #search-input {background: #222;color: #eee;border: 1px solid #444;}
@@ -47,6 +66,8 @@
     :root[data-theme="dark"] label { color: #ddd; }
     :root[data-theme="dark"] #results { color: #ccc; }
     :root[data-theme="dark"] .no-results { color: #666; }
+    :root[data-theme="dark"] #search-suggestions { background:#222; border:1px solid #444; color:#eee; }
+    :root[data-theme="dark"] #search-suggestions div:hover { background:#333; }
 
     #search-input::-webkit-search-decoration {
       -webkit-appearance: searchfield-decoration;
@@ -60,7 +81,10 @@
 <body>
   <h1>Suche</h1>
   <section id="search-section">
-    <input id="search-input" type="search" aria-label="Suche..." placeholder="Suchbegriff eingeben" />
+    <div id="search-wrapper">
+      <input id="search-input" type="search" aria-label="Suche..." placeholder="Suchbegriff eingeben" />
+      <div id="search-suggestions"></div>
+    </div>
     <button id="search-button">Suchen</button>
   </section>
   <div id="results"></div>
@@ -68,6 +92,7 @@
   <script>
     const input = document.getElementById("search-input");
     const results = document.getElementById("results");
+    const suggestions = document.getElementById("search-suggestions");
 
     const urlParams = new URLSearchParams(location.search);
     const q = urlParams.get("q");
@@ -81,6 +106,7 @@
       if(term){
         history.replaceState(null,"","?q="+encodeURIComponent(term));
         runSearch(term);
+        saveHistory(term);
       }
     });
 
@@ -158,80 +184,49 @@
       results.innerHTML += "<br><br><br>";
     }
 
-// Such emphelungen und Query Speicherung
-const SEARCH_KEY = "searchHistory";
-const maxStored = 15;
-const defaultShow = 4;
+    // Such Empfehlungen & Query Speicherung
+    const SEARCH_KEY = "searchHistory";
+    const maxStored = 15;
+    const defaultShow = 4;
 
-function getHistory(){ 
-  return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); 
-}
+    function getHistory(){ 
+      return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); 
+    }
 
-function saveHistory(term){
-  if(!term) return;
-  let arr = getHistory();
-  arr = arr.filter(t => t !== term);
-  arr.push(term);
-  if(arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
-  localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
-}
+    function saveHistory(term){
+      if(!term) return;
+      let arr = getHistory();
+      arr = arr.filter(t => t !== term);
+      arr.push(term);
+      if(arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
+      localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
+    }
 
-function renderSuggestions(focus=false){
-  const containerId = "search-suggestions";
-  let container = document.getElementById(containerId);
-  if(!container){
-    container = document.createElement("div");
-    container.id = containerId;
-    container.style.position = "relative";
-    container.style.marginTop = "0.3rem";
-    document.getElementById("search-section").appendChild(container);
-  }
-  container.innerHTML = "";
+    function renderSuggestions(focus=false){
+      suggestions.innerHTML = "";
 
-  const term = input.value.trim();
-  if(term) return; // <-- nur anzeigen, wenn Input leer
+      const term = input.value.trim();
+      if(term) return; // nur anzeigen wenn Input leer
 
-  let arr = getHistory();
-  if(!arr.length) return;
+      let arr = getHistory();
+      if(!arr.length) return;
 
-  let show = focus ? arr : arr.slice(-defaultShow);
-  const list = document.createElement("div");
-  list.style.border = "1px solid #ccc";
-  list.style.background = "#fff";
-  list.style.position = "absolute";
-  list.style.top = "100%";
-  list.style.left = "0";
-  list.style.right = "0";
-  list.style.zIndex = "10";
-  list.style.maxHeight = focus ? "450px" : "auto";
-  list.style.overflowY = focus ? "auto" : "visible";
+      let show = focus ? arr : arr.slice(-defaultShow);
+      show.reverse().forEach(term=>{
+        const div = document.createElement("div");
+        div.textContent = term;
+        div.addEventListener("click",()=>{ 
+          input.value = term; 
+          document.getElementById("search-button").click(); 
+        });
+        suggestions.appendChild(div);
+      });
+    }
 
-  show.reverse().forEach(term=>{
-    const div = document.createElement("div");
-    div.textContent = term;
-    div.style.padding = "0.3rem 0.5rem";
-    div.style.cursor = "pointer";
-    div.addEventListener("click",()=>{ input.value = term; document.getElementById("search-button").click(); });
-    div.addEventListener("mouseover",()=>{ div.style.background="#eee"; });
-    div.addEventListener("mouseout",()=>{ div.style.background=""; });
-    list.appendChild(div);
-  });
-  container.appendChild(list);
-}
+    input.addEventListener("focus",()=>{ renderSuggestions(true); });
+    input.addEventListener("blur",()=>{ setTimeout(()=>{ renderSuggestions(false); }, 100); });
 
-input.addEventListener("focus",()=>{ renderSuggestions(true); });
-
-input.addEventListener("blur",()=>{
-  setTimeout(()=>{ renderSuggestions(false); }, 100);
-});
-      
-document.getElementById("search-button").addEventListener("click",()=>{
-  const term = input.value.trim();
-  if(term) saveHistory(term);
-  renderSuggestions(false);
-});
-
-renderSuggestions(false);
+    renderSuggestions(false);
   </script>
 </body>
 </html>
