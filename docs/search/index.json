@@ -31,7 +31,7 @@
   },
   {
     "title": "Einstellung",
-    "desc": "Hier kannst du das Theme und Font einstellen",
+    "desc": "Hier kannst du das Theme einstellen",
     "url": "/settings",
     "alias": ["settings", "ändern", "light", "white", "dark", "schrift", "minecraft", "mojangles", "arial", "sans serif"]
   },
