@@ -76,16 +76,18 @@ th:nth-child(5), td:nth-child(5) { width: 80px; text-align: center; }
         <h2>Higher Enchantments</h2>
         <b>1.21</b>
         <p>Dieses Datapack erhöht die maximale Stufe von Enchantments</p>
-        <td title="Dieses Pack ist verbugt und kann unvorhergesehene Folgen haben in manchen Versionen" class="state-error state"><a href=""><img aria-label="Download" alt="Download" src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/icons/download.webp"></a></td>
-            <tr>
-                <td>1.21+</td>
-                <td>Katzenhausen</td>
-                <td>Ein Pack gemacht für Katzenhausen</td>
-                <td>Resourcepack</td>
-                <td title="Dieses Pack ist fehlerfrei" class="state-active state"><a href="files/katzenhausen.zip"><img alt="Download" aria-label="Download" src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/icons/download.webp"></a></td>
-            </tr>
-        </tbody>
-    </table>
+        <a href=""><img aria-label="Download" alt="Download" src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/icons/download.webp"></a>
+    </div>
+    <div class="left project">
+        <h2>Katzenhausen RP</h2>
+        <b>1.21+</b>
+        <p>Dieses Resourcepack wird von den Katzenhausenern verwendet</p>
+        <a href="files/katzenhausen.zip"><img alt="Download" aria-label="Download" src="https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/images/icons/download.webp"></a>
+    </div>
+    <div class="right project">
+        <h2>Katzenhausen</h2>
+        <b>froglight.net</b>
+        <p>Dieses Groß Projekt spielt auf froglight.net(ehemeals thejocraft.net) und wir bauen ein kleines Dorf</p>
     </div>
     <script>function sortTable(columnIndex) {const table = document.getElementById("downloadTable");const tbody = table.querySelector("tbody");const rows = Array.from(tbody.rows);const ascending = !table.dataset.sortDirection || table.dataset.sortDirection === 'descending';table.dataset.sortDirection = ascending ? 'ascending' : 'descending';rows.sort((a, b) => {const aText = a.cells[columnIndex].textContent.trim();const bText = b.cells[columnIndex].textContent.trim();if (ascending) { return aText.localeCompare(bText); } else { return bText.localeCompare(aText); }});rows.forEach(row => tbody.appendChild(row));}</script>
 </body>
