@@ -25,7 +25,6 @@
       font-size: 1rem;
     }
     button:hover { background: #cacaca; }
-    label { display: flex; align-items: center; gap: 0.5rem; }
     #results { margin-top: 1rem; }
     .no-results { color: #888; font-style: italic; margin-top: 1rem; }
 
@@ -35,10 +34,7 @@
       animation: fadeInUp 0.4s ease forwards;
     }
     @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Suggestions */
@@ -52,22 +48,30 @@
       z-index: 10;
     }
     #search-suggestions div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 0.3rem 0.5rem;
       cursor: pointer;
     }
     #search-suggestions div:hover { background: #eee; }
+    #search-suggestions span.remove {
+      cursor: pointer;
+      margin-left: 0.5rem;
+      color: red;
+      font-weight: bold;
+    }
 
     /* Dark Mode */
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
-    :root[data-theme="dark"] h1 { color: #eee; }
     :root[data-theme="dark"] #search-input {background: #222;color: #eee;border: 1px solid #444;}
     :root[data-theme="dark"] button { background: #1a1a1a; color: white; }
     :root[data-theme="dark"] button:hover { background: #3a3a3a; }
-    :root[data-theme="dark"] label { color: #ddd; }
     :root[data-theme="dark"] #results { color: #ccc; }
     :root[data-theme="dark"] .no-results { color: #666; }
     :root[data-theme="dark"] #search-suggestions { background:#222; border:1px solid #444; color:#eee; }
     :root[data-theme="dark"] #search-suggestions div:hover { background:#333; }
+    :root[data-theme="dark"] #search-suggestions span.remove { color:#f66; }
 
     #search-input::-webkit-search-decoration {
       -webkit-appearance: searchfield-decoration;
@@ -134,10 +138,7 @@
         const fetches = jsonFiles.map(file =>
           fetch(file)
             .then(res=>res.json())
-            .catch(e=>{
-              console.warn(`Fehler beim Laden von ${file}:`, e);
-              return [];
-            })
+            .catch(e=>{ console.warn(`Fehler beim Laden von ${file}:`, e); return []; })
         );
         const resultsArrays = await Promise.all(fetches);
         resultsArrays.forEach(arr => { if(Array.isArray(arr)) data.push(...arr) });
@@ -202,31 +203,49 @@
       localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
     }
 
+    function deleteHistory(term){
+      let arr = getHistory().filter(t => t !== term);
+      localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
+      renderSuggestions(true);
+    }
+
     function renderSuggestions(focus=false){
       suggestions.innerHTML = "";
-
-      const term = input.value.trim();
-      if(term) return; // nur anzeigen wenn Input leer
+      if(!focus) return; // nur anzeigen, wenn Input Fokus hat
 
       let arr = getHistory();
       if(!arr.length) return;
 
-      let show = focus ? arr : arr.slice(-defaultShow);
-      show.reverse().forEach(term=>{
+      let show = arr.slice(-defaultShow).reverse();
+      show.forEach(term=>{
         const div = document.createElement("div");
-        div.textContent = term;
-        div.addEventListener("click",()=>{ 
+
+        const text = document.createElement("span");
+        text.textContent = term;
+        text.style.flex = "1";
+
+        text.addEventListener("click",()=>{ 
           input.value = term; 
           document.getElementById("search-button").click(); 
         });
+
+        const remove = document.createElement("span");
+        remove.textContent = "×";
+        remove.classList.add("remove");
+        remove.addEventListener("click",(e)=>{
+          e.stopPropagation();
+          deleteHistory(term);
+        });
+
+        div.appendChild(text);
+        div.appendChild(remove);
         suggestions.appendChild(div);
       });
     }
 
     input.addEventListener("focus",()=>{ renderSuggestions(true); });
-    input.addEventListener("blur",()=>{ setTimeout(()=>{ renderSuggestions(false); }, 100); });
-
-    renderSuggestions(false);
+    input.addEventListener("blur",()=>{ setTimeout(()=>{ suggestions.innerHTML=""; }, 100); });
+    input.addEventListener("input",()=>{ renderSuggestions(true); });
   </script>
 </body>
 </html>
