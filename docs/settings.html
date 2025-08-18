@@ -5,16 +5,24 @@
   <title>Einstellungen - Redminer9630</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { margin: 0; background-color:#eaeaea; color: #000;padding: 2rem; font-family: sans-serif; }
-    h1 { margin-bottom: 2rem; color:#000; }
-    :root[data-theme="dark"] body{background-color:#1a1a1a;color:#fff;}
-    :root[data-theme="dark"] h1{color:#fff;}
-    .settings-item { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    label { cursor: pointer; }
+    body { margin:0; background-color:#eaeaea; color:#000; padding:2rem; font-family:sans-serif; }
+    h1 { margin-bottom:2rem; color:#000; }
+    .settings-item { margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.5rem; }
+    label { cursor:pointer; }
+    :root[data-theme="dark"] body { background-color:#1a1a1a; color:#fff; }
+    :root[data-theme="dark"] h1 { color:#fff; }
+    :root[data-theme="light"] body { background-color:#eaeaea; color:#000; }
+    :root[data-theme="light"] h1 { color:#000; }
   </style>
-  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t47/docs/autoloader.js" type="module" defer></script>
   <script type="module">
-    if (window.performance && performance.navigation.type === 2) {location.reload();}
+    function applyTheme(theme) {
+      if (theme === "sys") {
+        document.documentElement.removeAttribute("data-theme");
+      } else {
+        document.documentElement.setAttribute("data-theme", theme);
+      }
+    }
+
     function setRadioValue(name, value) {
       const radios = document.querySelectorAll(`input[name="${name}"]`);
       for (const radio of radios) {
@@ -24,30 +32,17 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const theme = localStorage.getItem("theme") || "sys";
-      //const font = localStorage.getItem("font") || "mojangles";
-
       setRadioValue("theme", theme);
-      //setRadioValue("font", font);
+      applyTheme(theme);
 
-      window.applyTheme?.(theme);
-      //window.applyFont?.(font);
-        
       document.querySelectorAll('input[name="theme"]').forEach(radio => {
         radio.addEventListener("change", e => {
           const theme = e.target.value;
           localStorage.setItem("theme", theme);
-          window.applyTheme?.(theme);
+          applyTheme(theme);
         });
       });
-/*
-      document.querySelectorAll('input[name="font"]').forEach(radio => {
-        radio.addEventListener("change", e => {
-          const font = e.target.value;
-          localStorage.setItem("font", font);
-          window.applyFont?.(font);
-        });
-      });
-    });*/
+    });
   </script>
 </head>
 <body>
@@ -62,18 +57,6 @@
         <label><input type="radio" name="theme" value="sys"> System</label>
       </div>
     </div>
-<!--
-    <div class="settings-item">
-      <label for="font">Schriftart</label>
-      <div class="radio-group" id="font-options">
-        <label><input type="radio" name="font" id="font-mojangles" value="mojangles"> Mojangles</label>
-        <label><input type="radio" name="font" id="font-arial" value="arial"> Arial</label>
-        <label><input type="radio" name="font" id="font-verdana" value="verdana"> Verdana</label>
-        <label><input type="radio" name="font" id="font-georgia" value="georgia"> Georgia</label>
-        <label><input type="radio" name="font" id="font-courier" value="courier"> Courier New</label>
-        <label><input type="radio" name="font" id="font-system-ui" value="system-ui"> System UI</label>
-      </div>
-   </div>-->
   </main>
 </body>
 </html>
