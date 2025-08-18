@@ -51,7 +51,38 @@ th:nth-child(5), td:nth-child(5) { width: 80px; text-align: center; }
         .img { color: grey; }
         .state-error {background-color: red;}
         .state-closed {background-color: grey; }
-        img { width: 50px; height: 50px; }
+        img { width: 1em; height: 1em; }
+.project {
+    width: 45%;
+    margin: 20px 2%;
+    padding: 15px;
+    border: 1px solid var(--border-color-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: inline-block;
+    vertical-align: top;
+}
+.left { float: left; clear: left; }
+.right { float: right; clear: right; }
+
+:root[data-theme="dark"] .project {
+    border: 1px solid var(--border-color-dark);
+    box-shadow: 0 2px 5px rgba(255,255,255,0.1);
+}
+:root[data-theme="light"] .project {
+    border: 1px solid var(--border-color-light);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .project {
+        width: 90%;
+        margin: 10px auto;
+        float: none;
+        display: block;
+    }
+}
+
     </style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t45/docs/autoloader.js" type="module" defer></script>
 </head>
