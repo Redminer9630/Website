@@ -79,6 +79,20 @@
     :root[data-theme="dark"] #search-input::-webkit-search-decoration {
       filter: invert(1) brightness(1.5);
     }
+.search-wrapper { position: relative; display: inline-block; }
+#search-input { padding-right: 24px; } /* Platz für X */
+#clear-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  display: none;
+}
+#clear-btn:hover { color: red; }
   </style>
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t47/docs/autoloader.js" type="module" defer></script>
 </head>
@@ -87,6 +101,7 @@
   <section id="search-section">
     <div id="search-wrapper">
       <input id="search-input" type="search" aria-label="Suche..." placeholder="Suchbegriff eingeben" />
+      <button id="clear-btn">×</button>
       <div id="search-suggestions"></div>
     </div>
     <button id="search-button">Suchen</button>
@@ -240,6 +255,25 @@ remove.addEventListener("mousedown",(e)=>{
         suggestions.appendChild(div);
       });
     }
+const input = document.getElementById("search-input");
+const clearBtn = document.getElementById("clear-btn");
+
+input.addEventListener("input",()=>{
+  clearBtn.style.display = input.value ? "block" : "none";
+});
+
+clearBtn.addEventListener("click",()=>{
+  if(input.value) saveHistory(input.value); // vorher speichern
+  input.value = "";
+  clearBtn.style.display = "none";
+  input.focus();
+});
+
+function saveHistory(q){
+  let history = JSON.parse(localStorage.getItem("searchHistory")||"[]");
+  if(!history.includes(q)) history.unshift(q);
+  localStorage.setItem("searchHistory",JSON.stringify(history));
+}
 
     input.addEventListener("focus",()=>{ renderSuggestions(true); });
     input.addEventListener("blur",()=>{ setTimeout(()=>{ suggestions.innerHTML=""; }, 100); });
