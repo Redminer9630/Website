@@ -4,13 +4,10 @@
   <meta charset="UTF-8" />
   <title>Suche – Redminer9630</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <style>
     body { font-family: 'Mojangles', system-ui, sans-serif; background: #eaeaea; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
     #search-section { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-
-    /* Wrapper für Input + Clear + Suggestions */
     #search-wrapper { flex: 1; min-width: 220px; position: relative; }
     #search-input {
       width: 100%;
@@ -43,7 +40,6 @@
     .result-item { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s ease forwards; }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* Suggestions-Dropdown */
     #search-suggestions {
       position: absolute; top: calc(100% + 4px); left: 0; right: 0;
       border: 1px solid #ccc; background: #fff; z-index: 10;
@@ -55,7 +51,6 @@
     #search-suggestions .item:hover { background: #eee; }
     #search-suggestions .remove { cursor: pointer; color: red; font-weight: bold; user-select: none; }
 
-    /* Dark Mode */
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
     :root[data-theme="dark"] #search-input { background: #222; color: #eee; border: 1px solid #444; }
     :root[data-theme="dark"] button { background: #1a1a1a; color: white; }
@@ -69,8 +64,6 @@
     #search-input::-webkit-search-decoration { -webkit-appearance: searchfield-decoration; }
     :root[data-theme="dark"] #search-input::-webkit-search-decoration { filter: invert(1) brightness(1.5); }
   </style>
-
-  <!-- Falls du globale Styles/JS brauchst, lass autoloader drin -->
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t50/docs/autoloader.js" type="module" defer></script>
 </head>
 <body>
@@ -79,7 +72,6 @@
   <section id="search-section">
     <div id="search-wrapper">
       <input id="search-input" type="search" aria-label="Suche..." placeholder="Suchbegriff eingeben" />
-      <button id="clear-btn" aria-label="Suche leeren" title="Suche leeren">×</button>
       <div id="search-suggestions" aria-label="Suchvorschläge"></div>
     </div>
     <button id="search-button">Suchen</button>
@@ -88,11 +80,9 @@
   <div id="results"></div>
 
   <script>
-    // === Elemente ===
     const input        = document.getElementById("search-input");
     const results      = document.getElementById("results");
     const suggestions  = document.getElementById("search-suggestions");
-    const clearBtn     = document.getElementById("clear-btn");
     const searchBtn    = document.getElementById("search-button");
 
     // === URL-Query übernehmen (von Mainpage) ===
@@ -101,13 +91,11 @@
       const q = urlParams.get("q");
       if (q) {
         input.value = q;
-        updateClearBtn();
         runSearch(q);
-        saveHistory(q); // auch speichern, wenn man von extern kommt
+        saveHistory(q);
       }
     })();
 
-    // === Suchen per Button ===
     searchBtn.addEventListener("click", () => {
       const term = input.value.trim();
       if (term) {
@@ -117,7 +105,6 @@
       }
     });
 
-    // === Suchen per Enter (keypress ist deprecated) ===
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -125,21 +112,7 @@
       }
     });
 
-    // === Clear-Button im Input ===
-    function updateClearBtn() {
-      clearBtn.style.display = input.value ? "block" : "none";
-    }
     input.addEventListener("input", () => {
-      updateClearBtn();
-      renderSuggestions(true); // beim Tippen Vorschläge aktualisieren
-    });
-    clearBtn.addEventListener("click", () => {
-      const last = input.value.trim();
-      if (last) saveHistory(last);   // vorher speichern
-      input.value = "";
-      results.innerHTML = "";
-      updateClearBtn();
-      input.focus();
       renderSuggestions(true);
     });
 
@@ -248,7 +221,6 @@
         text.addEventListener("mousedown", e => { // mousedown: kein Blur
           e.preventDefault();
           input.value = term;
-          updateClearBtn();
           searchBtn.click();
         });
 
