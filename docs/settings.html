@@ -14,36 +14,28 @@
     :root[data-theme="light"] body { background-color:#eaeaea; color:#000; }
     :root[data-theme="light"] h1 { color:#000; }
   </style>
-  <script type="module">
-    function applyTheme(theme) {
-      if (theme === "sys") {
-        document.documentElement.removeAttribute("data-theme");
-      } else {
-        document.documentElement.setAttribute("data-theme", theme);
-      }
+<script type="module">
+  function setRadioValue(name, value) {
+    const radios = document.querySelectorAll(`input[name="${name}"]`);
+    for (const radio of radios) {
+      radio.checked = (radio.value === value);
     }
+  }
 
-    function setRadioValue(name, value) {
-      const radios = document.querySelectorAll(`input[name="${name}"]`);
-      for (const radio of radios) {
-        radio.checked = (radio.value === value);
-      }
-    }
+  document.addEventListener("DOMContentLoaded", () => {
+    const theme = localStorage.getItem("theme") || "sys";
+    setRadioValue("theme", theme);
+    window.applyTheme?.(theme);
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const theme = localStorage.getItem("theme") || "sys";
-      setRadioValue("theme", theme);
-      applyTheme(theme);
-
-      document.querySelectorAll('input[name="theme"]').forEach(radio => {
-        radio.addEventListener("change", e => {
-          const theme = e.target.value;
-          localStorage.setItem("theme", theme);
-          applyTheme(theme);
-        });
+    document.querySelectorAll('input[name="theme"]').forEach(radio => {
+      radio.addEventListener("change", e => {
+        const theme = e.target.value;
+        localStorage.setItem("theme", theme);
+        window.applyTheme?.(theme);
       });
     });
-  </script>
+  });
+</script>
 </head>
 <body>
   <main role="main">
