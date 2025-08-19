@@ -25,8 +25,7 @@
       transform: scale(1.05);
     }
     :root[data-theme="dark"] .global-back-btn { background: #eaeaea; color: #000; border-color: #1a1a1a;}
-    @media (max-width: 768px) {.global-back-btn {font-size: 14px; padding: 8px 16px;}}
-    @media (max-width: 480px) {.global-back-btn {font-size: 12px; padding: 6px 12px;}}
+    @media (max-width: 768px) {.global-back-btn {font-size: 14px; padding: 8px 16px;}}@media (max-width: 480px) {.global-back-btn {font-size: 12px; padding: 6px 12px;}}
   `;
   document.head.appendChild(style);
 
@@ -36,16 +35,11 @@
   btn.setAttribute("aria-label", "Zurück zur vorherigen Seite");
 
   btn.addEventListener("click", () => {
-    if (document.referrer && document.referrer !== location.href) {
-      history.back();
-    } else {
-      window.location.href = "/";
-    }
+    const url = document.referrer || "/";
+    const timestamp = Date.now();
+    const separator = url.includes("?") ? "&" : "?";
+    window.location.href = `${url}${separator}_=${timestamp}`;
   });
 
   document.body.appendChild(btn);
-
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) location.reload();
-  });
 })();
