@@ -8,10 +8,12 @@
     body { font-family: 'Mojangles', system-ui, sans-serif; background: #eaeaea; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
     #search-section { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+
+    /* Wrapper für Input + Clear + Suggestions */
     #search-wrapper { flex: 1; min-width: 220px; position: relative; }
     #search-input {
       width: 100%;
-      padding: 0.5rem 2rem 0.5rem 0.5rem;
+      padding: 0.5rem 2rem 0.5rem 0.5rem; /* Platz rechts fürs X */
       font-size: 1rem;
       font-family: 'Mojangles', system-ui, sans-serif;
       box-sizing: border-box;
@@ -26,7 +28,7 @@
       font-size: 1.1rem;
       line-height: 1;
       cursor: pointer;
-      display: none;
+      display: none; /* wird bei Text angezeigt */
       user-select: none;
     }
     #clear-btn:hover { color: red; }
@@ -51,6 +53,8 @@
       animation: fadeInUp 0.4s ease forwards;
     }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Suggestions-Dropdown */
     #search-suggestions {
       position: absolute;
       top: calc(100% + 4px);
@@ -75,6 +79,8 @@
       font-weight: bold;
       user-select: none;
     }
+
+    /* Dark Mode */
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
     :root[data-theme="dark"] #search-input { background: #222; color: #eee; border: 1px solid #444; }
     :root[data-theme="dark"] button { background: #1a1a1a; color: white; }
@@ -84,6 +90,8 @@
     :root[data-theme="dark"] #search-suggestions { background:#222; border:1px solid #444; color:#eee; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#333; }
     :root[data-theme="dark"] #search-suggestions .remove { color:#f66; }
+
+    /* WebKit Such-Icon invertieren im Dark-Mode */
     #search-input::-webkit-search-decoration { -webkit-appearance: searchfield-decoration; }
     :root[data-theme="dark"] #search-input::-webkit-search-decoration { filter: invert(1) brightness(1.5); }
   </style>
@@ -143,11 +151,11 @@
     }
     input.addEventListener("input", () => {
       updateClearBtn();
-      renderSuggestions(true); // während des Tippens Vorschläge aktualisieren
+      renderSuggestions(true);
     });
     clearBtn.addEventListener("click", () => {
       const last = input.value.trim();
-      if (last) saveHistory(last); // vorher speichern
+      if (last) saveHistory(last);
       input.value = "";
       results.innerHTML = "";
       updateClearBtn();
@@ -287,7 +295,10 @@
     }
 
     input.addEventListener("focus", () => { hasFocus = true; renderSuggestions(true); });
-    input.addEventListener("blur", () => {hasFocus = false;setTimeout(() => { suggestions.innerHTML = ""; }, 100);});
+    input.addEventListener("blur", () => {
+      hasFocus = false;
+      setTimeout(() => { suggestions.innerHTML = ""; }, 100);
+    });
     input.addEventListener("input", () => { renderSuggestions(true); });
   </script>
 </body>
