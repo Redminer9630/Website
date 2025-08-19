@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Suche – Redminer9630</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     body { font-family: 'Mojangles', system-ui, sans-serif; background: #eaeaea; margin: 1rem; }
     h1 { margin-bottom: 1rem; }
@@ -23,62 +24,36 @@
       right: .4rem;
       top: 50%;
       transform: translateY(-50%);
-      border: none;
-      background: transparent;
-      font-size: 1.1rem;
-      line-height: 1;
-      cursor: pointer;
-      display: none; /* wird bei Text angezeigt */
-      user-select: none;
+      border: none; background: transparent;
+      font-size: 1.1rem; line-height: 1;
+      cursor: pointer; display: none; user-select: none;
     }
     #clear-btn:hover { color: red; }
 
     button {
-      background: #eaeaea;
-      color: black;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Mojangles', system-ui, sans-serif;
-      font-size: 1rem;
+      background: #eaeaea; color: black;
+      padding: 10px 20px; border: none; cursor: pointer;
+      font-family: 'Mojangles', system-ui, sans-serif; font-size: 1rem;
     }
     button:hover { background: #cacaca; }
 
     #results { margin-top: 1rem; }
     .no-results { color: #888; font-style: italic; margin-top: 1rem; }
 
-    .result-item {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInUp 0.4s ease forwards;
-    }
+    .result-item { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s ease forwards; }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
     /* Suggestions-Dropdown */
     #search-suggestions {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      right: 0;
-      border: 1px solid #ccc;
-      background: #fff;
-      z-index: 10;
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+      border: 1px solid #ccc; background: #fff; z-index: 10;
     }
     #search-suggestions .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .35rem .55rem;
-      cursor: pointer;
-      gap: .5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .35rem .55rem; cursor: pointer; gap: .5rem;
     }
     #search-suggestions .item:hover { background: #eee; }
-    #search-suggestions .remove {
-      cursor: pointer;
-      color: red;
-      font-weight: bold;
-      user-select: none;
-    }
+    #search-suggestions .remove { cursor: pointer; color: red; font-weight: bold; user-select: none; }
 
     /* Dark Mode */
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
@@ -91,11 +66,11 @@
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#333; }
     :root[data-theme="dark"] #search-suggestions .remove { color:#f66; }
 
-    /* WebKit Such-Icon invertieren im Dark-Mode */
     #search-input::-webkit-search-decoration { -webkit-appearance: searchfield-decoration; }
     :root[data-theme="dark"] #search-input::-webkit-search-decoration { filter: invert(1) brightness(1.5); }
   </style>
 
+  <!-- Falls du globale Styles/JS brauchst, lass autoloader drin -->
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t47/docs/autoloader.js" type="module" defer></script>
 </head>
 <body>
@@ -113,22 +88,26 @@
   <div id="results"></div>
 
   <script>
-    const input = document.getElementById("search-input");
-    const results = document.getElementById("results");
-    const suggestions = document.getElementById("search-suggestions");
-    const clearBtn = document.getElementById("clear-btn");
-    const searchBtn = document.getElementById("search-button");
+    // === Elemente ===
+    const input        = document.getElementById("search-input");
+    const results      = document.getElementById("results");
+    const suggestions  = document.getElementById("search-suggestions");
+    const clearBtn     = document.getElementById("clear-btn");
+    const searchBtn    = document.getElementById("search-button");
 
-    // --- URL-Query übernehmen (von Mainpage) ---
-    const urlParams = new URLSearchParams(location.search);
-    const initialQ = urlParams.get("q");
-    if (initialQ) {
-      input.value = initialQ;
-      updateClearBtn();
-      runSearch(initialQ);
-      saveHistory(initialQ);
-    }
+    // === URL-Query übernehmen (von Mainpage) ===
+    (function initFromURL(){
+      const urlParams = new URLSearchParams(location.search);
+      const q = urlParams.get("q");
+      if (q) {
+        input.value = q;
+        updateClearBtn();
+        runSearch(q);
+        saveHistory(q); // auch speichern, wenn man von extern kommt
+      }
+    })();
 
+    // === Suchen per Button ===
     searchBtn.addEventListener("click", () => {
       const term = input.value.trim();
       if (term) {
@@ -138,6 +117,7 @@
       }
     });
 
+    // === Suchen per Enter (keypress ist deprecated) ===
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
@@ -145,17 +125,17 @@
       }
     });
 
-    // --- Clear-Button im Input ---
+    // === Clear-Button im Input ===
     function updateClearBtn() {
       clearBtn.style.display = input.value ? "block" : "none";
     }
     input.addEventListener("input", () => {
       updateClearBtn();
-      renderSuggestions(true);
+      renderSuggestions(true); // beim Tippen Vorschläge aktualisieren
     });
     clearBtn.addEventListener("click", () => {
       const last = input.value.trim();
-      if (last) saveHistory(last);
+      if (last) saveHistory(last);   // vorher speichern
       input.value = "";
       results.innerHTML = "";
       updateClearBtn();
@@ -163,7 +143,7 @@
       renderSuggestions(true);
     });
 
-    // --- Daten laden und durchsuchen ---
+    // === Daten laden & durchsuchen ===
     async function runSearch(term) {
       results.innerHTML = "";
 
@@ -179,12 +159,10 @@
       let data = [];
       try {
         const fetches = jsonFiles.map(file =>
-          fetch(file)
-            .then(res => res.json())
-            .catch(e => { console.warn(`Fehler beim Laden von ${file}:`, e); return []; })
+          fetch(file).then(res => res.json()).catch(() => [])
         );
         const arrays = await Promise.all(fetches);
-        arrays.forEach(arr => { if (Array.isArray(arr)) data.push(...arr) });
+        arrays.forEach(arr => { if (Array.isArray(arr)) data.push(...arr); });
       } catch (e) {
         console.error("Fehler beim Laden der JSON-Dateien:", e);
       }
@@ -213,7 +191,6 @@
 
           const url = e.url || "#";
           const isExternal = url.startsWith("http") && !url.includes(location.hostname);
-
           const anchorOpen = isExternal
             ? `<a href="${url}" onclick="if(window.leaveSite){leaveSite(event, this)}"${e.safe ? ' safe' : ''}>`
             : `<a href="${url}">`;
@@ -221,7 +198,9 @@
           div.innerHTML = `<strong>${anchorOpen}${e.title}</a></strong><br><small>${e.desc || ""}</small><hr>`;
           results.appendChild(div);
 
-          if (typeof e.special_feature === "function") { try { e.special_feature(); } catch{} }
+          if (typeof e.special_feature === "function") {
+            try { e.special_feature(); } catch { /* ignore */ }
+          }
         });
       } else {
         results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
@@ -230,39 +209,32 @@
       results.innerHTML += "<br><br><br>";
     }
 
-    // --- History / Suggestions ---
-    const SEARCH_KEY = "searchHistory";
-    const maxStored = 15;
+    // === History & Suggestions ===
+    const SEARCH_KEY  = "searchHistory";
+    const maxStored   = 15;
     const defaultShow = 4;
 
-    function getHistory() {
-      return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]");
-    }
-    function setHistory(arr) {
-      localStorage.setItem(SEARCH_KEY, JSON.stringify(arr));
-    }
-    function saveHistory(term) {
+    function getHistory(){ return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); }
+    function setHistory(a){ localStorage.setItem(SEARCH_KEY, JSON.stringify(a)); }
+    function saveHistory(term){
       if (!term) return;
-      let arr = getHistory();
-      arr = arr.filter(t => t !== term);
+      let arr = getHistory().filter(t => t !== term);
       arr.push(term);
       if (arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
       setHistory(arr);
     }
-    function deleteHistory(term) {
-      let arr = getHistory().filter(t => t !== term);
-      setHistory(arr);
+    function deleteHistory(term){
+      setHistory(getHistory().filter(t => t !== term));
       renderSuggestions(true);
     }
 
     let hasFocus = false;
 
-    function renderSuggestions(focus = false) {
+    function renderSuggestions(focus=false){
       suggestions.innerHTML = "";
-      if (!focus) return;
-      if (!hasFocus) return;
+      if (!focus || !hasFocus) return;
 
-      let arr = getHistory();
+      const arr = getHistory();
       if (!arr.length) return;
 
       const show = arr.slice(-defaultShow).reverse();
@@ -273,7 +245,8 @@
         const text = document.createElement("span");
         text.textContent = term;
         text.style.flex = "1";
-        text.addEventListener("click", () => {
+        text.addEventListener("mousedown", e => { // mousedown: kein Blur
+          e.preventDefault();
           input.value = term;
           updateClearBtn();
           searchBtn.click();
@@ -283,8 +256,7 @@
         remove.textContent = "×";
         remove.className = "remove";
         remove.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           deleteHistory(term);
         });
 
@@ -294,11 +266,8 @@
       });
     }
 
-    input.addEventListener("focus", () => { hasFocus = true; renderSuggestions(true); });
-    input.addEventListener("blur", () => {
-      hasFocus = false;
-      setTimeout(() => { suggestions.innerHTML = ""; }, 100);
-    });
+    input.addEventListener("focus", () => { hasFocus = true;  renderSuggestions(true); });
+    input.addEventListener("blur",  () => { hasFocus = false; setTimeout(() => { suggestions.innerHTML = ""; }, 100); });
     input.addEventListener("input", () => { renderSuggestions(true); });
   </script>
 </body>
