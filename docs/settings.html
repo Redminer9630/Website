@@ -42,6 +42,7 @@
         });
       });
     });
+    window.addEventListener("pageshow", (event) => if (event.persisted) {location.reload();}});
   </script>
 </head>
 <body>
