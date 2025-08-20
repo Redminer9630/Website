@@ -244,5 +244,150 @@
     input.addEventListener("blur",  () => { hasFocus = false; setTimeout(() => { suggestions.innerHTML = ""; }, 100); });
     input.addEventListener("input", () => { renderSuggestions(true); });
   </script>
+<script>
+// === AI Suche mit Backend ===
+const AI_BACKEND = "https://aisearch9630.onrender.com/ask"; 
+let currentChat = [];
+let savedChats = JSON.parse(localStorage.getItem("aiChats") || "[]");
+
+// --- Stelle API-Anfrage ---
+async function runAISearch(query) {
+  try {
+    const res = await fetch(AI_BACKEND, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query })
+    });
+    const text = await res.text();
+
+    if (text.trim() === "-none-") return; // nichts anzeigen
+
+    renderAISnippet(query, text.trim());
+  } catch (e) {
+    console.error("AI Fehler:", e);
+  }
+}
+
+// --- Kleines Vorschau-Div ---
+function renderAISnippet(query, answer) {
+  const box = document.createElement("div");
+  box.style.border = "1px solid #ccc";
+  box.style.padding = "0.5rem";
+  box.style.marginTop = "1rem";
+  box.style.borderRadius = "5px";
+  box.style.background = "#fafafa";
+  box.innerHTML = `
+    <strong>AI Antwort (Prototyp)</strong><br>
+    ${answer}<br>
+    <button id="open-chat">Groß anzeigen</button>
+  `;
+  results.appendChild(box);
+
+  document.getElementById("open-chat").onclick = () => openFullChat(query, answer);
+}
+
+// --- Vollansicht (Chat) ---
+function openFullChat(firstQ, firstA) {
+  currentChat = [
+    { role: "user", content: firstQ },
+    { role: "assistant", content: firstA }
+  ];
+  renderChatUI();
+}
+
+// --- UI für kompletten Chat ---
+function renderChatUI() {
+  const modal = document.createElement("div");
+  modal.style.position = "fixed";
+  modal.style.top = "0"; modal.style.left = "0";
+  modal.style.width = "100%"; modal.style.height = "100%";
+  modal.style.background = "rgba(0,0,0,0.6)";
+  modal.style.display = "flex"; modal.style.justifyContent = "center"; modal.style.alignItems = "center";
+  modal.innerHTML = `
+    <div style="background:white;max-width:600px;width:100%;padding:1rem;border-radius:6px;display:flex;flex-direction:column;gap:.5rem;">
+      <div style="overflow-y:auto;max-height:300px;border:1px solid #ddd;padding:.5rem;" id="chat-messages"></div>
+      <textarea id="chat-input" placeholder="Nachricht eingeben..." style="width:100%;"></textarea>
+      <div style="display:flex;gap:.5rem;">
+        <button id="send-msg">Senden</button>
+        <button id="save-chat">Speichern</button>
+        <button id="close-chat">Schließen</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const msgBox = modal.querySelector("#chat-messages");
+  function renderMessages() {
+    msgBox.innerHTML = currentChat.map(m => 
+      `<div><b>${m.role === "user" ? "Du" : "AI"}:</b> ${m.content}</div>`
+    ).join("");
+  }
+  renderMessages();
+
+  modal.querySelector("#send-msg").onclick = async () => {
+    const input = modal.querySelector("#chat-input");
+    const userMsg = input.value.trim();
+    if (!userMsg) return;
+    currentChat.push({ role: "user", content: userMsg });
+    renderMessages();
+    input.value = "";
+
+    const res = await fetch(AI_BACKEND, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: userMsg })
+    });
+    const reply = await res.text();
+    currentChat.push({ role: "assistant", content: reply.trim() });
+    renderMessages();
+  };
+
+  modal.querySelector("#save-chat").onclick = () => {
+    savedChats.push(currentChat);
+    localStorage.setItem("aiChats", JSON.stringify(savedChats));
+    alert("Chat gespeichert!");
+    renderChatList();
+  };
+
+  modal.querySelector("#close-chat").onclick = () => modal.remove();
+}
+
+// --- Liste gespeicherter Chats ---
+function renderChatList() {
+  let container = document.getElementById("chat-list");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "chat-list";
+    container.style.display = "flex";
+    container.style.overflowX = "auto";
+    container.style.gap = "0.5rem";
+    container.style.marginBottom = "1rem";
+    document.body.insertBefore(container, document.body.firstChild);
+    alert("⚠Hinweis: Gib keine persönlichen Infos in den Chat ein!");
+  }
+  container.innerHTML = "";
+  savedChats.forEach((chat, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = `Chat ${i+1}`;
+    btn.onclick = () => { currentChat = chat; renderChatUI(); };
+    const del = document.createElement("span");
+    del.textContent = "×";
+    del.style.cursor = "pointer";
+    del.style.color = "red";
+    del.onclick = () => {
+      savedChats.splice(i,1);
+      localStorage.setItem("aiChats", JSON.stringify(savedChats));
+      renderChatList();
+    };
+    const wrap = document.createElement("div");
+    wrap.style.display="flex";wrap.style.alignItems="center";wrap.style.gap="0.25rem";
+    wrap.appendChild(btn);
+    wrap.appendChild(del);
+    container.appendChild(wrap);
+  });
+}
+renderChatList();
+
+</script>
 </body>
 </html>
