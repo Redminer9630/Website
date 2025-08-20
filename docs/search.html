@@ -83,168 +83,170 @@
 
   <div id="results"></div>
 
-  <script>
-    const input        = document.getElementById("search-input");
-    const results      = document.getElementById("results");
-    const suggestions  = document.getElementById("search-suggestions");
-    const searchBtn    = document.getElementById("search-button");
+<script>
+  const input        = document.getElementById("search-input");
+  const results      = document.getElementById("results");
+  const suggestions  = document.getElementById("search-suggestions");
+  const searchBtn    = document.getElementById("search-button");
 
-    // === URL-Query übernehmen (von Mainpage) ===
-    (function initFromURL(){
-      const urlParams = new URLSearchParams(location.search);
-      const q = urlParams.get("q");
-      if (q) {
-        input.value = q;
-        runSearch(q);
-        saveHistory(q);
-      }
-    })();
+  // === URL-Query übernehmen (von Mainpage) ===
+  (function initFromURL(){
+    const urlParams = new URLSearchParams(location.search);
+    const q = urlParams.get("q");
+    if (q) {
+      input.value = q;
+      runSearch(q);
+      saveHistory(q);
+    }
+  })();
 
-    searchBtn.addEventListener("click", () => {
-      const term = input.value.trim();
-      if (term) {
-        history.replaceState(null, "", "?q=" + encodeURIComponent(term));
-        runSearch(term);
-        saveHistory(term);
-      }
-    });
+  searchBtn.addEventListener("click", () => {
+    const term = input.value.trim();
+    if (term) {
+      history.replaceState(null, "", "?q=" + encodeURIComponent(term));
+      runSearch(term);
+      saveHistory(term);
+    }
+  });
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        searchBtn.click();
-      }
-    });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      searchBtn.click();
+    }
+  });
 
-    input.addEventListener("input", () => {
-      renderSuggestions(true);
-    });
+  input.addEventListener("input", () => {
+    renderSuggestions(true);
+  });
 
-    // === Daten laden & durchsuchen ===
-    async function runSearch(term) {
-      results.innerHTML = "";
+  // === Daten laden & durchsuchen ===
+  async function runSearch(term) {
+    results.innerHTML = "";
 
-      const jsonFiles = [
-        "search/index.json",
-        "search/discord.json",
-        "search/news.json",
-        "search/projects.json",
-        "search/linktree.json",
-        "search/manual.json"
-      ];
+    const jsonFiles = [
+      "search/index.json",
+      "search/discord.json",
+      "search/news.json",
+      "search/projects.json",
+      "search/linktree.json",
+      "search/manual.json"
+    ];
 
-      let data = [];
-      try {
-        const fetches = jsonFiles.map(file =>
+    let data = [];
+    try {
+      const arrays = await Promise.all(
+        jsonFiles.map(file =>
           fetch(file).then(res => res.json()).catch(() => [])
-        );
-        const arrays = await Promise.all(fetches);
-        arrays.forEach(arr => { if (Array.isArray(arr)) data.push(...arr); });
-      } catch (e) {
-        console.error("Fehler beim Laden der JSON-Dateien:", e);
-      }
+        )
+      );
+      arrays.forEach(arr => { if (Array.isArray(arr)) data.push(...arr); });
+    } catch (e) {
+      console.error("Fehler beim Laden der JSON-Dateien:", e);
+    }
 
-      const normalized = txt => (txt || "")
+    const normalize = txt =>
+      (txt || "")
         .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9äöüß ]/gi, "");
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      const words = normalized(term).split(" ").filter(Boolean);
-      const found = data.filter(e => {
-        const combined = [e.title, e.desc, ...(e.alias || [])].join(" ");
-        const flat = normalized(combined);
-        return words.some(w => flat.includes(w));
+    const query = normalize(term);
+    const found = data.filter(entry => {
+      const text = [
+        entry.title || "",
+        entry.desc || "",
+        ...(entry.alias || [])
+      ].join(" ");
+      return normalize(text).includes(query);
+    });
+
+    if (found.length > 0) {
+      const h2 = document.createElement("h2");
+      h2.textContent = "Ergebnisse";
+      results.appendChild(h2);
+
+      found.forEach((e, i) => {
+        const div = document.createElement("div");
+        div.classList.add("result-item");
+        div.style.animationDelay = `${i * 0.05}s`;
+
+        const url = e.url || "#";
+        const isExternal = url.startsWith("http") && !url.includes(location.hostname);
+        const anchorOpen = isExternal
+          ? `<a href="${url}" onclick="if(window.leaveSite){leaveSite(event, this)}"${e.safe ? ' safe' : ''}>`
+          : `<a href="${url}">`;
+
+        div.innerHTML = `
+          <strong>${anchorOpen}${e.title}</a></strong><br>
+          <small>${e.desc || ""}</small>
+          <hr>
+        `;
+        results.appendChild(div);
+      });
+    } else {
+      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
+    }
+  }
+
+  // === History & Suggestions ===
+  const SEARCH_KEY  = "searchHistory";
+  const maxStored   = 15;
+  const defaultShow = 4;
+
+  function getHistory(){ return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); }
+  function setHistory(a){ localStorage.setItem(SEARCH_KEY, JSON.stringify(a)); }
+  function saveHistory(term){
+    if (!term) return;
+    let arr = getHistory().filter(t => t !== term);
+    arr.push(term);
+    if (arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
+    setHistory(arr);
+  }
+  function deleteHistory(term){
+    setHistory(getHistory().filter(t => t !== term));
+    renderSuggestions(true);
+  }
+
+  let hasFocus = false;
+
+  function renderSuggestions(focus=false){
+    suggestions.innerHTML = "";
+    if (!focus || !hasFocus) return;
+
+    const arr = getHistory();
+    if (!arr.length) return;
+
+    const show = arr.slice(-defaultShow).reverse();
+    show.forEach(term => {
+      const row = document.createElement("div");
+      row.className = "item";
+
+      const text = document.createElement("span");
+      text.textContent = term;
+      text.style.flex = "1";
+      text.addEventListener("mousedown", e => {
+        e.preventDefault();
+        input.value = term;
+        searchBtn.click();
       });
 
-      if (found.length > 0) {
-        const h2 = document.createElement("h2");
-        h2.textContent = "Ergebnisse";
-        results.appendChild(h2);
-
-        found.forEach((e, i) => {
-          const div = document.createElement("div");
-          div.classList.add("result-item");
-          div.style.animationDelay = `${i * 0.05}s`;
-
-          const url = e.url || "#";
-          const isExternal = url.startsWith("http") && !url.includes(location.hostname);
-          const anchorOpen = isExternal
-            ? `<a href="${url}" onclick="if(window.leaveSite){leaveSite(event, this)}"${e.safe ? ' safe' : ''}>`
-            : `<a href="${url}">`;
-
-          div.innerHTML = `<strong>${anchorOpen}${e.title}</a></strong><br><small>${e.desc || ""}</small><hr>`;
-          results.appendChild(div);
-
-          if (typeof e.special_feature === "function") {
-            try { e.special_feature(); } catch { /* ignore */ }
-          }
-        });
-      } else {
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-      }
-
-      results.innerHTML += "<br><br><br>";
-    }
-
-    // === History & Suggestions ===
-    const SEARCH_KEY  = "searchHistory";
-    const maxStored   = 15;
-    const defaultShow = 4;
-
-    function getHistory(){ return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); }
-    function setHistory(a){ localStorage.setItem(SEARCH_KEY, JSON.stringify(a)); }
-    function saveHistory(term){
-      if (!term) return;
-      let arr = getHistory().filter(t => t !== term);
-      arr.push(term);
-      if (arr.length > maxStored) arr = arr.slice(arr.length - maxStored);
-      setHistory(arr);
-    }
-    function deleteHistory(term){
-      setHistory(getHistory().filter(t => t !== term));
-      renderSuggestions(true);
-    }
-
-    let hasFocus = false;
-
-    function renderSuggestions(focus=false){
-      suggestions.innerHTML = "";
-      if (!focus || !hasFocus) return;
-
-      const arr = getHistory();
-      if (!arr.length) return;
-
-      const show = arr.slice(-defaultShow).reverse();
-      show.forEach(term => {
-        const row = document.createElement("div");
-        row.className = "item";
-
-        const text = document.createElement("span");
-        text.textContent = term;
-        text.style.flex = "1";
-        text.addEventListener("mousedown", e => { // mousedown: kein Blur
-          e.preventDefault();
-          input.value = term;
-          searchBtn.click();
-        });
-
-        const remove = document.createElement("span");
-        remove.textContent = "×";
-        remove.className = "remove";
-        remove.addEventListener("mousedown", (e) => {
-          e.preventDefault(); e.stopPropagation();
-          deleteHistory(term);
-        });
-
-        row.appendChild(text);
-        row.appendChild(remove);
-        suggestions.appendChild(row);
+      const remove = document.createElement("span");
+      remove.textContent = "×";
+      remove.className = "remove";
+      remove.addEventListener("mousedown", (e) => {
+        e.preventDefault(); e.stopPropagation();
+        deleteHistory(term);
       });
-    }
 
-    input.addEventListener("focus", () => { hasFocus = true;  renderSuggestions(true); });
-    input.addEventListener("blur",  () => { hasFocus = false; setTimeout(() => { suggestions.innerHTML = ""; }, 100); });
-    input.addEventListener("input", () => { renderSuggestions(true); });
-  </script>
+      row.appendChild(text);
+      row.appendChild(remove);
+      suggestions.appendChild(row);
+    });
+  }
+
+  input.addEventListener("focus", () => { hasFocus = true;  renderSuggestions(true); });
+  input.addEventListener("blur",  () => { hasFocus = false; setTimeout(() => { suggestions.innerHTML = ""; }, 100); });
+  input.addEventListener("input", () => { renderSuggestions(true); });
+</script>
 </body>
 </html>
