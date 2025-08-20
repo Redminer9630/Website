@@ -11,7 +11,7 @@
     #search-wrapper { flex: 1; min-width: 220px; position: relative; }
     #search-input {
       width: 100%;
-      padding: 0.5rem 2rem 0.5rem 0.5rem; /* Platz rechts fürs X */
+      padding: 0.5rem 2rem 0.5rem 0.5rem;
       font-size: 1rem;
       font-family: 'Mojangles', system-ui, sans-serif;
       box-sizing: border-box;
@@ -26,20 +26,16 @@
       cursor: pointer; display: none; user-select: none;
     }
     #clear-btn:hover { color: red; }
-
     button {
       background: #eaeaea; color: black;
       padding: 10px 20px; border: none; cursor: pointer;
       font-family: 'Mojangles', system-ui, sans-serif; font-size: 1rem;
     }
     button:hover { background: #cacaca; }
-
     #results { margin-top: 1rem; }
     .no-results { color: #888; font-style: italic; margin-top: 1rem; }
-
     .result-item { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s ease forwards; }
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
     #search-suggestions {
       position: absolute; top: calc(100% + 4px); left: 0; right: 0;
       border: 1px solid #ccc; background: #fff; z-index: 10;
@@ -50,7 +46,6 @@
     }
     #search-suggestions .item:hover { background: #eee; }
     #search-suggestions .remove { cursor: pointer; color: red; font-weight: bold; user-select: none; }
-
     :root[data-theme="dark"] body { background: #1a1a1a; color: #eee; }
     :root[data-theme="dark"] #search-input { background: #222; color: #eee; border: 1px solid #444; }
     :root[data-theme="dark"] button { background: #1a1a1a; color: white; }
@@ -60,7 +55,6 @@
     :root[data-theme="dark"] #search-suggestions { background:#222; border:1px solid #444; color:#eee; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#333; }
     :root[data-theme="dark"] #search-suggestions .remove { color:#f66; }
-
     #search-input::-webkit-search-decoration { -webkit-appearance: searchfield-decoration; }
     :root[data-theme="dark"] #search-input::-webkit-search-decoration { filter: invert(1) brightness(1.5); }
   </style>
@@ -241,6 +235,32 @@
     input.addEventListener("focus", () => { hasFocus = true;  renderSuggestions(true); });
     input.addEventListener("blur",  () => { hasFocus = false; setTimeout(() => { suggestions.innerHTML = ""; }, 100); });
     input.addEventListener("input", () => { renderSuggestions(true); });
+
+// intiligentes suchen
+
+import { functionsData } from ".search/functions.js";
+
+const foundFunctions = functionsData.filter(f =>
+  words.some(w =>
+    (f.title + f.desc + (f.alias || []).join(" ")).toLowerCase().includes(w)
+  )
+);
+
+if(foundFunctions.length) {
+  const h2f = document.createElement("h2");
+  h2f.textContent = "Funktionen";
+  results.appendChild(h2f);
+
+  foundFunctions.forEach((f, i) => {
+    const div = document.createElement("div");
+    div.classList.add("result-item");
+    div.style.animationDelay = `${i * 0.05}s`;
+    div.innerHTML = `<strong>${f.title}</strong><br><small>${f.desc}</small><hr>`;
+    results.appendChild(div);
+
+    f.run();
+  });
+}
   </script>
 </body>
 </html>
