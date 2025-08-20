@@ -14,7 +14,7 @@ window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[t
 window.debug = false;
 window.CommonVersion = { version: "v1.4.1", key: "1.4.1", date: "19.8.25", time: "19:35" };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t53/docs/js_components/";["back_button.js","mctooltip.js","theme.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t53/docs/js_components/";["back_button.js","mctooltip.js","theme.js", "framework.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t53/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
 (function(){const canonical=document.querySelector('link[rel="canonical"]')||document.createElement('link');canonical.rel="canonical";canonical.href=location.origin+location.pathname;if(!canonical.parentNode)document.head.appendChild(canonical);})();
