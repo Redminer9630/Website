@@ -12,8 +12,6 @@
 
     :root[data-theme="dark"] body { background-color:#1a1a1a; color:#fff; }
     :root[data-theme="dark"] h1 { color:#fff; }
-    :root[data-theme="light"] body { background-color:#eaeaea; color:#000; }
-    :root[data-theme="light"] h1 { color:#000; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t53/docs/autoloader.js"></script>
 <script type="module">
@@ -25,20 +23,28 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    let theme = localStorage.getItem("theme");
-    if (!theme) {
-      theme = "sys"; 
-      localStorage.setItem("theme", theme);
-    }
+    let theme = localStorage.getItem("theme") || "sys"; 
+    let font = localStorage.getItem("font") || "mojangles";
 
     setRadioValue("theme", theme);
+    setRadioValue("font", font);
+
     window.applyTheme?.(theme);
+    window.applyFont?.(font);
 
     document.querySelectorAll('input[name="theme"]').forEach(radio => {
       radio.addEventListener("change", e => {
         const theme = e.target.value;
         localStorage.setItem("theme", theme);
         window.applyTheme?.(theme);
+      });
+    });
+
+    document.querySelectorAll('input[name="font"]').forEach(radio => {
+      radio.addEventListener("change", e => {
+        const font = e.target.value;
+        localStorage.setItem("font", font);
+        window.applyFont?.(font);
       });
     });
   });
@@ -62,6 +68,18 @@
         <label><input type="radio" name="theme" value="sys"> System</label>
       </div>
     </div>
+
+    <div class="settings-item">
+      <label for="font">Schriftart</label>
+      <div class="radio-group" id="font-options">
+        <label><input type="radio" name="font" id="font-mojangles" value="mojangles"> Mojangles</label>
+        <label><input type="radio" name="font" id="font-arial" value="arial"> Arial</label>
+        <label><input type="radio" name="font" id="font-verdana" value="verdana"> Verdana</label>
+        <label><input type="radio" name="font" id="font-georgia" value="georgia"> Georgia</label>
+        <label><input type="radio" name="font" id="font-courier" value="courier"> Courier New</label>
+        <label><input type="radio" name="font" id="font-system-ui" value="system-ui"> System UI</label>
+      </div>
+   </div>
   </main>
 </body>
 </html>
