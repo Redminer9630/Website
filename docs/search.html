@@ -7,51 +7,48 @@
   <style>
     body { font-family: 'Mojangles', system-ui, sans-serif; background:#eaeaea; margin:1rem; }
     h1 { margin-bottom:1rem; }
-    #search-section { display:flex; gap:.6rem; align-items:flex-start; margin-bottom:1rem; }
+    #search-section { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1rem; }
     #search-wrapper { flex:1; min-width:220px; position:relative; }
     #search-input {
       width:100%; padding:.5rem .6rem; font-size:1rem; box-sizing:border-box;
-      border:none; outline:none; background-clip:padding-box;
+      border:1px solid transparent; border-radius:6px; outline:none; background-clip:padding-box; height:44px;
     }
     #search-button {
       font-family: Mojangles, system-ui, sans-serif;
       font-size: 16px;
       background-color: #1a1a1a;
       color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
+      padding: 0 20px;
+      border-radius:6px;
       border: 1px solid #eaeaea;
       cursor: pointer;
+      height:44px;
+      display:inline-flex;
+      align-items:center;
     }
-    :root[data-theme="dark"] #search-button {
-        background: #eaeaea;
-        border: 1px solid #1a1a1a;
-        color: black;
-    #search-button:hover { opacity: .95; }
-
+    #search-button:hover { opacity:.95; }
     #search-suggestions {
       position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20;
       border:1px solid #ccc; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,.06);
-      display:none;
+      border-radius:4px; padding:4px 0; display:none;
     }
     #search-suggestions .item {
       display:flex; justify-content:space-between; gap:.5rem; padding:.45rem .6rem; cursor:pointer;
-      align-items: center; /* sorgt für vertikale Zentrierung */
+      align-items:center;
     }
     #search-suggestions .item:hover { background:#f3f3f3; }
     #search-suggestions .remove {
       color:#c33; cursor:pointer; margin-left:.5rem; user-select:none;
-      display:inline-flex; align-items:center; line-height:1; padding-top:0; /* zentriert × */
+      display:inline-flex; align-items:center; height:20px;
     }
-
     #results { margin-top:1rem; }
     .no-results { color:#666; font-style:italic; }
     .result-item { padding:.6rem 0; animation: fadeInUp .28s ease both; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
     hr { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; }
-
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
-    :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; }
+    :root[data-theme="dark"] #search-input { background:#111; color:#eee; border-color:#333; }
+    :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; box-shadow:none; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t55/docs/autoloader.js"></script>
@@ -102,8 +99,7 @@
     function deleteHistoryTerm(term){
       const arr = getHistory().filter(t=>t!==term);
       setHistory(arr);
-      if(arr.length > 0) renderSuggestions(true);
-      else renderSuggestions(false);
+      if(arr.length > 0) renderSuggestions(true); else renderSuggestions(false);
     }
 
     let suggestionsVisible = false;
@@ -115,7 +111,6 @@
       toShow.forEach(term => {
         const row = document.createElement("div");
         row.className = "item";
-
         const txt = document.createElement("span");
         txt.textContent = term;
         txt.style.flex = "1";
@@ -124,7 +119,6 @@
           input.value = term;
           doSearch();
         });
-
         const rem = document.createElement("span");
         rem.className = "remove";
         rem.textContent = "×";
@@ -154,13 +148,10 @@
       for(const file of JSON_FILES){
         try{
           const r = await fetch(file, {cache: "no-store"});
-          if(!r.ok) { console.warn("JSON nicht gefunden:", file, r.status); continue; }
+          if(!r.ok) continue;
           const j = await r.json();
           if(Array.isArray(j)) data.push(...j);
-          else console.warn("JSON hat kein Array:", file);
-        } catch(err){
-          console.warn("Fehler beim Laden", file, err);
-        }
+        } catch(err){}
       }
       return data;
     }
@@ -168,72 +159,50 @@
     async function runSearch(term){
       results.innerHTML = "";
       if(!term) return;
-
       let allData = [];
-      try {
-        allData = await loadAllData();
-      } catch(e) {
-        console.error("Fehler beim Laden aller Daten:", e);
-      }
-
+      try { allData = await loadAllData(); } catch(e) {}
       if(allData.length === 0){
         results.innerHTML = `<div class="no-results">Keine Index-Daten geladen. Prüfe die JSON-Dateien im /search-Ordner.</div>`;
         return;
       }
-
       const q = normalize(term);
       const words = q.split(" ").filter(Boolean);
-
       const found = allData.filter(entry => {
         const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
         const flat = normalize(text);
         return words.every(w => flat.includes(w));
       });
-
       if(found.length === 0){
         results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${escapeHtml(term)}</strong></div>`;
         return;
       }
-
       const h2 = document.createElement("h2");
       h2.textContent = "Ergebnisse";
       results.appendChild(h2);
-
       found.forEach((e,i) => {
         const item = document.createElement("div");
         item.className = "result-item";
-
         const title = document.createElement("div");
         const a = document.createElement("a");
         a.textContent = e.title || "Ohne Titel";
         a.href = e.url || "#";
-        if(a.href.startsWith("http") && !a.href.includes(location.hostname)){
-          a.target = "_blank"; a.rel = "noopener";
-        }
+        if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
         title.appendChild(a);
         title.style.fontWeight = "700";
-
         const desc = document.createElement("div");
         desc.innerHTML = `<small>${e.desc || ""}</small>`;
-
         item.appendChild(title);
         item.appendChild(desc);
         results.appendChild(item);
-
         if(i < found.length - 1) results.appendChild(document.createElement("hr"));
       });
     }
 
     function doSearch(){
       const term = input.value.trim();
-      if(!term){
-        results.innerHTML = "";
-        if(location.search) history.replaceState(null, "", location.pathname);
-        return;
-      }
+      if(!term){ results.innerHTML = ""; if(location.search) history.replaceState(null, "", location.pathname); return; }
       const newQ = "?q=" + encodeURIComponent(term);
       if(location.search !== newQ) history.replaceState(null, "", newQ);
-
       runSearch(term);
       saveHistory(term);
       renderSuggestions(false);
@@ -248,18 +217,9 @@
       if(q) runSearch(q); else results.innerHTML = "";
     });
 
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
-    }
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
 
-    (function init(){
-      const q = new URLSearchParams(location.search).get("q") || "";
-      if(q){
-        input.value = q;
-        runSearch(q);
-      }
-      renderSuggestions(false);
-    })();
+    (function init(){ const q = new URLSearchParams(location.search).get("q") || ""; if(q){ input.value = q; runSearch(q); } renderSuggestions(false); })();
   </script>
 </body>
 </html>
