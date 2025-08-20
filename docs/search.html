@@ -13,20 +13,43 @@
       width:100%; padding:.5rem .6rem; font-size:1rem; box-sizing:border-box;
       border:none; outline:none; background-clip:padding-box;
     }
-    #search-button { padding:.5rem 1rem; cursor:pointer; }
+    #search-button {
+      font-family: Mojangles, system-ui, sans-serif;
+      font-size: 16px;
+      background-color: #1a1a1a;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid #eaeaea;
+      cursor: pointer;
+    }
+    :root[data-theme="dark"] #search-button {
+        background: #eaeaea;
+        border: 1px solid #1a1a1a;
+        color: black;
+    #search-button:hover { opacity: .95; }
+
     #search-suggestions {
       position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20;
       border:1px solid #ccc; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,.06);
       display:none;
     }
-    #search-suggestions .item { display:flex; justify-content:space-between; gap:.5rem; padding:.45rem .6rem; cursor:pointer; }
+    #search-suggestions .item {
+      display:flex; justify-content:space-between; gap:.5rem; padding:.45rem .6rem; cursor:pointer;
+      align-items: center; /* sorgt für vertikale Zentrierung */
+    }
     #search-suggestions .item:hover { background:#f3f3f3; }
-    #search-suggestions .remove { color:#c33; cursor:pointer; margin-left:.5rem; user-select:none; }
+    #search-suggestions .remove {
+      color:#c33; cursor:pointer; margin-left:.5rem; user-select:none;
+      display:inline-flex; align-items:center; line-height:1; padding-top:0; /* zentriert × */
+    }
+
     #results { margin-top:1rem; }
     .no-results { color:#666; font-style:italic; }
     .result-item { padding:.6rem 0; animation: fadeInUp .28s ease both; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
     hr { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; }
+
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
     :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
@@ -63,6 +86,7 @@
     const searchBtn = document.getElementById("search-button");
     const suggestions = document.getElementById("search-suggestions");
     const results = document.getElementById("results");
+    const searchWrapper = document.getElementById("search-wrapper");
 
     const normalize = txt => (txt||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
@@ -78,7 +102,8 @@
     function deleteHistoryTerm(term){
       const arr = getHistory().filter(t=>t!==term);
       setHistory(arr);
-      renderSuggestions(false);
+      if(arr.length > 0) renderSuggestions(true);
+      else renderSuggestions(false);
     }
 
     let suggestionsVisible = false;
@@ -90,6 +115,7 @@
       toShow.forEach(term => {
         const row = document.createElement("div");
         row.className = "item";
+
         const txt = document.createElement("span");
         txt.textContent = term;
         txt.style.flex = "1";
@@ -98,6 +124,7 @@
           input.value = term;
           doSearch();
         });
+
         const rem = document.createElement("span");
         rem.className = "remove";
         rem.textContent = "×";
@@ -114,8 +141,13 @@
 
     input.addEventListener("focus", ()=> renderSuggestions(true));
     input.addEventListener("blur", ()=> { setTimeout(()=>{ renderSuggestions(false); }, 120); });
-
     input.addEventListener("input", ()=> { if(suggestionsVisible) renderSuggestions(true); });
+
+    document.addEventListener("click", (ev) => {
+      if(!searchWrapper.contains(ev.target)) {
+        renderSuggestions(false);
+      }
+    });
 
     async function loadAllData(){
       const data = [];
@@ -134,7 +166,7 @@
     }
 
     async function runSearch(term){
-      results.innerHTML = ""; // immer neu leeren
+      results.innerHTML = "";
       if(!term) return;
 
       let allData = [];
@@ -155,7 +187,6 @@
       const found = allData.filter(entry => {
         const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
         const flat = normalize(text);
-        // require all words to appear (AND-search)
         return words.every(w => flat.includes(w));
       });
 
