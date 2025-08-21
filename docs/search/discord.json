@@ -1,13 +1,13 @@
 [
   {
     "title": "Discord",
-    "desc": "Unter Discord ist unter <a href='https://discord.gg/uRNX47tYrX'>discord.gg/uRNX47tYrX</a> erreichbar",
+    "desc": "Unser Discord ist unter <a href='https://discord.gg/uRNX47tYrX'>discord.gg/uRNX47tYrX</a> erreichbar",
     "url": "/discord",
     "alias": ["dc", "server"]
   },
   {
     "url": "/discord/pp",
-    "title": "Datenschutz",
+    "title": "Datenschutz erklärung",
     "desc": "Datenschutz erklärung für denn Discord Bot [Veraltet]"
   },
   {    
