@@ -4,6 +4,11 @@ on:
   push:
     paths:
       - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: update-docs-version-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   update-version:
@@ -11,13 +16,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Wait for other workflows to finish
-        uses: peter-evans/wait-for-check@v2
-        with:
-          check-name: ''
-          ref: ${{ github.ref }}
-          wait-for-conclusion: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
