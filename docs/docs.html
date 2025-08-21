@@ -11,11 +11,11 @@
         .sidebar {width: 30%;height: 100vh;background: #f4f4f4;border-right: 1px solid #ddd;padding: 20px;box-sizing: border-box;overflow: hidden;position: fixed;left: 0;top: 0;}
 		.sidebar ul { list-style: none; padding: 0; margin: 0; }
 		.sidebar li { margin: 10px 0; }
-		.sidebar a { color: #333; text-decoration: none; font-weight: bold; font-family: 'Mojangles'; }
+		.sidebar a { color: #333; text-decoration: none; font-weight: bold; font-family:inherit; }
 		.sidebar a:hover { color: #007BFF; }
-        .content { width: 70%; height: 100vh; overflow-y: auto; padding: 20px; box-sizing: border-box; font-family: 'Mojangles'; margin-left: 30%;}
+        .content { width: 70%; height: 100vh; overflow-y: auto; padding: 20px; box-sizing: border-box; font-family: inherit; margin-left: 30%;}
 		section { margin-bottom: 40px; }
-		[class^="element"] { font-weight: bold; cursor: pointer; padding: 5px 10px; user-select: none; display: flex; align-items: center; transition: background-color 0.2s; font-family: 'Mojangles'; }
+		[class^="element"] { font-weight: bold; cursor: pointer; padding: 5px 10px; user-select: none; display: flex; align-items: center; transition: background-color 0.2s; font-family: inherit; }
 		[class^="element"]::before { content: "➤"; display: inline-block; margin-right: 5px; transform: rotate(0deg); transition: transform 0.2s ease; }
 		[class^="element"].open::before { transform: rotate(90deg); }
 		.element1 { font-size: 1.5em; }
