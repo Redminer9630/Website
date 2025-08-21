@@ -4,5 +4,15 @@
     "desc": "Unter Discord ist unter <a href='https://discord.gg/uRNX47tYrX'>discord.gg/uRNX47tYrX</a> erreichbar",
     "url": "/discord",
     "alias": ["dc", "server"]
+  },
+  {
+    "url": "/discord/pp",
+    "title": "Datenschutz",
+    "desc": "Datenschutz erklärung für denn Discord Bot [Veraltet]"
+  },
+  {    
+    "url":" /discord/tos",
+    "title": "Nutzungsbedingungen",
+    "desc": "Nutzungsbedingungen für denn Discord Bot [Veraltet]"
   }
 ]
