@@ -4,6 +4,7 @@
   "changes": [
     "Suche wurde verbessert",
     "Keine offenen Bugs mehr",
+    "Der Timestamp wird ab jetzt unabhängig von der Version geupdated",
     "Das ist eine der allerletzten Letzten Versionen von v1.0, es werden keine Größeren Änderungen gemacht"
   ]
 }
