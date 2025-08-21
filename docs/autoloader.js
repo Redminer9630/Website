@@ -12,7 +12,7 @@ if (location.hostname.startsWith("www.")) location.replace(location.href.replace
 window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt);alert(txt);};
 
 window.debug = false;
-window.CommonVersion = { version: "v1.pre2", key: "1.pre2", date: "20.8.25", time: "16:30" };
+window.CommonVersion = { version: "v1.pre2", key: "1.pre2", date: "25.08.21", time: "17:03" };
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t59/docs/js_components/";["back_button.js","mctooltip.js","theme.js", "framework.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 
