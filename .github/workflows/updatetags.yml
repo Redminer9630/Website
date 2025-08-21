@@ -1,4 +1,4 @@
-name: Update Docs Version
+name: Update Tags
 
 on:
   push:
