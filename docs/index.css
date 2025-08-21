@@ -55,7 +55,7 @@ input:checked+.slider:before{transform:translateX(22px);}
   padding: 10px;
   z-index: 999;
 }
-
+main, section, button, input { font-family: inherit; }
 #hamburger-dropdown .nav-item {
   display: flex;
   align-items: center;
