@@ -1,0 +1,41 @@
+name: Update Docs Version
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Wait for other workflows to finish
+        uses: peter-evans/wait-for-check@v2
+        with:
+          check-name: ''
+          ref: ${{ github.ref }}
+          wait-for-conclusion: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Update date and time in autoloader.js
+        run: |
+          FILE=docs/autoloader.js
+          DATE=$(date +'%y.%m.%d')
+          TIME=$(date +'%H:%M')
+          sed -i "s/\(date: \"[^\"]*\"\)/date: \"$DATE\"/" $FILE
+          sed -i "s/\(time: \"[^\"]*\"\)/time: \"$TIME\"/" $FILE
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/autoloader.js
+          git diff --staged --quiet || git commit -m "Update docs autoloader date/time"
+          git push
