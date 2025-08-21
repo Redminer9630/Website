@@ -6,7 +6,7 @@
   style.textContent = `
     .global-back-btn {
       all: unset;
-      font-family: Mojangles;
+      font-family: inherit;
       font-size: 16px;
       background-color: #1a1a1a;
       color: white;
