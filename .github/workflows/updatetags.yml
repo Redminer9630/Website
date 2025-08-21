@@ -1,138 +1,49 @@
-name: Tag Updaten
+name: Update Docs Version
 
 on:
-  workflow_dispatch:
-    inputs:
-      new_tag:
-        description: 'Neuer Tag'
-        required: true
-        default: 'from-file'
+  push:
+    paths:
+      - 'docs/**'
+
+concurrency:
+  group: update-docs-version-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  replace-tags:
+  tag-update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Tag Updaten
+        run: |
+          echo "Hier kommt dein Tag Update Code hin"
+
+  update-autoloader:
+    needs: tag-update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-          
-      - name: Auf Workflows Warten
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '20'
+
+      - name: Update date and time in autoloader.js
         run: |
-          echo "Prüfe laufende Workflows im gesamten Repo..."
-          while true; do
-            running=$(gh run list \
-              --repo "${{ github.repository }}" \
-              --limit 100 \
-              --json status,number \
-              --jq '[.[] | select(.status=="in_progress" or .status=="queued") | select(.number != ${{ github.run_number }})] | length')
+          FILE=docs/autoloader.js
+          DATE=$(date '+%y.%-m.%-d')   # %-m und %-d = keine führenden Nullen
+          TIME=$(date '+%H:%M')
+          sed -i "s/\(date: \"[^\"]*\"\)/date: \"$DATE\"/" $FILE
+          sed -i "s/\(time: \"[^\"]*\"\)/time: \"$TIME\"/" $FILE
 
-            if [ "$running" -gt 0 ]; then
-              echo "$running andere Workflows laufen noch..."
-            fi
-            if [ "$running" -eq 0 ]; then
-              echo "Keine anderen laufenden Workflows gefunden."
-              break
-            fi
-            
-            sleep 30
-          done
-
-      - name: Alten Tag laden
+      - name: Commit and push changes
         run: |
-          if [[ -f old_tags.txt ]]; then
-            OLD_TAGS=$(cat old_tags.txt)
-            echo "OLD_TAGS=$OLD_TAGS" >> $GITHUB_ENV
-          else
-            echo "old_tags.txt fehlt!"
-            exit 1
-          fi
-
-      - name: Neuen Tag bestimmen
-        run: |
-          INPUT="${{ github.event.inputs.new_tag }}"
-          LAST=$(head -n1 old_tags.txt | tr -d '\r' | cut -d',' -f1)
-
-          if [ -z "$INPUT" ] || [ "$INPUT" = "from-file" ]; then
-            CAND="$LAST"
-          else
-            CAND="$INPUT"
-          fi
-
-          bump_t() {
-            if [[ "$1" =~ ^t([0-9]+)$ ]]; then
-              n=${BASH_REMATCH[1]}
-              echo "t$((n+1))"
-              return 0
-            fi
-            return 1
-          }
-
-          bump_semver() {
-            ver="$1"
-            if [[ "$ver" =~ ^v([0-9]+(\.[0-9]+)*)$ ]]; then
-              core=${ver#v}
-              IFS='.' read -r -a parts <<< "$core"
-              last_index=$((${#parts[@]}-1))
-              parts[$last_index]=$(( ${parts[$last_index]} + 1 ))
-              echo "v$(IFS=.; echo "${parts[*]}")"
-              return 0
-            fi
-            return 1
-          }
-
-          if new=$(bump_t "$CAND"); then
-            :
-          elif new=$(bump_semver "$CAND"); then
-            :
-          else
-            new="$CAND"
-          fi
-
-          echo "NEW_TAG=$new" >> $GITHUB_ENV
-
-      - name: Tags in Dateien ersetzen
-        run: |
-          IFS=',' read -ra TAGS <<< "$OLD_TAGS"
-          DIRS=("docs" "docs/js_components")
-          EXTENSIONS=("css" "html" "js")
-
-          for dir in "${DIRS[@]}"; do
-            for ext in "${EXTENSIONS[@]}"; do
-              find "$dir" -type f -name "*.$ext" | while read -r file; do
-                for old_tag in "${TAGS[@]}"; do
-                  sed -i "s/@${old_tag}/@${NEW_TAG}/g" "$file"
-                done
-              done
-            done
-          done
-
-      - name: .bak Dateien entfernen
-        run: |
-          find docs docs/js_components -type f -name "*.bak" -delete
-
-      - name: Commiten und Pushen
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          echo "$NEW_TAG" > old_tags.txt
-          git add docs old_tags.txt
-
-          if [[ -n $(git status -s) ]]; then
-            git commit -m "Update CDN tags to @$NEW_TAG"
-            git push
-          else
-            echo "Keine Änderungen zum Commit."
-          fi
-
-      - name: GH Release Erstellen
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.NEW_TAG }}
-          name: ${{ env.NEW_TAG }}
-          body: "Automatischer Release für den Tag **${{ env.NEW_TAG }}**"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/autoloader.js
+          git diff --staged --quiet || git commit -m "Update autoloader date/time"
+          git push
