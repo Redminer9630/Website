@@ -49,11 +49,16 @@
     });
   });
 
-  window.addEventListener("pageshow", (event) => {
-    if (event.persisted) {
-      location.reload();
-    }
-  });
+  window.addEventListener("pageshow", (event) => {if (event.persisted) {location.reload();}});
+
+document.addEventListener("DOMContentLoaded", () => {
+  let alerts = localStorage.getItem("alerts") || "website";
+  let adv = localStorage.getItem("alerts_advanced") === "true";
+  setRadioValue("alerts", alerts);
+  document.getElementById("alerts-adv").checked = adv;
+  document.querySelectorAll('input[name="alerts"]').forEach(radio => {radio.addEventListener("change", e => {localStorage.setItem("alerts", e.target.value);});});
+  document.getElementById("alerts-adv").addEventListener("change", e => {localStorage.setItem("alerts_advanced", e.target.checked);});
+});
 </script>
 </head>
 <body>
@@ -80,6 +85,16 @@
         <label><input type="radio" name="font" id="font-system-ui" value="system-ui"> System UI</label>
       </div>
    </div>
+      
+   <div class="settings-item">
+     <label>Alerts</label>
+     <div class="radio-group" id="alert-options">
+       <label><input type="radio" name="alerts" value="website"> Website</label>
+       <label><input type="radio" name="alerts" value="system"> System</label>
+     </div>
+   </div>
+      
+   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails (für Support)</label></div>
   </main>
 </body>
 </html>
