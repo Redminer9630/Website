@@ -15,56 +15,44 @@
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t63/docs/autoloader.js"></script>
 <script type="module">
-  function setRadioValue(name, value) {
-    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-      r.checked = (r.value === value);
-    });
-  }
+function setRadioValue(name,value){
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r=>r.checked=r.value===value);
+}
 
-  document.addEventListener("DOMContentLoaded", () => {
-    let theme = localStorage.getItem("theme") || "sys";
-    let font = localStorage.getItem("font") || "mojangles";
-    let alerts = localStorage.getItem("alerts") || "website";
-    let adv = localStorage.getItem("alerts_advanced") === "true";
+document.addEventListener("DOMContentLoaded",()=>{
+  let theme=localStorage.getItem("theme")||"sys";
+  let font=localStorage.getItem("font")||"mojangles";
+  let alerts=localStorage.getItem("alerts")||"website";
+  let adv=localStorage.getItem("alerts_advanced")==="true";
 
-    setRadioValue("theme", theme);
-    setRadioValue("font", font);
-    setRadioValue("alerts", alerts);
-    document.querySelector(`#adv-${adv ? "on" : "off"}`).checked = true;
+  setRadioValue("theme",theme);
+  setRadioValue("font",font);
+  setRadioValue("alerts",alerts);
+  document.querySelector("#alerts-adv").checked=adv;
 
-    window.applyTheme?.(theme);
-    window.applyFont?.(font);
+  window.applyTheme?.(theme);
+  window.applyFont?.(font);
 
-    document.querySelectorAll('input[name="theme"]').forEach(r => {
-      r.addEventListener("change", e => {
-        localStorage.setItem("theme", e.target.value);
-        window.applyTheme?.(e.target.value);
-      });
-    });
+  document.querySelectorAll('input[name="theme"]').forEach(r=>r.addEventListener("change",e=>{
+    localStorage.setItem("theme",e.target.value);
+    window.applyTheme?.(e.target.value);
+  }));
 
-    document.querySelectorAll('input[name="font"]').forEach(r => {
-      r.addEventListener("change", e => {
-        localStorage.setItem("font", e.target.value);
-        window.applyFont?.(e.target.value);
-      });
-    });
+  document.querySelectorAll('input[name="font"]').forEach(r=>r.addEventListener("change",e=>{
+    localStorage.setItem("font",e.target.value);
+    window.applyFont?.(e.target.value);
+  }));
 
-    document.querySelectorAll('input[name="alerts"]').forEach(r => {
-      r.addEventListener("change", e => {
-        localStorage.setItem("alerts", e.target.value);
-      });
-    });
+  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
+    localStorage.setItem("alerts",e.target.value);
+  }));
 
-    document.querySelectorAll('input[name="alerts-advanced"]').forEach(r => {
-      r.addEventListener("change", e => {
-        localStorage.setItem("alerts_advanced", e.target.value === "on");
-      });
-    });
-  });
+  document.querySelectorAll('input[name="alerts-advanced"]').forEach(r=>r.addEventListener("change",e=>{
+    localStorage.setItem("alerts_advanced",e.target.checked);
+  }));
 
-  window.addEventListener("pageshow", e => {
-    if (e.persisted) location.reload();
-  });
+  if(alerts==="website") showToast("Website Alerts aktiv","info");
+});
 </script>
 </head>
 <body>
