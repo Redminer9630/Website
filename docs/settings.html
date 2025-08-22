@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { margin:0; background-color:#eaeaea; color:#000; padding:2rem; font-family:sans-serif; }
-    h1 { margin-bottom:2rem; color:#000; }
+    h1, h2 { margin-bottom:2rem; color:#000; }
     .settings-item { margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.5rem; }
     label { cursor:pointer; }
 
     :root[data-theme="dark"] body { background-color:#1a1a1a; color:#fff; }
-    :root[data-theme="dark"] h1 { color:#fff; }
+    :root[data-theme="dark"] h1, h2 { color:#fff; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t63/docs/autoloader.js"></script>
 <script type="module">
@@ -85,8 +85,7 @@ document.addEventListener("DOMContentLoaded",()=>{
        <label><input type="radio" name="alerts" value="system"> System</label>
      </div>
    </div>
-      
-   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails (für Support)</label></div>
+   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails</label></div>
   </main>
 </body>
 </html>
