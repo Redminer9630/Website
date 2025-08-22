@@ -1,9 +1,9 @@
 name: Update Docs Version
 
 on:
-  push:
-    paths:
-      - 'docs/**'
+  #push:
+  #  paths:
+  #    - 'docs/**'
   workflow_dispatch:
 
 concurrency:
