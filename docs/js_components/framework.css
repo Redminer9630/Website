@@ -1,9 +1,9 @@
 * { font-family: inherit; }
 @font-face {
 	font-family: "Mojangles";
-	src: url("/minecraft_font.woff2") format("woff2"),
-	     url("/minecraft_font.woff") format("woff"),
-	     url("/minecraft_font.ttf") format("truetype");
+	src: url("https://cdn.jsdelivr.net/gh/Redminer9630/Website@61/docs/minecraft_font.woff2") format("woff2"),
+	     url("https://cdn.jsdelivr.net/gh/Redminer9630/Website@61/docs/minecraft_font.woff") format("woff"),
+	     url("https://cdn.jsdelivr.net/gh/Redminer9630/Website@61/docs/minecraft_font.ttf") format("truetype");
 	font-display: swap;
 }
 a { color: inherit; text-decoration: underline; }
