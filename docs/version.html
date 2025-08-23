@@ -25,81 +25,110 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
 <body>
 <div id="content"></div>
 <script>
-const versionListHTML = `
-  <h2>Website-Versionen</h2>
-  <div id="currentVersionBox"></div>
-  <ul class="version-list" id="versionList">
-    <li><a href="?v=1.pre2">v1.pre2</a></li>
-    <li><a href="?v=1.4.0">v1.4.0</a></li>
-    <li><a href="?v=1.3.1">v1.3.1</a></li>
-    <li><a href="?v=1.3.0">v1.3.0</a></li>
-    <li><a href="?v=1.2.0">v1.2.0</a></li>
-    <li><a href="?v=1.1.0">v1.1.0</a></li>
-    <li><a href="?v=1.0.3">v1.0.3</a></li>
-    <li><a href="?v=1.0.2">v1.0.2</a></li>
-    <li><a href="?v=1.0.1">v1.0.1</a></li>
-    <li><a href="?v=1.0.0">v1.0.0</a></li>   
-  </ul>
-  <h3>Info</h3>
-  <p>
-    Versionen Zeitstrahl:<br>
-    <span>Indev v1.8.4</span><br>
-    <span'>Alpha v1.4.2</span><br>
-    <span>Beta v1.6.7</span><br>
-    <span>Pre Release v1.0.3</span><br>
-    <span>Release v1.pre2</span><br>
-    <span style='color:yellow;'>Full Release</span>
-  </p>
-`;
+(function(){
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
+  function getParam(name){ return new URL(window.location.href).searchParams.get(name); }
+  function createContent(){ let el = document.getElementById("content"); if(!el){ el = document.createElement("div"); el.id = "content"; document.body.appendChild(el); } return el; }
 
-function getParameterByName(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
-}
+  const versionListHTML = `
+    <h2>Website-Versionen</h2>
+    <div id="currentVersionBox"></div>
+    <ul class="version-list" id="versionList">
+      <li><a href="?v=1.pre2">v1.pre2</a></li>
+      <li><a href="?v=1.4.0">v1.4.0</a></li>
+      <li><a href="?v=1.3.1">v1.3.1</a></li>
+      <li><a href="?v=1.3.0">v1.3.0</a></li>
+      <li><a href="?v=1.2.0">v1.2.0</a></li>
+      <li><a href="?v=1.1.0">v1.1.0</a></li>
+      <li><a href="?v=1.0.3">v1.0.3</a></li>
+      <li><a href="?v=1.0.2">v1.0.2</a></li>
+      <li><a href="?v=1.0.1">v1.0.1</a></li>
+      <li><a href="?v=1.0.0">v1.0.0</a></li>
+    </ul>
+    <h3>Info</h3>
+    <p>
+      Versionen Zeitstrahl:<br>
+      <span>Indev v1.8.4</span><br>
+      <span>Alpha v1.4.2</span><br>
+      <span>Beta v1.6.7</span><br>
+      <span>Pre Release v1.0.3</span><br>
+      <span>Release v1.pre2</span><br>
+      <span style='color:yellow;'>Full Release</span>
+    </p>
+  `;
 
-function loadVersion(version) {
-  fetch(`https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/version/${version}.json`)
-    .then(res => { if(!res.ok) throw new Error("Version nicht gefunden."); return res.json(); })
-    .then(data => {
+  async function loadVersion(version, pushState = true){
+    const contentEl = createContent();
+    contentEl.innerHTML = `<p>Lädt Version ${escapeHtml(version)} …</p>`;
+    try {
+      const url = `https://cdn.jsdelivr.net/gh/Redminer9630/Website/docs/version/${encodeURIComponent(version)}.json`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error("Version nicht gefunden.");
+      const data = await res.json();
       let changesHTML = "";
-      if (Array.isArray(data.changes)) {
-        changesHTML = "<h3>Änderungen</h3><ul>";
-        data.changes.forEach(change => {
-          changesHTML += `<li>${change}</li>`;
-        });
-        changesHTML += "</ul>";
+      if(Array.isArray(data.changes) && data.changes.length){
+        changesHTML = "<h3>Änderungen</h3><ul>" + data.changes.map(c => `<li>${escapeHtml(c)}</li>`).join("") + "</ul>";
       }
+      const backHref = window.location.pathname;
+      contentEl.innerHTML = `
+        <h2>Version: ${escapeHtml(data.version)}</h2>
+        <p><strong>Veröffentlicht:</strong> ${escapeHtml(data.date)}</p>
+        ${changesHTML}
+        <a href="${backHref}" class="back-button">Alle Versionen</a>
+      `;
+      if(pushState) history.pushState({v:version}, "", "?v=" + encodeURIComponent(version));
+    } catch(err) {
+      const backHref = window.location.pathname;
+      contentEl.innerHTML = `<p style="color:red;">Fehler beim Laden: ${escapeHtml(err.message)}</p><a href="${backHref}" class="back-button">Alle Versionen</a>`;
+      if(pushState) history.pushState({}, "", backHref);
+    }
+  }
 
-      document.body.innerHTML = `
-        <div id="content">
-          <h2>Version: ${data.version}</h2>
-          <p><strong>Veröffentlicht:</strong> ${data.date}</p>
-          ${changesHTML}
-          <a href="version" class="back-button">Alle Versionen</a>
+  function renderVersionList(){
+    const contentEl = createContent();
+    contentEl.innerHTML = versionListHTML;
+    if(window.CommonVersion && document.getElementById("currentVersionBox")){
+      const box = document.getElementById("currentVersionBox");
+      box.innerHTML = `
+        <div style="padding:10px;background:#e0ffe0;border:1px solid #0a0;border-radius:5px;margin-bottom:15px;">
+          <strong>Aktuelle Version:</strong> ${escapeHtml(window.CommonVersion.version)}<br>
+          <em>Veröffentlicht:</em> ${escapeHtml(window.CommonVersion.date)}
         </div>
       `;
-    })
-    .catch(err => { 
-      document.body.innerHTML = `<p style="color:red;">Fehler beim Laden: ${err.message}</p>`; 
-    });
-}
-
-const version = getParameterByName("v");
-
-if(version){
-  loadVersion(version);
-} else {
-  document.getElementById("content").innerHTML = versionListHTML;
-  if(window.CommonVersion){
-    const box = document.getElementById("currentVersionBox");
-    box.innerHTML = `
-      <div style="padding:10px;background:#e0ffe0;border:1px solid #0a0;border-radius:5px;margin-bottom:15px;">
-        <strong>Aktuelle Version:</strong> ${window.CommonVersion.version}<br>
-        <em>Veröffentlicht:</em> ${window.CommonVersion.date}
-      </div>
-    `;
+    }
   }
-}
+
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a");
+    if(!a) return;
+    const href = a.getAttribute("href") || "";
+    if(href.startsWith("?v=")){
+      e.preventDefault();
+      const params = new URLSearchParams(href.replace(/^\?/, ""));
+      const v = params.get("v");
+      if(v) loadVersion(v);
+      return;
+    }
+    if(a.classList.contains("back-button")){
+      e.preventDefault();
+      history.pushState({}, "", window.location.pathname);
+      renderVersionList();
+      return;
+    }
+  });
+
+  window.addEventListener("popstate", () => {
+    const v = getParam("v");
+    if(v) loadVersion(v, false);
+    else renderVersionList();
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const v = getParam("v");
+    if(v) loadVersion(v, false);
+    else renderVersionList();
+  });
+})();
 </script>
 </body>
 </html>
