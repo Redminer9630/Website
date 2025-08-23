@@ -66,160 +66,180 @@
 
   <div id="results"></div>
 
-  <script>
-    const JSON_FILES = [
-      "search/index.json",
-      "search/discord.json",
-      "search/news.json",
-      "search/projects.json",
-      "search/linktree.json",
-      "search/manual.json"
-    ];
-    const SEARCH_KEY = "searchHistory";
-    const MAX_HISTORY = 15;
-    const SUGGEST_SHOW = 4;
+ <script>
+  const JSON_FILES = [
+    "search/index.json",
+    "search/discord.json",
+    "search/news.json",
+    "search/projects.json",
+    "search/linktree.json",
+    "search/manual.json"
+  ];
+  const SEARCH_KEY = "searchHistory";
+  const MAX_HISTORY = 15;
+  const SUGGEST_SHOW = 4;
 
-    const input = document.getElementById("search-input");
-    const searchBtn = document.getElementById("search-button");
-    const suggestions = document.getElementById("search-suggestions");
-    const results = document.getElementById("results");
-    const searchWrapper = document.getElementById("search-wrapper");
+  const input = document.getElementById("search-input");
+  const searchBtn = document.getElementById("search-button");
+  const suggestions = document.getElementById("search-suggestions");
+  const results = document.getElementById("results");
+  const searchWrapper = document.getElementById("search-wrapper");
 
-    const normalize = txt => (txt||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const normalize = txt => (txt||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-    function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
-    function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
-    function saveHistory(term){
-      if(!term) return;
-      let arr = getHistory().filter(t=>t!==term);
-      arr.unshift(term);
-      if(arr.length > MAX_HISTORY) arr = arr.slice(0, MAX_HISTORY);
-      setHistory(arr);
-    }
-    function deleteHistoryTerm(term){
-      const arr = getHistory().filter(t=>t!==term);
-      setHistory(arr);
-      if(arr.length > 0) renderSuggestions(true); else renderSuggestions(false);
-    }
+  function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
+  function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
+  function saveHistory(term){
+    if(!term) return;
+    let arr = getHistory().filter(t=>t!==term);
+    arr.unshift(term);
+    if(arr.length > MAX_HISTORY) arr = arr.slice(0, MAX_HISTORY);
+    setHistory(arr);
+  }
+  function deleteHistoryTerm(term){
+    const arr = getHistory().filter(t=>t!==term);
+    setHistory(arr);
+    if(arr.length > 0) renderSuggestions(true); else renderSuggestions(false);
+  }
 
-    let suggestionsVisible = false;
-    function renderSuggestions(show = true){
-      suggestions.innerHTML = "";
-      const arr = getHistory();
-      if(!show || arr.length === 0){ suggestions.style.display = "none"; suggestionsVisible = false; return; }
-      const toShow = arr.slice(0, SUGGEST_SHOW);
-      toShow.forEach(term => {
-        const row = document.createElement("div");
-        row.className = "item";
-        const txt = document.createElement("span");
-        txt.textContent = term;
-        txt.style.flex = "1";
-        txt.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          input.value = term;
-          doSearch();
-        });
-        const rem = document.createElement("span");
-        rem.className = "remove";
-        rem.textContent = "×";
-        rem.title = "Löschen";
-        rem.addEventListener("mousedown", (e) => { e.preventDefault(); e.stopPropagation(); deleteHistoryTerm(term); });
-
-        row.appendChild(txt);
-        row.appendChild(rem);
-        suggestions.appendChild(row);
+  let suggestionsVisible = false;
+  function renderSuggestions(show = true){
+    suggestions.innerHTML = "";
+    const arr = getHistory();
+    if(!show || arr.length === 0){ suggestions.style.display = "none"; suggestionsVisible = false; return; }
+    const toShow = arr.slice(0, SUGGEST_SHOW);
+    toShow.forEach(term => {
+      const row = document.createElement("div");
+      row.className = "item";
+      const txt = document.createElement("span");
+      txt.textContent = term;
+      txt.style.flex = "1";
+      txt.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        input.value = term;
+        doSearch();
       });
-      suggestions.style.display = "block";
-      suggestionsVisible = true;
-    }
+      const rem = document.createElement("span");
+      rem.className = "remove";
+      rem.textContent = "×";
+      rem.title = "Löschen";
+      rem.addEventListener("mousedown", (e) => { e.preventDefault(); e.stopPropagation(); deleteHistoryTerm(term); });
 
-    input.addEventListener("focus", ()=> renderSuggestions(true));
-    input.addEventListener("blur", ()=> { setTimeout(()=>{ renderSuggestions(false); }, 120); });
-    input.addEventListener("input", ()=> { if(suggestionsVisible) renderSuggestions(true); });
-
-    document.addEventListener("click", (ev) => {
-      if(!searchWrapper.contains(ev.target)) {
-        renderSuggestions(false);
-      }
+      row.appendChild(txt);
+      row.appendChild(rem);
+      suggestions.appendChild(row);
     });
+    suggestions.style.display = "block";
+    suggestionsVisible = true;
+  }
 
-    async function loadAllData(){
-      const data = [];
-      for(const file of JSON_FILES){
-        try{
-          const r = await fetch(file, {cache: "no-store"});
-          if(!r.ok) continue;
-          const j = await r.json();
-          if(Array.isArray(j)) data.push(...j);
-        } catch(err){}
-      }
-      return data;
-    }
+  input.addEventListener("focus", ()=> renderSuggestions(true));
+  input.addEventListener("blur", ()=> { setTimeout(()=>{ renderSuggestions(false); }, 120); });
+  input.addEventListener("input", ()=> { if(suggestionsVisible) renderSuggestions(true); });
 
-    async function runSearch(term){
-      results.innerHTML = "";
-      if(!term) return;
-      let allData = [];
-      try { allData = await loadAllData(); } catch(e) {}
-      if(allData.length === 0){
-        results.innerHTML = `<div class="no-results">Keine Index-Daten geladen. Prüfe die JSON-Dateien im /search-Ordner.</div>`;
-        return;
-      }
-      const q = normalize(term);
-      const words = q.split(" ").filter(Boolean);
-      const found = allData.filter(entry => {
-        const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
-        const flat = normalize(text);
-        return words.every(w => flat.includes(w));
-      });
-      if(found.length === 0){
-        results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${escapeHtml(term)}</strong></div>`;
-        return;
-      }
-      const h2 = document.createElement("h2");
-      h2.textContent = "Ergebnisse";
-      results.appendChild(h2);
-      found.forEach((e,i) => {
-        const item = document.createElement("div");
-        item.className = "result-item";
-        const title = document.createElement("div");
-        const a = document.createElement("a");
-        a.textContent = e.title || "Ohne Titel";
-        a.href = e.url || "#";
-        if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
-        title.appendChild(a);
-        title.style.fontWeight = "700";
-        const desc = document.createElement("div");
-        desc.innerHTML = `<small>${e.desc || ""}</small>`;
-        item.appendChild(title);
-        item.appendChild(desc);
-        results.appendChild(item);
-        if(i < found.length - 1) results.appendChild(document.createElement("hr"));
-      });
-    }
-
-    function doSearch(){
-      const term = input.value.trim();
-      if(!term){ results.innerHTML = ""; if(location.search) history.replaceState(null, "", location.pathname); return; }
-      const newQ = "?q=" + encodeURIComponent(term);
-      if(location.search !== newQ) history.replaceState(null, "", newQ);
-      runSearch(term);
-      saveHistory(term);
+  document.addEventListener("click", (ev) => {
+    if(!searchWrapper.contains(ev.target)) {
       renderSuggestions(false);
     }
+  });
 
-    searchBtn.addEventListener("click", doSearch);
-    input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
+  async function loadAllData(){
+    const data = [];
+    for(const file of JSON_FILES){
+      try{
+        const r = await fetch(file, {cache: "no-store"});
+        if(!r.ok) continue;
+        const j = await r.json();
+        if(Array.isArray(j)) data.push(...j);
+      } catch(err){}
+    }
+    return data;
+  }
 
-    window.addEventListener("popstate", () => {
-      const q = new URLSearchParams(location.search).get("q") || "";
-      input.value = q;
-      if(q) runSearch(q); else results.innerHTML = "";
+  // Hilfsfunktion: markiert alle Suchbegriffe mit <mark>
+  function highlightMatches(text, words) {
+    if(!text) return "";
+    let safe = escapeHtml(text);
+    words.forEach(w => {
+      if(!w) return;
+      const regex = new RegExp(`(${w})`, "gi"); // case-insensitive
+      safe = safe.replace(regex, "<mark>$1</mark>");
+    });
+    return safe;
+  }
+
+  async function runSearch(term){
+    results.innerHTML = "";
+    if(!term) return;
+    let allData = [];
+    try { allData = await loadAllData(); } catch(e) {}
+    if(allData.length === 0){
+      results.innerHTML = `<div class="no-results">Keine Index-Daten geladen. Prüfe die JSON-Dateien im /search-Ordner.</div>`;
+      return;
+    }
+    const q = normalize(term);
+    const words = q.split(" ").filter(Boolean);
+
+    const found = allData.filter(entry => {
+      const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
+      const flat = normalize(text);
+      return words.every(w => flat.includes(w));
     });
 
-    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
+    if(found.length === 0){
+      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${escapeHtml(term)}</strong></div>`;
+      return;
+    }
 
-    (function init(){ const q = new URLSearchParams(location.search).get("q") || ""; if(q){ input.value = q; runSearch(q); } renderSuggestions(false); })();
-  </script>
+    const h2 = document.createElement("h2");
+    h2.textContent = "Ergebnisse";
+    results.appendChild(h2);
+
+    found.forEach((e,i) => {
+      const item = document.createElement("div");
+      item.className = "result-item";
+
+      const title = document.createElement("div");
+      const a = document.createElement("a");
+      a.innerHTML = highlightMatches(e.title || "Ohne Titel", words);
+      a.href = e.url || "#";
+      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
+      title.appendChild(a);
+      title.style.fontWeight = "700";
+
+      const desc = document.createElement("div");
+      desc.innerHTML = `<small>${highlightMatches(e.desc || "", words)}</small>`;
+
+      item.appendChild(title);
+      item.appendChild(desc);
+      results.appendChild(item);
+
+      if(i < found.length - 1) results.appendChild(document.createElement("hr"));
+    });
+  }
+
+  function doSearch(){
+    const term = input.value.trim();
+    if(!term){ results.innerHTML = ""; if(location.search) history.replaceState(null, "", location.pathname); return; }
+    const newQ = "?q=" + encodeURIComponent(term);
+    if(location.search !== newQ) history.replaceState(null, "", newQ);
+    runSearch(term);
+    saveHistory(term);
+    renderSuggestions(false);
+  }
+
+  searchBtn.addEventListener("click", doSearch);
+  input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
+
+  window.addEventListener("popstate", () => {
+    const q = new URLSearchParams(location.search).get("q") || "";
+    input.value = q;
+    if(q) runSearch(q); else results.innerHTML = "";
+  });
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
+
+  (function init(){ const q = new URLSearchParams(location.search).get("q") || ""; if(q){ input.value = q; runSearch(q); } renderSuggestions(false); })();
+</script>
 </body>
 </html>
