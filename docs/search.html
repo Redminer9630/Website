@@ -44,6 +44,7 @@
     #results { margin-top:1rem; }
     .no-results { color:#666; font-style:italic; }
     .result-item { padding:.6rem 0; animation: fadeInUp .28s ease both; }
+    .result-sep { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; animation: fadeInUp .28s ease both; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
     hr { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; }
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
@@ -195,27 +196,31 @@
     h2.textContent = "Ergebnisse";
     results.appendChild(h2);
 
-    found.forEach((e,i) => {
-      const item = document.createElement("div");
-      item.className = "result-item";
+found.forEach((e,i) => {
+  const item = document.createElement("div");
+  item.className = "result-item";
 
-      const title = document.createElement("div");
-      const a = document.createElement("a");
-      a.innerHTML = highlightMatches(e.title || "Ohne Titel", words);
-      a.href = e.url || "#";
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
-      title.appendChild(a);
-      title.style.fontWeight = "700";
+  const title = document.createElement("div");
+  const a = document.createElement("a");
+  a.innerHTML = highlightMatches(e.title || "Ohne Titel", words);
+  a.href = e.url || "#";
+  if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
+  title.appendChild(a);
+  title.style.fontWeight = "700";
 
-      const desc = document.createElement("div");
-      desc.innerHTML = `<small>${highlightMatches(e.desc || "", words)}</small>`;
+  const desc = document.createElement("div");
+  desc.innerHTML = `<small>${highlightMatches(e.desc || "", words)}</small>`;
 
-      item.appendChild(title);
-      item.appendChild(desc);
-      results.appendChild(item);
+  item.appendChild(title);
+  item.appendChild(desc);
+  results.appendChild(item);
 
-      if(i < found.length - 1) results.appendChild(document.createElement("hr"));
-    });
+  if(i < found.length - 1) {
+    const hr = document.createElement("hr");
+    hr.className = "result-sep";
+    results.appendChild(hr);
+  }
+});
   }
 
   function doSearch(){
