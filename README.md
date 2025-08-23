@@ -12,10 +12,6 @@ Dein Feedback hilft uns, das Projekt weiterzuentwickeln.
 
 Für Fragen oder Anregungen erreichst du uns über unseren [Discord-Server](https://discord.com/invite/uRNX47tYrX).
 
-## 🔗 Weitere Links
-
-- [Redminer9630 App Repository](https://github.com/Redminer9630de/app9630)
-
 ---
 
 ### Ein Wuffi
