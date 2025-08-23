@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   setRadioValue("theme",theme);
   setRadioValue("font",font);
-  document.querySelector("#marks-toggle").checked=marks;
+  document.querySelector("#marks-toggle").checked = (marks === null ? true : marks === "true");
 //  setRadioValue("alerts",alerts);
 //  document.querySelector("#alerts-adv").checked=adv;
 
@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.applyFont?.(e.target.value);
   }));
 
-  document.querySelector("#marks-toggle").addEventListener("change",e=>{
-    localStorage.setItem("marks",e.target.checked);
+  document.querySelector("#marks-toggle").addEventListener("change", e => {
+    localStorage.setItem("marks", e.target.checked ? "true" : "false");
   });
 
 /*  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
