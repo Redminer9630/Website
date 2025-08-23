@@ -22,13 +22,13 @@ function setRadioValue(name, value){
 document.addEventListener("DOMContentLoaded",()=>{
   const theme=localStorage.getItem("theme")||"sys";
   const font=localStorage.getItem("font")||"mojangles";
-  const alerts=localStorage.getItem("alerts")||"website";
-  const adv=localStorage.getItem("alerts_advanced")==="true";
+//  const alerts=localStorage.getItem("alerts")||"website";
+//  const adv=localStorage.getItem("alerts_advanced")==="true";
 
   setRadioValue("theme",theme);
   setRadioValue("font",font);
-  setRadioValue("alerts",alerts);
-  document.querySelector("#alerts-adv").checked=adv;
+//  setRadioValue("alerts",alerts);
+//  document.querySelector("#alerts-adv").checked=adv;
 
   window.applyTheme?.(theme);
   window.applyFont?.(font);
@@ -43,13 +43,13 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.applyFont?.(e.target.value);
   }));
 
-  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
+/*  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
     localStorage.setItem("alerts",e.target.value);
   }));
 
   document.querySelector("#alerts-adv").addEventListener("change",e=>{
     localStorage.setItem("alerts_advanced",e.target.checked);
-  });
+  });*/
 });
 </script>
 </head>
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         <label><input type="radio" name="font" id="font-arial" value="arial"> Arial</label>
       </div>
    </div>
-      
+   <!--   
    <div class="settings-item">
      <label>Alerts</label>
      <div class="radio-group" id="alert-options">
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded",()=>{
        <label><input type="radio" name="alerts" value="system"> System</label>
      </div>
    </div>
-   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails</label></div>
+   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails</label></div>-->
   </main>
 </body>
 </html>
