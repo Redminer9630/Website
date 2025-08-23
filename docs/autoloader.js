@@ -3,7 +3,6 @@
 		{ tag: 'meta', attrs: { name: 'description', content: 'Offizielle Website von Redminer9630. - Minecraft Tools und Generatoren' }},
 		{ tag: 'meta', attrs: { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }},
 		{ tag: 'meta', attrs: { name: 'keywords', content: 'Minecraft, Redminer9630, Mods, Downloads, Tools, Generatoren, Wiki, Server' }},
-		{ tag: 'meta', attrs: { name: 'robots', content: 'index, follow' }},
 		{ tag: 'link', attrs: { rel: 'icon', type: 'image/x-icon', href: 'favicon/favicon.ico' }}
 	];tags.forEach(({ tag, attrs, text }) => {if (tag === 'title' && !head.querySelector('title')) {const el = document.createElement('title'); el.textContent = text; head.appendChild(el);} else if (attrs && !head.querySelector(`${tag}${Object.entries(attrs).map(([k, v]) => `[${k}="${v}"]`).join('')}`)) {const el = document.createElement(tag);Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));head.appendChild(el);}});})();
 
@@ -12,13 +11,12 @@ if (location.hostname.startsWith("www.")) location.replace(location.href.replace
 window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt);alert(txt);};
 
 window.debug = false;
-window.CommonVersion = { version: "vp2.1", key: "1.pre2", date: "25.08.23", time: "15:09" };
+window.CommonVersion = { version: "vp2.2", key: "1.pre2", date: "25.08.24", time: "00:00" };
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t65/docs/js_components/";["back_button.js","mctooltip.js","theme.js","overrides.js", "toast.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 const link = document.createElement("link");link.rel = "stylesheet";link.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t65/docs/js_components/framework.css";document.head.appendChild(link);
 
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t65/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
-(function(){const canonical=document.querySelector('link[rel="canonical"]')||document.createElement('link');canonical.rel="canonical";canonical.href=location.origin+location.pathname;if(!canonical.parentNode)document.head.appendChild(canonical);})();
 
 document.addEventListener("DOMContentLoaded", () => {
     const year = new Date().getFullYear();
