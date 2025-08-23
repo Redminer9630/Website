@@ -43,6 +43,10 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.applyFont?.(e.target.value);
   }));
 
+  document.querySelector("#marks-toggle").addEventListener("change",e=>{
+    localStorage.setItem("marks",e.target.checked);
+  }));
+
 /*  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
     localStorage.setItem("alerts",e.target.value);
   }));
@@ -73,6 +77,8 @@ document.addEventListener("DOMContentLoaded",()=>{
         <label><input type="radio" name="font" id="font-arial" value="arial"> Arial</label>
       </div>
    </div>
+
+   <div class="settings-item"><label><input type="checkbox" id="marks-toggle"> Suchergebnisse markieren</label></div>
    <!--   
    <div class="settings-item">
      <label>Alerts</label>
