@@ -22,11 +22,13 @@ function setRadioValue(name, value){
 document.addEventListener("DOMContentLoaded",()=>{
   const theme=localStorage.getItem("theme")||"sys";
   const font=localStorage.getItem("font")||"mojangles";
+  const marks=localStorage.getItem("marks")||"true";
 //  const alerts=localStorage.getItem("alerts")||"website";
 //  const adv=localStorage.getItem("alerts_advanced")==="true";
 
   setRadioValue("theme",theme);
   setRadioValue("font",font);
+  document.querySelector("#marks-toggle").checked=marks;
 //  setRadioValue("alerts",alerts);
 //  document.querySelector("#alerts-adv").checked=adv;
 
