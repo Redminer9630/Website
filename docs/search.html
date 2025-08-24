@@ -159,16 +159,19 @@
     return data;
   }
 
-function highlightMatches(text, words) {
+function highlightMatches(text, words, allowHtml=false) {
   if(!text) return "";
-  const marksEnabled = localStorage.getItem("marks");
-  if(marksEnabled !== "true") return escapeHtml(text); 
-  let safe = escapeHtml(text);
-  words.forEach(w => {
-    if(!w) return;
-    const regex = new RegExp(`(${w})`, "gi");
-    safe = safe.replace(regex, "<mark>$1</mark>");
-  });
+  const marksEnabled = localStorage.getItem("marks") === "true";
+
+  let safe = allowHtml ? text : escapeHtml(text);
+
+  if(marksEnabled){
+    words.forEach(w => {
+      if(!w) return;
+      const regex = new RegExp(`(${w})`, "gi");
+      safe = safe.replace(regex, "<mark>$1</mark>");
+    });
+  }
   return safe;
 }
 
