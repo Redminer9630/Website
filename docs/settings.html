@@ -9,28 +9,21 @@
     h1, h2 { margin-bottom:2rem; color:#000; }
     .settings-item { margin-bottom:1.5rem; display:flex; flex-direction:column; gap:0.5rem; }
     label { cursor:pointer; }
-
     :root[data-theme="dark"] body { background-color:#1a1a1a; color:#fff; }
     :root[data-theme="dark"] h1, h2 { color:#fff; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t69/docs/autoloader.js"></script>
-<script type="module">
-function setRadioValue(name, value){
-  document.querySelectorAll(`input[name="${name}"]`).forEach(r=>r.checked=r.value===value);
-}
-
+<script type="module">function setRadioValue(name, value){document.querySelectorAll(`input[name="${name}"]`).forEach(r=>r.checked=r.value===value);}
 document.addEventListener("DOMContentLoaded",()=>{
   const theme=localStorage.getItem("theme")||"sys";
   const font=localStorage.getItem("font")||"mojangles";
   const marks=localStorage.getItem("marks")||"true";
-//  const alerts=localStorage.getItem("alerts")||"website";
-//  const adv=localStorage.getItem("alerts_advanced")==="true";
+  const maxHistory=localStorage.getItem("searchMaxHistory")||"15";
 
   setRadioValue("theme",theme);
   setRadioValue("font",font);
-  document.querySelector("#marks-toggle").checked = (marks === null ? true : marks === "true");
-//  setRadioValue("alerts",alerts);
-//  document.querySelector("#alerts-adv").checked=adv;
+  document.querySelector("#marks-toggle").checked = (marks === null ? true : marks === "true")
+  document.querySelector("#max-history").value = maxHistory;
 
   window.applyTheme?.(theme);
   window.applyFont?.(font);
@@ -47,6 +40,14 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   document.querySelector("#marks-toggle").addEventListener("change", e => {
     localStorage.setItem("marks", e.target.checked ? "true" : "false");
+  });
+
+  document.querySelector("#max-history").addEventListener("change", e => {
+    let val = parseInt(e.target.value, 10);
+    if(isNaN(val) || val < 1) val = 1;
+    if(val > 50) val = 50;
+    e.target.value = val;
+    localStorage.setItem("searchMaxHistory", val);
   });
 });
 </script>
@@ -75,7 +76,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    <h2>Suche</h2>
    <div class="settings-item"><label><input type="checkbox" id="marks-toggle"> Suchergebnisse markieren</label></div>
    <div class="settings-item">
-     <label for="max-history">Maximale gespeicherte Suchvorschläge</label>
+     <label for="max-history"> Maximale gespeicherte Suchvorschläge</label>
      <input type="number" id="max-history" min="1" max="50" value="15">
    </div>
   </main>
