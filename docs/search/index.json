@@ -7,7 +7,7 @@
   },
   {
     "title": "Tools",
-    "desc": "Hier kannst du du Tools wie ein Taschenrechner oder Hex Rechner benutzten",
+    "desc": "Hier kannst du Tools wie ein Taschenrechner oder Hex Rechner benutzten",
     "url": "/tools",
     "alias": ["rechner", "calc", "hex"]
   },
