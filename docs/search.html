@@ -5,19 +5,20 @@
   <title>Suche – Redminer9630</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { font-family: Mojangles; background:#eaeaea; margin:1rem; }
+    body { font-family:Mojangles; background:#eaeaea; margin:1rem; color:#000; }
     h1 { margin-bottom:1rem; }
     #search-section { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1rem; }
     #search-wrapper { flex:1; min-width:220px; position:relative; }
     #search-input {
       width:100%; padding:.5rem .6rem; font-size:1rem; box-sizing:border-box;
       border:1px solid transparent; border-radius:6px; outline:none; background-clip:padding-box; height:44px;
+      background:#fff; color:#000;
     }
     #search-button {
       font-family: inherit;
       font-size: 16px;
       background-color: #1a1a1a;
-      color: white;
+      color: #fff;
       padding: 0 20px;
       border-radius:6px;
       border: 1px solid #eaeaea;
@@ -25,34 +26,34 @@
       height:44px;
       display:inline-flex;
       align-items:center;
+      justify-content:center;
+      line-height:1;
     }
-    mark {background: #fffb91;color: inherit;padding: 0;box-decoration-break: clone; }
-    :root[data-theme="dark"] mark {background:#5a5a1e;}
     #search-button:hover { opacity:.95; }
+    #results { margin-top:1rem; }
+    .no-results { color:#666; font-style:italic; }
+    .result-item { padding:.6rem 0; animation: fadeInUp .24s ease both; }
+    .result-sep { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; animation: fadeInUp .24s ease both; }
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
+    mark { background:#fffb91; color:inherit; padding:0; box-decoration-break:clone; }
     #search-suggestions {
       position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20;
       border:1px solid #ccc; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,.06);
-      border-radius:4px; padding:4px 0; display:none;
+      border-radius:6px; padding:4px 0; display:none;
     }
     #search-suggestions .item {
-      display:flex; justify-content:space-between; gap:.5rem; padding:.45rem .6rem; cursor:pointer;
-      align-items:center;
+      display:flex; justify-content:space-between; gap:.5rem; padding:.45rem .6rem; cursor:pointer; align-items:center;
     }
     #search-suggestions .item:hover { background:#f3f3f3; }
     #search-suggestions .remove {
-      color:#c33; cursor:pointer; margin-left:.5rem; user-select:none;
-      display:inline-flex; align-items:center; height:20px;
+      color:#c33; cursor:pointer; margin-left:.5rem; user-select:none; display:inline-flex; align-items:center; height:20px;
+      font-weight:700; line-height:1; transform: translateY(-1px);
     }
-    #results { margin-top:1rem; }
-    .no-results { color:#666; font-style:italic; }
-    .result-item { padding:.6rem 0; animation: fadeInUp .28s ease both; }
-    .result-sep { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; animation: fadeInUp .28s ease both; }
-    @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
-    hr { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; }
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
     :root[data-theme="dark"] #search-input { background:#111; color:#eee; border-color:#333; }
     :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; box-shadow:none; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
+    :root[data-theme="dark"] mark { background:#5a5a1e; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t69/docs/autoloader.js"></script>
 </head>
@@ -88,7 +89,7 @@
   const results = document.getElementById("results");
   const searchWrapper = document.getElementById("search-wrapper");
 
-  const normalize = txt => (txt||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
   function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
   function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
@@ -127,7 +128,6 @@
       rem.textContent = "×";
       rem.title = "Löschen";
       rem.addEventListener("mousedown", (e) => { e.preventDefault(); e.stopPropagation(); deleteHistoryTerm(term); });
-
       row.appendChild(txt);
       row.appendChild(rem);
       suggestions.appendChild(row);
@@ -139,69 +139,46 @@
   input.addEventListener("focus", ()=> renderSuggestions(true));
   input.addEventListener("blur", ()=> { setTimeout(()=>{ renderSuggestions(false); }, 120); });
   input.addEventListener("input", ()=> { if(suggestionsVisible) renderSuggestions(true); });
+  document.addEventListener("click", (ev) => { if(!searchWrapper.contains(ev.target)) renderSuggestions(false); });
 
-  document.addEventListener("click", (ev) => {
-    if(!searchWrapper.contains(ev.target)) {
-      renderSuggestions(false);
-    }
-  });
-
+  let cacheData = null;
   async function loadAllData(){
-    const data = [];
-    for(const file of JSON_FILES){
-      try{
-        const r = await fetch(file, {cache: "no-store"});
-        if(!r.ok) continue;
-        const j = await r.json();
-        if(Array.isArray(j)) data.push(...j);
-      } catch(err){}
-    }
-    return data;
+    if (cacheData) return cacheData;
+    const responses = await Promise.all(JSON_FILES.map(f => fetch(f, {cache:"no-store"}).catch(()=>null)));
+    const jsons = await Promise.all(responses.map(r => r && r.ok ? r.json() : []));
+    const merged = [];
+    jsons.forEach(j => { if (Array.isArray(j)) merged.push(...j); });
+    cacheData = merged;
+    return cacheData;
   }
 
-  // --- NEU: DOM-basiertes Highlight ---
-  function highlightElement(root, words){
-    const marksEnabled = localStorage.getItem("marks");
-    if(marksEnabled !== "true") return;
-
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
-    const texts = [];
-    while(walker.nextNode()) texts.push(walker.currentNode);
-
-    texts.forEach(node=>{
-      const text = node.nodeValue;
-      let replaced = text;
-      words.forEach(w=>{
-        if(!w) return;
-        const regex = new RegExp(`(${w})`, "gi");
-        replaced = replaced.replace(regex, "<mark>$1</mark>");
-      });
-      if(replaced !== text){
-        const span = document.createElement("span");
-        span.innerHTML = replaced;
-        node.replaceWith(...span.childNodes);
-      }
+  function highlightHtml(html, words){
+    const marks = localStorage.getItem("marks") === "true";
+    if(!marks) return html;
+    let out = html;
+    words.forEach(w=>{
+      if(!w) return;
+      const rx = new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")})`, "gi");
+      out = out.replace(rx, "<mark>$1</mark>");
     });
+    return out;
   }
 
   async function runSearch(term){
     results.innerHTML = "";
     if(!term) return;
-    let allData = [];
-    try { allData = await loadAllData(); } catch(e) {}
+    const allData = await loadAllData();
     if(allData.length === 0){
-      results.innerHTML = `<div class="no-results">Es scheint ein Problem mit den Sucheinträgen geben. Wenn dieser Fehler nach 3 Stunden nicht verschwindet, mache ein Issue</div>`;
+      results.innerHTML = `<div class="no-results">Keine Suchdaten verfügbar.</div>`;
       return;
     }
     const q = normalize(term);
     const words = q.split(" ").filter(Boolean);
-
     const found = allData.filter(entry => {
       const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
       const flat = normalize(text);
       return words.every(w => flat.includes(w));
     });
-
     if(found.length === 0){
       results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
       return;
@@ -215,22 +192,19 @@
       const item = document.createElement("div");
       item.className = "result-item";
 
-      const title = document.createElement("div");
+      const titleWrap = document.createElement("div");
+      titleWrap.style.fontWeight = "700";
       const a = document.createElement("a");
-      a.innerHTML = e.title || "Ohne Titel";
+      const titleHtml = highlightHtml(e.title || "Ohne Titel", words);
+      a.innerHTML = titleHtml;
       a.href = e.url || "#";
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){
-        a.target = "_blank"; a.rel = "noopener";
-      }
-      highlightElement(a, words);
-      title.appendChild(a);
-      title.style.fontWeight = "700";
+      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
+      titleWrap.appendChild(a);
 
       const desc = document.createElement("div");
-      desc.innerHTML = `<small>${e.desc || ""}</small>`;
-      highlightElement(desc, words);
+      desc.innerHTML = `<small>${highlightHtml(e.desc || "", words)}</small>`;
 
-      item.appendChild(title);
+      item.appendChild(titleWrap);
       item.appendChild(desc);
       results.appendChild(item);
 
@@ -261,10 +235,11 @@
     if(q) runSearch(q); else results.innerHTML = "";
   });
 
-  (function init(){ 
-    const q = new URLSearchParams(location.search).get("q") || ""; 
-    if(q){ input.value = q; runSearch(q); } 
-    renderSuggestions(false); 
+  (function init(){
+    const q = new URLSearchParams(location.search).get("q") || "";
+    if(q){ input.value = q; runSearch(q); }
+    renderSuggestions(false);
+    loadAllData();
   })();
 </script>
 </body>
