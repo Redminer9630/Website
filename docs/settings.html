@@ -48,21 +48,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.querySelector("#marks-toggle").addEventListener("change", e => {
     localStorage.setItem("marks", e.target.checked ? "true" : "false");
   });
-
-/*  document.querySelectorAll('input[name="alerts"]').forEach(r=>r.addEventListener("change",e=>{
-    localStorage.setItem("alerts",e.target.value);
-  }));
-
-  document.querySelector("#alerts-adv").addEventListener("change",e=>{
-    localStorage.setItem("alerts_advanced",e.target.checked);
-  });*/
 });
 </script>
 </head>
 <body>
   <main role="main">
     <h1>Einstellungen</h1>
-    
+    <h2>Aussehen</h2>
     <div class="settings-item">
       <label>Design</label>
       <div class="radio-group" id="theme-options">
@@ -80,16 +72,12 @@ document.addEventListener("DOMContentLoaded",()=>{
       </div>
    </div>
 
+   <h2>Suche</h2>
    <div class="settings-item"><label><input type="checkbox" id="marks-toggle"> Suchergebnisse markieren</label></div>
-   <!--   
    <div class="settings-item">
-     <label>Alerts</label>
-     <div class="radio-group" id="alert-options">
-       <label><input type="radio" name="alerts" value="website"> Website</label>
-       <label><input type="radio" name="alerts" value="system"> System</label>
-     </div>
+     <label for="max-history">Maximale gespeicherte Suchvorschläge</label>
+     <input type="number" id="max-history" min="1" max="50" value="15">
    </div>
-   <div class="settings-item"><label><input type="checkbox" id="alerts-adv"> Erweiterte Fehlerdetails</label></div>-->
   </main>
 </body>
 </html>
