@@ -164,57 +164,70 @@
     return out;
   }
 
-  async function runSearch(term){
-    results.innerHTML = "";
-    if(!term) return;
-    const allData = await loadAllData();
-    if(allData.length === 0){
-      results.innerHTML = `<div class="no-results">Keine Suchdaten verfügbar.</div>`;
-      return;
-    }
-    const q = normalize(term);
-    const words = q.split(" ").filter(Boolean);
-    const found = allData.filter(entry => {
-      const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
-      const flat = normalize(text);
-      return words.every(w => flat.includes(w));
-    });
-    if(found.length === 0){
-      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-      return;
-    }
-
-    const h2 = document.createElement("h2");
-    h2.textContent = "Ergebnisse";
-    results.appendChild(h2);
-
-    found.forEach((e,i) => {
-      const item = document.createElement("div");
-      item.className = "result-item";
-
-      const titleWrap = document.createElement("div");
-      titleWrap.style.fontWeight = "700";
-      const a = document.createElement("a");
-      const titleHtml = highlightHtml(e.title || "Ohne Titel", words);
-      a.innerHTML = titleHtml;
-      a.href = e.url || "#";
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
-      titleWrap.appendChild(a);
-
-      const desc = document.createElement("div");
-      desc.innerHTML = `<small>${highlightHtml(e.desc || "", words)}</small>`;
-
-      item.appendChild(titleWrap);
-      item.appendChild(desc);
-      results.appendChild(item);
-
-      if(i < found.length - 1) {
-        const hr = document.createElement("hr");
-        hr.className = "result-sep";
-        results.appendChild(hr);
-      }
-    });
+async function runSearch(term){
+  results.innerHTML = "";
+  if(!term) return;
+  const start = performance.now();
+  const allData = await loadAllData();
+  if(allData.length === 0){
+    results.innerHTML = `<div class="no-results">Keine Suchdaten verfügbar.</div>`;
+    return;
   }
+  const q = normalize(term);
+  const words = q.split(" ").filter(Boolean);
+  const found = allData.filter(entry => {
+    const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
+    const flat = normalize(text);
+    return words.every(w => flat.includes(w));
+  });
+  const end = performance.now();
+  const duration = Math.round(end - start);
+
+  if(found.length === 0){
+    results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
+    return;
+  }
+
+  const h2 = document.createElement("h2");
+  h2.textContent = "Ergebnisse";
+  results.appendChild(h2);
+
+  const info = document.createElement("div");
+  info.style.fontSize = "0.9rem";
+  info.style.color = "#666";
+  info.style.marginBottom = "0.6rem";
+  info.textContent = `${found.length} Ergebnisse gefunden in ${duration} ms`;
+  results.appendChild(info);
+
+  found.forEach((e,i) => {
+    const item = document.createElement("div");
+    item.className = "result-item";
+
+    const titleWrap = document.createElement("div");
+    titleWrap.style.fontWeight = "700";
+    const a = document.createElement("a");
+    const titleHtml = highlightHtml(e.title || "Ohne Titel", words);
+    a.innerHTML = titleHtml;
+    a.href = e.url || "#";
+    if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ 
+      a.target = "_blank"; a.rel = "noopener"; 
+    }
+    titleWrap.appendChild(a);
+
+    const desc = document.createElement("div");
+    desc.innerHTML = `<small>${highlightHtml(e.desc || "", words)}</small>`;
+
+    item.appendChild(titleWrap);
+    item.appendChild(desc);
+    results.appendChild(item);
+
+    if(i < found.length - 1) {
+      const hr = document.createElement("hr");
+      hr.className = "result-sep";
+      results.appendChild(hr);
+    }
+  });
+}
 
   function doSearch(){
     const term = input.value.trim();
