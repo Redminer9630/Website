@@ -104,6 +104,7 @@
 
   const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
+  function isValidQuery(q){return q && q.trim().length > 0;}
   function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
   function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
   function saveHistory(term){
@@ -179,6 +180,7 @@
 
 async function runSearch(term){
   results.innerHTML = "";
+  if(!isValidQuery(term)) return;
   if(!term) return;
   const start = performance.now();
   const allData = await loadAllData();
@@ -242,15 +244,19 @@ async function runSearch(term){
   });
 }
 
-  function doSearch(){
-    const term = input.value.trim();
-    if(!term){ results.innerHTML = ""; if(location.search) history.replaceState(null, "", location.pathname); return; }
-    const newQ = "?q=" + encodeURIComponent(term);
-    if(location.search !== newQ) history.replaceState(null, "", newQ);
-    runSearch(term);
-    saveHistory(term);
-    renderSuggestions(false);
+function doSearch(){
+  const term = input.value.trim();
+  if(!isValidQuery(term)){ 
+    results.innerHTML = ""; 
+    if(location.search) history.replaceState(null, "", location.pathname); 
+    return; 
   }
+  const newQ = "?q=" + encodeURIComponent(term);
+  if(location.search !== newQ) history.replaceState(null, "", newQ);
+  runSearch(term);
+  saveHistory(term);
+  renderSuggestions(false);
+}
 
   searchBtn.addEventListener("click", doSearch);
   input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
