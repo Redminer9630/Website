@@ -26,8 +26,8 @@
       display:inline-flex;
       align-items:center;
     }
-    mark {background: #fffb91;color: inherit;padding: 0 .1em;box-decoration-break: clone; }
-    :root[data-theme="dark"] mark {background:#5a5a1e;color:inherit;}
+    mark {background: #fffb91;color: inherit;padding: 0;box-decoration-break: clone; }
+    :root[data-theme="dark"] mark {background:#5a5a1e;}
     #search-button:hover { opacity:.95; }
     #search-suggestions {
       position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20;
@@ -69,7 +69,7 @@
 
   <div id="results"></div>
 
- <script>
+<script>
   const JSON_FILES = [
     "search/index.json",
     "search/discord.json",
@@ -159,21 +159,30 @@
     return data;
   }
 
-function highlightMatches(text, words, allowHtml=false) {
-  if(!text) return "";
-  const marksEnabled = localStorage.getItem("marks") === "true";
+  // --- NEU: DOM-basiertes Highlight ---
+  function highlightElement(root, words){
+    const marksEnabled = localStorage.getItem("marks");
+    if(marksEnabled !== "true") return;
 
-  let safe = allowHtml ? text : escapeHtml(text);
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null, false);
+    const texts = [];
+    while(walker.nextNode()) texts.push(walker.currentNode);
 
-  if(marksEnabled){
-    words.forEach(w => {
-      if(!w) return;
-      const regex = new RegExp(`(${w})`, "gi");
-      safe = safe.replace(regex, "<mark>$1</mark>");
+    texts.forEach(node=>{
+      const text = node.nodeValue;
+      let replaced = text;
+      words.forEach(w=>{
+        if(!w) return;
+        const regex = new RegExp(`(${w})`, "gi");
+        replaced = replaced.replace(regex, "<mark>$1</mark>");
+      });
+      if(replaced !== text){
+        const span = document.createElement("span");
+        span.innerHTML = replaced;
+        node.replaceWith(...span.childNodes);
+      }
     });
   }
-  return safe;
-}
 
   async function runSearch(term){
     results.innerHTML = "";
@@ -194,7 +203,7 @@ function highlightMatches(text, words, allowHtml=false) {
     });
 
     if(found.length === 0){
-      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${escapeHtml(term)}</strong></div>`;
+      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
       return;
     }
 
@@ -202,31 +211,35 @@ function highlightMatches(text, words, allowHtml=false) {
     h2.textContent = "Ergebnisse";
     results.appendChild(h2);
 
-found.forEach((e,i) => {
-  const item = document.createElement("div");
-  item.className = "result-item";
+    found.forEach((e,i) => {
+      const item = document.createElement("div");
+      item.className = "result-item";
 
-  const title = document.createElement("div");
-  const a = document.createElement("a");
-  a.innerHTML = highlightMatches(e.title || "Ohne Titel", words);
-  a.href = e.url || "#";
-  if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ a.target = "_blank"; a.rel = "noopener"; }
-  title.appendChild(a);
-  title.style.fontWeight = "700";
+      const title = document.createElement("div");
+      const a = document.createElement("a");
+      a.innerHTML = e.title || "Ohne Titel";
+      a.href = e.url || "#";
+      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){
+        a.target = "_blank"; a.rel = "noopener";
+      }
+      highlightElement(a, words);
+      title.appendChild(a);
+      title.style.fontWeight = "700";
 
-  const desc = document.createElement("div");
-  desc.innerHTML = `<small>${highlightMatches(e.desc || "", words)}</small>`;
+      const desc = document.createElement("div");
+      desc.innerHTML = `<small>${e.desc || ""}</small>`;
+      highlightElement(desc, words);
 
-  item.appendChild(title);
-  item.appendChild(desc);
-  results.appendChild(item);
+      item.appendChild(title);
+      item.appendChild(desc);
+      results.appendChild(item);
 
-  if(i < found.length - 1) {
-    const hr = document.createElement("hr");
-    hr.className = "result-sep";
-    results.appendChild(hr);
-  }
-});
+      if(i < found.length - 1) {
+        const hr = document.createElement("hr");
+        hr.className = "result-sep";
+        results.appendChild(hr);
+      }
+    });
   }
 
   function doSearch(){
@@ -248,9 +261,11 @@ found.forEach((e,i) => {
     if(q) runSearch(q); else results.innerHTML = "";
   });
 
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
-
-  (function init(){ const q = new URLSearchParams(location.search).get("q") || ""; if(q){ input.value = q; runSearch(q); } renderSuggestions(false); })();
+  (function init(){ 
+    const q = new URLSearchParams(location.search).get("q") || ""; 
+    if(q){ input.value = q; runSearch(q); } 
+    renderSuggestions(false); 
+  })();
 </script>
 </body>
 </html>
