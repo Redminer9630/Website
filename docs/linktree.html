@@ -6,23 +6,23 @@
     <title>Linktree - Redminer9630</title>
     <style>
         :root[data-theme="dark"] html, :root[data-theme="dark"] body {background-color: #1a1a1a;color: #fff;}
-html, body {
-    background-color: #eaeaea;
-    color: #000;
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    height: auto;
-    font-family: 'Mojangles';
-}
+        html, body {
+            background-color: #eaeaea;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            height: auto;
+            font-family: 'Mojangles';
+        }
 
-.container {
-    width: 100vw;
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .container {
+            width: 100vw;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         h1 {
             margin: 32px 0 28px 0;
@@ -72,8 +72,8 @@ html, body {
         }
         :root[data-theme="dark"] .link-icon{background-color: #191919;}
         .link-icon img {
-            max-width: 74px;
-            max-height: 74px;
+            max-width: 64px;
+            max-height: 64px;
             width: auto;
             height: auto;
             aspect-ratio: 1/1;
@@ -95,10 +95,13 @@ html, body {
         }
         @media (max-width: 600px) {
             .links {gap: 10px;}
-            .link-icon img {width: 58px;height: 58px;}
+            .link-icon img {max-width: 50px; max-height: 50px;}
             h1 {font-size: 1.2em;}
         }
-        a { text-decoration: none;}
+        a { 
+            text-decoration: none; 
+            color: inherit; /* übernimmt Theme-Farbe */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t69/docs/autoloader.js" type="module" defer></script>
 </head>
@@ -155,7 +158,6 @@ html, body {
                 <img src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t69/docs/images/twitch.webp" alt="Firefly The Phnix Twitch">
                 <span class="link-label">Twitch</span>
             </a>
-        </div>
         </div>
     </div>
     <br><br>
