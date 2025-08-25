@@ -66,6 +66,16 @@
     :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; box-shadow:none; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
     :root[data-theme="dark"] mark { background:#5a5a1e; }
+.result-item .title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.result-item .desc {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.4;
+}
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t72/docs/autoloader.js"></script>
 </head>
@@ -168,7 +178,6 @@
 
   function escapeRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
-  // DOM-sicheres Highlighting: nur Textknoten, nie Tags/Attribute
   function highlightNodeSafe(root, words){
     if(localStorage.getItem("marks") !== "true") return;
     const terms = words.filter(Boolean);
@@ -251,24 +260,24 @@
       const item = document.createElement("div");
       item.className = "result-item";
 
-      const titleWrap = document.createElement("div");
-      titleWrap.style.fontWeight = "700";
+const titleWrap = document.createElement("div");
+titleWrap.className = "title";
+const a = document.createElement("a");
+a.innerHTML = highlightHtml(e.title || "Ohne Titel", words);
+a.href = e.url || "#";
+if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ 
+  a.target = "_blank"; 
+  a.rel = "noopener"; 
+}
+titleWrap.appendChild(a);
 
-      const a = document.createElement("a");
-      a.textContent = e.title || "Ohne Titel";
-      a.href = e.url || "#";
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){
-        a.target = "_blank"; a.rel = "noopener";
-      }
-      titleWrap.appendChild(a);
+const desc = document.createElement("div");
+desc.className = "desc";
+desc.innerHTML = highlightHtml(e.desc || "", words);
 
-      const desc = document.createElement("div");
-      desc.innerHTML = e.desc || "";
-      highlightNodeSafe(a, words);
-      highlightNodeSafe(desc, words);
+item.appendChild(titleWrap);
+item.appendChild(desc);
 
-      item.appendChild(titleWrap);
-      item.appendChild(desc);
       results.appendChild(item);
 
       if(i < found.length - 1) {
