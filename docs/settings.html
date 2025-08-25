@@ -11,6 +11,7 @@
     label { cursor:pointer; } input[type="checkbox"], input[type="radio"] {vertical-align: middle;position: relative;top: -1px;}
     :root[data-theme="dark"] body { background-color:#1a1a1a; color:#fff; }
     :root[data-theme="dark"] h1, :root[data-theme="dark"] h2 { color:#fff; }
+    .settings-itemtitle {font-weight: bold;}
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t71/docs/autoloader.js"></script>
 <script type="module">function setRadioValue(name, value){document.querySelectorAll(`input[name="${name}"]`).forEach(r=>r.checked=r.value===value);}
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <h1>Einstellungen</h1>
     <h2>Aussehen</h2>
     <div class="settings-item">
-      <label>Design</label>
+      <label class="settings-itemtitle">Design</label>
       <div class="radio-group" id="theme-options">
         <label><input type="radio" name="theme" value="dark"> Dunkel</label>
         <label><input type="radio" name="theme" value="light"> Hell</label>
@@ -66,7 +67,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     </div>
 
     <div class="settings-item">
-      <label for="font">Schriftart</label>
+      <label for="font" class="settings-itemtitle">Schriftart</label>
       <div class="radio-group" id="font-options">
         <label><input type="radio" name="font" id="font-mojangles" value="mojangles"> Mojangles</label>
         <label><input type="radio" name="font" id="font-arial" value="arial"> Arial</label>
@@ -74,9 +75,9 @@ document.addEventListener("DOMContentLoaded",()=>{
    </div>
 
    <h2>Suche</h2>
-   <div class="settings-item"><label><input type="checkbox" id="marks-toggle"> Suchergebnisse markieren</label></div>
+   <div class="settings-item"><label class="settings-itemtitle"><input type="checkbox" id="marks-toggle"> Suchergebnisse markieren</label></div>
    <div class="settings-item">
-     <label for="max-history"> Maximale gespeicherte Suchvorschläge</label>
+     <label for="max-history" class="settings-itemtitle"> Maximale gespeicherte Suchvorschläge</label>
      <input type="number" id="max-history" style="width: 5ch;" min="1" max="50" value="15">
    </div>
   </main>
