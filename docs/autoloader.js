@@ -24,11 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
     footer.id = "main-footer";
     footer.className = "fixed-footer";
 
-    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. 
-        <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a>`;
+    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version} ${window.CommonVersion.date} ${window.CommonVersion.time}</a>`;
 
     footer.innerHTML = `<span class="footer-text">${footerText}</span>`;
     document.body.appendChild(footer);
+    function adjustFooterPadding() {const footerHeight = footer.offsetHeight;document.body.style.paddingBottom = footerHeight + "px";}
+    adjustFooterPadding();
+    window.addEventListener("resize", adjustFooterPadding);
 
     const css = document.createElement("style");
     css.textContent = `
