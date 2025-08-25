@@ -115,6 +115,7 @@
   const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   const isValidQuery = q => q && q.trim().length > 0;
 
+  function syncInputWithQuery(){const q = new URLSearchParams(location.search).get("q") || "";input.value = q;return q;}
   function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
   function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
   function saveHistory(term){
@@ -305,18 +306,13 @@ item.appendChild(desc);
   searchBtn.addEventListener("click", doSearch);
   input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
 
-  window.addEventListener("popstate", () => {
-    const q = new URLSearchParams(location.search).get("q") || "";
-    input.value = q;
-    if(q) runSearch(q); else results.innerHTML = "";
-  });
-
-  (function init(){
-    const q = new URLSearchParams(location.search).get("q") || "";
-    if(q){ input.value = q; runSearch(q); }
-    renderSuggestions(false);
-    loadAllData();
-  })();
+  window.addEventListener("popstate", () => {const q = new URLSearchParams(location.search).get("q") || "";input.value = q;if(q) runSearch(q); else results.innerHTML = "";});
+(function init(){
+  const q = syncInputWithQuery();
+  if(q) runSearch(q);
+  renderSuggestions(false);
+  loadAllData();
+})();
 </script>
 </body>
 </html>
