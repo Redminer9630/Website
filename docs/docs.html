@@ -528,35 +528,5 @@
 			</ul>
 		</section>
 	</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("h2").forEach(h2 => {
-    if (!h2.id) {
-      h2.id = h2.textContent.toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w\-]/g, "");
-    }
-
-    const link = document.createElement("a");
-    link.href = `#${h2.id}`;
-    link.textContent = "🔗";
-    link.style.marginLeft = "0.5rem";
-    link.style.textDecoration = "none";
-    link.style.opacity = "0.6";
-    link.title = "Direktlink kopieren";
-
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const url = `${location.origin}${location.pathname}#${h2.id}`;
-      navigator.clipboard.writeText(url).catch(()=>{});
-      history.replaceState(null, "", `#${h2.id}`);
-      h2.scrollIntoView({ behavior: "smooth" });
-    });
-
-    h2.appendChild(link);
-  });
-});
-</script>
-
 </body>
 </html>
