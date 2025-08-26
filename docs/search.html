@@ -8,7 +8,7 @@
   <style>
     body { font-family:Mojangles; background:#eaeaea; margin:1rem; color:#000; }
     h1 { margin-bottom:1rem; }
-    #search-section { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1rem; }
+    #search-section { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1rem; position:relative; }
     #search-wrapper { flex:1; min-width:220px; position:relative; }
     #search-input {
       width:100%; padding:.5rem .6rem; font-size:1rem; box-sizing:border-box;
@@ -57,30 +57,23 @@
     }
 
     /* Filtermenü */
+    #filter-container { position:relative; }
     #filter-menu {
-      position:absolute; top:calc(100% + 6px); right:0; z-index:30;
+      position:absolute; top:calc(100% + 6px); left:0; z-index:30;
       background:#fff; border:1px solid #ccc; padding:.6rem; border-radius:6px;
       box-shadow:0 4px 12px rgba(0,0,0,.1); display:none; min-width:180px;
     }
-    #filter-menu label { display:flex; align-items:center; gap:.5rem; margin-bottom:.4rem; font-size:.95rem; }
-    #filter-menu i { color:#333; }
-    #filter-menu input[type="checkbox"] { transform:scale(1.2); }
+    #filter-menu label { display:flex; align-items:center; gap:.5rem; margin-bottom:.4rem; font-size:.95rem; cursor:pointer; }
+    #filter-menu i { color:#333; width:20px; text-align:center; }
+    #filter-menu input[type="radio"] { transform:scale(1.2); }
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
     :root[data-theme="dark"] #search-input { background:#111; color:#eee; border-color:#333; }
     :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; box-shadow:none; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
     :root[data-theme="dark"] mark { background:#5a5a1e; }
     :root[data-theme="dark"] #filter-menu { background:#111; border-color:#333; color:#eee; }
-    .result-item .title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-    .result-item .desc {
-      font-size: 1rem;
-      color: #444;
-      line-height: 1.4;
-    }
+    .result-item .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .result-item .desc { font-size: 1rem; color: #444; line-height: 1.4; }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t73/docs/autoloader.js"></script>
 </head>
@@ -92,12 +85,16 @@
       <input id="search-input" type="search" autocomplete="off" placeholder="Suchbegriff eingeben" />
       <div id="search-suggestions" aria-label="Suchvorschläge"></div>
     </div>
-    <button id="search-button">Suchen</button>
-    <button id="filter-button" title="Filter"><i class="fa-solid fa-filter"></i></button>
-    <div id="filter-menu">
-      <label><input type="checkbox" id="filter-regex"> <i class="fa-solid fa-code"></i> Regex</label>
-      <label><input type="checkbox" id="filter-wildcard"> <i class="fa-solid fa-asterisk"></i> Wildcards</label>
+    <div id="filter-container">
+      <button id="filter-button" title="Filter"><i class="fa-solid fa-filter"></i></button>
+      <div id="filter-menu">
+        <label><input type="radio" name="filter-pos" value="left"> <i class="fa-solid fa-align-left"></i> Muss am Anfang stehen</label>
+        <label><input type="radio" name="filter-pos" value="middle"> <i class="fa-solid fa-align-center"></i> Muss irgendwo drin sein</label>
+        <label><input type="radio" name="filter-pos" value="right"> <i class="fa-solid fa-align-right"></i> Muss am Ende stehen</label>
+        <label><input type="radio" name="filter-pos" value="any" checked> <i class="fa-solid fa-arrows-left-right"></i> Egal wo</label>
+      </div>
     </div>
+    <button id="search-button">Suchen</button>
   </section>
 
   <div id="results"></div>
@@ -111,79 +108,18 @@
     "search/linktree.json",
     "search/manual.json"
   ];
-  const SETTINGS_KEY = "searchMaxHistory";
-  let MAX_HISTORY = parseInt(localStorage.getItem(SETTINGS_KEY) || "15", 10);
-  const SEARCH_KEY = "searchHistory";
-  const SUGGEST_SHOW = 4;
 
   const input = document.getElementById("search-input");
   const searchBtn = document.getElementById("search-button");
-  const suggestions = document.getElementById("search-suggestions");
   const results = document.getElementById("results");
-  const searchWrapper = document.getElementById("search-wrapper");
 
   const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   const isValidQuery = q => typeof q === "string" && q.trim().length > 0;
-  function escapeRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
-
-  function highlightHtml(text, words){
-    if(localStorage.getItem("marks") !== "true") return text;
-    if(!words || !words.length) return text;
-    const rx = new RegExp(words.map(escapeRe).join("|"), "gi");
-    return (text||"").replace(rx, m => `<mark>${m}</mark>`);
-  }
-
-  function syncInputWithQuery(){const q = new URLSearchParams(location.search).get("q") || "";input.value = q;return q;}
-  function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
-  function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
-  function saveHistory(term){
-    if(!term) return;
-    let arr = getHistory().filter(t=>t!==term);
-    arr.unshift(term);
-    if(arr.length > MAX_HISTORY) arr = arr.slice(0, MAX_HISTORY);
-    setHistory(arr);
-  }
-  function deleteHistoryTerm(term){
-    const arr = getHistory().filter(t=>t!==term);
-    setHistory(arr);
-    if(arr.length > 0) renderSuggestions(true); else renderSuggestions(false);
-  }
-
-  let suggestionsVisible = false;
-  function renderSuggestions(show = true){
-    suggestions.innerHTML = "";
-    const arr = getHistory();
-    if(!show || arr.length === 0){ suggestions.style.display = "none"; suggestionsVisible = false; return; }
-    const toShow = arr.slice(0, SUGGEST_SHOW);
-    toShow.forEach(term => {
-      const row = document.createElement("div");
-      row.className = "item";
-      const txt = document.createElement("span");
-      txt.textContent = term;
-      txt.style.flex = "1";
-      txt.addEventListener("mousedown", (e) => { e.preventDefault(); input.value = term; doSearch(); });
-      const rem = document.createElement("span");
-      rem.className = "remove";
-      rem.textContent = "×";
-      rem.title = "Löschen";
-      rem.addEventListener("mousedown", (e) => { e.preventDefault(); e.stopPropagation(); deleteHistoryTerm(term); });
-      row.appendChild(txt);
-      row.appendChild(rem);
-      suggestions.appendChild(row);
-    });
-    suggestions.style.display = "block";
-    suggestionsVisible = true;
-  }
-
-  input.addEventListener("focus", ()=> renderSuggestions(true));
-  input.addEventListener("blur", ()=> { setTimeout(()=>{ renderSuggestions(false); }, 120); });
-  input.addEventListener("input", ()=> { if(suggestionsVisible) renderSuggestions(true); });
-  document.addEventListener("click", (ev) => { if(!searchWrapper.contains(ev.target)) renderSuggestions(false); });
 
   let cacheData = null;
   async function loadAllData(){
     if (cacheData) return cacheData;
-    const responses = await Promise.all(JSON_FILES.map(f => fetch(f, {cache:"no-store"}).catch(()=>null)));
+    const responses = await Promise.all(JSON_FILES.map(f => fetch(f).catch(()=>null)));
     const jsons = await Promise.all(responses.map(r => r && r.ok ? r.json() : []));
     const merged = [];
     jsons.forEach(j => { if (Array.isArray(j)) merged.push(...j); });
@@ -191,204 +127,61 @@
     return cacheData;
   }
 
-  function getFilterFlags(){
-    return {
-      regex: !!document.getElementById("filter-regex")?.checked,
-      wildcard: !!document.getElementById("filter-wildcard")?.checked
-    };
-  }
-
   function haystackOfEntry(entry){
-    const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
-    return normalize(text);
+    return normalize([entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" "));
   }
 
-  function parseWildcardTokens(q){
-    return q.split(/\s+/).map(t => t.trim()).filter(Boolean).map(raw => {
-      const onlyStar = raw === "*";
-      const starts = raw.startsWith("*");
-      const ends = raw.endsWith("*");
-      const core = normalize(raw.replace(/^\*+|\*+$/g, ""));
-      let type = "plain";
-      if(onlyStar){ type = "all"; }
-      else if(starts && ends){ type = "mid"; }
-      else if(starts){ type = "end"; }
-      else if(ends){ type = "start"; }
-      return { raw, core, type };
-    });
-  }
-
-  function containsMiddle(hay, core){
-    if(!core) return false;
-    let i = hay.indexOf(core);
-    while(i !== -1){
-      if(i > 0 && i + core.length < hay.length) return true;
-      i = hay.indexOf(core, i + 1);
-    }
-    return false;
-  }
-  function matchesToken(hay, tok){
-    if(tok.type === "all") return true;
-    if(!tok.core) return false;
-    switch(tok.type){
-      case "start": return hay.startsWith(tok.core);
-      case "end":   return hay.endsWith(tok.core);
-      case "mid":   return containsMiddle(hay, tok.core);
-      default:      return hay.includes(tok.core); // plain
-    }
+  function getFilterMode(){
+    const checked = document.querySelector("#filter-menu input[name='filter-pos']:checked");
+    return checked ? checked.value : "any";
   }
 
   async function runSearch(term){
     results.innerHTML = "";
     if(!isValidQuery(term)) return;
 
-    const { regex: regexActive, wildcard: wildcardActive } = getFilterFlags();
-
-    const start = performance.now();
     const allData = await loadAllData();
-    if(allData.length === 0){
-      results.innerHTML = `<div class="no-results">Keine Suchdaten verfügbar.</div>`;
-      return;
-    }
+    const qNorm = normalize(term.trim());
+    const mode = getFilterMode();
 
-    const qRaw = term.trim();
-    const qNorm = normalize(qRaw);
-
-    let found = [];
-
-    try {
-      if(regexActive){
-        const rx = new RegExp(qRaw, "i");
-        found = allData.filter(e => rx.test(haystackOfEntry(e)));
-      } else if(wildcardActive){
-        const tokens = parseWildcardTokens(qRaw);
-
-        if(tokens.length === 1 && tokens[0].type === "all"){
-          found = allData.slice();
-        } else {
-          found = allData.filter(e => {
-            const hay = haystackOfEntry(e);
-            return tokens.every(tok => matchesToken(hay, tok));
-          });
-        }
-      } else {
-        const words = qNorm.split(/\s+/).filter(Boolean);
-        found = allData.filter(entry => {
-          const hay = haystackOfEntry(entry);
-          return words.every(w => hay.includes(w));
-        });
+    let found = allData.filter(e=>{
+      const hay = haystackOfEntry(e);
+      switch(mode){
+        case "left": return hay.startsWith(qNorm);
+        case "right": return hay.endsWith(qNorm);
+        case "middle": return hay.includes(qNorm) && !hay.startsWith(qNorm) && !hay.endsWith(qNorm);
+        default: return hay.includes(qNorm);
       }
-    } catch(err){
-      results.innerHTML = `<div class="no-results">Ungültiger Suchausdruck (${err.message}).</div>`;
-      return;
-    }
+    });
 
-    const duration = Math.round(performance.now() - start);
-
-    if(found.length === 0){
-      results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${term}</strong></div>`;
-      return;
-    }
-
-    let wordsForHL = [];
-    if(!regexActive){
-      if(wildcardActive){
-        const toks = parseWildcardTokens(qRaw)
-          .filter(t => t.type !== "all" && t.core);
-        wordsForHL = Array.from(new Set(toks.map(t => t.core)));
-      } else {
-        wordsForHL = qNorm.split(/\s+/).filter(Boolean);
-      }
-    }
+    if(found.length===0){ results.innerHTML="<div class='no-results'>Keine Ergebnisse gefunden.</div>"; return; }
 
     const h2 = document.createElement("h2");
     h2.textContent = "Ergebnisse";
     results.appendChild(h2);
 
-    const info = document.createElement("div");
-    info.style.fontSize = "0.9rem";
-    info.style.color = "#666";
-    info.style.marginBottom = "0.6rem";
-    info.textContent = `${found.length} Ergebnisse gefunden in ${duration} ms`;
-    results.appendChild(info);
-
-    found.forEach((e,i) => {
-      const item = document.createElement("div");
-      item.className = "result-item";
-
-      const titleWrap = document.createElement("div");
-      titleWrap.className = "title";
-      const a = document.createElement("a");
-      a.innerHTML = highlightHtml(e.title || "Ohne Titel", wordsForHL);
-      a.href = e.url || "#";
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){ 
-        a.target = "_blank"; 
-        a.rel = "noopener"; 
-      }
+    found.forEach((e,i)=>{
+      const item=document.createElement("div"); item.className="result-item";
+      const titleWrap=document.createElement("div"); titleWrap.className="title";
+      const a=document.createElement("a"); a.textContent=e.title||"Ohne Titel"; a.href=e.url||"#"; 
+      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){a.target="_blank"; a.rel="noopener";}
       titleWrap.appendChild(a);
-
-      const desc = document.createElement("div");
-      desc.className = "desc";
-      desc.innerHTML = highlightHtml(e.desc || "", wordsForHL);
-
-      item.appendChild(titleWrap);
-      item.appendChild(desc);
-      results.appendChild(item);
-
-      if(i < found.length - 1) {
-        const hr = document.createElement("hr");
-        hr.className = "result-sep";
-        results.appendChild(hr);
-      }
+      const desc=document.createElement("div"); desc.className="desc"; desc.textContent=e.desc||"";
+      item.appendChild(titleWrap); item.appendChild(desc); results.appendChild(item);
+      if(i<found.length-1){const hr=document.createElement("hr"); hr.className="result-sep"; results.appendChild(hr);}
     });
   }
 
-  function doSearch(){
-    const term = input.value.trim();
-    if(!isValidQuery(term)){
-      results.innerHTML = "";
-      if(location.search) history.replaceState(null, "", location.pathname);
-      return;
-    }
-    const newQ = "?q=" + encodeURIComponent(term);
-    if(location.search !== newQ) history.replaceState(null, "", newQ);
-    runSearch(term);
-    saveHistory(term);
-    renderSuggestions(false);
-  }
+  function doSearch(){ const term=input.value.trim(); if(!isValidQuery(term)) return; runSearch(term); }
 
   searchBtn.addEventListener("click", doSearch);
-  input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
+  input.addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); doSearch(); } });
 
-  window.addEventListener("popstate", () => {
-    const q = new URLSearchParams(location.search).get("q") || "";
-    input.value = q;
-    if(q) runSearch(q); else results.innerHTML = "";
-  });
-
-  const filterBtn = document.getElementById("filter-button");
-  const filterMenu = document.getElementById("filter-menu");
-  if(filterBtn && filterMenu){
-    filterBtn.addEventListener("click", ()=>{
-      filterMenu.style.display = filterMenu.style.display === "block" ? "none" : "block";
-    });
-    document.addEventListener("click", (e)=>{
-      if(!filterBtn.contains(e.target) && !filterMenu.contains(e.target)){
-        filterMenu.style.display = "none";
-      }
-    });
-    filterMenu.addEventListener("change", () => {
-      const q = input.value.trim();
-      if(q) runSearch(q);
-    });
-  }
-
-  (function init(){
-    const q = syncInputWithQuery();
-    if(q) runSearch(q);
-    renderSuggestions(false);
-    loadAllData();
-  })();
+  const filterBtn=document.getElementById("filter-button");
+  const filterMenu=document.getElementById("filter-menu");
+  filterBtn.addEventListener("click",()=>{filterMenu.style.display=filterMenu.style.display==="block"?"none":"block";});
+  document.addEventListener("click",e=>{ if(!filterBtn.contains(e.target)&&!filterMenu.contains(e.target)){filterMenu.style.display="none";} });
+  filterMenu.addEventListener("change", ()=>{ if(input.value.trim()) runSearch(input.value.trim()); });
 </script>
 </body>
 </html>
