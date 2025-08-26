@@ -31,9 +31,9 @@
   },
   {
     "title": "Einstellung",
-    "desc": "Hier kannst du das Theme einstellen",
+    "desc": "Hier kannst du das Theme einstellen, die Schriftart und noch andere Sachen",
     "url": "/settings",
-    "alias": ["settings", "ändern", "light", "white", "dark", "schrift", "minecraft", "mojangles", "arial", "sans serif"]
+    "alias": ["settings", "ändern", "light", "white", "dark", "schrift", "minecraft", "mojangles", "arial", "such", "ergebnise", "suggestions", "markier"]
   },
   {
     "title": "Minecraft Freunde Fanstory",
