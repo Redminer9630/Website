@@ -6,74 +6,161 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <style>
-    body { font-family:Mojangles; background:#eaeaea; margin:1rem; color:#000; }
+    :root {
+      --input-h: 44px;
+      --radius: 6px;
+      --suggest-item-h: 44px;
+    }
+
+    body { font-family: Mojangles, system-ui, sans-serif; background:#eaeaea; margin:1rem; color:#000; }
     h1 { margin-bottom:1rem; }
+
     #search-section { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1rem; position:relative; }
     #search-wrapper { flex:1; min-width:220px; position:relative; }
+
     #search-input {
-      width:100%; padding:.5rem .6rem; font-size:1rem; box-sizing:border-box;
-      border:1px solid transparent; border-radius:6px; outline:none; background-clip:padding-box; height:44px;
-      background:#fff; color:#000;
+      width:100%;
+      padding:.5rem .6rem;
+      font-size:1rem;
+      box-sizing:border-box;
+      border:1px solid transparent;
+      border-radius:var(--radius);
+      outline:none;
+      background-clip:padding-box;
+      height:var(--input-h);
+      background:#fff;
+      color:#000;
     }
-    #search-suggestions {
-      position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20;
-      border:1px solid #ccc; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,.06);
-      border-radius:4px; padding:0; display:none;
-      max-height:176px;
-      overflow-y:auto;
+
+    /* SEARCH + FILTER BUTTONS */
+    #controls {
+      display:flex;
+      gap:.6rem;
+      align-items:center;
     }
-    #search-suggestions .item {
-      display:flex; justify-content:space-between; gap:.5rem;
-      padding:0 .6rem; cursor:pointer; align-items:center;
-      font-size:1rem; height:44px; line-height:44px;
-    }
-    #search-button, #filter-button {
-      font-family: inherit;
+    #search-button {
+      font-family: Mojangles, system-ui, sans-serif;
       font-size: 16px;
       background-color: #1a1a1a;
-      color: #fff;
+      color: white;
       padding: 0 20px;
-      border-radius:6px;
+      border-radius:8px;
       border: 1px solid #eaeaea;
       cursor: pointer;
-      height:44px;
+      height:var(--input-h);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1;
+    }
+    #filter-button {
+      font-family: Mojangles, system-ui, sans-serif;
+      font-size: 16px;
+      background-color: #1a1a1a;
+      color: white;
+      padding: 0 12px;
+      border-radius:8px;
+      border: 1px solid #eaeaea;
+      cursor: pointer;
+      height:var(--input-h);
       display:inline-flex;
       align-items:center;
       justify-content:center;
       line-height:1;
     }
     #search-button:hover, #filter-button:hover { opacity:.95; }
+
+    /* SUGGESTIONS */
+    #search-suggestions {
+      position:absolute;
+      top: calc(100% + 6px);
+      left:0;
+      right:0;
+      z-index:20;
+      border:1px solid #ccc;
+      background:#fff;
+      box-shadow:0 6px 18px rgba(0,0,0,.06);
+      border-radius:6px;
+      padding:4px 0;
+      display:none;
+      max-height: calc(var(--suggest-item-h) * 4 + 8px); /* 4 items high */
+      overflow-y:auto;
+    }
+    #search-suggestions .item {
+      display:flex;
+      justify-content:space-between;
+      gap:.5rem;
+      padding:.0 .6rem;
+      cursor:pointer;
+      align-items:center;
+      font-size:1rem;
+      height:var(--suggest-item-h);
+      line-height:var(--suggest-item-h);
+    }
+    #search-suggestions .item:hover { background:#f3f3f3; }
+    #search-suggestions .remove {
+      color:#c33;
+      cursor:pointer;
+      margin-left:.5rem;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      height:20px;
+      font-weight:700;
+      line-height:1;
+      transform: translateY(-2px); /* 2px hoch korrigiert */
+    }
+
+    /* FILTER MENU (positioned by JS under button) */
+    #filter-menu {
+      position: absolute;
+      z-index: 30;
+      background:#fff;
+      border:1px solid #ccc;
+      padding:.6rem;
+      border-radius:8px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+      display:none;
+      min-width:200px;
+    }
+    #filter-menu .row { display:flex; align-items:center; gap:.5rem; margin-bottom:.5rem; cursor:pointer; }
+    #filter-menu .row i { width:20px; text-align:center; }
+    #filter-menu .row input { margin:0; transform:translateY(1px); }
+    #filter-menu .hint { font-size:0.85rem; color:#666; margin-bottom:.4rem; }
+
+    /* RESULTS */
     #results { margin-top:1rem; }
     .no-results { color:#666; font-style:italic; }
     .result-item { padding:.6rem 0; animation: fadeInUp .24s ease both; }
     .result-sep { border:none; border-top:1px solid #e0e0e0; margin:.5rem 0; animation: fadeInUp .24s ease both; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
+
     mark { background:#fffb91; color:inherit; padding:0; box-decoration-break:clone; }
 
-    #search-suggestions .item:hover { background:#f3f3f3; }
-    #search-suggestions .remove {
-      color:#c33; cursor:pointer; margin-left:.5rem; user-select:none; display:inline-flex; align-items:center; height:20px;
-      font-weight:700; line-height:1; transform: translateY(-1px);
+    .result-item .title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+    .result-item .desc {
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.4;
     }
 
-    /* Filtermenü */
-    #filter-container { position:relative; }
-    #filter-menu {
-      position:absolute; top:calc(100% + 6px); left:0; z-index:30;
-      background:#fff; border:1px solid #ccc; padding:.6rem; border-radius:6px;
-      box-shadow:0 4px 12px rgba(0,0,0,.1); display:none; min-width:180px;
-    }
-    #filter-menu label { display:flex; align-items:center; gap:.5rem; margin-bottom:.4rem; font-size:.95rem; cursor:pointer; }
-    #filter-menu i { color:#333; width:20px; text-align:center; }
-    #filter-menu input[type="radio"] { transform:scale(1.2); }
+    /* dark */
     :root[data-theme="dark"] body { background:#101010; color:#eee; }
     :root[data-theme="dark"] #search-input { background:#111; color:#eee; border-color:#333; }
     :root[data-theme="dark"] #search-suggestions { background:#111; border:1px solid #333; color:#eee; box-shadow:none; }
     :root[data-theme="dark"] #search-suggestions .item:hover { background:#1a1a1a; }
     :root[data-theme="dark"] mark { background:#5a5a1e; }
     :root[data-theme="dark"] #filter-menu { background:#111; border-color:#333; color:#eee; }
-    .result-item .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.2rem; }
-    .result-item .desc { font-size: 1rem; color: #444; line-height: 1.4; }
+
+    /* small screens */
+    @media (max-width:520px){
+      #controls { flex-direction: row; }
+      #filter-menu { min-width: 160px; }
+    }
   </style>
   <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t73/docs/autoloader.js"></script>
 </head>
@@ -85,103 +172,350 @@
       <input id="search-input" type="search" autocomplete="off" placeholder="Suchbegriff eingeben" />
       <div id="search-suggestions" aria-label="Suchvorschläge"></div>
     </div>
-    <div id="filter-container">
+
+    <div id="controls" aria-hidden="false">
+      <button id="search-button" title="Suchen">Suchen</button>
       <button id="filter-button" title="Filter"><i class="fa-solid fa-filter"></i></button>
-      <div id="filter-menu">
-        <label><input type="radio" name="filter-pos" value="left"> <i class="fa-solid fa-align-left"></i> Muss am Anfang stehen</label>
-        <label><input type="radio" name="filter-pos" value="middle"> <i class="fa-solid fa-align-center"></i> Muss irgendwo drin sein</label>
-        <label><input type="radio" name="filter-pos" value="right"> <i class="fa-solid fa-align-right"></i> Muss am Ende stehen</label>
-        <label><input type="radio" name="filter-pos" value="any" checked> <i class="fa-solid fa-arrows-left-right"></i> Egal wo</label>
-      </div>
     </div>
-    <button id="search-button">Suchen</button>
+
+    <div id="filter-menu" role="dialog" aria-label="Suchfilter">
+      <div class="hint">Suche muss sein:</div>
+      <div class="row" data-mode="any"><input type="radio" name="filter-mode" id="mode-any" checked><i class="fa-solid fa-globe"></i><label for="mode-any">Überall</label></div>
+      <div class="row" data-mode="start"><input type="radio" name="filter-mode" id="mode-start"><i class="fa-solid fa-align-left"></i><label for="mode-start">Am Anfang</label></div>
+      <div class="row" data-mode="mid"><input type="radio" name="filter-mode" id="mode-mid"><i class="fa-solid fa-align-center"></i><label for="mode-mid">Mitten drin</label></div>
+      <div class="row" data-mode="end"><input type="radio" name="filter-mode" id="mode-end"><i class="fa-solid fa-align-right"></i><label for="mode-end">Am Ende</label></div>
+      <div class="hint" style="margin-top:.4rem;font-size:.85rem">Tipp: Verwende `*wort` / `wort*` / `*wort*` für flexible Suche.</div>
+    </div>
   </section>
 
   <div id="results"></div>
 
 <script>
-  const JSON_FILES = [
-    "search/index.json",
-    "search/discord.json",
-    "search/news.json",
-    "search/projects.json",
-    "search/linktree.json",
-    "search/manual.json"
-  ];
+const JSON_FILES = [
+  "search/index.json",
+  "search/discord.json",
+  "search/news.json",
+  "search/projects.json",
+  "search/linktree.json",
+  "search/manual.json"
+];
+const SETTINGS_KEY = "searchMaxHistory";
+let MAX_HISTORY = parseInt(localStorage.getItem(SETTINGS_KEY) || "15", 10);
+const SEARCH_KEY = "searchHistory";
+const SUGGEST_SHOW = 4;
 
-  const input = document.getElementById("search-input");
-  const searchBtn = document.getElementById("search-button");
-  const results = document.getElementById("results");
+const input = document.getElementById("search-input");
+const searchBtn = document.getElementById("search-button");
+const filterBtn = document.getElementById("filter-button");
+const suggestions = document.getElementById("search-suggestions");
+const results = document.getElementById("results");
+const searchWrapper = document.getElementById("search-wrapper");
+const filterMenu = document.getElementById("filter-menu");
 
-  const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  const isValidQuery = q => typeof q === "string" && q.trim().length > 0;
+const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const isValidQuery = q => typeof q === "string" && q.trim().length > 0;
+function escapeRe(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
-  let cacheData = null;
-  async function loadAllData(){
-    if (cacheData) return cacheData;
-    const responses = await Promise.all(JSON_FILES.map(f => fetch(f).catch(()=>null)));
-    const jsons = await Promise.all(responses.map(r => r && r.ok ? r.json() : []));
-    const merged = [];
-    jsons.forEach(j => { if (Array.isArray(j)) merged.push(...j); });
-    cacheData = merged;
-    return cacheData;
+function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
+function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
+function saveHistory(term){
+  if(!term) return;
+  let arr = getHistory().filter(t => t !== term);
+  arr.unshift(term);
+  if(arr.length > MAX_HISTORY) arr = arr.slice(0, MAX_HISTORY);
+  setHistory(arr);
+}
+function deleteHistoryTerm(term){
+  const arr = getHistory().filter(t => t !== term);
+  setHistory(arr);
+  renderSuggestions(true);
+}
+
+let suggestionsVisible = false;
+function renderSuggestions(show = true){
+  suggestions.innerHTML = "";
+  const arr = getHistory();
+  if(!show || arr.length === 0){ suggestions.style.display = "none"; suggestionsVisible = false; return; }
+  const toShow = arr.slice(0, SUGGEST_SHOW);
+  toShow.forEach(term => {
+    const row = document.createElement("div");
+    row.className = "item";
+
+    const txt = document.createElement("span");
+    txt.textContent = term;
+    txt.style.flex = "1";
+    txt.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      input.value = term;
+      doSearch();
+    });
+
+    const rem = document.createElement("span");
+    rem.className = "remove";
+    rem.textContent = "×";
+    rem.title = "Löschen";
+    rem.addEventListener("mousedown", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      deleteHistoryTerm(term);
+    });
+
+    row.appendChild(txt);
+    row.appendChild(rem);
+    suggestions.appendChild(row);
+  });
+  suggestions.style.display = "block";
+  suggestionsVisible = true;
+}
+
+input.addEventListener("focus", () => renderSuggestions(true));
+input.addEventListener("input", () => { if(suggestionsVisible) renderSuggestions(true); });
+
+document.addEventListener("click", (ev) => {
+  if(!searchWrapper.contains(ev.target) && !suggestions.contains(ev.target)) {
+    renderSuggestions(false);
+  }
+});
+
+let cacheData = null;
+async function loadAllData(){
+  if(cacheData) return cacheData;
+  const responses = await Promise.all(JSON_FILES.map(f => fetch(f, {cache:"no-store"}).catch(()=>null)));
+  const jsons = await Promise.all(responses.map(r => r && r.ok ? r.json() : []));
+  const merged = [];
+  jsons.forEach(j => { if(Array.isArray(j)) merged.push(...j); });
+  cacheData = merged;
+  return cacheData;
+}
+
+function parseWildcardTokens(qRaw){
+  return qRaw.split(/\s+/).map(t => t.trim()).filter(Boolean).map(raw => {
+    const onlyStar = raw === "*";
+    const starts = raw.startsWith("*");
+    const ends = raw.endsWith("*");
+    const core = normalize(raw.replace(/^\*+|\*+$/g,""));
+    let type = "plain";
+    if(onlyStar){ type = "all"; }
+    else if(starts && ends){ type = "mid"; }
+    else if(starts){ type = "end"; }
+    else if(ends){ type = "start"; }
+    return { raw, core, type };
+  });
+}
+
+function containsMiddle(hay, core){
+  if(!core) return false;
+  let i = hay.indexOf(core);
+  while(i !== -1){
+    if(i > 0 && i + core.length < hay.length) return true;
+    i = hay.indexOf(core, i + 1);
+  }
+  return false;
+}
+
+function matchesToken(hay, tok, forceMode){
+  if(tok.type === "all") return true;
+  if(!tok.core) return false;
+  const mode = forceMode || tok.type;
+  switch(mode){
+    case "start": return hay.startsWith(tok.core);
+    case "end":   return hay.endsWith(tok.core);
+    case "mid":   return containsMiddle(hay, tok.core);
+    default:      return hay.includes(tok.core); // plain or any
+  }
+}
+
+function getMenuMode(){
+  const checked = filterMenu.querySelector('input[name="filter-mode"]:checked');
+  return checked ? checked.parentNode.dataset.mode : 'any';
+}
+
+function haystackOfEntry(entry){
+  const text = [entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" ");
+  return normalize(text);
+}
+
+function highlightHtml(text, words){
+  if(localStorage.getItem("marks") !== "true") return escapeHtml(text);
+  if(!words || !words.length) return escapeHtml(text);
+  let out = escapeHtml(text || "");
+  words.forEach(w => {
+    if(!w) return;
+    const rx = new RegExp(escapeRe(w), "gi");
+    out = out.replace(rx, m => `<mark>${m}</mark>`);
+  });
+  return out;
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
+
+async function runSearch(term){
+  results.innerHTML = "";
+  if(!isValidQuery(term)) return;
+
+  const start = performance.now();
+  const allData = await loadAllData();
+  if(!Array.isArray(allData) || allData.length === 0){
+    results.innerHTML = `<div class="no-results">Keine Suchdaten verfügbar.</div>`;
+    return;
   }
 
-  function haystackOfEntry(entry){
-    return normalize([entry.title||"", entry.desc||"", ...(entry.alias||[])].join(" "));
+  const qRaw = term.trim();
+  const qNorm = normalize(qRaw);
+  const menuMode = getMenuMode();
+
+  let found = [];
+
+  try {
+    if(qRaw === "*"){
+      found = allData.slice();
+    } else {
+      const tokens = parseWildcardTokens(qRaw);
+      found = allData.filter(entry => {
+        const hay = haystackOfEntry(entry);
+        return tokens.every(tok => {
+          const force = (tok.type === 'plain') ? (menuMode === 'any' ? null : menuMode) : null;
+          return matchesToken(hay, tok, force);
+        });
+      });
+    }
+  } catch (err) {
+    results.innerHTML = `<div class="no-results">Ungültiger Suchausdruck (${escapeHtml(err.message)}).</div>`;
+    return;
   }
 
-  function getFilterMode(){
-    const checked = document.querySelector("#filter-menu input[name='filter-pos']:checked");
-    return checked ? checked.value : "any";
+  const duration = Math.round(performance.now() - start);
+
+  if(found.length === 0){
+    results.innerHTML = `<div class="no-results">Keine Ergebnisse gefunden für: <strong>${escapeHtml(term)}</strong></div>`;
+    return;
   }
 
-  async function runSearch(term){
+  let wordsForHL = [];
+  const toks = parseWildcardTokens(qRaw).filter(t => t.type !== 'all' && t.core);
+  if(toks.length) wordsForHL = Array.from(new Set(toks.map(t => t.core)));
+  if(!wordsForHL.length) wordsForHL = qNorm.split(/\s+/).filter(Boolean);
+
+  const h2 = document.createElement("h2");
+  h2.textContent = "Ergebnisse";
+  results.appendChild(h2);
+
+  const info = document.createElement("div");
+  info.style.fontSize = "0.9rem";
+  info.style.color = "#666";
+  info.style.marginBottom = "0.6rem";
+  info.textContent = `${found.length} Ergebnisse gefunden in ${duration} ms`;
+  results.appendChild(info);
+
+  found.forEach((e,i) => {
+    const item = document.createElement("div");
+    item.className = "result-item";
+
+    const titleWrap = document.createElement("div");
+    titleWrap.className = "title";
+
+    const a = document.createElement("a");
+    a.href = e.url || "#";
+    if(a.href.startsWith("http") && !a.href.includes(location.hostname)){
+      a.target = "_blank"; a.rel = "noopener";
+    }
+    const titleSpan = document.createElement("span");
+    titleSpan.innerHTML = highlightHtml(e.title || "Ohne Titel", wordsForHL);
+    a.appendChild(titleSpan);
+
+    titleWrap.appendChild(a);
+
+    const desc = document.createElement("div");
+    desc.className = "desc";
+    desc.innerHTML = highlightHtml(e.desc || "", wordsForHL);
+
+    item.appendChild(titleWrap);
+    item.appendChild(desc);
+    results.appendChild(item);
+
+    if(i < found.length - 1) {
+      const hr = document.createElement("hr");
+      hr.className = "result-sep";
+      results.appendChild(hr);
+    }
+  });
+}
+
+function doSearch(){
+  const term = input.value.trim();
+  if(!isValidQuery(term)){
     results.innerHTML = "";
-    if(!isValidQuery(term)) return;
-
-    const allData = await loadAllData();
-    const qNorm = normalize(term.trim());
-    const mode = getFilterMode();
-
-    let found = allData.filter(e=>{
-      const hay = haystackOfEntry(e);
-      switch(mode){
-        case "left": return hay.startsWith(qNorm);
-        case "right": return hay.endsWith(qNorm);
-        case "middle": return hay.includes(qNorm) && !hay.startsWith(qNorm) && !hay.endsWith(qNorm);
-        default: return hay.includes(qNorm);
-      }
-    });
-
-    if(found.length===0){ results.innerHTML="<div class='no-results'>Keine Ergebnisse gefunden.</div>"; return; }
-
-    const h2 = document.createElement("h2");
-    h2.textContent = "Ergebnisse";
-    results.appendChild(h2);
-
-    found.forEach((e,i)=>{
-      const item=document.createElement("div"); item.className="result-item";
-      const titleWrap=document.createElement("div"); titleWrap.className="title";
-      const a=document.createElement("a"); a.textContent=e.title||"Ohne Titel"; a.href=e.url||"#"; 
-      if(a.href.startsWith("http") && !a.href.includes(location.hostname)){a.target="_blank"; a.rel="noopener";}
-      titleWrap.appendChild(a);
-      const desc=document.createElement("div"); desc.className="desc"; desc.textContent=e.desc||"";
-      item.appendChild(titleWrap); item.appendChild(desc); results.appendChild(item);
-      if(i<found.length-1){const hr=document.createElement("hr"); hr.className="result-sep"; results.appendChild(hr);}
-    });
+    if(location.search) history.replaceState(null, "", location.pathname);
+    return;
   }
+  const newQ = "?q=" + encodeURIComponent(term);
+  if(location.search !== newQ) history.replaceState(null, "", newQ);
+  runSearch(term);
+  saveHistory(term);
+  renderSuggestions(false);
+}
 
-  function doSearch(){ const term=input.value.trim(); if(!isValidQuery(term)) return; runSearch(term); }
+searchBtn.addEventListener("click", doSearch);
+input.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); doSearch(); } });
 
-  searchBtn.addEventListener("click", doSearch);
-  input.addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); doSearch(); } });
+window.addEventListener("popstate", () => {
+  const q = new URLSearchParams(location.search).get("q") || "";
+  input.value = q;
+  if(q) runSearch(q); else results.innerHTML = "";
+});
 
-  const filterBtn=document.getElementById("filter-button");
-  const filterMenu=document.getElementById("filter-menu");
-  filterBtn.addEventListener("click",()=>{filterMenu.style.display=filterMenu.style.display==="block"?"none":"block";});
-  document.addEventListener("click",e=>{ if(!filterBtn.contains(e.target)&&!filterMenu.contains(e.target)){filterMenu.style.display="none";} });
-  filterMenu.addEventListener("change", ()=>{ if(input.value.trim()) runSearch(input.value.trim()); });
+function openFilterMenu(){
+  // position under filterBtn
+  const rect = filterBtn.getBoundingClientRect();
+  const bodyRect = document.body.getBoundingClientRect();
+  filterMenu.style.display = "block";
+  const top = rect.bottom + window.scrollY + 6;
+  let left = rect.left + window.scrollX - (filterMenu.offsetWidth - rect.width)
+  if(left < 6) left = 6;
+  if(left + filterMenu.offsetWidth > window.innerWidth - 6) {
+    left = window.innerWidth - filterMenu.offsetWidth - 6;
+  }
+  filterMenu.style.top = top + "px";
+  filterMenu.style.left = left + "px";
+}
+
+filterBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if(filterMenu.style.display === "block") {
+    filterMenu.style.display = "none";
+  } else {
+    filterMenu.style.display = "block"
+    requestAnimationFrame(openFilterMenu);
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if(!filterBtn.contains(e.target) && !filterMenu.contains(e.target)){
+    filterMenu.style.display = "none";
+  }
+});
+
+filterMenu.addEventListener("change", () => {
+  const q = input.value.trim();
+  if(q) runSearch(q);
+});
+
+filterMenu.querySelectorAll(".row").forEach(r => {
+  r.addEventListener("click", () => {
+    const radio = r.querySelector('input[type="radio"]');
+    if(radio) { radio.checked = true; filterMenu.dispatchEvent(new Event('change')); }
+  });
+});
+
+(function init(){
+  MAX_HISTORY = parseInt(localStorage.getItem(SETTINGS_KEY) || "15", 10);
+
+  const q = new URLSearchParams(location.search).get("q") || "";
+  if(q) {
+    input.value = q;
+    runSearch(q);
+  }
+  renderSuggestions(false);
+  loadAllData().catch(()=>{});
+})();
 </script>
 </body>
 </html>
