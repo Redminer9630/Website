@@ -11,7 +11,7 @@ if (location.hostname.startsWith("www.")) location.replace(location.href.replace
 window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[type] || console.log;log(txt);alert(txt);};
 
 window.debug = false;
-window.CommonVersion = { version: "vp2.3", key: "1.pre2", date: "25.08.24", time: "20:00" };
+window.CommonVersion = { version: "vp2.4", key: "1.pre2", date: "25.08.26", time: "8:00" };
 
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t72/docs/js_components/";["back_button.js","mctooltip.js","theme.js","overrides.js", "toast.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 const link = document.createElement("link");link.rel = "stylesheet";link.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t72/docs/js_components/framework.css";document.head.appendChild(link);
