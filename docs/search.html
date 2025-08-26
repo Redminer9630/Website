@@ -115,6 +115,7 @@
   const normalize = t => (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   const isValidQuery = q => q && q.trim().length > 0;
 
+  function highlightHtml(text, words){if(localStorage.getItem("marks") !== "true") return text;if(!words || !words.length) return text;const rx = new RegExp(words.map(escapeRe).join("|"), "gi");return text.replace(rx, m => `<mark>${m}</mark>`);}
   function syncInputWithQuery(){const q = new URLSearchParams(location.search).get("q") || "";input.value = q;return q;}
   function getHistory(){ try { return JSON.parse(localStorage.getItem(SEARCH_KEY) || "[]"); } catch { return []; } }
   function setHistory(arr){ localStorage.setItem(SEARCH_KEY, JSON.stringify(arr)); }
