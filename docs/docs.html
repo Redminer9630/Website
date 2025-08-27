@@ -18,11 +18,9 @@
 			height: 100vh;
 			overflow: hidden;
 		}
-
-		/* Sidebar flexibler mit Mindestbreite */
 		.sidebar {
-			flex-basis: 300px; /* Mindestbreite */
-			flex-shrink: 0; /* Nicht kleiner als 300px */
+			flex-basis: 300px;
+			flex-shrink: 0;
 			height: 100vh;
 			background: #f4f4f4;
 			border-right: 1px solid #ddd;
@@ -34,9 +32,8 @@
 			top: 0;
 		}
 
-		/* Content nimmt restlichen Platz ein */
 		.content {
-			margin-left: 300px; /* Platz für Sidebar */
+			margin-left: 300px;
 			flex-grow: 1;
 			height: 100vh;
 			overflow-y: auto;
