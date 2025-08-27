@@ -1,528 +1,164 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Dokumentation - Redminer9630</title>
 	<script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t73/docs/autoloader.js" type="module" defer></script>
 	<style>
-		html,
-		body {
-			height: 100%;
-			margin: 0;
-			font-family: "Mojangles";
+		:root {
+			--sidebar-width: 300px;
+			--gap: 20px;
+			--bg: #f4f4f4;
+			--accent: #007bff;
+			--radius: 8px;
+			--font: "Mojangles", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 		}
-
-		body {
-			display: flex;
-			height: 100vh;
-			overflow: hidden;
+		html,body{height:100%;margin:0;font-family:var(--font);color:#111;background:#fff;box-sizing:border-box}
+		*,*:before,*:after{box-sizing:inherit}
+		.sidebar{
+			position:fixed;
+			left:0;top:0;bottom:0;
+			width:var(--sidebar-width);
+			padding:var(--gap);
+			background:var(--bg);
+			border-right:1px solid #ddd;
+			overflow:auto;
 		}
-		.sidebar {
-			flex-basis: 300px;
-			flex-shrink: 0;
-			height: 100vh;
-			background: #f4f4f4;
-			border-right: 1px solid #ddd;
-			padding: 20px;
-			box-sizing: border-box;
-			overflow-y: auto;
-			position: fixed;
-			left: 0;
-			top: 0;
+		.content{
+			margin-left:var(--sidebar-width);
+			min-height:100vh;
+			padding:var(--gap);
+			background:transparent;
 		}
-
-		.content {
-			margin-left: 300px;
-			flex-grow: 1;
-			height: 100vh;
-			overflow-y: auto;
-			padding: 20px;
-			box-sizing: border-box;
-			font-family: inherit;
+		.sidebar ul{list-style:none;padding:0;margin:0}
+		.sidebar li{margin:10px 0}
+		.sidebar a{color:#333;text-decoration:none;font-weight:700}
+		.sidebar a:hover{color:var(--accent)}
+		.toggle{cursor:pointer;user-select:none;display:flex;align-items:center;padding:6px 8px;font-weight:700}
+		.toggle::before{content:"➤";margin-right:8px;transition:transform .18s ease}
+		.toggle.open::before{transform:rotate(90deg)}
+		.submenu{display:none;padding-left:14px;margin:6px 0}
+		.submenu.show{display:block}
+		.wpage{cursor:pointer;padding:6px 8px;border-radius:6px}
+		.wpage.active{background:var(--accent);color:#fff}
+		#imgcrdt ul.submenu{max-height:300px;overflow:auto;padding-left:0}
+		#imgcrdt ul.submenu a{display:block;padding:6px;border-radius:6px;color:var(--accent);background:transparent;margin:4px 0;text-decoration:none}
+		#imgcrdt ul.submenu a:hover{background:var(--accent);color:#fff}
+		.title{font-size:1.6em;margin:0 0 18px 0}
+		section{margin-bottom:36px}
+		h1{margin:0 0 18px 0}
+		h2{margin:14px 0 12px 0}
+		@media (max-width:900px){
+			:root{--sidebar-width:260px}
+			.sidebar{width:var(--sidebar-width)}
+			.content{margin-left:var(--sidebar-width)}
 		}
-
-		.sidebar ul {
-			list-style: none;
-			padding: 0;
-			margin: 0;
+		@media (max-width:600px){
+			:root{--sidebar-width:0}
+			.sidebar{position:relative;width:100%;height:auto;border-right:none;padding:12px}
+			.content{margin-left:0;padding:12px}
 		}
-
-		.sidebar li {
-			margin: 10px 0;
-		}
-
-		.sidebar a {
-			color: #333;
-			text-decoration: none;
-			font-weight: bold;
-			font-family: inherit;
-		}
-
-		.sidebar a:hover {
-			color: #007bff;
-		}
-
-		section {
-			margin-bottom: 40px;
-		}
-
-		[class^="element"] {
-			font-weight: bold;
-			cursor: pointer;
-			padding: 5px 10px;
-			user-select: none;
-			display: flex;
-			align-items: center;
-			transition: background-color 0.2s;
-			font-family: inherit;
-		}
-
-		[class^="element"]::before {
-			content: "➤";
-			display: inline-block;
-			margin-right: 5px;
-			transform: rotate(0deg);
-			transition: transform 0.2s ease;
-		}
-
-		[class^="element"].open::before {
-			transform: rotate(90deg);
-		}
-
-		.element1 {
-			font-size: 1.5em;
-		}
-		.element2 {
-			font-size: 1.4em;
-			padding-left: 10px;
-		}
-		.element3 {
-			font-size: 1.3em;
-			padding-left: 20px;
-		}
-		.element4 {
-			font-size: 1.2em;
-			padding-left: 30px;
-		}
-		.element5 {
-			font-size: 1.1em;
-			padding-left: 40px;
-		}
-		.element6 {
-			font-size: 1em;
-			padding-left: 50px;
-		}
-
-		.submenu {
-			display: none;
-			padding-left: 15px;
-			list-style: none;
-			margin: 0;
-		}
-
-		.submenu.show {
-			display: block;
-			animation: slideDown 0.3s ease;
-		}
-
-		.wpage {
-			cursor: pointer;
-			padding: 5px 10px;
-			border-radius: 8px;
-		}
-
-		.wpage.active {
-			background: #007bff;
-			color: #fff;
-		}
-
-		@keyframes slideDown {
-			from {
-				opacity: 0;
-				max-height: 0;
-			}
-			to {
-				opacity: 1;
-				max-height: 500px;
-			}
-		}
-
-		.toggle {
-			cursor: pointer;
-			user-select: none;
-		}
-
-		/* Angepasste Styles für Image Credits */
-		#imgcrdt {
-			display: block;
-			padding: 0;
-			margin: 0;
-		}
-
-		#imgcrdt ul.submenu {
-			display: none;
-			padding-left: 15px;
-			list-style: none;
-			margin: 0;
-			max-height: 300px;
-			overflow-y: auto;
-			position: sticky;
-			top: 20px;
-			background: #f4f4f4;
-			border-radius: 6px;
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-			z-index: 10;
-		}
-
-		#imgcrdt ul.submenu.show {
-			display: block;
-		}
-
-		#imgcrdt ul.submenu a {
-			display: block;
-			margin: 6px 0;
-			padding: 6px 10px;
-			background: #f4f4f4;
-			border-radius: 6px;
-			color: #007bff;
-			text-decoration: none;
-			transition: background 0.2s, color 0.2s;
-		}
-
-		#imgcrdt ul.submenu a:hover {
-			background: #007bff;
-			color: #fff;
-		}
-
-		/* --- Media Queries für responsive Verhalten --- */
-
-		@media (max-width: 800px) {
-			.sidebar {
-				flex-basis: 250px;
-				position: fixed;
-				height: 100vh;
-				overflow-y: auto;
-			}
-			.content {
-				margin-left: 250px;
-			}
-		}
-
-		@media (max-width: 500px) {
-			body {
-				flex-direction: column;
-			}
-			.sidebar {
-				position: relative;
-				width: 100%;
-				height: auto;
-				border-right: none;
-				padding: 10px 20px;
-				flex-basis: auto;
-			}
-			.content {
-				margin-left: 0;
-				padding: 10px 20px;
-				height: auto;
-			}
-		}
-
-		/* Schriftgrößen kleiner bei kleinen Bildschirmen */
-
-		@media (max-width: 600px) {
-			body {
-				font-size: 0.9em;
-			}
-			.element1 {
-				font-size: 1.3em;
-			}
-			.element2 {
-				font-size: 1.2em;
-			}
-			.element3 {
-				font-size: 1.1em;
-			}
-			.element4 {
-				font-size: 1em;
-			}
-			.element5 {
-				font-size: 0.95em;
-			}
-			.element6 {
-				font-size: 0.9em;
-			}
-			.sidebar {
-				padding-left: 0;
-			}
-			[class^="element"]::before {
-				content: none;
-			}
-		}
-
-		@media (max-width: 350px) {
-			body {
-				font-size: 0.8em;
-			}
-			.element1 {
-				font-size: 1.1em;
-			}
-			.element2 {
-				font-size: 1em;
-			}
-			.element3 {
-				font-size: 0.95em;
-			}
-			.element4 {
-				font-size: 0.9em;
-			}
-			.element5 {
-				font-size: 0.85em;
-			}
-			.element6 {
-				font-size: 0.8em;
-			}
-			.sidebar {
-				padding-left: 0;
-			}
-			[class^="element"]::before {
-				content: none;
-			}
-		}
-
-		/* Dark Mode Styles */
-
-		html[data-theme="dark"] body {
-			background: #121212;
-			color: #ddd;
-		}
-
-		html[data-theme="dark"] .sidebar {
-			background: #222;
-			border-color: #444;
-		}
-
-		html[data-theme="dark"] .sidebar a {
-			color: #ccc;
-		}
-
-		html[data-theme="dark"] .sidebar a:hover {
-			color: #66aaff;
-		}
-
-		html[data-theme="dark"] .content {
-			background: #181818;
-			color: #ddd;
-		}
-
-		html[data-theme="dark"] .wpage.active {
-			background: #3399ff;
-			color: #fff;
-		}
-
-		html[data-theme="dark"] #imgcrdt ul.submenu a {
-			background: #222;
-			color: #66aaff;
-		}
-
-		html[data-theme="dark"] #imgcrdt ul.submenu a:hover {
-			background: #3399ff;
-			color: #fff;
-		}
-
-		.title {
-			font-size: 1.6em;
-		}
+		html[data-theme="dark"] body{background:#121212;color:#ddd}
+		html[data-theme="dark"] .sidebar{background:#222;border-color:#333}
+		html[data-theme="dark"] .sidebar a{color:#ccc}
+		html[data-theme="dark"] .sidebar a:hover{color:#66aaff}
+		html[data-theme="dark"] #imgcrdt ul.submenu a{background:transparent;color:#66aaff}
 	</style>
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
 			document.querySelectorAll(".toggle").forEach((el, i) => {
 				const key = "sidebar_toggle_" + i;
-
 				if (localStorage.getItem(key) === "open") {
 					el.classList.add("open");
 					const submenu = el.nextElementSibling;
 					if (submenu) submenu.classList.add("show");
 				}
-
 				el.addEventListener("click", () => {
 					el.classList.toggle("open");
 					const submenu = el.nextElementSibling;
 					if (submenu) submenu.classList.toggle("show");
-
-					if (el.classList.contains("open")) {
-						localStorage.setItem(key, "open");
-					} else {
-						localStorage.removeItem(key);
-					}
+					if (el.classList.contains("open")) localStorage.setItem(key, "open"); else localStorage.removeItem(key);
 				});
 			});
-
 			const pages = document.querySelectorAll(".wpage");
 			const activeId = new URLSearchParams(location.search).get("q");
-
 			if (activeId) {
 				const section = document.getElementById(activeId);
 				section?.scrollIntoView({ behavior: "smooth" });
-				pages.forEach((p) => {
-					if (p.getAttribute("data-target") === activeId) p.classList.add("active");
-					else p.classList.remove("active");
-				});
+				pages.forEach((p) => p.classList.toggle("active", p.getAttribute("data-target") === activeId));
 			}
-
-			pages.forEach((page) => {
-				page.addEventListener("click", () => {
-					const target = page.getAttribute("data-target");
-					if (target) {
-						history.replaceState(null, "", `?q=${target}`);
-						document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
-						pages.forEach((p) => p.classList.remove("active"));
-						page.classList.add("active");
-					}
-				});
-			});
+			pages.forEach((page) => page.addEventListener("click", () => {
+				const target = page.getAttribute("data-target");
+				if (!target) return;
+				history.replaceState(null, "", `?q=${target}`);
+				document.getElementById(target)?.scrollIntoView({ behavior: "smooth" });
+				pages.forEach(p => p.classList.remove("active"));
+				page.classList.add("active");
+			}));
 		});
 	</script>
 </head>
 <body>
 	<div class="sidebar">
 		<div class="nav-group">
-			<div class="element2 toggle" mctip="Allgemein expandieren">Allgemein</div>
+			<div class="element2 toggle">Allgemein</div>
 			<ul class="submenu">
 				<li class="wpage" data-target="impressum">Impressum</li>
 				<li class="wpage" data-target="about">Mehr über mich</li>
 				<li class="wpage" data-target="hinweise">Hinweise</li>
 			</ul>
-			<!--<div class="element2 toggle" mctip="Redeem expandieren">Redeem</div>
-			<ul class="submenu">
-				<li class="wpage" data-target="rdmcd">Code Redeem</li>
-				<li class="wpage" data-target="rdmml">Redeem Mail</li>
-			</ul>-->
-			<div class="element2 toggle" mctip="Technisches expandieren">Technisch</div>
+			<div class="element2 toggle">Technisch</div>
 			<ul class="submenu">
 				<li class="wpage" data-target="fehler">Fehler</li>
 				<li class="wpage" data-target="ipdata">Deine Daten</li>
 			</ul>
+			<section id="imgcrdt">
+				<div class="element2 toggle">Image Credits</div>
+				<ul class="submenu">
+					<li><a href="https://www.flaticon.com/free-icons/user-generated-content" title="user generated content icons">User generated content icons — Uniconlabs</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/file" title="file icons">File icons — Freepik</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/tools" title="tools icons">Tools icons — Freepik</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/webinar" title="webinar icons">Webinar icons — Corner Pixel</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/server" title="server icons">Server icons — juicy_fish</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/satisfaction" title="satisfaction icons">Satisfaction icons — Ilham Fitrotul Hayat</a></li>
+					<li><a href="https://www.flaticon.com/free-icons/game-development" title="game development icons">Game development icons — Pixelmeetup</a></li>
+				</ul>
+			</section>
 		</div>
 	</div>
+
 	<div class="content">
 		<h1>Dokumentation</h1>
 		<h2 class="title">Allgemein</h2>
+
 		<section id="impressum">
 			<h2>Impressum</h2>
-			<p>
-				Erstellt von Redminer9630 mit Hilfe von
-				<a href="https://chatgpt.com">ChatGPT</a>.
-			</p>
-			<p>
-				Kontaktieren über
-				<a href="mailto:redminer9630@gmail.com">redminer9630@gmail.com</a>
-			</p>
+			<p>Erstellt von Redminer9630 mit Hilfe von <a href="https://chatgpt.com">ChatGPT</a>.</p>
+			<p>Kontaktieren über <a href="mailto:redminer9630@gmail.com">redminer9630@gmail.com</a></p>
 		</section>
+
 		<section id="about">
 			<h2>Mehr über mich</h2>
-			<p>
-				Ich bin ein FED(Front End Developer) und Minecraft Pro, der fleißig
-				Programmiert und Minecraft Spielt
-			</p>
+			<p>Ich bin ein FED (Front End Developer) und Minecraft Pro, der fleißig programmiert und Minecraft spielt.</p>
 		</section>
+
 		<section id="hinweise">
 			<h2>Hinweise</h2>
-			<p>
-				Gebe niemals irgendwo auf unserer Website Persönliche/Private Daten
-				an da diese auf deinem Gerät gespeichert werden! Hacker etc. können
-				sie <u><i>leicht</i></u> einsehen!
-			</p>
+			<p>Gebe niemals persönliche/private Daten auf der Website an. Sie werden lokal gespeichert und können eingesehen werden.</p>
 		</section>
-		<!--<h2 class="title">Redeem</h2>
-		<section id="rdmcd">
-			<h3>Redeem Code</h3>
-			<p>Du kannst diesen Code von einem Discord oder Minecraft Server Giveaway bekommen.</p>
-		</section>
-		<section id="rdmml">
-			<h3>Redeem Email</h3>
-			<p>Gebe deine Email oder die Email von jemand anderem, falls du die Belohnung verschenken möchtest.</p>
-		</section>-->
+
 		<h2 class="title">Technisch</h2>
+
 		<section id="fehler">
 			<h2>404 Seite</h2>
 			<h3>404 - Seite nicht gefunden</h3>
-			<p>
-				Dieser Fehler kann auftauchen, wenn die URL nicht existiert oder nicht
-				gefunden wurde.
-			</p>
+			<p>Dieser Fehler kann auftauchen, wenn die URL nicht existiert oder nicht gefunden wurde.</p>
 		</section>
+
 		<section id="ipdata">
 			<h3>Deine Daten</h3>
-			<p>
-				Die angezeigten Daten werden an niemand weitergeleitet und sind nur für
-				dich sichtbar.
-				<a href="/404">Daten einsehen</a>
-			</p>
-		</section>
-		<section id="imgcrdt">
-			<h2 class="element2 toggle">Image Credits</h2>
-			<ul class="submenu">
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/user-generated-content"
-						title="user generated content icons"
-						>User generated content icons created by Uniconlabs - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/file"
-						title="file icons"
-						>File icons created by Freepik - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/tools"
-						title="tools icons"
-						>Tools icons created by Freepik - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/webinar"
-						title="webinar icons"
-						>Webinar icons created by Corner Pixel - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/server"
-						title="server icons"
-						>Server icons created by juicy_fish - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/satisfaction"
-						title="satisfaction icons"
-						>Satisfaction icons created by Ilham Fitrotul Hayat - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/game-development"
-						title="game development icons"
-						>Game development icons created by Pixelmeetup - Flaticon</a
-					>
-				</li>
-				<li>
-					<a
-						href="https://www.flaticon.com/free-icons/donate"
-						title="donate icons"
-						>Donate icons created by Freepik - Flaticon</a
-					>
-				</li>
-				<li>
-					<a href="https://www.flaticon.com/free-icons/minecraft"title="minecraft icons">Minecraft icons created by Pixel perfect - Flaticon</a>
-				</li>
-			</ul>
+			<p>Die angezeigten Daten werden an niemanden weitergeleitet und sind nur für dich sichtbar. <a href="/404">Daten einsehen</a></p>
 		</section>
 	</div>
 </body>
