@@ -13,7 +13,7 @@ window.noti = (type, ...msg) => {const txt = msg.join(" ");const log = console[t
 window.debug = false;
 window.CommonVersion = { version: "v2.0", key: "2.0", date: " 25.08.28", time: " 6:00" };
 
-const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t75/docs/js_components/";["back_button.js","mctooltip.js","theme.js","overrides.js", "toast.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
+const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t75/docs/js_components/";["back_button.js","mctooltip.js","theme.js","overrides.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 const link = document.createElement("link");link.rel = "stylesheet";link.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t75/docs/js_components/framework.css";document.head.appendChild(link);
 
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t75/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
