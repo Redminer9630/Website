@@ -17,6 +17,35 @@ const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t76/docs/js_co
 const link = document.createElement("link");link.rel = "stylesheet";link.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t76/docs/js_components/framework.css";document.head.appendChild(link);
 
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t76/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
+(function() {
+    function ensureThemeMeta() {
+        let meta = document.querySelector('meta[name="theme-color"]');
+        if (!meta) {
+            meta = document.createElement("meta");
+            meta.name = "theme-color";
+            document.head.appendChild(meta);
+        }
+        return meta;
+    }
+
+    function getBodyBgColor() {return getComputedStyle(document.body).backgroundColor;}
+
+    function updateThemeColor() {
+        const meta = ensureThemeMeta();
+        const theme = document.documentElement.getAttribute("data-theme");
+        let color;
+        if (theme === "dark") {color = getBodyBgColor() || "#1a1a1a";
+        } else if (theme === "light") {color = getBodyBgColor() || "#eaeaea";
+        } else {color = getBodyBgColor() || "#eaeaea";}
+        meta.setAttribute("content", color);
+    }
+    document.addEventListener("DOMContentLoaded", updateThemeColor);
+    const observer = new MutationObserver(muts => {for (const m of muts) {if (m.type === "attributes" && m.attributeName === "data-theme") {updateThemeColor();}}});
+    observer.observe(document.documentElement, { attributes: true });
+    const bodyObserver = new MutationObserver(updateThemeColor);
+    bodyObserver.observe(document.body, { attributes: true, attributeFilter: ["style", "class"] });
+    window.updateThemeColor = updateThemeColor;
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
     const year = new Date().getFullYear();
