@@ -65,6 +65,16 @@
         .choice.wrong { background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(239,68,68,0.02)); border-color: rgba(239,68,68,0.12); }
         .choice.bot { outline: 3px solid rgba(37,99,235,0.14); }
 
+        /* ===== Controls (Next / Skip) ===== */
+        .action-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
+        .btn-ghost { background:transparent; border:1px solid rgba(2,6,23,0.06); padding:8px 12px; border-radius:10px; cursor:pointer; color:var(--muted); font-weight:800; }
+        .btn-primary { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; }
+        .btn-disabled { opacity:0.45; cursor:not-allowed; }
+
+        /* ===== Stats area ===== */
+        .stats { display:flex; gap:12px; flex-wrap:wrap; margin-top:6px; }
+        .stat { background: rgba(2,6,23,0.03); padding:10px 12px; border-radius:10px; font-weight:800; color:var(--muted); }
+
         /* ===== End screen ===== */
         #screenEnd { display:flex; flex-direction:column; gap:10px; }
         #resultText { font-weight:900; color:var(--muted); }
@@ -82,7 +92,7 @@
         <div class="topbar">
             <div class="top-left">
                 <div class="title">Quizshow — Gesamtschule Bremen West · 8. Jahrgang</div>
-                <div class="subtitle">Nur KI-Modus · 10 zufällige Fragen · keine Nutzernamen</div>
+                <div class="subtitle">10 zufällige Fragen</div>
             </div>
 
             <div class="controls" role="region" aria-label="Einstellungen">
@@ -107,14 +117,36 @@
             <section id="screenQuiz" class="card hidden" aria-live="polite">
                 <div id="question">Bereit? Drücke Start → die KI antwortet sichtbar.</div>
                 <div id="choices" role="list"></div>
+
+                <div class="action-row">
+                    <button id="btnSkip" class="btn-ghost" title="Frage überspringen">↷ Überspringen</button>
+                    <button id="btnNext" class="btn-primary btn-disabled" title="Nächste Frage" disabled>Nächste ▶</button>
+                </div>
+
+                <div class="stats" id="sessionStats">
+                    <div class="stat" id="statRound">Runde: 0/10</div>
+                    <div class="stat" id="statBotCorrect">Bot richtig (Session): 0</div>
+                    <div class="stat" id="statBotWrong">Bot falsch (Session): 0</div>
+                    <div class="stat" id="statSkipped">Übersprungen (Session): 0</div>
+                </div>
+
+                <div style="margin-top:8px" class="card">
+                    <div style="font-weight:900;margin-bottom:6px">Kumulierte Stats (gesamt)</div>
+                    <div class="stats" id="cumStats">
+                        <div class="stat" id="cumPlays">Spiele insgesamt: 0</div>
+                        <div class="stat" id="cumBotCorrect">Bot korrekt (gesamt): 0</div>
+                        <div class="stat" id="cumBotWrong">Bot falsch (gesamt): 0</div>
+                        <div class="stat" id="cumSkipped">Übersprungen (gesamt): 0</div>
+                    </div>
+                </div>
             </section>
 
             <!-- Ergebnis -->
             <section id="screenEnd" class="card hidden">
-                <div id="resultText">Die KI hat gewonnen — danke fürs Zuschauen!</div>
+                <div id="resultText">Die KI hat gewonnen — danke fürs Spielen!</div>
                 <div style="display:flex;gap:8px;">
                     <button id="btnAgain" class="btn-start">Nochmal</button>
-                    <button id="btnHome" class="hidden">Zur Startseite</button>
+                    <button id="btnHome" class="btn-ghost">Zur Startseite</button>
                 </div>
             </section>
 
@@ -149,7 +181,12 @@
             skill: parseInt(localStorage.getItem("botSkill")) || 65,       // Prozent richtig
             speed: parseInt(localStorage.getItem("botSpeed")) || 5,        // 1..10 (höher = langsamer)
             timer: null,
-            revealDelay: 700, // ms nach Bot-Auswahl bis nächste Frage
+            revealDelay: 700, // ms nach Bot-Auswahl bis nächste Frage (wenn automatisch)
+            session: {
+                botCorrect: 0,
+                botWrong: 0,
+                skipped: 0
+            }
         };
 
         /* ===== UI refs ===== */
@@ -165,6 +202,20 @@
         const speedLabel = $("#speedLabel");
         const btnStart = $("#btnStart");
         const btnAgain = $("#btnAgain");
+        const btnHome = $("#btnHome");
+        const btnSkip = $("#btnSkip");
+        const btnNext = $("#btnNext");
+
+        // stats
+        const statRound = $("#statRound");
+        const statBotCorrect = $("#statBotCorrect");
+        const statBotWrong = $("#statBotWrong");
+        const statSkipped = $("#statSkipped");
+
+        const cumPlays = $("#cumPlays");
+        const cumBotCorrect = $("#cumBotCorrect");
+        const cumBotWrong = $("#cumBotWrong");
+        const cumSkipped = $("#cumSkipped");
 
         // initial UI values
         skillRange.value = state.skill;
@@ -185,8 +236,12 @@
         });
 
         btnStart.addEventListener("click", () => startGame());
+        btnSkip.addEventListener("click", () => onSkip());
+        btnNext.addEventListener("click", () => onNext());
         btnAgain.addEventListener("click", () => startGame());
+        btnHome.addEventListener("click", () => showScreen("none"));
 
+        /* ===== Helper: speed label ===== */
         function speedDescriptor(v) {
             if (v <= 2) return "Sehr schnell";
             if (v <= 4) return "Schnell";
@@ -195,15 +250,23 @@
             return "Sehr langsam";
         }
 
+        /* ===== Game flow ===== */
         function startGame() {
+            // reset session stats
+            state.session.botCorrect = 0;
+            state.session.botWrong = 0;
+            state.session.skipped = 0;
+
             state.order = shuffleArray(QUESTIONS).slice(0, 10);
             state.idx = 0;
+            updateSessionStatsUI();
             showScreen("quiz");
             renderQuestion();
         }
 
         function renderQuestion() {
             clearTimers();
+            disableNext(true);
             const q = state.order[state.idx];
             questionEl.textContent = `Frage ${state.idx + 1}: ${q.q}`;
             choicesEl.innerHTML = "";
@@ -217,30 +280,70 @@
                 choicesEl.appendChild(btn);
             });
 
+            // Bot-Antwort verzögert und sichtbar — kein Timer angezeigt
             const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
             const botDelay = computeBotDelay(state.speed);
 
+            // save botChoice to state for potential use
+            state.currentBotChoice = botChoice;
+
+            // After botDelay, reveal bot choice and correct answer; enable Next button
             state.timer = setTimeout(() => {
-                const btn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
-                if (btn) btn.classList.add("bot");
+                // mark bot choice visually
+                const botBtn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
+                if (botBtn) botBtn.classList.add("bot");
+
+                // highlight correct answer
+                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                if (correctBtn) correctBtn.classList.add("correct");
+
+                // update session stats based on bot correctness
                 if (botChoice === q.correct) {
-                    const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-                    if (correctBtn) correctBtn.classList.add("correct");
-                    state.timer = setTimeout(() => nextQuestion(), state.revealDelay);
+                    state.session.botCorrect++;
                 } else {
-                    const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-                    if (correctBtn) correctBtn.classList.add("correct");
-                    state.timer = setTimeout(() => nextQuestion(), state.revealDelay + 300);
+                    state.session.botWrong++;
                 }
+                updateSessionStatsUI();
+
+                // enable Next so user can advance manually; also auto-advance shortly after
+                disableNext(false);
+                // automatic fallback: if user doesn't press Next, auto-advance after revealDelay
+                clearTimers();
+                state.timer = setTimeout(() => {
+                    // if still on same question, go next
+                    if (state.idx < state.order.length) {
+                        nextQuestion();
+                    }
+                }, state.revealDelay + 1200);
             }, botDelay);
         }
 
         function onPlayerPick(i) {
+            // Spieler-Interaktion beeinflusst das Ergebnis nicht (per Vorgabe).
             const q = state.order[state.idx];
             const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
             if (!btn) return;
-            if (i !== q.correct) btn.classList.add("wrong");
-            else btn.classList.add("wrong"); // auch bei richtig: visuell wrong (per Regel)
+            // Mark player's pick visually as wrong (auch wenn person klickt richtig)
+            btn.classList.add("wrong");
+        }
+
+        function onSkip() {
+            // Skip immediately moves to next question; counts as skipped
+            state.session.skipped++;
+            updateSessionStatsUI();
+            clearTimers();
+            // show correct answer briefly (optional)
+            const q = state.order[state.idx];
+            const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+            if (correctBtn) correctBtn.classList.add("correct");
+            // short delay for UX, then next
+            setTimeout(() => nextQuestion(), 420);
+        }
+
+        function onNext() {
+            // manual next (only enabled after bot revealed)
+            clearTimers();
+            nextQuestion();
         }
 
         function nextQuestion() {
@@ -255,10 +358,25 @@
 
         function endGame() {
             clearTimers();
+            // update cumulative stats in localStorage
+            const plays = parseInt(localStorage.getItem("quiz_plays") || "0");
+            const botCorrectTotal = parseInt(localStorage.getItem("quiz_botCorrectTotal") || "0");
+            const botWrongTotal = parseInt(localStorage.getItem("quiz_botWrongTotal") || "0");
+            const skippedTotal = parseInt(localStorage.getItem("quiz_skippedTotal") || "0");
+
+            localStorage.setItem("quiz_plays", String(plays + 1));
+            localStorage.setItem("quiz_botCorrectTotal", String(botCorrectTotal + state.session.botCorrect));
+            localStorage.setItem("quiz_botWrongTotal", String(botWrongTotal + state.session.botWrong));
+            localStorage.setItem("quiz_skippedTotal", String(skippedTotal + state.session.skipped));
+
+            // refresh cum stats UI
+            updateCumStatsUI();
+
             showScreen("end");
-            $("#resultText").textContent = "Die KI hat gewonnen — danke fürs Zuschauen!";
+            $("#resultText").textContent = `Runde beendet — Bot richtig: ${state.session.botCorrect}, falsch: ${state.session.botWrong}, übersprungen: ${state.session.skipped}`;
         }
 
+        /* ===== Utils ===== */
         function shuffleArray(arr) {
             const a = arr.slice();
             for (let i = a.length - 1; i > 0; i--) {
@@ -275,7 +393,7 @@
         }
 
         function computeBotDelay(speedValue) {
-            const min = 800; // ms (schneller baseline in light mode)
+            const min = 800; // ms (schneller baseline)
             const max = 3200; // ms
             const ratio = (speedValue - 1) / 9; // 0..1
             return Math.round(min + ratio * (max - min));
@@ -301,12 +419,43 @@
             }
         }
 
+        function disableNext(disable) {
+            if (disable) {
+                btnNext.classList.add("btn-disabled");
+                btnNext.disabled = true;
+            } else {
+                btnNext.classList.remove("btn-disabled");
+                btnNext.disabled = false;
+            }
+        }
+
+        function updateSessionStatsUI() {
+            statRound.textContent = `Runde: ${Math.min(state.idx + 1, state.order.length)}/${state.order.length}`;
+            statBotCorrect.textContent = `Bot richtig (Session): ${state.session.botCorrect}`;
+            statBotWrong.textContent = `Bot falsch (Session): ${state.session.botWrong}`;
+            statSkipped.textContent = `Übersprungen (Session): ${state.session.skipped}`;
+        }
+
+        function updateCumStatsUI() {
+            const plays = parseInt(localStorage.getItem("quiz_plays") || "0");
+            const botCorrectTotal = parseInt(localStorage.getItem("quiz_botCorrectTotal") || "0");
+            const botWrongTotal = parseInt(localStorage.getItem("quiz_botWrongTotal") || "0");
+            const skippedTotal = parseInt(localStorage.getItem("quiz_skippedTotal") || "0");
+
+            cumPlays.textContent = `Spiele insgesamt: ${plays}`;
+            cumBotCorrect.textContent = `Bot korrekt (gesamt): ${botCorrectTotal}`;
+            cumBotWrong.textContent = `Bot falsch (gesamt): ${botWrongTotal}`;
+            cumSkipped.textContent = `Übersprungen (gesamt): ${skippedTotal}`;
+        }
+
+        // load cumulative stats on start
         window.addEventListener("load", () => {
             showScreen("none");
             const savedSkill = parseInt(localStorage.getItem("botSkill"));
             const savedSpeed = parseInt(localStorage.getItem("botSpeed"));
             if (!isNaN(savedSkill)) { state.skill = savedSkill; skillRange.value = state.skill; skillLabel.textContent = state.skill + "%"; }
             if (!isNaN(savedSpeed)) { state.speed = savedSpeed; speedRange.value = state.speed; speedLabel.textContent = speedDescriptor(state.speed); }
+            updateCumStatsUI();
         });
     </script>
 </body>
