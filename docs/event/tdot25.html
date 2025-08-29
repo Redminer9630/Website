@@ -5,35 +5,35 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Quizshow – Gesamtschule Bremen West, 8. Jahrgang</title>
     <style>
-        /* ===== Basis & Farben (hoher Kontrast) ===== */
+        /* ===== Basis & Light-Mode Farben (nur Light Mode) ===== */
         :root {
-            --bg: #071027;
-            --panel: #0b1a33;
-            --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            --muted: #b9c7d9;
-            --text: #eaf3ff;
-            --accent: #4f9ef8;
-            --accent-2: #20d0a8;
-            --danger: #ff6b6b;
-            --glass: rgba(255,255,255,0.03);
+            --bg: #f4f8ff;
+            --panel: #ffffff;
+            --card-bg: #ffffff;
+            --muted: #4b5563;
+            --text: #071226;
+            --accent: #2563eb;
+            --accent-2: #06b6d4;
+            --danger: #ef4444;
+            --glass: rgba(2,6,23,0.03);
             --radius: 14px;
             --gap: 14px;
             --pad: 16px;
-            --shadow: 0 10px 30px rgba(0,0,0,0.6);
+            --shadow: 0 8px 24px rgba(17,24,39,0.08);
             --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         }
 
         /* ===== Reset & Layout ===== */
         * { box-sizing: border-box; }
-        html, body { height: 100%; margin: 0; font-family: var(--font); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: radial-gradient(800px 300px at 10% 10%, rgba(79,158,248,0.06), transparent), var(--bg); color: var(--text); }
+        html, body { height: 100%; margin: 0; font-family: var(--font); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: linear-gradient(180deg,var(--bg),#ffffff); color: var(--text); }
         .wrap { width: min(1100px, 96vw); margin: 28px auto; padding: 12px; display: grid; gap: var(--gap); }
 
         /* ===== Top controls (oben) ===== */
         .topbar {
-            display:flex; gap:12px; align-items:center; background:var(--panel); padding:12px; border-radius:12px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03);
+            display:flex; gap:12px; align-items:center; background:var(--panel); padding:12px; border-radius:12px; box-shadow:var(--shadow); border:1px solid rgba(2,6,23,0.04);
         }
         .top-left { display:flex; flex-direction:column; gap:6px; min-width: 320px; }
-        .title { font-weight:900; font-size:1.1rem; letter-spacing:.2px; }
+        .title { font-weight:900; font-size:1.1rem; letter-spacing:.2px; color:var(--text); }
         .subtitle { color:var(--muted); font-weight:700; font-size:0.92rem; }
 
         .controls { display:flex; gap:12px; align-items:center; margin-left:auto; }
@@ -42,28 +42,28 @@
         }
         .control label { font-size:0.78rem; font-weight:800; color:var(--muted); }
         .slider { width:100%; -webkit-appearance:none; appearance:none; height:8px; border-radius:8px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); outline:none; }
-        .btn-start { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#021226; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; box-shadow: 0 6px 18px rgba(79,158,248,0.12); }
+        .btn-start { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; box-shadow: 0 6px 18px rgba(37,99,235,0.12); }
 
         /* ===== Main area ===== */
         .main { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:6px; }
-        .card { background: var(--card); padding: var(--pad); border-radius: var(--radius); border:1px solid rgba(255,255,255,0.03); box-shadow: var(--shadow); }
+        .card { background: var(--card-bg); padding: var(--pad); border-radius: var(--radius); border:1px solid rgba(2,6,23,0.04); box-shadow: var(--shadow); }
 
         /* ===== Quiz area ===== */
         #screenQuiz { display:flex; flex-direction:column; gap:12px; }
         #question { font-size:1.3rem; font-weight:900; margin-bottom:4px; color:var(--text); }
         #choices { display:grid; gap:10px; }
         .choice {
-            display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border:1px solid rgba(255,255,255,0.04); padding:14px; border-radius:12px; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease;
+            display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(2,6,23,0.02), rgba(2,6,23,0.01));
+            border:1px solid rgba(2,6,23,0.06); padding:14px; border-radius:12px; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease;
             color:var(--text); font-weight:800;
         }
-        .choice:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.45); }
+        .choice:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(17,24,39,0.06); }
         .choice .letter {
-            min-width:44px; min-height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.06); color:var(--muted); font-weight:900; font-size:0.95rem;
+            min-width:44px; min-height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(2,6,23,0.04); color:var(--muted); font-weight:900; font-size:0.95rem;
         }
-        .choice.correct { background: linear-gradient(90deg, rgba(32,208,168,0.12), rgba(79,158,248,0.08)); border-color: rgba(32,208,168,0.35); }
-        .choice.wrong { background: linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02)); border-color: rgba(255,107,107,0.25); }
-        .choice.bot { outline: 3px solid rgba(79,158,248,0.14); }
+        .choice.correct { background: linear-gradient(90deg, rgba(6,182,212,0.12), rgba(37,99,235,0.08)); border-color: rgba(6,182,212,0.18); }
+        .choice.wrong { background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(239,68,68,0.02)); border-color: rgba(239,68,68,0.12); }
+        .choice.bot { outline: 3px solid rgba(37,99,235,0.14); }
 
         /* ===== End screen ===== */
         #screenEnd { display:flex; flex-direction:column; gap:10px; }
@@ -149,18 +149,16 @@
             skill: parseInt(localStorage.getItem("botSkill")) || 65,       // Prozent richtig
             speed: parseInt(localStorage.getItem("botSpeed")) || 5,        // 1..10 (höher = langsamer)
             timer: null,
-            revealDelay: 700, // Zeit nach Bot-Auswahl bis nächste Frage
+            revealDelay: 700, // ms nach Bot-Auswahl bis nächste Frage
         };
 
         /* ===== UI refs ===== */
         const $ = s => document.querySelector(s);
-        const $all = s => document.querySelectorAll(s);
         const choicesEl = $("#choices");
         const questionEl = $("#question");
         const screenQuiz = $("#screenQuiz");
         const screenEnd = $("#screenEnd");
 
-        /* ===== Init Controls ===== */
         const skillRange = $("#skillRange");
         const speedRange = $("#speedRange");
         const skillLabel = $("#skillLabel");
@@ -168,7 +166,7 @@
         const btnStart = $("#btnStart");
         const btnAgain = $("#btnAgain");
 
-        // set initial UI values from state/localStorage
+        // initial UI values
         skillRange.value = state.skill;
         speedRange.value = state.speed;
         skillLabel.textContent = state.skill + "%";
@@ -187,11 +185,8 @@
         });
 
         btnStart.addEventListener("click", () => startGame());
-        btnAgain.addEventListener("click", () => {
-            startGame();
-        });
+        btnAgain.addEventListener("click", () => startGame());
 
-        /* ===== Helper: speed label ===== */
         function speedDescriptor(v) {
             if (v <= 2) return "Sehr schnell";
             if (v <= 4) return "Schnell";
@@ -200,7 +195,6 @@
             return "Sehr langsam";
         }
 
-        /* ===== Game flow ===== */
         function startGame() {
             state.order = shuffleArray(QUESTIONS).slice(0, 10);
             state.idx = 0;
@@ -223,50 +217,30 @@
                 choicesEl.appendChild(btn);
             });
 
-            // Bot-Antwort verzögert und sichtbar — kein Timer angezeigt
             const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
-            const botDelay = computeBotDelay(state.speed); // ms
+            const botDelay = computeBotDelay(state.speed);
 
-            // Mark bot choice after delay
             state.timer = setTimeout(() => {
-                // add bot CSS marker
                 const btn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
-                if (btn) {
-                    btn.classList.add("bot");
-                }
-                // Mark correct answer visually as well (but player still loses if bot correct)
+                if (btn) btn.classList.add("bot");
                 if (botChoice === q.correct) {
                     const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
                     if (correctBtn) correctBtn.classList.add("correct");
-                    // weiter zur nächsten Frage nach kurzem Reveal
-                    state.timer = setTimeout(() => {
-                        nextQuestion();
-                    }, state.revealDelay);
+                    state.timer = setTimeout(() => nextQuestion(), state.revealDelay);
                 } else {
-                    // Bot falsch -> zeigen welche richtig ist (highlight)
                     const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
                     if (correctBtn) correctBtn.classList.add("correct");
-                    // lasse noch kurz Zeit für Beobachtung, dann weiter
-                    state.timer = setTimeout(() => {
-                        nextQuestion();
-                    }, state.revealDelay + 300);
+                    state.timer = setTimeout(() => nextQuestion(), state.revealDelay + 300);
                 }
             }, botDelay);
         }
 
         function onPlayerPick(i) {
-            // Player interaction hat keinen Einfluss auf Ergebnis (wie gewünscht).
             const q = state.order[state.idx];
             const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
             if (!btn) return;
-            // Mark player's pick visually (wrong) — selbst wenn korrekt, verliert man per Vorgabe
-            if (i !== q.correct) {
-                btn.classList.add("wrong");
-            } else {
-                // falls Spieler zufällig richtig anklickt — trotzdem verliert er gemäß Regel -> markieren wir als wrong visuell
-                btn.classList.add("wrong");
-            }
-            // Keine Änderung an Flow; Bot wird weiterhin seine Auswahl anzeigen
+            if (i !== q.correct) btn.classList.add("wrong");
+            else btn.classList.add("wrong"); // auch bei richtig: visuell wrong (per Regel)
         }
 
         function nextQuestion() {
@@ -285,7 +259,6 @@
             $("#resultText").textContent = "Die KI hat gewonnen — danke fürs Zuschauen!";
         }
 
-        /* ===== Utils ===== */
         function shuffleArray(arr) {
             const a = arr.slice();
             for (let i = a.length - 1; i > 0; i--) {
@@ -302,10 +275,8 @@
         }
 
         function computeBotDelay(speedValue) {
-            // speedValue: 1..10 (1 = sehr schnell, 10 = sehr langsam)
-            // map to ms: 500ms .. 3000ms
-            const min = 500;
-            const max = 3000;
+            const min = 800; // ms (schneller baseline in light mode)
+            const max = 3200; // ms
             const ratio = (speedValue - 1) / 9; // 0..1
             return Math.round(min + ratio * (max - min));
         }
@@ -319,22 +290,19 @@
 
         function showScreen(name) {
             if (name === "quiz") {
-                screenQuiz.classList.remove("hidden");
-                screenEnd.classList.add("hidden");
+                $("#screenQuiz").classList.remove("hidden");
+                $("#screenEnd").classList.add("hidden");
             } else if (name === "end") {
-                screenQuiz.classList.add("hidden");
-                screenEnd.classList.remove("hidden");
+                $("#screenQuiz").classList.add("hidden");
+                $("#screenEnd").classList.remove("hidden");
             } else {
-                screenQuiz.classList.add("hidden");
-                screenEnd.classList.add("hidden");
+                $("#screenQuiz").classList.add("hidden");
+                $("#screenEnd").classList.add("hidden");
             }
         }
 
-        /* ===== Seite laden ===== */
         window.addEventListener("load", () => {
-            // ensure start view (no user input)
             showScreen("none");
-            // restore settings
             const savedSkill = parseInt(localStorage.getItem("botSkill"));
             const savedSpeed = parseInt(localStorage.getItem("botSpeed"));
             if (!isNaN(savedSkill)) { state.skill = savedSkill; skillRange.value = state.skill; skillLabel.textContent = state.skill + "%"; }
