@@ -5,427 +5,340 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Quizshow – Gesamtschule Bremen West, 8. Jahrgang</title>
     <style>
-        /* ===== Farben & Basis ===== */
-        :root{
-            --bg-1: #0f172a;
-            --bg-2: #071029;
-            --card: rgba(255,255,255,0.04);
-            --glass: rgba(255,255,255,0.04);
-            --muted: #9aa7bd;
+        /* ===== Basis & Farben (hoher Kontrast) ===== */
+        :root {
+            --bg: #071027;
+            --panel: #0b1a33;
+            --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            --muted: #b9c7d9;
+            --text: #eaf3ff;
             --accent: #4f9ef8;
             --accent-2: #20d0a8;
             --danger: #ff6b6b;
-            --btn-txt: #031026;
-            --radius: 16px;
-            --gap: 16px;
-            --pad: 18px;
-            --shadow: 0 10px 30px rgba(2,6,23,0.6);
-            --ui-gap: 12px;
-            --font: "Inter", system-ui, Roboto, "Segoe UI", Arial;
-        }
-        @media (prefers-color-scheme: light){
-            :root{
-                --bg-1: #e9f0ff;
-                --bg-2: #ffffff;
-                --card: rgba(4,8,20,0.03);
-                --glass: rgba(255,255,255,0.85);
-                --muted: #51607a;
-                --btn-txt: #00142a;
-                --shadow: 0 8px 20px rgba(12,20,40,0.06);
-            }
+            --glass: rgba(255,255,255,0.03);
+            --radius: 14px;
+            --gap: 14px;
+            --pad: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.6);
+            --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
         }
 
         /* ===== Reset & Layout ===== */
-        *{box-sizing:border-box}
-        html,body{height:100%;margin:0;font-family:var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-        body{
-            background: radial-gradient(1200px 400px at 10% 10%, rgba(79,158,248,0.08), transparent 10%),
-                        linear-gradient(180deg,var(--bg-1),var(--bg-2));
-            color:#e6eef9;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:28px;
-        }
-        .app{width:min(1100px,96vw);max-width:1100px;display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
-        @media (max-width:980px){ .app{grid-template-columns:1fr; padding-bottom:40px} }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; font-family: var(--font); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: radial-gradient(800px 300px at 10% 10%, rgba(79,158,248,0.06), transparent), var(--bg); color: var(--text); }
+        .wrap { width: min(1100px, 96vw); margin: 28px auto; padding: 12px; display: grid; gap: var(--gap); }
 
-        /* ===== Left: Main Card ===== */
-        .card{
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border-radius:var(--radius);
-            padding:var(--pad);
-            box-shadow:var(--shadow);
-            border:1px solid rgba(255,255,255,0.03);
+        /* ===== Top controls (oben) ===== */
+        .topbar {
+            display:flex; gap:12px; align-items:center; background:var(--panel); padding:12px; border-radius:12px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03);
         }
-        .big-title{font-size:1.4rem;margin:0 0 6px 0;font-weight:800;letter-spacing:0.2px}
-        .sub{color:var(--muted);font-weight:600;margin:0 0 14px 0}
+        .top-left { display:flex; flex-direction:column; gap:6px; min-width: 320px; }
+        .title { font-weight:900; font-size:1.1rem; letter-spacing:.2px; }
+        .subtitle { color:var(--muted); font-weight:700; font-size:0.92rem; }
 
-        /* ===== Start-Card (links oben) ===== */
-        #screenStart .row{display:flex;gap:12px;align-items:center}
-        .input{
-            display:block;width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-weight:700;
-            outline:none;font-size:1rem;
+        .controls { display:flex; gap:12px; align-items:center; margin-left:auto; }
+        .control {
+            display:flex; flex-direction:column; gap:6px; background:var(--glass); padding:8px 10px; border-radius:10px; min-width:180px; color:var(--muted);
         }
-        .small{font-size:0.9rem;color:var(--muted);margin-top:6px}
-        .start-actions{display:flex;gap:12px;margin-top:14px;align-items:center}
-        .btn{
-            background:linear-gradient(180deg,var(--accent),var(--accent-2));
-            color:var(--btn-txt);
-            padding:12px 18px;border-radius:12px;border:0;font-weight:900;
-            box-shadow:0 6px 18px rgba(32,208,168,0.08);
-        }
-        .ghost{
-            background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:10px 14px;border-radius:12px;font-weight:800;
-        }
+        .control label { font-size:0.78rem; font-weight:800; color:var(--muted); }
+        .slider { width:100%; -webkit-appearance:none; appearance:none; height:8px; border-radius:8px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); outline:none; }
+        .btn-start { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#021226; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; box-shadow: 0 6px 18px rgba(79,158,248,0.12); }
 
-        /* ===== Right: Info / Status Card ===== */
-        .side{
-            display:flex;flex-direction:column;gap:12px;
-            height:100%;
-        }
-        .status{
-            padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border:1px solid rgba(255,255,255,0.03);
-        }
-        .status h3{margin:0 0 6px 0;font-size:1rem}
-        .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:800;font-size:0.85rem}
+        /* ===== Main area ===== */
+        .main { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:6px; }
+        .card { background: var(--card); padding: var(--pad); border-radius: var(--radius); border:1px solid rgba(255,255,255,0.03); box-shadow: var(--shadow); }
 
-        /* ===== Quiz Screen ===== */
-        #screenQuiz{display:flex;flex-direction:column;gap:12px}
-        #question{font-size:1.25rem;font-weight:900;margin-bottom:4px}
-        #choices{display:grid;gap:10px}
-        .choice{
-            display:flex;align-items:center;gap:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border:1px solid rgba(255,255,255,0.04);padding:16px;border-radius:12px;font-weight:800;cursor:pointer;
-            transition:transform .12s ease,box-shadow .12s ease,background .18s ease;
+        /* ===== Quiz area ===== */
+        #screenQuiz { display:flex; flex-direction:column; gap:12px; }
+        #question { font-size:1.3rem; font-weight:900; margin-bottom:4px; color:var(--text); }
+        #choices { display:grid; gap:10px; }
+        .choice {
+            display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border:1px solid rgba(255,255,255,0.04); padding:14px; border-radius:12px; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease;
+            color:var(--text); font-weight:800;
         }
-        .choice:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(10,20,40,0.35)}
-        .choice .letter{
-            min-width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:rgba(0,0,0,0.06);font-weight:900;color:var(--muted)
+        .choice:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.45); }
+        .choice .letter {
+            min-width:44px; min-height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.06); color:var(--muted); font-weight:900; font-size:0.95rem;
         }
-        .choice.correct{background:linear-gradient(90deg, rgba(32,208,168,0.12), rgba(79,158,248,0.08));border-color:rgba(32,208,168,0.35)}
-        .choice.wrong{background:linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02));border-color:rgba(255,107,107,0.25)}
+        .choice.correct { background: linear-gradient(90deg, rgba(32,208,168,0.12), rgba(79,158,248,0.08)); border-color: rgba(32,208,168,0.35); }
+        .choice.wrong { background: linear-gradient(90deg, rgba(255,107,107,0.08), rgba(255,107,107,0.02)); border-color: rgba(255,107,107,0.25); }
+        .choice.bot { outline: 3px solid rgba(79,158,248,0.14); }
 
-        /* ===== Controls row (progress + pause + skip) ===== */
-        .controls-row{display:flex;align-items:center;gap:12px;margin-top:6px}
-        .progress-wrap{flex:1;background:rgba(255,255,255,0.03);height:18px;border-radius:999px;padding:3px}
-        .progress-bar{
-            height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 3s linear;
-            box-shadow:0 6px 18px rgba(79,158,248,0.12) inset;
-        }
-        .icon-btn{padding:10px 12px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:900;cursor:pointer}
-        .icon-btn.pause-on{background:linear-gradient(90deg,var(--danger),#ff9a9a);color:#fff}
-
-        /* ===== End Card ===== */
-        #screenEnd{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
-        #resultText{font-weight:800;color:var(--muted)}
-        .result-actions{display:flex;gap:10px;margin-top:8px}
+        /* ===== End screen ===== */
+        #screenEnd { display:flex; flex-direction:column; gap:10px; }
+        #resultText { font-weight:900; color:var(--muted); }
 
         /* ===== small helpers ===== */
-        .muted{color:var(--muted)}
-        .hidden{display:none !important}
+        .muted { color:var(--muted); }
+        .hidden { display:none !important; }
+        @media (max-width:880px){ .controls { flex-direction:column; align-items:flex-end; } .top-left{min-width:160px} }
     </style>
 </head>
 <body>
-    <div class="app">
+    <div class="wrap">
 
-        <!-- LEFT: Hauptbereich -->
-        <div class="card" id="leftCol">
+        <!-- TOP BAR: Einstellungen (oben) -->
+        <div class="topbar">
+            <div class="top-left">
+                <div class="title">Quizshow — Gesamtschule Bremen West · 8. Jahrgang</div>
+                <div class="subtitle">Nur KI-Modus · 10 zufällige Fragen · keine Nutzernamen</div>
+            </div>
 
-            <!-- Start -->
-            <section id="screenStart">
-                <div class="big-title">Quizshow</div>
-                <div class="sub">Gesamtschule Bremen West · 8. Jahrgang</div>
-
-                <label for="username" class="small muted">Name (wird beim Start kurz gespeichert)</label>
-                <input id="username" class="input" type="text" placeholder="Dein Name">
-
-                <label for="adminCode" class="small muted" style="margin-top:8px">Admin-Code (für Lehrer / Admin-Optionen)</label>
-                <input id="adminCode" class="input" type="text" placeholder="Admin-Code">
-
-                <div class="start-actions">
-                    <button id="btnStart" class="btn">Start KI-Match ▶</button>
-                    <button id="btnDemo" class="ghost">Demo</button>
-                    <div style="margin-left:auto" class="muted">10 zufällige Fragen</div>
+            <div class="controls" role="region" aria-label="Einstellungen">
+                <div class="control" title="Wie oft die KI richtig liegt (höher = stärker)">
+                    <label for="skillRange">Bot-Stärke: <span id="skillLabel">65%</span></label>
+                    <input id="skillRange" class="slider" type="range" min="40" max="95" step="1" value="65">
                 </div>
+
+                <div class="control" title="Wie langsam die KI antwortet (höher = langsamer)">
+                    <label for="speedRange">Bot-Geschwindigkeit: <span id="speedLabel">Mittel</span></label>
+                    <input id="speedRange" class="slider" type="range" min="1" max="10" step="1" value="5">
+                </div>
+
+                <button id="btnStart" class="btn-start" title="Quiz starten">Start KI-Match ▶</button>
+            </div>
+        </div>
+
+        <!-- MAIN: Quiz + Ergebnis -->
+        <div class="main">
+
+            <!-- Quiz-Karte -->
+            <section id="screenQuiz" class="card hidden" aria-live="polite">
+                <div id="question">Bereit? Drücke Start → die KI antwortet sichtbar.</div>
+                <div id="choices" role="list"></div>
             </section>
 
-            <!-- Quiz -->
-            <section id="screenQuiz" class="card hidden">
-                <div id="question">Fragetext …</div>
-                <div id="choices"></div>
-
-                <div class="controls-row" style="margin-top:12px">
-                    <div class="progress-wrap" title="Nächste Frage in 3s">
-                        <div id="progressBar" class="progress-bar"></div>
-                    </div>
-
-                    <button id="pauseBtn" class="icon-btn" title="Pause/Resume">⏸</button>
-                    <button id="skipBtn" class="icon-btn" title="Frage überspringen">↷ Überspringen</button>
-                </div>
-            </section>
-
-            <!-- Ende -->
+            <!-- Ergebnis -->
             <section id="screenEnd" class="card hidden">
-                <h3 style="margin:0">Ergebnis</h3>
-                <div id="resultText">Die KI hat gewonnen — besser trainiert 😎</div>
-
-                <div class="result-actions">
-                    <button id="btnAgain" class="btn">Nochmal spielen</button>
-                    <button id="btnHome" class="ghost">Zur Startseite</button>
+                <div id="resultText">Die KI hat gewonnen — danke fürs Zuschauen!</div>
+                <div style="display:flex;gap:8px;">
+                    <button id="btnAgain" class="btn-start">Nochmal</button>
+                    <button id="btnHome" class="hidden">Zur Startseite</button>
                 </div>
             </section>
 
         </div>
-
-        <!-- RIGHT: Seitenleiste (Status / Info) -->
-        <aside class="side">
-            <div class="status card">
-                <h3>Spiel-Status</h3>
-                <div style="display:flex;gap:10px;align-items:center;margin-top:8px">
-                    <div class="badge" id="badgeUser">Spieler: —</div>
-                    <div class="badge" id="badgeRound">Runde: 0/10</div>
-                </div>
-                <p class="small muted" style="margin-top:10px">Bot-Stärke: <span id="botSkill">65%</span></p>
-            </div>
-
-            <div class="status card">
-                <h3>Letzte Spieler</h3>
-                <div id="userList" class="small muted">Keine</div>
-            </div>
-
-            <div class="status card">
-                <h3>Hinweis</h3>
-                <p class="small muted">Der KI-Bot zeigt seine Auswahl an — du verlierst automatisch, wenn die KI richtig liegt. Nutze <b>Überspringen</b> oder beobachte die Antworten.</p>
-            </div>
-        </aside>
     </div>
 
     <script>
-        /* ===== Fragenpool (erweiterbar) ===== */
-        const QUESTIONS=[
-            {q:"Wie viele Bundesländer hat Deutschland?",a:["14","16","18","12"],correct:1,cat:"wissen"},
-            {q:"Hauptstadt von Bremen ist …",a:["Bremerhaven","Bremen","Vegesack","Oldenburg"],correct:1,cat:"bremen"},
-            {q:"5 · 7 = ?",a:["30","32","35","37"],correct:2,cat:"mathe"},
-            {q:"Welches Tier ist ein Säugetier?",a:["Hai","Delfin","Forelle","Karpfen"],correct:1,cat:"natur"},
-            {q:"Was bedeutet ‚CPU‘?",a:["Central Processing Unit","Central Program Utility","Compute Power Unit","Core Program Unit"],correct:0,cat:"it"},
-            {q:"Welche Programmiersprache läuft im Browser?",a:["C++","Python","JavaScript","Java"],correct:2,cat:"it"},
-            {q:"Der Rhein mündet in …",a:["Ostsee","Nordsee","Mittelmeer","Schwarzes Meer"],correct:1,cat:"wissen"},
-            {q:"9+7·2 = ?",a:["30","32","34","36"],correct:1,cat:"mathe"},
-            {q:"Wie nennt man Pflanzenfresser?",a:["Karnivoren","Omnivoren","Herbivoren","Detritivoren"],correct:2,cat:"natur"},
-            {q:"Bremens Fußballclub?",a:["HSV","Werder","FCSP","H96"],correct:1,cat:"bremen"},
-            {q:"Was ist 2^5?",a:["16","32","64","128"],correct:1,cat:"mathe"},
-            {q:"HTTP steht für …",a:["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"],correct:0,cat:"it"},
-            {q:"Welcher Planet ist der Sonne am nächsten?",a:["Venus","Merkur","Mars","Erde"],correct:1,cat:"wissen"},
-            {q:"Welche Einheit misst elektrische Stromstärke?",a:["Volt","Watt","Ohm","Ampere"],correct:3,cat:"wissen"},
-            {q:"Welches Schutzgebiet liegt um Bremen?",a:["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"],correct:0,cat:"bremen"},
-            // du kannst hier weitere Fragen hinzufügen
+        /* ===== Fragenpool ===== */
+        const QUESTIONS = [
+            { q: "Wie viele Bundesländer hat Deutschland?", a: ["14","16","18","12"], correct: 1 },
+            { q: "Hauptstadt von Bremen ist …", a: ["Bremerhaven","Bremen","Vegesack","Oldenburg"], correct: 1 },
+            { q: "5 · 7 = ?", a: ["30","32","35","37"], correct: 2 },
+            { q: "Welches Tier ist ein Säugetier?", a: ["Hai","Delfin","Forelle","Karpfen"], correct: 1 },
+            { q: "Was bedeutet ‚CPU‘?", a: ["Central Processing Unit","Central Program Utility","Compute Power Unit","Core Program Unit"], correct: 0 },
+            { q: "Welche Programmiersprache läuft im Browser?", a: ["C++","Python","JavaScript","Java"], correct: 2 },
+            { q: "Der Rhein mündet in …", a: ["Ostsee","Nordsee","Mittelmeer","Schwarzes Meer"], correct: 1 },
+            { q: "9 + 7 · 2 = ?", a: ["30","32","34","36"], correct: 1 },
+            { q: "Wie nennt man Pflanzenfresser?", a: ["Karnivoren","Omnivoren","Herbivoren","Detritivoren"], correct: 2 },
+            { q: "Bremens Fußballclub?", a: ["HSV","Werder","FCSP","H96"], correct: 1 },
+            { q: "Was ist 2^5?", a: ["16","32","64","128"], correct: 1 },
+            { q: "HTTP steht für …", a: ["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"], correct: 0 },
+            { q: "Welcher Planet ist der Sonne am nächsten?", a: ["Venus","Merkur","Mars","Erde"], correct: 1 },
+            { q: "Welche Einheit misst elektrische Stromstärke?", a: ["Volt","Watt","Ohm","Ampere"], correct: 3 },
+            { q: "Welches Schutzgebiet liegt um Bremen?", a: ["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"], correct: 0 },
+            // weitere Fragen kannst du hier ergänzen
         ];
 
         /* ===== State ===== */
-        let state={
-            username:"",
-            idx:0,
-            order:[],
-            botSkill:0.65,
-            timer:null,
-            paused:false,
-            lastUsernameForAgain:null
+        const state = {
+            order: [],
+            idx: 0,
+            skill: parseInt(localStorage.getItem("botSkill")) || 65,       // Prozent richtig
+            speed: parseInt(localStorage.getItem("botSpeed")) || 5,        // 1..10 (höher = langsamer)
+            timer: null,
+            revealDelay: 700, // Zeit nach Bot-Auswahl bis nächste Frage
         };
 
+        /* ===== UI refs ===== */
         const $ = s => document.querySelector(s);
+        const $all = s => document.querySelectorAll(s);
+        const choicesEl = $("#choices");
+        const questionEl = $("#question");
+        const screenQuiz = $("#screenQuiz");
+        const screenEnd = $("#screenEnd");
 
-        /* ===== Init UI ===== */
-        function init(){
-            // load users list
-            renderUserList();
-            $("#btnStart").addEventListener("click", onStart);
-            $("#btnDemo").addEventListener("click", startDemo);
-            $("#pauseBtn").addEventListener("click", togglePause);
-            $("#skipBtn").addEventListener("click", onSkip);
-            $("#btnAgain").addEventListener("click", onAgain);
-            $("#btnHome").addEventListener("click", ()=>showScreen("start"));
-        }
-        init();
+        /* ===== Init Controls ===== */
+        const skillRange = $("#skillRange");
+        const speedRange = $("#speedRange");
+        const skillLabel = $("#skillLabel");
+        const speedLabel = $("#speedLabel");
+        const btnStart = $("#btnStart");
+        const btnAgain = $("#btnAgain");
 
-        /* ===== Helpers ===== */
-        function shuffle(a){ return a.slice().sort(()=>Math.random()-0.5); }
-        function showScreen(name){
-            $("#screenStart").classList.toggle("hidden", name!=="start");
-            $("#screenQuiz").classList.toggle("hidden", name!=="quiz");
-            $("#screenEnd").classList.toggle("hidden", name!=="end");
-        }
-        function saveUsername(name){
-            if(!name) return;
-            let list = JSON.parse(localStorage.getItem("users")||"[]");
-            if(!list.includes(name)) list.push(name);
-            localStorage.setItem("users", JSON.stringify(list));
-            renderUserList();
-        }
-        function renderUserList(){
-            let list = JSON.parse(localStorage.getItem("users")||"[]");
-            $("#userList").textContent = list.length? list.slice(-6).reverse().join(", ") : "Keine";
-        }
+        // set initial UI values from state/localStorage
+        skillRange.value = state.skill;
+        speedRange.value = state.speed;
+        skillLabel.textContent = state.skill + "%";
+        speedLabel.textContent = speedDescriptor(state.speed);
 
-        /* ===== Start / Setup Spiel ===== */
-        function onStart(){
-            const name = $("#username").value.trim();
-            if(!name){ alert("Bitte Namen eingeben"); return; }
-            state.username = name;
-            state.lastUsernameForAgain = name;
-            saveUsername(name);
+        skillRange.addEventListener("input", (e) => {
+            state.skill = parseInt(e.target.value);
+            skillLabel.textContent = state.skill + "%";
+            localStorage.setItem("botSkill", state.skill);
+        });
+
+        speedRange.addEventListener("input", (e) => {
+            state.speed = parseInt(e.target.value);
+            speedLabel.textContent = speedDescriptor(state.speed);
+            localStorage.setItem("botSpeed", state.speed);
+        });
+
+        btnStart.addEventListener("click", () => startGame());
+        btnAgain.addEventListener("click", () => {
             startGame();
+        });
+
+        /* ===== Helper: speed label ===== */
+        function speedDescriptor(v) {
+            if (v <= 2) return "Sehr schnell";
+            if (v <= 4) return "Schnell";
+            if (v <= 6) return "Mittel";
+            if (v <= 8) return "Langsam";
+            return "Sehr langsam";
         }
 
-        function startDemo(){
-            $("#username").value = "Demo";
-            $("#btnStart").click();
-        }
-
-        function startGame(){
+        /* ===== Game flow ===== */
+        function startGame() {
+            state.order = shuffleArray(QUESTIONS).slice(0, 10);
             state.idx = 0;
-            state.order = shuffle(QUESTIONS).slice(0,10);
-            $("#badgeUser").textContent = "Spieler: " + state.username;
-            $("#badgeRound").textContent = `Runde: ${state.idx+1}/${state.order.length}`;
             showScreen("quiz");
             renderQuestion();
         }
 
-        /* ===== Render Frage ===== */
-        function renderQuestion(){
+        function renderQuestion() {
             clearTimers();
             const q = state.order[state.idx];
-            $("#question").textContent = q.q;
-            const ch = $("#choices");
-            ch.innerHTML = "";
+            questionEl.textContent = `Frage ${state.idx + 1}: ${q.q}`;
+            choicesEl.innerHTML = "";
 
-            q.a.forEach((txt,i)=>{
+            q.a.forEach((txt, i) => {
                 const btn = document.createElement("button");
                 btn.className = "choice";
-                btn.innerHTML = `<div class="letter">${String.fromCharCode(65+i)}</div><div style="flex:1">${txt}</div>`;
-                btn.addEventListener("click", ()=> pickAnswer(i));
-                ch.appendChild(btn);
+                btn.setAttribute("data-index", i);
+                btn.innerHTML = `<div class="letter">${String.fromCharCode(65 + i)}</div><div style="flex:1">${txt}</div>`;
+                btn.addEventListener("click", () => onPlayerPick(i));
+                choicesEl.appendChild(btn);
             });
 
-            // KI-Wahl sichtbar markieren (aber Spieler verliert automatisch falls KI richtig)
-            const botChoice = Math.random() < state.botSkill ? q.correct : randomWrong(q.correct, q.a.length);
-            // visual feedback: add correct style to botChoice (keine Punkteänderung, nur Anzeige)
-            setTimeout(()=>{ const el = ch.children[botChoice]; if(el) el.classList.add("correct"); }, 400);
+            // Bot-Antwort verzögert und sichtbar — kein Timer angezeigt
+            const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
+            const botDelay = computeBotDelay(state.speed); // ms
 
-            // Fortschrittsbar starten
-            const bar = $("#progressBar");
-            bar.style.transition = "none";
-            bar.style.width = "0%";
-            // Ensure reflow before transition:
-            requestAnimationFrame(()=>{ requestAnimationFrame(()=>{ bar.style.transition = "width 3000ms linear"; if(!state.paused) bar.style.width = "100%"; }) });
-
-            // Timer: nach 3s automatisch zur nächsten Frage (wenn nicht pausiert)
-            if(!state.paused) state.timer = setTimeout(() => {
-                // wenn bot richtig ist -> Spieler verliert (animation already shows correct)
-                // wir zeigen kurz Wrong-class beim Spieler-Auswahl-Phase nicht nötig — direkt next
-                nextQuestion();
-            }, 3000);
-
-            $("#badgeRound").textContent = `Runde: ${state.idx+1}/${state.order.length}`;
+            // Mark bot choice after delay
+            state.timer = setTimeout(() => {
+                // add bot CSS marker
+                const btn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
+                if (btn) {
+                    btn.classList.add("bot");
+                }
+                // Mark correct answer visually as well (but player still loses if bot correct)
+                if (botChoice === q.correct) {
+                    const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                    if (correctBtn) correctBtn.classList.add("correct");
+                    // weiter zur nächsten Frage nach kurzem Reveal
+                    state.timer = setTimeout(() => {
+                        nextQuestion();
+                    }, state.revealDelay);
+                } else {
+                    // Bot falsch -> zeigen welche richtig ist (highlight)
+                    const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                    if (correctBtn) correctBtn.classList.add("correct");
+                    // lasse noch kurz Zeit für Beobachtung, dann weiter
+                    state.timer = setTimeout(() => {
+                        nextQuestion();
+                    }, state.revealDelay + 300);
+                }
+            }, botDelay);
         }
 
-        function randomWrong(correct,n){
-            let r = Math.floor(Math.random()*n);
-            if(r===correct) r=(r+1)%n;
-            return r;
-        }
-
-        /* ===== Interaktionen ===== */
-        function pickAnswer(i){
-            // Spieler verliert automatisch — hier geben wir kurz falsche Markierung, then wait for progress bar to move on
+        function onPlayerPick(i) {
+            // Player interaction hat keinen Einfluss auf Ergebnis (wie gewünscht).
             const q = state.order[state.idx];
-            const ch = $("#choices");
-            // mark chosen as wrong if not correct
-            if(i !== q.correct){
-                const el = ch.children[i]; if(el) el.classList.add("wrong");
+            const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
+            if (!btn) return;
+            // Mark player's pick visually (wrong) — selbst wenn korrekt, verliert man per Vorgabe
+            if (i !== q.correct) {
+                btn.classList.add("wrong");
             } else {
-                // falls ausversehen richtig, trotzdem verliert der Spieler per Vorgabe — mark as wrong visually
-                const el = ch.children[i]; if(el) { el.classList.add("wrong"); }
+                // falls Spieler zufällig richtig anklickt — trotzdem verliert er gemäß Regel -> markieren wir als wrong visuell
+                btn.classList.add("wrong");
             }
-            // no score change; let progress continue to next question automatically
+            // Keine Änderung an Flow; Bot wird weiterhin seine Auswahl anzeigen
         }
 
-        function onSkip(){
-            // skip counts as wrong; jump to next immediately (still show small delay for UX)
-            clearTimers();
-            const bar = $("#progressBar");
-            bar.style.transition = "width 400ms linear";
-            bar.style.width = "100%";
-            setTimeout(nextQuestion, 420);
-        }
-
-        function nextQuestion(){
+        function nextQuestion() {
             clearTimers();
             state.idx++;
-            if(state.idx >= state.order.length){
+            if (state.idx >= state.order.length) {
                 endGame();
             } else {
                 renderQuestion();
             }
         }
 
-        function endGame(){
+        function endGame() {
+            clearTimers();
             showScreen("end");
-            $("#resultText").textContent = `Die KI hat gewonnen — besser trainiert! Viel Spaß trotzdem, ${state.username}.`;
-            // Username-Feld auf Startseite leer lassen, außer bei "Nochmal spielen"
-            $("#username").value = "";
-            $("#badgeUser").textContent = "Spieler: —";
+            $("#resultText").textContent = "Die KI hat gewonnen — danke fürs Zuschauen!";
         }
 
-        /* ===== Pause / Resume ===== */
-        function togglePause(){
-            state.paused = !state.paused;
-            const btn = $("#pauseBtn");
-            const bar = $("#progressBar");
-            if(state.paused){
-                // freeze progress bar
-                const computed = getComputedStyle(bar).width;
-                const parentW = bar.parentElement.clientWidth;
-                const pct = parentW ? (parseFloat(computed) / parentW) * 100 : 0;
-                bar.style.transition = "none";
-                bar.style.width = pct + "%";
-                clearTimers();
-                btn.classList.add("pause-on");
-                btn.textContent = "▶";
-            } else {
-                // resume remaining
-                const parentW = bar.parentElement.clientWidth;
-                const curW = parseFloat(getComputedStyle(bar).width);
-                const remainingPx = Math.max(0, parentW - curW);
-                const remainingRatio = parentW ? (remainingPx / parentW) : 0;
-                const remainingMs = Math.max(0, Math.round(remainingRatio * 3000));
-                // animate to full
-                requestAnimationFrame(()=>{ bar.style.transition = `width ${remainingMs}ms linear`; bar.style.width = "100%"; });
-                clearTimers();
-                state.timer = setTimeout(nextQuestion, remainingMs);
-                btn.classList.remove("pause-on");
-                btn.textContent = "⏸";
+        /* ===== Utils ===== */
+        function shuffleArray(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function randomWrong(correct, n) {
+            let r = Math.floor(Math.random() * n);
+            if (r === correct) r = (r + 1) % n;
+            return r;
+        }
+
+        function computeBotDelay(speedValue) {
+            // speedValue: 1..10 (1 = sehr schnell, 10 = sehr langsam)
+            // map to ms: 500ms .. 3000ms
+            const min = 500;
+            const max = 3000;
+            const ratio = (speedValue - 1) / 9; // 0..1
+            return Math.round(min + ratio * (max - min));
+        }
+
+        function clearTimers() {
+            if (state.timer) {
+                clearTimeout(state.timer);
+                state.timer = null;
             }
         }
 
-        function clearTimers(){ if(state.timer) { clearTimeout(state.timer); state.timer = null; } }
-
-        /* ===== "Nochmal spielen" Verhalten ===== */
-        function onAgain(){
-            // set username back to last used only if exists
-            if(state.lastUsernameForAgain) $("#username").value = state.lastUsernameForAgain;
-            // start game immediately
-            $("#btnStart").click();
+        function showScreen(name) {
+            if (name === "quiz") {
+                screenQuiz.classList.remove("hidden");
+                screenEnd.classList.add("hidden");
+            } else if (name === "end") {
+                screenQuiz.classList.add("hidden");
+                screenEnd.classList.remove("hidden");
+            } else {
+                screenQuiz.classList.add("hidden");
+                screenEnd.classList.add("hidden");
+            }
         }
 
-        /* ===== page load ===== */
-        // ensure start username empty on load (per Wunsch)
-        window.addEventListener("load", ()=>{
-            $("#username").value = "";
-            showScreen("start");
-            // show stored users (sidebar)
-            renderUserList();
+        /* ===== Seite laden ===== */
+        window.addEventListener("load", () => {
+            // ensure start view (no user input)
+            showScreen("none");
+            // restore settings
+            const savedSkill = parseInt(localStorage.getItem("botSkill"));
+            const savedSpeed = parseInt(localStorage.getItem("botSpeed"));
+            if (!isNaN(savedSkill)) { state.skill = savedSkill; skillRange.value = state.skill; skillLabel.textContent = state.skill + "%"; }
+            if (!isNaN(savedSpeed)) { state.speed = savedSpeed; speedRange.value = state.speed; speedLabel.textContent = speedDescriptor(state.speed); }
         });
     </script>
 </body>
