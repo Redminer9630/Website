@@ -22,7 +22,6 @@
             --shadow: 0 8px 24px rgba(17,24,39,0.08);
             --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
             --user-blue: rgba(37,99,235,0.12);
-            --user-wrong: rgba(239,68,68,0.10);
             --bot-blue: rgba(37,99,235,0.12);
             --correct-green: rgba(16,185,129,0.12);
         }
@@ -60,7 +59,6 @@
             display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(2,6,23,0.02), rgba(2,6,23,0.01));
             border:1px solid rgba(2,6,23,0.06); padding:14px; border-radius:12px; cursor:pointer; transition: box-shadow .12s ease, background .12s ease;
             color:var(--text); font-weight:800;
-            /* wichtig: keine scale/transform beim selektieren (nur dunkler) */
         }
         .choice:hover { box-shadow:0 10px 24px rgba(17,24,39,0.06); background: color-mix(in oklab, rgba(2,6,23,0.02), transparent 6%); }
         .choice .letter {
@@ -70,7 +68,6 @@
         /* visuelle Zustände (keine Skalierung, nur Farbe/Helligkeit) */
         .choice.selected { filter: brightness(0.94); }
         .choice.user-blue { background: var(--user-blue); border-color: rgba(37,99,235,0.22); }
-        .choice.user-wrong { background: var(--user-wrong); border-color: rgba(239,68,68,0.18); }
         .choice.bot { outline: 3px solid rgba(37,99,235,0.14); background: var(--bot-blue); border-color: rgba(37,99,235,0.22); }
         .choice.correct { background: var(--correct-green); border-color: rgba(16,185,129,0.25); }
 
@@ -371,6 +368,8 @@
                 btn.className = "choice";
                 btn.setAttribute("data-index", i);
                 btn.setAttribute("data-clickable", "1");
+                btn.disabled = false;
+                btn.style.pointerEvents = "auto";
                 btn.innerHTML = `<div class="letter">${String.fromCharCode(65 + i)}</div><div style="flex:1">${txt}</div>`;
                 btn.addEventListener("click", () => onPlayerPick(i));
                 choicesEl.appendChild(btn);
@@ -400,19 +399,23 @@
                 }
                 updateSessionStatsUI();
 
+                // disable further clicks after bot answered
+                choicesEl.querySelectorAll("button").forEach(b => { b.disabled = true; b.style.pointerEvents = "none"; b.setAttribute("data-clickable", "0"); });
+
                 // show modal "Bot war schneller"
                 showModal("bot");
 
                 // enable Next for manual advance
                 disableNext(false);
 
-                // do NOT auto-advance; user or host presses Next
+                // do NOT auto-advance; host/user clicks Next
             }, botDelay);
         }
 
         function onPlayerPick(i) {
-            // If user already picked, ignore
+            // If user already picked or bot already answered, ignore
             if (state.userChoice !== null) return;
+            if (state.botAnswered) return; // prevent answering after bot revealed
 
             // Stop the bot if it hasn't answered yet
             if (state.timer) {
@@ -431,29 +434,26 @@
             const botBtn = choicesEl.querySelector(`button.bot`);
             if (botBtn) botBtn.classList.remove("bot");
 
-            // mark user's pick: blue if correct, red if wrong
+            // mark user's pick: always blue (per Wunsch)
+            btn.classList.add("selected");
+            btn.classList.add("user-blue");
+
+            // reveal correct answer (green) if user was wrong; if user correct we still keep blue
+            const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
             if (i === q.correct) {
-                btn.classList.add("user-blue");
-                // also mark correct button visually (green tint) to be explicit
-                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-                if (correctBtn && correctBtn !== btn) correctBtn.classList.add("correct");
-                // show modal "Richtig!"
+                // user correct -> keep blue on user's pick, also optionally show modal
                 showModal("richtig");
             } else {
-                // wrong -> red
-                btn.classList.add("user-wrong");
-                // show correct answer too
-                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                // user wrong -> show correct (green), user's pick stays blue
                 if (correctBtn) correctBtn.classList.add("correct");
-                // show modal "Falsch!"
                 showModal("falsch");
             }
 
+            // disable further clicks for this question
+            choicesEl.querySelectorAll("button").forEach(b => { b.disabled = true; b.style.pointerEvents = "none"; b.setAttribute("data-clickable", "0"); });
+
             // enable Next so user/host can proceed
             disableNext(false);
-
-            // disable further clicks for this question
-            choicesEl.querySelectorAll("button").forEach(b => b.setAttribute("data-clickable", "0"));
         }
 
         function onSkip() {
@@ -541,7 +541,10 @@
                 b.className = "choice";
                 b.style.outline = "";
                 b.removeAttribute("data-clickable");
+                b.disabled = false;
+                b.style.pointerEvents = "auto";
             });
+            // clear container so renderQuestion will repopulate fresh
             choicesEl.innerHTML = "";
             clearModal();
         }
