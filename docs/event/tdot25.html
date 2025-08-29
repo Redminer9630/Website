@@ -1,318 +1,292 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Schul-Quizshow – KI vs. Mensch</title>
-<style>
-/* ========== TSPS9630 + CSS9630 (kompakt, mit Einrückung) ========== */
-:root { --bg:#ffffff; --fg:#0f172a; --muted:#64748b; --accent:#2563eb; --accent-2:#10b981; --danger:#ef4444; --card:#f1f5f9; --btn:#0ea5e9; --shadow:0 10px 30px rgba(2,6,23,.08); --radius:14px; --gap:14px; --pad:14px; --font:system-ui,Segoe UI,Roboto,Arial,Apple Color Emoji,Segoe UI Emoji; }
-@media (prefers-color-scheme: dark) { :root { --bg:#0b1020; --fg:#e5e7eb; --muted:#94a3b8; --accent:#60a5fa; --accent-2:#34d399; --danger:#f87171; --card:#0f172a; --btn:#38bdf8; --shadow:0 10px 30px rgba(0,0,0,.35); } }
-* { box-sizing:border-box; }
-html,body { height:100%; }
-body { margin:0; background:linear-gradient(180deg,var(--bg),color-mix(in oklab,var(--bg),#000 6%)); color:var(--fg); font-family:var(--font); display:grid; place-items:center; }
-.app { width:min(950px,94vw); }
-.header { display:flex; align-items:center; justify-content:space-between; gap:var(--gap); margin:24px 0; }
-.hgroup { display:flex; flex-direction:column; gap:4px; }
-.title { font-size:clamp(22px,3vw,30px); font-weight:800; letter-spacing:.2px; }
-.subtitle { color:var(--muted); font-weight:500; }
-.card { background:var(--card); border:1px solid color-mix(in oklab,var(--fg),transparent 92%); border-radius:var(--radius); padding:calc(var(--pad)*1.2); box-shadow:var(--shadow); }
-.controls { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--gap); }
-@media (max-width:720px){ .controls { grid-template-columns:1fr; } }
-label { font-weight:600; font-size:14px; color:var(--muted); }
-select,input[type="number"] { width:100%; padding:12px; border-radius:10px; border:1px solid color-mix(in oklab,var(--fg),transparent 85%); background:#fff0; color:var(--fg); }
-.row { display:flex; gap:var(--gap); align-items:center; }
-.btn { appearance:none; border:0; border-radius:12px; padding:12px 16px; font-weight:800; cursor:pointer; background:var(--btn); color:#041; transition:transform .08s ease,filter .2s ease,opacity .2s ease; box-shadow:inset 0 -2px 0 rgba(0,0,0,.08); }
-.btn:hover { filter:brightness(1.05); transform:translateY(-1px); }
-.btn:active { transform:translateY(0); }
-.btn.secondary { background:color-mix(in oklab,var(--accent),#000 8%); color:#001; }
-.btn.ghost { background:transparent; border:1px dashed color-mix(in oklab,var(--fg),transparent 75%); color:var(--fg); }
-.badge { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px; font-size:12px; background:color-mix(in oklab,var(--accent-2),#000 84%); color:var(--accent-2); border:1px solid color-mix(in oklab,var(--accent-2),transparent 70%); }
-.main { display:grid; gap:var(--gap); }
-.hidden { display:none !important; }
-
-/* Quiz UI */
-.topbar { display:flex; align-items:center; justify-content:space-between; gap:var(--gap); }
-.progress { width:100%; height:10px; background:color-mix(in oklab,var(--fg),transparent 92%); border-radius:999px; overflow:hidden; }
-.progress>i { display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .25s ease; }
-.timer { min-width:88px; text-align:center; font-feature-settings:"tnum"; font-variant-numeric:tabular-nums; font-weight:800; padding:8px 12px; border-radius:10px; background:color-mix(in oklab,var(--danger),transparent 88%); border:1px solid color-mix(in oklab,var(--danger),transparent 60%); }
-.qcard { display:grid; gap:var(--gap); }
-.question { font-size:clamp(18px,2.6vw,24px); font-weight:800; }
-.choices { display:grid; gap:10px; grid-template-columns:1fr; }
-.choice { border:1px solid color-mix(in oklab,var(--fg),transparent 85%); background:#0000; padding:14px; border-radius:12px; cursor:pointer; text-align:left; font-weight:700; transition:transform .08s ease,background .2s ease,border-color .2s ease; }
-.choice:hover { transform:translateY(-1px); background:color-mix(in oklab,var(--accent),transparent 92%); }
-.choice.correct { background:color-mix(in oklab,var(--accent-2),transparent 84%); border-color:color-mix(in oklab,var(--accent-2),transparent 40%); }
-.choice.wrong { background:color-mix(in oklab,var(--danger),transparent 86%); border-color:color-mix(in oklab,var(--danger),transparent 40%); }
-.meta { display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-weight:600; }
-
-/* Footer */
-.footer { margin:16px 0 32px; text-align:center; color:var(--muted); font-size:12px; }
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Quizshow – Gesamtschule Bremen West, 8. Jahrgang</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #0f172a;
+            --muted: #64748b;
+            --accent: #2563eb;
+            --accent-2: #10b981;
+            --danger: #ef4444;
+            --card: #f1f5f9;
+            --btn: #0ea5e9;
+            --shadow: 0 10px 30px rgba(2,6,23,.08);
+            --radius: 14px;
+            --gap: 14px;
+            --pad: 14px;
+            --font: system-ui,Segoe UI,Roboto,Arial;
+        }
+        @media (prefers-color-scheme: dark){
+            :root{
+                --bg:#0b1020;
+                --fg:#e5e7eb;
+                --muted:#94a3b8;
+                --accent:#60a5fa;
+                --accent-2:#34d399;
+                --danger:#f87171;
+                --card:#0f172a;
+                --btn:#38bdf8;
+                --shadow:0 10px 30px rgba(0,0,0,.35);
+            }
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin:0;
+            display:grid;
+            place-items:center;
+            height:100%;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font);
+        }
+        .app {
+            width: min(900px, 95vw);
+        }
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: var(--pad);
+            box-shadow: var(--shadow);
+            margin-bottom: var(--gap);
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin: 0 0 0.5rem 0;
+        }
+        input, button, select {
+            font: inherit;
+        }
+        input[type=text] {
+            padding: 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        button {
+            cursor:pointer;
+            border:0;
+            border-radius:8px;
+            padding:0.6rem 1rem;
+            font-weight:600;
+        }
+        .btn {
+            background: var(--btn);
+            color: #041;
+        }
+        .btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+        .choice {
+            display:block;
+            width:100%;
+            text-align:left;
+            margin:.3rem 0;
+            padding:.6rem;
+            border:1px solid color-mix(in oklab,var(--fg),transparent 85%);
+            border-radius:8px;
+            cursor:pointer;
+            transition: background .2s, border-color .2s;
+        }
+        .choice:hover {
+            background: color-mix(in oklab,var(--accent),transparent 90%);
+        }
+        .choice.correct {
+            background: color-mix(in oklab,var(--accent-2),transparent 84%);
+            border-color: color-mix(in oklab,var(--accent-2),transparent 40%);
+        }
+        .choice.wrong {
+            background: color-mix(in oklab,var(--danger),transparent 86%);
+            border-color: color-mix(in oklab,var(--danger),transparent 40%);
+        }
+        .progress-bar-container {
+            background: color-mix(in oklab,var(--fg),transparent 90%);
+            border-radius: 999px;
+            height: 12px;
+            flex:1;
+            margin-right: 10px;
+            overflow:hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            width:0%;
+            background: linear-gradient(90deg,var(--accent),var(--accent-2));
+            transition: width 3s linear;
+        }
+        .controls-row {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-top:10px;
+        }
+        .pause-btn {
+            background: var(--danger);
+            color:#fff;
+        }
+    </style>
 </head>
 <body>
-<div class="app">
-  <header class="header">
-    <div class="hgroup">
-      <div class="title">Schul-Quizshow <span class="badge">KI-Modus verfügbar</span></div>
-      <div class="subtitle">Starte ein Quiz – alleine, gegen Freunde oder gegen den <b>KI-Bot</b>.</div>
-    </div>
-    <button class="btn ghost" id="btnHelp" title="Kurzanleitung">ℹ︎ Anleitung</button>
-  </header>
+    <div class="app">
 
-  <!-- Start -->
-  <section class="card" id="screenStart">
-    <div class="main">
-      <div class="controls">
-        <div>
-          <label>Kategorie</label>
-          <select id="selCategory">
-            <option value="mixed">Gemischt</option>
-            <option value="wissen">Allgemeinwissen</option>
-            <option value="mathe">Mathe</option>
-            <option value="natur">Natur</option>
-            <option value="it">Informatik</option>
-            <option value="bremen">Bremen</option>
-          </select>
-        </div>
-        <div>
-          <label>Schwierigkeit</label>
-          <select id="selDifficulty">
-            <option value="leicht">Leicht</option>
-            <option value="mittel" selected>Mittel</option>
-            <option value="schwer">Schwer</option>
-          </select>
-        </div>
-        <div>
-          <label>Anzahl Fragen</label>
-          <input id="numQuestions" type="number" min="3" max="25" value="10" />
-        </div>
-        <div>
-          <label>Zeit pro Frage (Sek.)</label>
-          <input id="numTime" type="number" min="5" max="90" value="20" />
-        </div>
-      </div>
+        <!-- Startscreen -->
+        <section class="card" id="screenStart">
+            <h1>Quizshow – Gesamtschule Bremen West, 8. Jahrgang</h1>
+            <input type="text" id="username" placeholder="Gib deinen Namen ein">
+            <input type="text" id="adminCode" placeholder="Admin-Code">
+            <button class="btn" id="btnStart">Start</button>
+        </section>
 
-      <div class="row" style="justify-content:space-between;">
-        <div class="row">
-          <input id="chkBot" type="checkbox" /> <label for="chkBot">Gegen KI-Bot spielen</label>
-        </div>
-        <div class="row">
-          <label for="selBotSkill">Bot-Stärke</label>
-          <select id="selBotSkill" title="Wie gut der KI-Bot rät">
-            <option value="50">Casual (≈50%)</option>
-            <option value="65" selected>Smart (≈65%)</option>
-            <option value="80">Pro (≈80%)</option>
-            <option value="92">Insane (≈92%)</option>
-          </select>
-        </div>
-      </div>
+        <!-- Quizscreen -->
+        <section class="card hidden" id="screenQuiz">
+            <div id="question" style="font-weight:800;font-size:1.2rem;margin-bottom:10px;">Frage</div>
+            <div id="choices"></div>
+            <div class="controls-row">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <button class="btn pause-btn" id="pauseBtn">Pause</button>
+                <button class="btn" id="skipBtn">Überspringen</button>
+            </div>
+        </section>
 
-      <div class="row" style="justify-content:flex-end;">
-        <button class="btn secondary" id="btnDemo">Sofort-Demo</button>
-        <button class="btn" id="btnStart">Quiz starten ▶</button>
-      </div>
-
-      <details class="card" style="background:transparent; border-style:dashed;">
-        <summary style="cursor:pointer;font-weight:800;">Fragen bearbeiten? (Lehrer-Modus)</summary>
-        <p style="margin:8px 0 0;">Öffne diese Datei, suche nach <code>const QUESTIONS</code> und ergänze eigene Fragen. Format siehe Kommentar.</p>
-      </details>
-    </div>
-  </section>
-
-  <!-- Quiz -->
-  <section class="card hidden" id="screenQuiz">
-    <div class="topbar">
-      <div class="progress"><i id="bar"></i></div>
-      <div class="timer" id="timer">20s</div>
+        <!-- Endscreen -->
+        <section class="card hidden" id="screenEnd">
+            <h2>Ergebnis</h2>
+            <div id="resultText"></div>
+            <button class="btn" id="btnAgain">Nochmal spielen</button>
+        </section>
     </div>
 
-    <div class="qcard">
-      <div class="meta"><span id="metaCat">Kategorie</span><span id="metaCount">Frage 1/10</span></div>
-      <div class="question" id="question">Fragetext…</div>
-      <div class="choices" id="choices"></div>
-      <div class="meta"><span id="metaMode">Modus: Solo</span><span id="metaScore">Punkte: 0</span></div>
-    </div>
+    <script>
+        // ===== Fragenpool =====
+        const QUESTIONS=[
+            {q:"Wie viele Bundesländer hat Deutschland?",a:["14","16","18","12"],correct:1},
+            {q:"Hauptstadt von Bremen ist …",a:["Bremerhaven","Bremen","Vegesack","Oldenburg"],correct:1},
+            {q:"5 · 7 = ?",a:["30","32","35","37"],correct:2},
+            {q:"Welches Tier ist ein Säugetier?",a:["Hai","Delfin","Forelle","Karpfen"],correct:1},
+            {q:"Was bedeutet ‚CPU‘?",a:["Central Processing Unit","Central Program Utility","Compute Power Unit","Core Program Unit"],correct:0},
+            {q:"Welche Programmiersprache läuft im Browser?",a:["C++","Python","JavaScript","Java"],correct:2},
+            {q:"Der Rhein mündet in …",a:["Ostsee","Nordsee","Mittelmeer","Schwarzes Meer"],correct:1},
+            {q:"9+7·2 = ?",a:["30","32","34","36"],correct:1},
+            {q:"Wie nennt man Pflanzenfresser?",a:["Karnivoren","Omnivoren","Herbivoren","Detritivoren"],correct:2},
+            {q:"Bremens Fußballclub?",a:["HSV","Werder","FCSP","H96"],correct:1},
+            {q:"Was ist 2^5?",a:["16","32","64","128"],correct:1},
+            {q:"HTTP steht für …",a:["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"],correct:0},
+            {q:"Welcher Planet ist der Sonne am nächsten?",a:["Venus","Merkur","Mars","Erde"],correct:1},
+            {q:"Welche Einheit misst elektrische Stromstärke?",a:["Volt","Watt","Ohm","Ampere"],correct:3},
+            {q:"Welches Schutzgebiet liegt um Bremen?",a:["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"],correct:0},
+        ];
 
-    <div class="row" style="justify-content:space-between;margin-top:6px;">
-      <button class="btn ghost" id="btnQuit">Zurück</button>
-      <div class="row">
-        <button class="btn secondary" id="btnSkip" title="Frage überspringen (kein Punkt)">Überspringen ↷</button>
-        <button class="btn" id="btnNext" disabled>Nächste ▶</button>
-      </div>
-    </div>
-  </section>
+        // ===== State =====
+        let state={
+            username:"",
+            idx:0,
+            order:[],
+            botSkill:0.65,
+            times:[],
+            paused:false,
+        };
+        const $=s=>document.querySelector(s);
 
-  <!-- Ergebnis -->
-  <section class="card hidden" id="screenEnd">
-    <div class="main">
-      <h2 style="margin:0;">Ergebnis</h2>
-      <p id="resultText">Du hast X/Y richtig! 🎉</p>
-      <div class="row" style="gap:8px; flex-wrap:wrap;">
-        <span class="badge" id="badgeTime">Ø Zeit: –</span>
-        <span class="badge" id="badgeSpeed">Bestzeit: –</span>
-        <span class="badge" id="badgeStreak">Streak: –</span>
-        <span class="badge" id="badgeBot">KI-Bot: –</span>
-      </div>
-      <div class="row" style="justify-content:flex-end;">
-        <button class="btn ghost" id="btnReview">Lösungen anzeigen</button>
-        <button class="btn secondary" id="btnAgain">Nochmal</button>
-        <button class="btn" id="btnHome">Start</button>
-      </div>
-      <details id="review" class="card hidden" style="margin-top:8px;">
-        <summary style="cursor:pointer;font-weight:800;">Lösungen</summary>
-        <ol id="reviewList" style="margin:8px 0 0; padding-left:20px;"></ol>
-      </details>
-    </div>
-  </section>
+        // ===== Start =====
+        $("#btnStart").addEventListener("click",()=>{
+            const name=$("#username").value.trim();
+            if(!name) return alert("Bitte Namen eingeben");
+            state.username=name;
+            saveUsername(name);
+            startGame();
+        });
 
-  <div class="footer">Made for Tag der offenen Tür · Offline-fähig · <span id="footYear"></span></div>
-</div>
+        function saveUsername(name){
+            let users=JSON.parse(localStorage.getItem("users")||"[]");
+            if(!users.includes(name)) users.push(name);
+            localStorage.setItem("users",JSON.stringify(users));
+        }
 
-<script>
-/* ===== Fragenpool (einfach erweiterbar) =======================================
-  Format:
-  { q:"Frage", a:["Antwort A","Antwort B","Antwort C","Antwort D"], correct:1, cat:"wissen" }
-  - 'correct' ist der Index der richtigen Antwort (0..3)
-  - Kategorien: wissen, mathe, natur, it, bremen
-============================================================================== */
-const QUESTIONS=[
-  {q:"Wie viele Bundesländer hat Deutschland?",a:["14","16","18","12"],correct:1,cat:"wissen"},
-  {q:"Hauptstadt von Bremen ist …",a:["Bremerhaven","Bremen","Vegesack","Oldenburg"],correct:1,cat:"bremen"},
-  {q:"5 · 7 = ?",a:["30","32","35","37"],correct:2,cat:"mathe"},
-  {q:"Welches Tier ist ein Säugetier?",a:["Hai","Delfin","Forelle","Karpfen"],correct:1,cat:"natur"},
-  {q:"Was bedeutet ‚CPU‘?",a:["Central Processing Unit","Central Program Utility","Compute Power Unit","Core Program Unit"],correct:0,cat:"it"},
-  {q:"Welche Programmiersprache läuft im Browser?",a:["C++","Python","JavaScript","Java"],correct:2,cat:"it"},
-  {q:"Der Rhein mündet in …",a:["Ostsee","Nordsee","Mittelmeer","Schwarzes Meer"],correct:1,cat:"wissen"},
-  {q:"\(9+7)·2 = ?",a:["30","32","34","36"],correct:1,cat:"mathe"},
-  {q:"Wie nennt man Pflanzenfresser?",a:["Karnivoren","Omnivoren","Herbivoren","Detritivoren"],correct:2,cat:"natur"},
-  {q:"Bremens Fußballclub?",a:["HSV","Werder","FCSP","H96"],correct:1,cat:"bremen"},
-  {q:"Was ist 2^5?",a:["16","32","64","128"],correct:1,cat:"mathe"},
-  {q:"HTTP steht für …",a:["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"],correct:0,cat:"it"},
-  {q:"Welcher Planet ist der Sonne am nächsten?",a:["Venus","Merkur","Mars","Erde"],correct:1,cat:"wissen"},
-  {q:"Welche Einheit misst elektrische Stromstärke?",a:["Volt","Watt","Ohm","Ampere"],correct:3,cat:"wissen"},
-  {q:"Welches Schutzgebiet liegt um Bremen?",a:["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"],correct:0,cat:"bremen"},
-];
+        function startGame(){
+            state.idx=0;
+            state.order=shuffle(QUESTIONS).slice(0,10);
+            $("#screenStart").classList.add("hidden");
+            $("#screenEnd").classList.add("hidden");
+            $("#screenQuiz").classList.remove("hidden");
+            renderQuestion();
+        }
 
-/* ===== State ===== */
-let state={ idx:0, order:[], picked:null, score:0, correct:0, total:10, tLeft:20, perQ:20, running:false, bot:false, botSkill:.65, cat:"mixed", diff:"mittel", history:[], bestStreak:0, streak:0, aiCorrect:0, aiTotal:0, times:[] };
-const $=s=>document.querySelector(s); const $$=s=>document.querySelectorAll(s);
+        function shuffle(a){return a.sort(()=>Math.random()-0.5);}
 
-/* ===== Helpers (klein im JS9630-Stil) ===== */
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
-const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
-const ms=s=>Math.round(s*1000);
+        // ===== Render Frage =====
+        let timer=null;
+        function renderQuestion(){
+            const q=state.order[state.idx];
+            $("#question").textContent=q.q;
+            const choices=$("#choices");
+            choices.innerHTML="";
+            q.a.forEach((txt,i)=>{
+                const b=document.createElement("button");
+                b.className="choice";
+                b.textContent=txt;
+                b.addEventListener("click",()=>pickAnswer(i));
+                choices.appendChild(b);
+            });
+            // KI-Bot wählt zufällig
+            const botChoice=Math.random()<state.botSkill?q.correct:Math.floor(Math.random()*q.a.length);
+            choices.children[botChoice].classList.add("correct");
+            // Start Fortschrittsbar
+            const bar=$("#progressBar");
+            bar.style.transition="none";
+            bar.style.width="0%";
+            setTimeout(()=>{ bar.style.transition="width 3s linear"; bar.style.width="100%"; },50);
+            if(timer) clearTimeout(timer);
+            timer=setTimeout(nextQuestion,3000);
+        }
 
-/* ===== UI Bindings ===== */
-const el={ start:$("#screenStart"), quiz:$("#screenQuiz"), end:$("#screenEnd"), q:$("#question"), choices:$("#choices"), timer:$("#timer"), bar:$("#bar"), metaCount:$("#metaCount"), metaCat:$("#metaCat"), metaScore:$("#metaScore"), metaMode:$("#metaMode"), resultText:$("#resultText"), review:$("#review"), reviewList:$("#reviewList"), badgeTime:$("#badgeTime"), badgeSpeed:$("#badgeSpeed"), badgeStreak:$("#badgeStreak"), badgeBot:$("#badgeBot") };
+        function pickAnswer(i){
+            // Spieler verliert automatisch, egal was er klickt
+        }
 
-/* ===== Init ===== */
-$("#footYear").textContent=new Date().getFullYear();
-$("#btnHelp").addEventListener("click",()=>alert("So funktioniert’s:\n• Einstellungen wählen\n• Optional KI-Bot aktivieren (antwortet automatisch)\n• Punkte pro richtige Antwort\n• Zeit läuft pro Frage!"));
-$("#btnStart").addEventListener("click",startGame);
-$("#btnDemo").addEventListener("click",()=>{ $("#selCategory").value="mixed"; $("#selDifficulty").value="mittel"; $("#numQuestions").value=6; $("#numTime").value=15; $("#chkBot").checked=true; $("#selBotSkill").value=65; startGame(); });
-$("#btnQuit").addEventListener("click",()=>showScreen("start"));
-$("#btnSkip").addEventListener("click",()=>{ lockChoices(); commitAnswer(null,false,true); });
-$("#btnNext").addEventListener("click",nextQuestion);
-$("#btnAgain").addEventListener("click",()=>startGame(true));
-$("#btnHome").addEventListener("click",()=>showScreen("start"));
-$("#btnReview").addEventListener("click",()=>{ el.review.classList.toggle("hidden"); });
-$("#selBotSkill").addEventListener("change",e=>state.botSkill=parseInt(e.target.value)/100);
+        function nextQuestion(){
+            state.idx++;
+            if(state.idx>=state.order.length){
+                endGame();
+            }else{
+                renderQuestion();
+            }
+        }
 
-/* ===== Screens ===== */
-function showScreen(name){
-  [el.start,el.quiz,el.end].forEach(n=>n.classList.add("hidden"));
-  if(name==="start"){ el.start.classList.remove("hidden"); clearInterval(timerI); state.running=false; }
-  if(name==="quiz"){ el.quiz.classList.remove("hidden"); }
-  if(name==="end"){ el.end.classList.remove("hidden"); }
-}
+        function endGame(){
+            $("#screenQuiz").classList.add("hidden");
+            $("#screenEnd").classList.remove("hidden");
+            $("#resultText").textContent=`Du hast verloren gegen die KI, ${state.username}!`;
+        }
 
-/* ===== Game Setup ===== */
-function startGame(restart=false){
-  state.cat=$("#selCategory").value; state.diff=$("#selDifficulty").value;
-  state.total=clamp(parseInt($("#numQuestions").value)||10,3,25);
-  state.perQ=clamp(parseInt($("#numTime").value)||20,5,90);
-  state.bot=$("#chkBot").checked; state.botSkill=parseInt($("#selBotSkill").value)/100;
-  state.idx=0; state.score=0; state.correct=0; state.picked=null; state.history=[]; state.bestStreak=0; state.streak=0; state.aiCorrect=0; state.aiTotal=0; state.times=[];
-  const pool=buildPool(state.cat,state.diff); state.order=pool.slice(0,state.total);
-  showScreen("quiz"); el.metaMode.textContent=state.bot?`Modus: Du vs KI-Bot (${Math.round(state.botSkill*100)}%)`:"Modus: Solo";
-  renderQuestion();
-}
+        // ===== Buttons =====
+        $("#btnAgain").addEventListener("click",()=>{
+            $("#username").value=state.username;
+            startGame();
+        });
 
-/* Auswahl der Fragen nach Kategorie & „Schwierigkeit“ (hier: leichte=mehr Basics) */
-function buildPool(cat,diff){
-  let arr=QUESTIONS.slice();
-  if(cat!=="mixed") arr=arr.filter(x=>x.cat===cat);
-  const weights=arr.map(q=>({q, w: (diff==="leicht"?1.0:diff==="mittel"?0.9:0.8) * (q.cat==="mathe"||q.cat==="it"?(diff==="schwer"?1.1:1):1) }));
-  const sorted=weights.sort(()=>Math.random()-.5).map(x=>x.q);
-  return shuffle(sorted);
-}
-
-/* ===== Render & Flow ===== */
-let timerI=null, aiI=null, lock=false, tStart=0;
-function renderQuestion(){
-  clearInterval(timerI); clearTimeout(aiI); lock=false; $("#btnNext").disabled=true;
-  const q=state.order[state.idx]; el.q.textContent=q.q; el.metaCat.textContent="Kategorie: "+labelCat(q.cat); el.metaCount.textContent=`Frage ${state.idx+1}/${state.total}`; el.metaScore.textContent=`Punkte: ${state.score}`;
-  el.choices.innerHTML="";
-  q.a.forEach((text,i)=>{ const b=document.createElement("button"); b.className="choice"; b.textContent=text; b.addEventListener("click",()=>pickAnswer(i)); el.choices.appendChild(b); });
-  // Timer
-  state.tLeft=state.perQ; el.timer.textContent=`${state.tLeft}s`; el.bar.style.width=`${(state.idx/state.total)*100}%`; tStart=performance.now();
-  timerI=setInterval(()=>{ state.tLeft--; el.timer.textContent=`${state.tLeft}s`; if(state.tLeft<=0){ lockChoices(); commitAnswer(null,false,true); } },1000);
-  // KI-Bot
-  if(state.bot){ const delay=randomBotDelay(state.perQ); aiI=setTimeout(()=>botAnswer(),delay); }
-}
-
-/* ===== Interaction ===== */
-function pickAnswer(i){ if(lock) return; lockChoices(); commitAnswer(i,true,false); }
-function lockChoices(){ if(lock) return; lock=true; clearInterval(timerI); clearTimeout(aiI); [...el.choices.children].forEach(b=>b.disabled=true); }
-
-function commitAnswer(i,byPlayer,timeoutSkip){
-  const q=state.order[state.idx]; const timeSec=Math.max(0,Math.round((performance.now()-tStart)/1000)); state.times.push(timeSec);
-  const correct=i===q.correct;
-  if(byPlayer){ if(correct){ state.score+=10; state.correct++; state.streak++; state.bestStreak=Math.max(state.bestStreak,state.streak); } else { state.streak=0; } }
-  highlight(q.correct,i);
-  state.history.push({q:q.q,a:q.a,correct:q.correct,chosen:i,player:byPlayer,timeout:timeoutSkip});
-  $("#btnNext").disabled=false;
-}
-
-function highlight(correct,chosen){
-  [...el.choices.children].forEach((b,idx)=>{ if(idx===correct) b.classList.add("correct"); if(chosen!=null && idx===chosen && chosen!==correct) b.classList.add("wrong"); });
-}
-
-/* ===== Bot ===== */
-function randomBotDelay(perQ){ const min=ms(Math.max(1,perQ*0.2)), max=ms(Math.max(2,perQ*0.65)); return Math.floor(min+Math.random()*(max-min)); }
-function botAnswer(){
-  const q=state.order[state.idx]; state.aiTotal++;
-  const knows=Math.random()<state.botSkill; const choice=knows?q.correct:randomWrong(q.correct, q.a.length);
-  // Wenn Spieler noch nicht geantwortet hat, wird Bot markiert (kein Einfluss auf Spielstand des Spielers)
-  if(!lock){ // visual feedback: kurz Rahmen auf Bot-Antwort
-    el.choices.children[choice].style.outline="3px solid color-mix(in oklab,var(--accent),#000 20%)";
-    setTimeout(()=>{ if(el.choices.children[choice]) el.choices.children[choice].style.outline=""; },400);
-  }
-  if(choice===q.correct) state.aiCorrect++;
-}
-function randomWrong(correct,n){ let r=Math.floor(Math.random()*n); if(r===correct) r=(r+1)%n; return r; }
-
-/* ===== Next / End ===== */
-function nextQuestion(){
-  if(state.idx<state.total-1){ state.idx++; renderQuestion(); }
-  else { endGame(); }
-}
-function endGame(){
-  showScreen("end");
-  const pct=Math.round((state.correct/state.total)*100);
-  el.resultText.textContent=`Du hast ${state.correct}/${state.total} richtig (${pct}%). Punkte: ${state.score}.`;
-  const avg=state.times.reduce((a,b)=>a+b,0)/Math.max(1,state.times.length);
-  const best=Math.min(...state.times);
-  el.badgeTime.textContent=`Ø Zeit: ${avg.toFixed(1)}s`; el.badgeSpeed.textContent=`Bestzeit: ${best===Infinity?"–":best+"s"}`; el.badgeStreak.textContent=`Streak: ${state.bestStreak}`;
-  el.badgeBot.textContent=state.bot?`KI-Bot: ${state.aiCorrect}/${state.aiTotal}`:`KI-Bot: aus`;
-  // Review
-  el.reviewList.innerHTML="";
-  state.history.forEach((h,i)=>{ const li=document.createElement("li"); const chosen=h.chosen==null?"(keine)":String.fromCharCode(65+(h.chosen??0)); const correct=String.fromCharCode(65+h.correct); li.innerHTML=`<b>${h.q}</b><br/>Richtig: ${correct} – Deine Wahl: ${chosen}`; el.reviewList.appendChild(li); });
-  el.review.classList.remove("hidden");
-}
-
-/* ===== Labels ===== */
-function labelCat(c){ return c==="wissen"?"Allgemeinwissen":c==="mathe"?"Mathe":c==="natur"?"Natur":c==="it"?"Informatik":c==="bremen"?"Bremen":"Gemischt"; }
-</script>
+        // ===== Pause =====
+        $("#pauseBtn").addEventListener("click",()=>{
+            state.paused=!state.paused;
+            const bar=$("#progressBar");
+            if(state.paused){
+                const computed=getComputedStyle(bar).width;
+                bar.style.transition="none";
+                bar.style.width=computed;
+                clearTimeout(timer);
+            } else {
+                const remaining=3000*(1-parseFloat(bar.style.width)/bar.parentElement.clientWidth);
+                bar.style.transition=`width ${remaining}ms linear`;
+                bar.style.width="100%";
+                timer=setTimeout(nextQuestion,remaining);
+            }
+        });
+    </script>
 </body>
 </html>
