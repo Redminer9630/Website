@@ -21,6 +21,9 @@
             --pad: 16px;
             --shadow: 0 8px 24px rgba(17,24,39,0.08);
             --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            --user-correct: rgba(16,185,129,0.12);
+            --user-wrong: rgba(239,68,68,0.10);
+            --bot-blue: rgba(37,99,235,0.12);
         }
 
         /* ===== Reset & Layout ===== */
@@ -54,16 +57,21 @@
         #choices { display:grid; gap:10px; }
         .choice {
             display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(2,6,23,0.02), rgba(2,6,23,0.01));
-            border:1px solid rgba(2,6,23,0.06); padding:14px; border-radius:12px; cursor:pointer; transition: transform .12s ease, box-shadow .12s ease;
+            border:1px solid rgba(2,6,23,0.06); padding:14px; border-radius:12px; cursor:pointer; transition: box-shadow .12s ease, background .12s ease;
             color:var(--text); font-weight:800;
+            /* wichtig: keine scale/transform beim selektieren (nur dunkler) */
         }
-        .choice:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(17,24,39,0.06); }
+        .choice:hover { box-shadow:0 10px 24px rgba(17,24,39,0.06); background: color-mix(in oklab, rgba(2,6,23,0.02), transparent 6%); }
         .choice .letter {
             min-width:44px; min-height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(2,6,23,0.04); color:var(--muted); font-weight:900; font-size:0.95rem;
         }
+
+        /* visuelle Zustände (keine Skalierung, nur Farbe/Helligkeit) */
+        .choice.selected { filter: brightness(0.94); }
+        .choice.user-correct { background: var(--user-correct); border-color: rgba(16,185,129,0.25); }
+        .choice.user-wrong { background: var(--user-wrong); border-color: rgba(239,68,68,0.18); }
         .choice.correct { background: linear-gradient(90deg, rgba(6,182,212,0.12), rgba(37,99,235,0.08)); border-color: rgba(6,182,212,0.18); }
-        .choice.wrong { background: linear-gradient(90deg, rgba(239,68,68,0.08), rgba(239,68,68,0.02)); border-color: rgba(239,68,68,0.12); }
-        .choice.bot { outline: 3px solid rgba(37,99,235,0.14); }
+        .choice.bot { outline: 3px solid rgba(37,99,235,0.14); background: var(--bot-blue); border-color: rgba(37,99,235,0.22); }
 
         /* ===== Controls (Next / Skip) ===== */
         .action-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
@@ -92,7 +100,7 @@
         <div class="topbar">
             <div class="top-left">
                 <div class="title">Quizshow — Gesamtschule Bremen West · 8. Jahrgang</div>
-                <div class="subtitle">10 zufällige Fragen</div>
+                <div class="subtitle">Nur KI-Modus · 10 zufällige Fragen · keine Nutzernamen</div>
             </div>
 
             <div class="controls" role="region" aria-label="Einstellungen">
@@ -123,7 +131,7 @@
                     <button id="btnNext" class="btn-primary btn-disabled" title="Nächste Frage" disabled>Nächste ▶</button>
                 </div>
 
-                <div class="stats" id="sessionStats">
+                <div class="stats" id="sessionStats" style="margin-top:10px;">
                     <div class="stat" id="statRound">Runde: 0/10</div>
                     <div class="stat" id="statBotCorrect">Bot richtig (Session): 0</div>
                     <div class="stat" id="statBotWrong">Bot falsch (Session): 0</div>
@@ -143,7 +151,7 @@
 
             <!-- Ergebnis -->
             <section id="screenEnd" class="card hidden">
-                <div id="resultText">Die KI hat gewonnen — danke fürs Spielen!</div>
+                <div id="resultText">Die KI hat gewonnen — danke fürs Zuschauen!</div>
                 <div style="display:flex;gap:8px;">
                     <button id="btnAgain" class="btn-start">Nochmal</button>
                     <button id="btnHome" class="btn-ghost">Zur Startseite</button>
@@ -182,11 +190,9 @@
             speed: parseInt(localStorage.getItem("botSpeed")) || 5,        // 1..10 (höher = langsamer)
             timer: null,
             revealDelay: 700, // ms nach Bot-Auswahl bis nächste Frage (wenn automatisch)
-            session: {
-                botCorrect: 0,
-                botWrong: 0,
-                skipped: 0
-            }
+            session: { botCorrect: 0, botWrong: 0, skipped: 0 },
+            userChoice: null,
+            botChoice: null
         };
 
         /* ===== UI refs ===== */
@@ -256,6 +262,8 @@
             state.session.botCorrect = 0;
             state.session.botWrong = 0;
             state.session.skipped = 0;
+            state.userChoice = null;
+            state.botChoice = null;
 
             state.order = shuffleArray(QUESTIONS).slice(0, 10);
             state.idx = 0;
@@ -266,7 +274,10 @@
 
         function renderQuestion() {
             clearTimers();
+            state.userChoice = null;
+            state.botChoice = null;
             disableNext(true);
+
             const q = state.order[state.idx];
             questionEl.textContent = `Frage ${state.idx + 1}: ${q.q}`;
             choicesEl.innerHTML = "";
@@ -275,6 +286,7 @@
                 const btn = document.createElement("button");
                 btn.className = "choice";
                 btn.setAttribute("data-index", i);
+                btn.setAttribute("data-clickable", "1");
                 btn.innerHTML = `<div class="letter">${String.fromCharCode(65 + i)}</div><div style="flex:1">${txt}</div>`;
                 btn.addEventListener("click", () => onPlayerPick(i));
                 choicesEl.appendChild(btn);
@@ -283,17 +295,15 @@
             // Bot-Antwort verzögert und sichtbar — kein Timer angezeigt
             const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
             const botDelay = computeBotDelay(state.speed);
-
-            // save botChoice to state for potential use
-            state.currentBotChoice = botChoice;
+            state.botChoice = botChoice;
 
             // After botDelay, reveal bot choice and correct answer; enable Next button
             state.timer = setTimeout(() => {
-                // mark bot choice visually
                 const botBtn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
-                if (botBtn) botBtn.classList.add("bot");
+                if (botBtn) {
+                    botBtn.classList.add("bot");
+                }
 
-                // highlight correct answer
                 const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
                 if (correctBtn) correctBtn.classList.add("correct");
 
@@ -305,12 +315,12 @@
                 }
                 updateSessionStatsUI();
 
-                // enable Next so user can advance manually; also auto-advance shortly after
+                // enable Next for manual advance
                 disableNext(false);
-                // automatic fallback: if user doesn't press Next, auto-advance after revealDelay
+
+                // auto-advance fallback
                 clearTimers();
                 state.timer = setTimeout(() => {
-                    // if still on same question, go next
                     if (state.idx < state.order.length) {
                         nextQuestion();
                     }
@@ -319,12 +329,23 @@
         }
 
         function onPlayerPick(i) {
-            // Spieler-Interaktion beeinflusst das Ergebnis nicht (per Vorgabe).
+            // ignore clicks if already chosen
+            if (state.userChoice !== null) return;
             const q = state.order[state.idx];
+            state.userChoice = i;
+
+            // mark user selection visually (green if correct, red if wrong)
             const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
             if (!btn) return;
-            // Mark player's pick visually as wrong (auch wenn person klickt richtig)
-            btn.classList.add("wrong");
+            btn.classList.add("selected");
+            if (i === q.correct) {
+                btn.classList.add("user-correct");
+            } else {
+                btn.classList.add("user-wrong");
+            }
+
+            // disable further clicks for this question
+            choicesEl.querySelectorAll("button").forEach(b => b.setAttribute("data-clickable", "0"));
         }
 
         function onSkip() {
@@ -332,7 +353,7 @@
             state.session.skipped++;
             updateSessionStatsUI();
             clearTimers();
-            // show correct answer briefly (optional)
+            // show correct answer briefly
             const q = state.order[state.idx];
             const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
             if (correctBtn) correctBtn.classList.add("correct");
@@ -369,7 +390,6 @@
             localStorage.setItem("quiz_botWrongTotal", String(botWrongTotal + state.session.botWrong));
             localStorage.setItem("quiz_skippedTotal", String(skippedTotal + state.session.skipped));
 
-            // refresh cum stats UI
             updateCumStatsUI();
 
             showScreen("end");
