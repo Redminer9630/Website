@@ -22,6 +22,7 @@
             --shadow: 0 8px 24px rgba(17,24,39,0.08);
             --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
             --user-blue: rgba(37,99,235,0.12);
+            --user-wrong: rgba(239,68,68,0.10);
             --bot-blue: rgba(37,99,235,0.12);
             --correct-green: rgba(16,185,129,0.12);
         }
@@ -69,6 +70,7 @@
         /* visuelle Zustände (keine Skalierung, nur Farbe/Helligkeit) */
         .choice.selected { filter: brightness(0.94); }
         .choice.user-blue { background: var(--user-blue); border-color: rgba(37,99,235,0.22); }
+        .choice.user-wrong { background: var(--user-wrong); border-color: rgba(239,68,68,0.18); }
         .choice.bot { outline: 3px solid rgba(37,99,235,0.14); background: var(--bot-blue); border-color: rgba(37,99,235,0.22); }
         .choice.correct { background: var(--correct-green); border-color: rgba(16,185,129,0.25); }
 
@@ -81,6 +83,46 @@
         /* ===== Stats area ===== */
         .stats { display:flex; gap:12px; flex-wrap:wrap; margin-top:6px; }
         .stat { background: rgba(2,6,23,0.03); padding:10px 12px; border-radius:10px; font-weight:800; color:var(--muted); }
+
+        /* ===== Modal (Mitte, kurz) ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            pointer-events: none;
+        }
+        .modal {
+            min-width: 220px;
+            max-width: 90%;
+            background: white;
+            color: var(--text);
+            padding: 18px 22px;
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(2,6,23,0.12);
+            transform: scale(.9);
+            opacity: 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            pointer-events: auto;
+        }
+        .modal.show {
+            animation: pop-in 360ms cubic-bezier(.2,.9,.2,1);
+            opacity: 1;
+            transform: scale(1);
+        }
+        .modal.ok { background: #ecfdf5; color: #064e3b; border: 1px solid rgba(16,185,129,0.18); }
+        .modal.bad { background: #fff1f2; color: #7f1d1d; border: 1px solid rgba(239,68,68,0.16); }
+        .modal.botfast { background: #eef2ff; color: #1e3a8a; border: 1px solid rgba(79,158,248,0.14); }
+
+        @keyframes pop-in {
+            from { transform: scale(.9); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            to { transform: scale(1); opacity: 1; }
+        }
 
         /* ===== End screen ===== */
         #screenEnd { display:flex; flex-direction:column; gap:10px; }
@@ -99,7 +141,7 @@
         <div class="topbar">
             <div class="top-left">
                 <div class="title">Quizshow — Gesamtschule Bremen West · 8. Jahrgang</div>
-                <div class="subtitle">10 zufällige Fragen</div>
+                <div class="subtitle">Nur KI-Modus · 10 zufällige Fragen · keine Nutzernamen</div>
             </div>
 
             <div class="controls" role="region" aria-label="Einstellungen">
@@ -136,6 +178,16 @@
                     <div class="stat" id="statBotWrong">Bot falsch (Session): 0</div>
                     <div class="stat" id="statSkipped">Übersprungen (Session): 0</div>
                 </div>
+
+                <div style="margin-top:8px" class="card">
+                    <div style="font-weight:900;margin-bottom:6px">Kumulierte Stats (gesamt)</div>
+                    <div class="stats" id="cumStats">
+                        <div class="stat" id="cumPlays">Spiele insgesamt: 0</div>
+                        <div class="stat" id="cumBotCorrect">Bot korrekt (gesamt): 0</div>
+                        <div class="stat" id="cumBotWrong">Bot falsch (gesamt): 0</div>
+                        <div class="stat" id="cumSkipped">Übersprungen (gesamt): 0</div>
+                    </div>
+                </div>
             </section>
 
             <!-- Ergebnis -->
@@ -148,6 +200,11 @@
             </section>
 
         </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+        <div id="modalBox" class="modal" role="status" aria-live="polite"></div>
     </div>
 
     <script>
@@ -167,18 +224,17 @@
             { q: "HTTP steht für …", a: ["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"], correct: 0 },
             { q: "Welcher Planet ist der Sonne am nächsten?", a: ["Venus","Merkur","Mars","Erde"], correct: 1 },
             { q: "Welche Einheit misst elektrische Stromstärke?", a: ["Volt","Watt","Ohm","Ampere"], correct: 3 },
-            { q: "Welches Schutzgebiet liegt um Bremen?", a: ["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"], correct: 0 },
-            // weitere Fragen kannst du hier ergänzen
+            { q: "Welches Schutzgebiet liegt um Bremen?", a: ["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"], correct: 0 }
         ];
 
         /* ===== State ===== */
         const state = {
             order: [],
             idx: 0,
-            skill: parseInt(localStorage.getItem("botSkill")) || 65,       // Prozent richtig
-            speed: parseInt(localStorage.getItem("botSpeed")) || 5,        // 1..10 (höher = langsamer)
+            skill: parseInt(localStorage.getItem("botSkill")) || 65,
+            speed: parseInt(localStorage.getItem("botSpeed")) || 5,
             timer: null,
-            revealDelay: 700, // ms nach Bot-Auswahl bis nächste Frage (wenn automatisch)
+            revealDelay: 700,
             session: { botCorrect: 0, botWrong: 0, skipped: 0 },
             userChoice: null,
             botChoice: null,
@@ -214,6 +270,11 @@
         const cumBotWrong = $("#cumBotWrong");
         const cumSkipped = $("#cumSkipped");
 
+        // modal
+        const modalOverlay = $("#modalOverlay");
+        const modalBox = $("#modalBox");
+        let modalTimer = null;
+
         // initial UI values
         skillRange.value = state.skill;
         speedRange.value = state.speed;
@@ -247,9 +308,35 @@
             return "Sehr langsam";
         }
 
+        /* ===== Modal ===== */
+        function showModal(kind) {
+            // kind: "richtig" | "falsch" | "bot"
+            clearModal();
+            modalOverlay.setAttribute("aria-hidden", "false");
+            modalBox.className = "modal";
+            if (kind === "richtig") {
+                modalBox.classList.add("ok");
+                modalBox.textContent = "Richtig!";
+            } else if (kind === "falsch") {
+                modalBox.classList.add("bad");
+                modalBox.textContent = "Falsch!";
+            } else { // bot
+                modalBox.classList.add("botfast");
+                modalBox.textContent = "Bot war schneller!";
+            }
+            modalBox.classList.add("show");
+            // hide after 1100ms
+            modalTimer = setTimeout(() => clearModal(), 1100);
+        }
+        function clearModal() {
+            if (modalTimer) { clearTimeout(modalTimer); modalTimer = null; }
+            modalBox.className = "modal";
+            modalBox.textContent = "";
+            modalOverlay.setAttribute("aria-hidden", "true");
+        }
+
         /* ===== Game flow ===== */
         function startGame() {
-            // reset session stats
             state.session.botCorrect = 0;
             state.session.botWrong = 0;
             state.session.skipped = 0;
@@ -266,7 +353,6 @@
         }
 
         function renderQuestion() {
-            // clear any possible leftover timers and visual states (safety)
             clearTimers();
             clearChoicesVisuals();
 
@@ -290,12 +376,11 @@
                 choicesEl.appendChild(btn);
             });
 
-            // Bot-Antwort verzögert und sichtbar — kein Timer angezeigt
             const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
             const botDelay = computeBotDelay(state.speed);
             state.botChoice = botChoice;
 
-            // After botDelay, reveal bot choice and correct answer; enable Next button
+            // After botDelay, reveal bot choice and correct answer; enable Next button (no auto-skip)
             state.timer = setTimeout(() => {
                 // if bot was stopped by player, skip bot reveal
                 if (state.botStoppedByPlayer) return;
@@ -307,7 +392,7 @@
                 const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
                 if (correctBtn) correctBtn.classList.add("correct");
 
-                // update session stats based on bot correctness
+                // update session stats
                 if (botChoice === q.correct) {
                     state.session.botCorrect++;
                 } else {
@@ -315,14 +400,13 @@
                 }
                 updateSessionStatsUI();
 
-                // enable Next so user can advance manually
+                // show modal "Bot war schneller"
+                showModal("bot");
+
+                // enable Next for manual advance
                 disableNext(false);
 
-                // automatic fallback: if user doesn't press Next, auto-advance after revealDelay
-                clearTimers();
-                state.timer = setTimeout(() => {
-                    if (state.idx < state.order.length) nextQuestion();
-                }, state.revealDelay + 1200);
+                // do NOT auto-advance; user or host presses Next
             }, botDelay);
         }
 
@@ -335,23 +419,37 @@
                 clearTimeout(state.timer);
                 state.timer = null;
             }
-            state.botStoppedByPlayer = true; // signal to not apply bot reveal logic
+            state.botStoppedByPlayer = true;
 
             const q = state.order[state.idx];
             state.userChoice = i;
 
-            // mark user selection visually as blue (per Wunsch)
             const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
             if (!btn) return;
-            btn.classList.add("selected");
-            btn.classList.add("user-blue");
 
-            // reveal correct answer (green) so user sees right answer immediately
-            const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-            if (correctBtn) correctBtn.classList.add("correct");
+            // remove any bot outline if present
+            const botBtn = choicesEl.querySelector(`button.bot`);
+            if (botBtn) botBtn.classList.remove("bot");
 
-            // since bot was stopped by user action, do NOT update bot session stats here
-            // enable Next button so user can proceed
+            // mark user's pick: blue if correct, red if wrong
+            if (i === q.correct) {
+                btn.classList.add("user-blue");
+                // also mark correct button visually (green tint) to be explicit
+                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                if (correctBtn && correctBtn !== btn) correctBtn.classList.add("correct");
+                // show modal "Richtig!"
+                showModal("richtig");
+            } else {
+                // wrong -> red
+                btn.classList.add("user-wrong");
+                // show correct answer too
+                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                if (correctBtn) correctBtn.classList.add("correct");
+                // show modal "Falsch!"
+                showModal("falsch");
+            }
+
+            // enable Next so user/host can proceed
             disableNext(false);
 
             // disable further clicks for this question
@@ -359,7 +457,6 @@
         }
 
         function onSkip() {
-            // Skip immediately moves to next question; counts as skipped
             state.session.skipped++;
             updateSessionStatsUI();
             clearTimers();
@@ -367,19 +464,18 @@
             const q = state.order[state.idx];
             const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
             if (correctBtn) correctBtn.classList.add("correct");
-            // short delay for UX, then next
+            // show modal "Falsch" (treated as skipped/wrong)
+            showModal("falsch");
             setTimeout(() => nextQuestion(), 420);
         }
 
         function onNext() {
-            // manual next (only enabled after reveal or user pick)
             clearTimers();
             nextQuestion();
         }
 
         function nextQuestion() {
             clearTimers();
-            // remove any inline outlines / classes on current buttons to avoid lingering styles
             clearChoicesVisuals();
             state.idx++;
             if (state.idx >= state.order.length) {
@@ -425,9 +521,9 @@
         }
 
         function computeBotDelay(speedValue) {
-            const min = 800; // ms (schneller baseline)
-            const max = 3200; // ms
-            const ratio = (speedValue - 1) / 9; // 0..1
+            const min = 800;
+            const max = 3200;
+            const ratio = (speedValue - 1) / 9;
             return Math.round(min + ratio * (max - min));
         }
 
@@ -436,18 +532,18 @@
                 clearTimeout(state.timer);
                 state.timer = null;
             }
+            if (modalTimer) { clearTimeout(modalTimer); modalTimer = null; }
         }
 
         function clearChoicesVisuals() {
-            // remove any leftover classes and inline outlines from previous question
             const buttons = choicesEl.querySelectorAll("button");
             buttons.forEach(b => {
                 b.className = "choice";
                 b.style.outline = "";
                 b.removeAttribute("data-clickable");
             });
-            // also clear innerHTML (renderQuestion will repopulate)
             choicesEl.innerHTML = "";
+            clearModal();
         }
 
         function showScreen(name) {
