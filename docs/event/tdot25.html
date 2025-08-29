@@ -21,9 +21,9 @@
             --pad: 16px;
             --shadow: 0 8px 24px rgba(17,24,39,0.08);
             --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            --user-correct: rgba(16,185,129,0.12);
-            --user-wrong: rgba(239,68,68,0.10);
+            --user-blue: rgba(37,99,235,0.12);
             --bot-blue: rgba(37,99,235,0.12);
+            --correct-green: rgba(16,185,129,0.12);
         }
 
         /* ===== Reset & Layout ===== */
@@ -68,10 +68,9 @@
 
         /* visuelle Zustände (keine Skalierung, nur Farbe/Helligkeit) */
         .choice.selected { filter: brightness(0.94); }
-        .choice.user-correct { background: var(--user-correct); border-color: rgba(16,185,129,0.25); }
-        .choice.user-wrong { background: var(--user-wrong); border-color: rgba(239,68,68,0.18); }
-        .choice.correct { background: linear-gradient(90deg, rgba(6,182,212,0.12), rgba(37,99,235,0.08)); border-color: rgba(6,182,212,0.18); }
+        .choice.user-blue { background: var(--user-blue); border-color: rgba(37,99,235,0.22); }
         .choice.bot { outline: 3px solid rgba(37,99,235,0.14); background: var(--bot-blue); border-color: rgba(37,99,235,0.22); }
+        .choice.correct { background: var(--correct-green); border-color: rgba(16,185,129,0.25); }
 
         /* ===== Controls (Next / Skip) ===== */
         .action-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
@@ -193,7 +192,8 @@
             session: { botCorrect: 0, botWrong: 0, skipped: 0 },
             userChoice: null,
             botChoice: null,
-            botAnswered: false
+            botAnswered: false,
+            botStoppedByPlayer: false
         };
 
         /* ===== UI refs ===== */
@@ -266,6 +266,7 @@
             state.userChoice = null;
             state.botChoice = null;
             state.botAnswered = false;
+            state.botStoppedByPlayer = false;
 
             state.order = shuffleArray(QUESTIONS).slice(0, 10);
             state.idx = 0;
@@ -282,6 +283,7 @@
             state.userChoice = null;
             state.botChoice = null;
             state.botAnswered = false;
+            state.botStoppedByPlayer = false;
             disableNext(true);
 
             const q = state.order[state.idx];
@@ -305,36 +307,33 @@
 
             // After botDelay, reveal bot choice and correct answer; enable Next button
             state.timer = setTimeout(() => {
-                // mark bot choice visually (but only if bot wasn't stopped by player)
-                if (!state.botStoppedByPlayer) {
-                    const botBtn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
-                    if (botBtn) botBtn.classList.add("bot");
-                    state.botAnswered = true;
+                // if bot was stopped by player, skip bot reveal
+                if (state.botStoppedByPlayer) return;
 
-                    // highlight correct answer
-                    const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-                    if (correctBtn) correctBtn.classList.add("correct");
+                const botBtn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
+                if (botBtn) botBtn.classList.add("bot");
+                state.botAnswered = true;
 
-                    // update session stats based on bot correctness
-                    if (botChoice === q.correct) {
-                        state.session.botCorrect++;
-                    } else {
-                        state.session.botWrong++;
-                    }
-                    updateSessionStatsUI();
+                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
+                if (correctBtn) correctBtn.classList.add("correct");
 
-                    // enable Next so user can advance manually
-                    disableNext(false);
-                    // automatic fallback: if user doesn't press Next, auto-advance after revealDelay
-                    clearTimers();
-                    state.timer = setTimeout(() => {
-                        if (state.idx < state.order.length) nextQuestion();
-                    }, state.revealDelay + 1200);
+                // update session stats based on bot correctness
+                if (botChoice === q.correct) {
+                    state.session.botCorrect++;
+                } else {
+                    state.session.botWrong++;
                 }
-            }, botDelay);
+                updateSessionStatsUI();
 
-            // reset botStoppedByPlayer flag for this question
-            state.botStoppedByPlayer = false;
+                // enable Next so user can advance manually
+                disableNext(false);
+
+                // automatic fallback: if user doesn't press Next, auto-advance after revealDelay
+                clearTimers();
+                state.timer = setTimeout(() => {
+                    if (state.idx < state.order.length) nextQuestion();
+                }, state.revealDelay + 1200);
+            }, botDelay);
         }
 
         function onPlayerPick(i) {
@@ -351,21 +350,17 @@
             const q = state.order[state.idx];
             state.userChoice = i;
 
-            // mark user selection visually (green if correct, red if wrong)
+            // mark user selection visually as blue (per Wunsch)
             const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
             if (!btn) return;
             btn.classList.add("selected");
-            if (i === q.correct) {
-                btn.classList.add("user-correct");
-            } else {
-                btn.classList.add("user-wrong");
-            }
+            btn.classList.add("user-blue");
 
             // reveal correct answer (green) so user sees right answer immediately
             const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
             if (correctBtn) correctBtn.classList.add("correct");
 
-            // since bot was stopped by user action, do NOT update bot session stats
+            // since bot was stopped by user action, do NOT update bot session stats here
             // enable Next button so user can proceed
             disableNext(false);
 
