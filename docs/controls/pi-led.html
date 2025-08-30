@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>PI5 LED Steuerung</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; text-align:center; }
+    button { margin:5px; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; }
+    .on { background:#4caf50; color:#fff; }
+    .off { background:#f44336; color:#fff; }
+    .prog { background:#2196f3; color:#fff; }
+    .pattern { background:#ff9800; color:#fff; }
+    input { margin:10px; padding:5px; width:250px; }
+  </style>
+</head>
+<body>
+  <h1>PI5 LED Steuerung</h1>
+  <button class="off" onclick="setMode('off')">LED Aus</button>
+  <button class="on" onclick="setMode('on')">LED An</button>
+  <button class="prog" onclick="setMode('blink_programs')">Programme blinken</button>
+
+  <h2>Eigenes Blinkmuster</h2>
+  <p>Pattern eingeben (Sekunden, mit Kommas trennen, Start = AN, dann AUS usw.)</p>
+  <input id="patternInput" value="0.2,0.2,1.0,0.5">
+  <button class="pattern" onclick="sendPattern()">Muster senden</button>
+
+  <p id="status"></p>
+
+  <script>
+    const PI_IP = "http://PI_IP:5000";
+
+    function setMode(mode) {
+      fetch(`${PI_IP}/led2/${mode}`)
+        .then(res => res.text())
+        .then(txt => document.getElementById("status").innerText = txt);
+    }
+
+    function sendPattern() {
+      let input = document.getElementById("patternInput").value;
+      let pattern = input.split(",").map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+      fetch(`${PI_IP}/led2/pattern`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pattern })
+      })
+      .then(res => res.text())
+      .then(txt => document.getElementById("status").innerText = txt);
+    }
+  </script>
+</body>
+</html>
