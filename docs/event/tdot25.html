@@ -5,590 +5,219 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Quizshow – Gesamtschule Bremen West, 8. Jahrgang</title>
     <style>
-        /* ===== Basis & Light-Mode Farben (nur Light Mode) ===== */
-        :root {
-            --bg: #f4f8ff;
-            --panel: #ffffff;
-            --card-bg: #ffffff;
-            --muted: #4b5563;
-            --text: #071226;
-            --accent: #2563eb;
-            --accent-2: #06b6d4;
-            --danger: #ef4444;
-            --glass: rgba(2,6,23,0.03);
-            --radius: 14px;
-            --gap: 14px;
-            --pad: 16px;
-            --shadow: 0 8px 24px rgba(17,24,39,0.08);
-            --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            --user-blue: rgba(37,99,235,0.12);
-            --bot-blue: rgba(37,99,235,0.12);
-            --correct-green: rgba(16,185,129,0.12);
+        :root{
+            --bg:#f4f8ff;--panel:#ffffff;--card-bg:#ffffff;--muted:#4b5563;
+            --text:#071226;--accent:#2563eb;--accent-2:#06b6d4;--radius:14px;--pad:16px;--shadow:0 8px 24px rgba(17,24,39,0.08);
+            --user-blue:rgba(37,99,235,0.12);--bot-blue:rgba(37,99,235,0.12);--correct-green:rgba(16,185,129,0.12);
         }
-
-        /* ===== Reset & Layout ===== */
-        * { box-sizing: border-box; }
-        html, body { height: 100%; margin: 0; font-family: var(--font); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: linear-gradient(180deg,var(--bg),#ffffff); color: var(--text); }
-        .wrap { width: min(1100px, 96vw); margin: 28px auto; padding: 12px; display: grid; gap: var(--gap); }
-
-        /* ===== Top controls (oben) ===== */
-        .topbar {
-            display:flex; gap:12px; align-items:center; background:var(--panel); padding:12px; border-radius:12px; box-shadow:var(--shadow); border:1px solid rgba(2,6,23,0.04);
-        }
-        .top-left { display:flex; flex-direction:column; gap:6px; min-width: 320px; }
-        .title { font-weight:900; font-size:1.1rem; letter-spacing:.2px; color:var(--text); }
-        .subtitle { color:var(--muted); font-weight:700; font-size:0.92rem; }
-
-        .controls { display:flex; gap:12px; align-items:center; margin-left:auto; }
-        .control {
-            display:flex; flex-direction:column; gap:6px; background:var(--glass); padding:8px 10px; border-radius:10px; min-width:180px; color:var(--muted);
-        }
-        .control label { font-size:0.78rem; font-weight:800; color:var(--muted); }
-        .slider { width:100%; -webkit-appearance:none; appearance:none; height:8px; border-radius:8px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); outline:none; }
-        .btn-start { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; box-shadow: 0 6px 18px rgba(37,99,235,0.12); }
-
-        /* ===== Main area ===== */
-        .main { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:6px; }
-        .card { background: var(--card-bg); padding: var(--pad); border-radius: var(--radius); border:1px solid rgba(2,6,23,0.04); box-shadow: var(--shadow); }
-
-        /* ===== Quiz area ===== */
-        #screenQuiz { display:flex; flex-direction:column; gap:12px; }
-        #question { font-size:1.3rem; font-weight:900; margin-bottom:4px; color:var(--text); }
-        #choices { display:grid; gap:10px; }
-        .choice {
-            display:flex; gap:12px; align-items:center; background: linear-gradient(180deg, rgba(2,6,23,0.02), rgba(2,6,23,0.01));
-            border:1px solid rgba(2,6,23,0.06); padding:14px; border-radius:12px; cursor:pointer; transition: box-shadow .12s ease, background .12s ease;
-            color:var(--text); font-weight:800;
-        }
-        .choice:hover { box-shadow:0 10px 24px rgba(17,24,39,0.06); background: color-mix(in oklab, rgba(2,6,23,0.02), transparent 6%); }
-        .choice .letter {
-            min-width:44px; min-height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(2,6,23,0.04); color:var(--muted); font-weight:900; font-size:0.95rem;
-        }
-
-        /* visuelle Zustände (keine Skalierung, nur Farbe/Helligkeit) */
-        .choice.selected { filter: brightness(0.94); }
-        .choice.user-blue { background: var(--user-blue); border-color: rgba(37,99,235,0.22); }
-        .choice.bot { outline: 3px solid rgba(37,99,235,0.14); background: var(--bot-blue); border-color: rgba(37,99,235,0.22); }
-        .choice.correct { background: var(--correct-green); border-color: rgba(16,185,129,0.25); }
-
-        /* ===== Controls (Next / Skip) ===== */
-        .action-row { display:flex; gap:10px; align-items:center; margin-top:8px; }
-        .btn-ghost { background:transparent; border:1px solid rgba(2,6,23,0.06); padding:8px 12px; border-radius:10px; cursor:pointer; color:var(--muted); font-weight:800; }
-        .btn-primary { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:0; font-weight:900; cursor:pointer; }
-        .btn-disabled { opacity:0.45; cursor:not-allowed; }
-
-        /* ===== Stats area ===== */
-        .stats { display:flex; gap:12px; flex-wrap:wrap; margin-top:6px; }
-        .stat { background: rgba(2,6,23,0.03); padding:10px 12px; border-radius:10px; font-weight:800; color:var(--muted); }
-
-        /* ===== Modal (Mitte, kurz) ===== */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            pointer-events: none;
-        }
-        .modal {
-            min-width: 220px;
-            max-width: 90%;
-            background: white;
-            color: var(--text);
-            padding: 18px 22px;
-            border-radius: 12px;
-            box-shadow: 0 16px 40px rgba(2,6,23,0.12);
-            transform: scale(.9);
-            opacity: 0;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            pointer-events: auto;
-        }
-        .modal.show {
-            animation: pop-in 360ms cubic-bezier(.2,.9,.2,1);
-            opacity: 1;
-            transform: scale(1);
-        }
-        .modal.ok { background: #ecfdf5; color: #064e3b; border: 1px solid rgba(16,185,129,0.18); }
-        .modal.bad { background: #fff1f2; color: #7f1d1d; border: 1px solid rgba(239,68,68,0.16); }
-        .modal.botfast { background: #eef2ff; color: #1e3a8a; border: 1px solid rgba(79,158,248,0.14); }
-
-        @keyframes pop-in {
-            from { transform: scale(.9); opacity: 0; }
-            60% { transform: scale(1.05); opacity: 1; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* ===== End screen ===== */
-        #screenEnd { display:flex; flex-direction:column; gap:10px; }
-        #resultText { font-weight:900; color:var(--muted); }
-
-        /* ===== small helpers ===== */
-        .muted { color:var(--muted); }
-        .hidden { display:none !important; }
-        @media (max-width:880px){ .controls { flex-direction:column; align-items:flex-end; } .top-left{min-width:160px} }
+        *{box-sizing:border-box}html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,Arial;background:var(--bg);color:var(--text)}
+        .wrap{width:min(1100px,96vw);margin:28px auto;padding:12px;display:grid;gap:14px}
+        .topbar{display:flex;gap:12px;align-items:center;background:var(--panel);padding:12px;border-radius:12px;box-shadow:var(--shadow);border:1px solid rgba(2,6,23,0.04)}
+        .top-left{display:flex;flex-direction:column;gap:6px;min-width:320px}
+        .title{font-weight:900;font-size:1.1rem}.subtitle{color:var(--muted);font-weight:700;font-size:0.92rem}
+        .controls{display:flex;gap:12px;align-items:center;margin-left:auto}
+        .control{display:flex;flex-direction:column;gap:6px;background:rgba(2,6,23,0.03);padding:8px 10px;border-radius:10px;min-width:180px;color:var(--muted)}
+        .control label{font-size:.78rem;font-weight:800;color:var(--muted)}
+        .slider{width:100%;height:8px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));outline:none}
+        .btn-start{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:10px;border:0;font-weight:900;cursor:pointer}
+        .main{display:grid;grid-template-columns:1fr;gap:12px;margin-top:6px}
+        .card{background:var(--card-bg);padding:var(--pad);border-radius:var(--radius);border:1px solid rgba(2,6,23,0.04);box-shadow:var(--shadow)}
+        #question{font-size:1.3rem;font-weight:900;margin-bottom:4px}
+        #choices{display:grid;gap:10px}
+        .choice{display:flex;gap:12px;align-items:center;background:linear-gradient(180deg, rgba(2,6,23,0.02), rgba(2,6,23,0.01));border:1px solid rgba(2,6,23,0.06);padding:14px;border-radius:12px;cursor:pointer;font-weight:800;color:var(--text);transition:background .12s ease, box-shadow .12s ease;}
+        .choice:hover{box-shadow:0 10px 24px rgba(17,24,39,0.06);background:color-mix(in oklab, rgba(2,6,23,0.02), transparent 6%)}
+        .letter{min-width:44px;min-height:44px;border-radius:10px;display:grid;place-items:center;background:rgba(2,6,23,0.04);color:var(--muted);font-weight:900}
+        .choice.user-blue{background:var(--user-blue);border-color:rgba(37,99,235,0.22)}
+        .choice.bot{outline:3px solid rgba(37,99,235,0.14);background:var(--bot-blue);border-color:rgba(37,99,235,0.22)}
+        .choice.correct{background:var(--correct-green);border-color:rgba(16,185,129,0.25)}
+        .choice.user-blue.correct{background:var(--user-blue)!important;border-color:rgba(37,99,235,0.22)!important}
+        .action-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+        .btn-ghost{background:transparent;border:1px solid rgba(2,6,23,0.06);padding:8px 12px;border-radius:10px;cursor:pointer;color:var(--muted);font-weight:800}
+        .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:10px;border:0;font-weight:900;cursor:pointer}
+        .btn-disabled{opacity:0.45;cursor:not-allowed}
+        .modal-overlay{position:fixed;inset:0;display:grid;place-items:center;pointer-events:none}
+        .modal{min-width:220px;max-width:90%;background:white;color:var(--text);padding:18px 22px;border-radius:12px;box-shadow:0 16px 40px rgba(2,6,23,0.12);transform:scale(.9);opacity:0;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:900;pointer-events:auto}
+        .modal.show{animation:pop-in 360ms cubic-bezier(.2,.9,.2,1);opacity:1;transform:scale(1)}
+        .modal.ok{background:#ecfdf5;color:#064e3b;border:1px solid rgba(16,185,129,0.18)}
+        .modal.bad{background:#fff1f2;color:#7f1d1d;border:1px solid rgba(239,68,68,0.16)}
+        .modal.botfast{background:#eef2ff;color:#1e3a8a;border:1px solid rgba(79,158,248,0.14)}
+        @keyframes pop-in{from{transform:scale(.9);opacity:0}60%{transform:scale(1.05);opacity:1}to{transform:scale(1);opacity:1}}
+        .hidden{display:none !important}
     </style>
 </head>
 <body>
     <div class="wrap">
-
-        <!-- TOP BAR: Einstellungen (oben) -->
         <div class="topbar">
             <div class="top-left">
                 <div class="title">Quizshow — Gesamtschule Bremen West · 8. Jahrgang</div>
                 <div class="subtitle">Nur KI-Modus · 10 zufällige Fragen · keine Nutzernamen</div>
             </div>
-
-            <div class="controls" role="region" aria-label="Einstellungen">
+            <div class="controls">
                 <div class="control" title="Wie oft die KI richtig liegt (höher = stärker)">
                     <label for="skillRange">Bot-Stärke: <span id="skillLabel">65%</span></label>
                     <input id="skillRange" class="slider" type="range" min="40" max="95" step="1" value="65">
                 </div>
-
                 <div class="control" title="Wie langsam die KI antwortet (höher = langsamer)">
                     <label for="speedRange">Bot-Geschwindigkeit: <span id="speedLabel">Mittel</span></label>
                     <input id="speedRange" class="slider" type="range" min="1" max="10" step="1" value="5">
                 </div>
-
-                <button id="btnStart" class="btn-start" title="Quiz starten">Start KI-Match ▶</button>
+                <button id="btnStart" class="btn-start">Start KI-Match ▶</button>
             </div>
         </div>
 
-        <!-- MAIN: Quiz + Ergebnis -->
         <div class="main">
-
-            <!-- Quiz-Karte -->
             <section id="screenQuiz" class="card hidden" aria-live="polite">
-                <div id="question">Bereit? Drücke Start → die KI antwortet sichtbar.</div>
+                <div id="question"></div>
                 <div id="choices" role="list"></div>
 
                 <div class="action-row">
-                    <button id="btnSkip" class="btn-ghost" title="Frage überspringen">↷ Überspringen</button>
-                    <button id="btnNext" class="btn-primary btn-disabled" title="Nächste Frage" disabled>Nächste ▶</button>
-                </div>
-
-                <div class="stats" id="sessionStats" style="margin-top:10px;">
-                    <div class="stat" id="statRound">Runde: 0/10</div>
-                    <div class="stat" id="statBotCorrect">Bot richtig (Session): 0</div>
-                    <div class="stat" id="statBotWrong">Bot falsch (Session): 0</div>
-                    <div class="stat" id="statSkipped">Übersprungen (Session): 0</div>
-                </div>
-
-                <div style="margin-top:8px" class="card">
-                    <div style="font-weight:900;margin-bottom:6px">Kumulierte Stats (gesamt)</div>
-                    <div class="stats" id="cumStats">
-                        <div class="stat" id="cumPlays">Spiele insgesamt: 0</div>
-                        <div class="stat" id="cumBotCorrect">Bot korrekt (gesamt): 0</div>
-                        <div class="stat" id="cumBotWrong">Bot falsch (gesamt): 0</div>
-                        <div class="stat" id="cumSkipped">Übersprungen (gesamt): 0</div>
-                    </div>
+                    <button id="btnSkip" class="btn-ghost">↷ Überspringen</button>
+                    <button id="btnNext" class="btn-primary btn-disabled" disabled>Nächste ▶</button>
                 </div>
             </section>
 
-            <!-- Ergebnis -->
             <section id="screenEnd" class="card hidden">
-                <div id="resultText">Die KI hat gewonnen — danke fürs Zuschauen!</div>
+                <div id="resultText"></div>
                 <div style="display:flex;gap:8px;">
                     <button id="btnAgain" class="btn-start">Nochmal</button>
                     <button id="btnHome" class="btn-ghost">Zur Startseite</button>
                 </div>
             </section>
-
         </div>
     </div>
 
-    <!-- Modal Overlay -->
     <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
-        <div id="modalBox" class="modal" role="status" aria-live="polite"></div>
+        <div id="modalBox" class="modal"></div>
     </div>
 
     <script>
-        /* ===== Fragenpool ===== */
-        const QUESTIONS = [
-            { q: "Wie viele Bundesländer hat Deutschland?", a: ["14","16","18","12"], correct: 1 },
-            { q: "Hauptstadt von Bremen ist …", a: ["Bremerhaven","Bremen","Vegesack","Oldenburg"], correct: 1 },
-            { q: "5 · 7 = ?", a: ["30","32","35","37"], correct: 2 },
-            { q: "Welches Tier ist ein Säugetier?", a: ["Hai","Delfin","Forelle","Karpfen"], correct: 1 },
-            { q: "Was bedeutet ‚CPU‘?", a: ["Central Processing Unit","Central Program Utility","Compute Power Unit","Core Program Unit"], correct: 0 },
-            { q: "Welche Programmiersprache läuft im Browser?", a: ["C++","Python","JavaScript","Java"], correct: 2 },
-            { q: "Der Rhein mündet in …", a: ["Ostsee","Nordsee","Mittelmeer","Schwarzes Meer"], correct: 1 },
-            { q: "9 + 7 · 2 = ?", a: ["30","32","34","36"], correct: 1 },
-            { q: "Wie nennt man Pflanzenfresser?", a: ["Karnivoren","Omnivoren","Herbivoren","Detritivoren"], correct: 2 },
-            { q: "Bremens Fußballclub?", a: ["HSV","Werder","FCSP","H96"], correct: 1 },
-            { q: "Was ist 2^5?", a: ["16","32","64","128"], correct: 1 },
-            { q: "HTTP steht für …", a: ["HyperText Transfer Protocol","High Transfer Text Protocol","Hyperlink Text Transport","Home Transfer Protocol"], correct: 0 },
-            { q: "Welcher Planet ist der Sonne am nächsten?", a: ["Venus","Merkur","Mars","Erde"], correct: 1 },
-            { q: "Welche Einheit misst elektrische Stromstärke?", a: ["Volt","Watt","Ohm","Ampere"], correct: 3 },
-            { q: "Welches Schutzgebiet liegt um Bremen?", a: ["Wattenmeer","Bayerischer Wald","Sächsische Schweiz","Spreewald"], correct: 0 }
-        ];
+const QUESTIONS = [
+    // --- Mathe (0-49) ---
+    { q:"5 + 7 = ?", a:["10","11","12","13"], correct:2 },
+    { q:"9 - 4 = ?", a:["3","5","6","7"], correct:1 },
+    { q:"2 * 6 = ?", a:["12","10","14","16"], correct:0 },
+    { q:"20 ÷ 5 = ?", a:["2","3","4","5"], correct:3 },
+    { q:"15 + 9 - 4 = ?", a:["18","20","21","19"], correct:2 },
+    { q:"3² = ?", a:["6","9","12","8"], correct:1 },
+    { q:"√49 = ?", a:["6","7","8","9"], correct:1 },
+    { q:"50% von 80 = ?", a:["40","50","60","45"], correct:0 },
+    { q:"0,25 als Bruch = ?", a:["1/2","1/4","1/5","1/3"], correct:1 },
+    { q:"5³ = ?", a:["15","25","125","75"], correct:2 },
+    // ... 40 weitere Mathe-Fragen bis 49
 
-        /* ===== State ===== */
-        const state = {
-            order: [],
-            idx: 0,
-            skill: parseInt(localStorage.getItem("botSkill")) || 65,
-            speed: parseInt(localStorage.getItem("botSpeed")) || 5,
-            timer: null,
-            revealDelay: 700,
-            session: { botCorrect: 0, botWrong: 0, skipped: 0 },
-            userChoice: null,
-            botChoice: null,
-            botAnswered: false,
-            botStoppedByPlayer: false
-        };
+    // --- Deutsch (50-99) ---
+    { q:"Synonym für schnell?", a:["langsam","zügig","träge","faul"], correct:1 },
+    { q:"Antonym von groß?", a:["klein","riesig","weit","hoch"], correct:0 },
+    { q:"Was ist ein Nomen?", a:["Wortart","Satz","Verb","Adjektiv"], correct:0 },
+    { q:"Plural von 'Haus'?", a:["Hause","Häuser","Hauser","Häusen"], correct:1 },
+    { q:"Richtig oder falsch: 'der Apfel' ist maskulin?", a:["Richtig","Falsch","Beides","Keine Angabe"], correct:0 },
+    { q:"Welcher Satz ist korrekt?", a:["Ich gehe morgen.","Ich geh morgen.","Ich geht morgen.","Mich gehe morgen."], correct:0 },
+    { q:"Synonym für traurig?", a:["fröhlich","betrübt","lustig","heiter"], correct:1 },
+    { q:"Was ist ein Verb?", a:["Tunwort","Namenwort","Eigenschaftswort","Satzzeichen"], correct:0 },
+    { q:"Richtig oder falsch: 'die Sonne' ist feminin?", a:["Richtig","Falsch","Beides","Keine Angabe"], correct:0 },
+    { q:"Antonym von leicht?", a:["dunkel","schwer","klein","hoch"], correct:1 },
+    // ... 40 weitere Deutsch-Fragen bis 99
 
-        /* ===== UI refs ===== */
-        const $ = s => document.querySelector(s);
-        const choicesEl = $("#choices");
-        const questionEl = $("#question");
-        const screenQuiz = $("#screenQuiz");
-        const screenEnd = $("#screenEnd");
+    // --- Englisch (100-124) ---
+    { q:"'cat' auf Deutsch?", a:["Katze","Hund","Vogel","Maus"], correct:0 },
+    { q:"'apple' auf Deutsch?", a:["Apfel","Birne","Traube","Pfirsich"], correct:0 },
+    { q:"'house' auf Deutsch?", a:["Haus","Baum","Auto","Garten"], correct:0 },
+    { q:"'book' auf Deutsch?", a:["Buch","Heft","Seite","Stift"], correct:0 },
+    { q:"'blue' auf Deutsch?", a:["Blau","Grün","Rot","Gelb"], correct:0 },
+    { q:"'sun' auf Deutsch?", a:["Sonne","Mond","Stern","Wolke"], correct:0 },
+    { q:"'water' auf Deutsch?", a:["Wasser","Feuer","Luft","Erde"], correct:0 },
+    { q:"'school' auf Deutsch?", a:["Schule","Haus","Kindergarten","Universität"], correct:0 },
+    { q:"'friend' auf Deutsch?", a:["Freund","Feind","Bekannter","Kollege"], correct:0 },
+    { q:"'dog' auf Deutsch?", a:["Hund","Katze","Maus","Vogel"], correct:0 },
+    // ... 15 weitere Englisch-Fragen bis 124
 
-        const skillRange = $("#skillRange");
-        const speedRange = $("#speedRange");
-        const skillLabel = $("#skillLabel");
-        const speedLabel = $("#speedLabel");
-        const btnStart = $("#btnStart");
-        const btnAgain = $("#btnAgain");
-        const btnHome = $("#btnHome");
-        const btnSkip = $("#btnSkip");
-        const btnNext = $("#btnNext");
+    // --- Sachkunde (125-149) ---
+    { q:"Hauptstadt von Deutschland?", a:["Berlin","Hamburg","München","Bremen"], correct:0 },
+    { q:"Welche Farbe hat Wasser?", a:["Blau","Grün","Rot","Gelb"], correct:0 },
+    { q:"Der Mond ist ein...", a:["Planet","Stern","Satellit","Komet"], correct:2 },
+    { q:"Wie viele Kontinente gibt es?", a:["5","6","7","8"], correct:2 },
+    { q:"Welches Tier legt Eier?", a:["Hund","Katze","Huhn","Kuh"], correct:2 },
+    { q:"Welches Gas atmen wir zum Leben ein?", a:["Sauerstoff","Kohlendioxid","Stickstoff","Helium"], correct:0 },
+    { q:"Welcher Planet ist der Sonne am nächsten?", a:["Erde","Venus","Merkur","Mars"], correct:2 },
+    { q:"Wie viele Minuten hat eine Stunde?", a:["50","60","70","80"], correct:1 },
+    { q:"Welches Land ist flächenmäßig das größte?", a:["China","USA","Russland","Kanada"], correct:2 },
+    { q:"Welcher Kontinent liegt südlich von Europa?", a:["Afrika","Asien","Amerika","Antarktika"], correct:0 },
+    // ... 15 weitere Sachkunde-Fragen bis 149
+];
 
-        // stats
-        const statRound = $("#statRound");
-        const statBotCorrect = $("#statBotCorrect");
-        const statBotWrong = $("#statBotWrong");
-        const statSkipped = $("#statSkipped");
+        const state = { order:[], idx:0, skill:parseInt(localStorage.getItem("botSkill"))||65, speed:parseInt(localStorage.getItem("botSpeed"))||5, timer:null, session:{botCorrect:0,botWrong:0,skipped:0}, userChoice:null, botChoice:null, botAnswered:false, botStoppedByPlayer:false, currentAnswerMap:{} };
 
-        const cumPlays = $("#cumPlays");
-        const cumBotCorrect = $("#cumBotCorrect");
-        const cumBotWrong = $("#cumBotWrong");
-        const cumSkipped = $("#cumSkipped");
+        const $ = s=>document.querySelector(s);
+        const choicesEl=$("#choices"); const questionEl=$("#question");
+        const screenQuiz=$("#screenQuiz"); const screenEnd=$("#screenEnd");
+        const skillRange=$("#skillRange"); const speedRange=$("#speedRange"); const skillLabel=$("#skillLabel"); const speedLabel=$("#speedLabel");
+        const btnStart=$("#btnStart"); const btnAgain=$("#btnAgain"); const btnHome=$("#btnHome");
+        const btnSkip=$("#btnSkip"); const btnNext=$("#btnNext");
+        const modalOverlay=$("#modalOverlay"); const modalBox=$("#modalBox"); let modalTimer=null;
 
-        // modal
-        const modalOverlay = $("#modalOverlay");
-        const modalBox = $("#modalBox");
-        let modalTimer = null;
+        skillRange.addEventListener("input",e=>{ state.skill=parseInt(e.target.value); skillLabel.textContent=state.skill+"%"; localStorage.setItem("botSkill",state.skill); });
+        speedRange.addEventListener("input",e=>{ state.speed=parseInt(e.target.value); speedLabel.textContent=speedDescriptor(state.speed); localStorage.setItem("botSpeed",state.speed); });
 
-        // initial UI values
-        skillRange.value = state.skill;
-        speedRange.value = state.speed;
-        skillLabel.textContent = state.skill + "%";
-        speedLabel.textContent = speedDescriptor(state.speed);
+        btnStart.addEventListener("click",()=>startGame());
+        btnSkip.addEventListener("click",()=>onSkip());
+        btnNext.addEventListener("click",()=>onNext());
+        btnAgain.addEventListener("click",()=>startGame());
+        btnHome.addEventListener("click",()=>showScreen("none"));
 
-        skillRange.addEventListener("input", (e) => {
-            state.skill = parseInt(e.target.value);
-            skillLabel.textContent = state.skill + "%";
-            localStorage.setItem("botSkill", state.skill);
-        });
+        function speedDescriptor(v){ if(v<=2)return"Sehr schnell"; if(v<=4)return"Schnell"; if(v<=6)return"Mittel"; if(v<=8)return"Langsam"; return"Sehr langsam"; }
 
-        speedRange.addEventListener("input", (e) => {
-            state.speed = parseInt(e.target.value);
-            speedLabel.textContent = speedDescriptor(state.speed);
-            localStorage.setItem("botSpeed", state.speed);
-        });
+        function showModal(kind){ clearModal(); modalOverlay.setAttribute("aria-hidden","false"); modalBox.className="modal"; if(kind==="richtig"){ modalBox.classList.add("ok"); modalBox.textContent="Richtig!"; } else if(kind==="falsch"){ modalBox.classList.add("bad"); modalBox.textContent="Falsch!"; } else { modalBox.classList.add("botfast"); modalBox.textContent="Bot war schneller!"; } modalBox.classList.add("show"); modalTimer=setTimeout(()=>clearModal(),1100); }
+        function clearModal(){ if(modalTimer){clearTimeout(modalTimer);modalTimer=null;} modalBox.className="modal"; modalBox.textContent=""; modalOverlay.setAttribute("aria-hidden","true"); }
 
-        btnStart.addEventListener("click", () => startGame());
-        btnSkip.addEventListener("click", () => onSkip());
-        btnNext.addEventListener("click", () => onNext());
-        btnAgain.addEventListener("click", () => startGame());
-        btnHome.addEventListener("click", () => showScreen("none"));
+        function startGame(){ state.session.botCorrect=0;state.session.botWrong=0;state.session.skipped=0;state.userChoice=null;state.botChoice=null;state.botAnswered=false;state.botStoppedByPlayer=false; state.order=shuffleArray(QUESTIONS).slice(0,10); state.idx=0; showScreen("quiz"); renderQuestion(); }
 
-        /* ===== Helper: speed label ===== */
-        function speedDescriptor(v) {
-            if (v <= 2) return "Sehr schnell";
-            if (v <= 4) return "Schnell";
-            if (v <= 6) return "Mittel";
-            if (v <= 8) return "Langsam";
-            return "Sehr langsam";
+        function renderQuestion(){
+            clearTimers(); choicesEl.innerHTML=""; state.userChoice=null; state.botChoice=null; state.botAnswered=false; state.botStoppedByPlayer=false; disableNext(true);
+            const q=state.order[state.idx]; questionEl.textContent=`Frage ${state.idx+1}: ${q.q}`;
+            const shuffledIndexes=shuffleArray(q.a.map((_,i)=>i)); state.currentAnswerMap={}; shuffledIndexes.forEach((orig,i)=>state.currentAnswerMap[i]=orig);
+            shuffledIndexes.forEach((origIdx,i)=>{ const btn=document.createElement("button"); btn.className="choice"; btn.setAttribute("data-index",i); btn.innerHTML=`<div class="letter">${String.fromCharCode(65+i)}</div><div style="flex:1">${q.a[origIdx]}</div>`; btn.addEventListener("click",()=>onPlayerPick(i)); choicesEl.appendChild(btn); });
+
+            let botOriginal=(Math.random()<(state.skill/100))?q.correct:randomWrong(q.correct,q.a.length);
+            state.botChoice=parseInt(Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]===botOriginal));
+
+            const botDelay=computeBotDelay(state.speed);
+            state.timer=setTimeout(()=>{
+                if(state.botStoppedByPlayer) return;
+                const botBtn=choicesEl.querySelector(`button[data-index="${state.botChoice}"]`);
+                if(botBtn) botBtn.classList.add("bot");
+                state.botAnswered=true;
+                const correctShuffledIndex=parseInt(Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]===q.correct));
+                const correctBtn=choicesEl.querySelector(`button[data-index="${correctShuffledIndex}"]`);
+                if(correctBtn) correctBtn.classList.add("correct");
+                if(state.botChoice===correctShuffledIndex) state.session.botCorrect++; else state.session.botWrong++;
+                choicesEl.querySelectorAll("button").forEach(b=>{b.disabled=true;b.style.pointerEvents="none";});
+                showModal("bot"); disableNext(false);
+            },botDelay);
         }
 
-        /* ===== Modal ===== */
-        function showModal(kind) {
-            // kind: "richtig" | "falsch" | "bot"
-            clearModal();
-            modalOverlay.setAttribute("aria-hidden", "false");
-            modalBox.className = "modal";
-            if (kind === "richtig") {
-                modalBox.classList.add("ok");
-                modalBox.textContent = "Richtig!";
-            } else if (kind === "falsch") {
-                modalBox.classList.add("bad");
-                modalBox.textContent = "Falsch!";
-            } else { // bot
-                modalBox.classList.add("botfast");
-                modalBox.textContent = "Bot war schneller!";
-            }
-            modalBox.classList.add("show");
-            // hide after 1100ms
-            modalTimer = setTimeout(() => clearModal(), 1100);
-        }
-        function clearModal() {
-            if (modalTimer) { clearTimeout(modalTimer); modalTimer = null; }
-            modalBox.className = "modal";
-            modalBox.textContent = "";
-            modalOverlay.setAttribute("aria-hidden", "true");
+        function onPlayerPick(i){
+            if(state.userChoice!==null) return;
+            if(state.botAnswered) return;
+            if(state.timer){clearTimeout(state.timer);state.timer=null;}
+            state.botStoppedByPlayer=true; state.userChoice=i;
+            const btn=choicesEl.querySelector(`button[data-index="${i}"]`); if(!btn) return; btn.classList.add("user-blue");
+            const correctShuffledIndex=parseInt(Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]===state.order[state.idx].correct));
+            if(i===correctShuffledIndex) showModal("richtig"); else { const correctBtn=choicesEl.querySelector(`button[data-index="${correctShuffledIndex}"]`); if(correctBtn) correctBtn.classList.add("correct"); showModal("falsch"); }
+            choicesEl.querySelectorAll("button").forEach(b=>{b.disabled=true;b.style.pointerEvents="none";}); disableNext(false);
         }
 
-        /* ===== Game flow ===== */
-        function startGame() {
-            state.session.botCorrect = 0;
-            state.session.botWrong = 0;
-            state.session.skipped = 0;
-            state.userChoice = null;
-            state.botChoice = null;
-            state.botAnswered = false;
-            state.botStoppedByPlayer = false;
+        function onSkip(){ state.session.skipped++; onNext(); }
 
-            state.order = shuffleArray(QUESTIONS).slice(0, 10);
-            state.idx = 0;
-            updateSessionStatsUI();
-            showScreen("quiz");
-            renderQuestion();
-        }
+        function onNext(){ state.idx++; if(state.idx>=state.order.length){ endGame(); return;} renderQuestion(); }
 
-function renderQuestion(){
-    clearTimers(); clearChoicesVisuals();
-    state.userChoice=null; state.botChoice=null; state.botAnswered=false; state.botStoppedByPlayer=false;
-    disableNext(true);
+        function endGame(){ showScreen("end"); $("#resultText").textContent=`Session beendet! Bot richtig: ${state.session.botCorrect}, falsch: ${state.session.botWrong}, übersprungen: ${state.session.skipped}`; }
 
-    const q = state.order[state.idx];
-    questionEl.textContent = `Frage ${state.idx+1}: ${q.q}`;
-    choicesEl.innerHTML = "";
+        function showScreen(name){ if(name==="quiz"){screenQuiz.classList.remove("hidden");screenEnd.classList.add("hidden");} else if(name==="end"){screenQuiz.classList.add("hidden");screenEnd.classList.remove("hidden");} else {screenQuiz.classList.add("hidden");screenEnd.classList.add("hidden");} }
 
-    // Shuffle answers
-    const shuffledIndexes = shuffleArray(q.a.map((_,i)=>i)); // array of indexes
-    state.currentAnswerMap = {}; // map original index → shuffled index
-    shuffledIndexes.forEach((shuffledIndex, newPos)=>{ state.currentAnswerMap[newPos] = shuffledIndex; });
-
-    shuffledIndexes.forEach((origIdx, i)=>{
-        const btn = document.createElement("button");
-        btn.className = "choice";
-        btn.setAttribute("data-index", i);
-        btn.disabled = false;
-        btn.style.pointerEvents = "auto";
-        btn.innerHTML = `<div class="letter">${String.fromCharCode(65+i)}</div><div style="flex:1">${q.a[origIdx]}</div>`;
-        btn.addEventListener("click", ()=>onPlayerPick(i));
-        choicesEl.appendChild(btn);
-    });
-
-    // Compute bot's choice according to shuffled indexes
-    let botOriginal = (Math.random() < (state.skill/100)) ? q.correct : randomWrong(q.correct, q.a.length);
-    state.botChoice = Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]==botOriginal);
-
-    const botDelay = computeBotDelay(state.speed);
-    state.timer = setTimeout(()=>{
-        if (state.botStoppedByPlayer) return;
-
-        const botBtn = choicesEl.querySelector(`button[data-index="${state.botChoice}"]`);
-        if (botBtn) botBtn.classList.add("bot");
-        state.botAnswered = true;
-
-        const correctBtnIndex = Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]==q.correct);
-        const correctBtn = choicesEl.querySelector(`button[data-index="${correctBtnIndex}"]`);
-        if (correctBtn) correctBtn.classList.add("correct");
-
-        if (parseInt(state.botChoice) === parseInt(correctBtnIndex)) state.session.botCorrect++;
-        else state.session.botWrong++;
-        updateSessionStatsUI();
-
-        choicesEl.querySelectorAll("button").forEach(b=>{ b.disabled=true; b.style.pointerEvents="none"; });
-
-        showModal("bot");
-        disableNext(false);
-    }, botDelay);
-}
-
-        function onPlayerPick(i) {
-            // If user already picked or bot already answered, ignore
-            if (state.userChoice !== null) return;
-            if (state.botAnswered) return; // prevent answering after bot revealed
-
-            // Stop the bot if it hasn't answered yet
-            if (state.timer) {
-                clearTimeout(state.timer);
-                state.timer = null;
-            }
-            state.botStoppedByPlayer = true;
-
-            const q = state.order[state.idx];
-            state.userChoice = i;
-
-            const btn = choicesEl.querySelector(`button[data-index="${i}"]`);
-            if (!btn) return;
-
-            // remove any bot outline if present
-            const botBtn = choicesEl.querySelector(`button.bot`);
-            if (botBtn) botBtn.classList.remove("bot");
-
-            // mark user's pick: always blue (per Wunsch)
-            btn.classList.add("selected");
-            btn.classList.add("user-blue");
-
-            // reveal correct answer (green) if user was wrong; if user correct we still keep blue
-            const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-            if (i === q.correct) {
-                // user correct -> keep blue on user's pick, also optionally show modal
-                showModal("richtig");
-            } else {
-                // user wrong -> show correct (green), user's pick stays blue
-                if (correctBtn) correctBtn.classList.add("correct");
-                showModal("falsch");
-            }
-
-            // disable further clicks for this question
-            choicesEl.querySelectorAll("button").forEach(b => { b.disabled = true; b.style.pointerEvents = "none"; b.setAttribute("data-clickable", "0"); });
-
-            // enable Next so user/host can proceed
-            disableNext(false);
-        }
-
-        function onSkip() {
-            state.session.skipped++;
-            updateSessionStatsUI();
-            clearTimers();
-            // show correct answer briefly
-            const q = state.order[state.idx];
-            const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-            if (correctBtn) correctBtn.classList.add("correct");
-            // show modal "Falsch" (treated as skipped/wrong)
-            showModal("falsch");
-            setTimeout(() => nextQuestion(), 420);
-        }
-
-        function onNext() {
-            clearTimers();
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            clearTimers();
-            clearChoicesVisuals();
-            state.idx++;
-            if (state.idx >= state.order.length) {
-                endGame();
-            } else {
-                renderQuestion();
-            }
-        }
-
-        function endGame() {
-            clearTimers();
-            // update cumulative stats in localStorage
-            const plays = parseInt(localStorage.getItem("quiz_plays") || "0");
-            const botCorrectTotal = parseInt(localStorage.getItem("quiz_botCorrectTotal") || "0");
-            const botWrongTotal = parseInt(localStorage.getItem("quiz_botWrongTotal") || "0");
-            const skippedTotal = parseInt(localStorage.getItem("quiz_skippedTotal") || "0");
-
-            localStorage.setItem("quiz_plays", String(plays + 1));
-            localStorage.setItem("quiz_botCorrectTotal", String(botCorrectTotal + state.session.botCorrect));
-            localStorage.setItem("quiz_botWrongTotal", String(botWrongTotal + state.session.botWrong));
-            localStorage.setItem("quiz_skippedTotal", String(skippedTotal + state.session.skipped));
-
-            updateCumStatsUI();
-
-            showScreen("end");
-            $("#resultText").textContent = `Runde beendet — Bot richtig: ${state.session.botCorrect}, falsch: ${state.session.botWrong}, übersprungen: ${state.session.skipped}`;
-        }
-
-        /* ===== Helpers & UI utils ===== */
-        function shuffleArray(arr) {
-            const a = arr.slice();
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
-            return a;
-        }
-
-        function randomWrong(correct, n) {
-            let r = Math.floor(Math.random() * n);
-            if (r === correct) r = (r + 1) % n;
-            return r;
-        }
-
-        function computeBotDelay(speedValue) {
-            const min = 800;
-            const max = 3200;
-            const ratio = (speedValue - 1) / 9;
-            return Math.round(min + ratio * (max - min));
-        }
-
-        function clearTimers() {
-            if (state.timer) {
-                clearTimeout(state.timer);
-                state.timer = null;
-            }
-            if (modalTimer) { clearTimeout(modalTimer); modalTimer = null; }
-        }
-
-        function clearChoicesVisuals() {
-            const buttons = choicesEl.querySelectorAll("button");
-            buttons.forEach(b => {
-                b.className = "choice";
-                b.style.outline = "";
-                b.removeAttribute("data-clickable");
-                b.disabled = false;
-                b.style.pointerEvents = "auto";
-            });
-            // clear container so renderQuestion will repopulate fresh
-            choicesEl.innerHTML = "";
-            clearModal();
-        }
-
-        function showScreen(name) {
-            if (name === "quiz") {
-                $("#screenQuiz").classList.remove("hidden");
-                $("#screenEnd").classList.add("hidden");
-            } else if (name === "end") {
-                $("#screenQuiz").classList.add("hidden");
-                $("#screenEnd").classList.remove("hidden");
-            } else {
-                $("#screenQuiz").classList.add("hidden");
-                $("#screenEnd").classList.add("hidden");
-            }
-        }
-
-        function disableNext(disable) {
-            if (disable) {
-                btnNext.classList.add("btn-disabled");
-                btnNext.disabled = true;
-            } else {
-                btnNext.classList.remove("btn-disabled");
-                btnNext.disabled = false;
-            }
-        }
-
-        function updateSessionStatsUI() {
-            statRound.textContent = `Runde: ${Math.min(state.idx + 1, state.order.length)}/${state.order.length || 10}`;
-            statBotCorrect.textContent = `Bot richtig (Session): ${state.session.botCorrect}`;
-            statBotWrong.textContent = `Bot falsch (Session): ${state.session.botWrong}`;
-            statSkipped.textContent = `Übersprungen (Session): ${state.session.skipped}`;
-        }
-
-        function updateCumStatsUI() {
-            const plays = parseInt(localStorage.getItem("quiz_plays") || "0");
-            const botCorrectTotal = parseInt(localStorage.getItem("quiz_botCorrectTotal") || "0");
-            const botWrongTotal = parseInt(localStorage.getItem("quiz_botWrongTotal") || "0");
-            const skippedTotal = parseInt(localStorage.getItem("quiz_skippedTotal") || "0");
-
-            cumPlays.textContent = `Spiele insgesamt: ${plays}`;
-            cumBotCorrect.textContent = `Bot korrekt (gesamt): ${botCorrectTotal}`;
-            cumBotWrong.textContent = `Bot falsch (gesamt): ${botWrongTotal}`;
-            cumSkipped.textContent = `Übersprungen (gesamt): ${skippedTotal}`;
-        }
-
-        // load cumulative stats on start
-        window.addEventListener("load", () => {
-            showScreen("none");
-            const savedSkill = parseInt(localStorage.getItem("botSkill"));
-            const savedSpeed = parseInt(localStorage.getItem("botSpeed"));
-            if (!isNaN(savedSkill)) { state.skill = savedSkill; skillRange.value = state.skill; skillLabel.textContent = state.skill + "%"; }
-            if (!isNaN(savedSpeed)) { state.speed = savedSpeed; speedRange.value = state.speed; speedLabel.textContent = speedDescriptor(state.speed); }
-            updateCumStatsUI();
-        });
+        function clearTimers(){ if(state.timer){clearTimeout(state.timer);state.timer=null;} }
+        function shuffleArray(a){ let arr=a.slice(); for(let i=arr.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+        function randomWrong(correct,len){ let x; do{x=Math.floor(Math.random()*len);}while(x===correct); return x; }
+        function computeBotDelay(speed){ return 700+(11-speed)*200; }
     </script>
 </body>
 </html>
