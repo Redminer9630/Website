@@ -349,68 +349,57 @@
             renderQuestion();
         }
 
-        function renderQuestion() {
-            clearTimers();
-            clearChoicesVisuals();
+function renderQuestion(){
+    clearTimers(); clearChoicesVisuals();
+    state.userChoice=null; state.botChoice=null; state.botAnswered=false; state.botStoppedByPlayer=false;
+    disableNext(true);
 
-            state.userChoice = null;
-            state.botChoice = null;
-            state.botAnswered = false;
-            state.botStoppedByPlayer = false;
-            disableNext(true);
+    const q = state.order[state.idx];
+    questionEl.textContent = `Frage ${state.idx+1}: ${q.q}`;
+    choicesEl.innerHTML = "";
 
-            const q = state.order[state.idx];
-            questionEl.textContent = `Frage ${state.idx + 1}: ${q.q}`;
-            choicesEl.innerHTML = "";
+    // Shuffle answers
+    const shuffledIndexes = shuffleArray(q.a.map((_,i)=>i)); // array of indexes
+    state.currentAnswerMap = {}; // map original index → shuffled index
+    shuffledIndexes.forEach((shuffledIndex, newPos)=>{ state.currentAnswerMap[newPos] = shuffledIndex; });
 
-            q.a.forEach((txt, i) => {
-                const btn = document.createElement("button");
-                btn.className = "choice";
-                btn.setAttribute("data-index", i);
-                btn.setAttribute("data-clickable", "1");
-                btn.disabled = false;
-                btn.style.pointerEvents = "auto";
-                btn.innerHTML = `<div class="letter">${String.fromCharCode(65 + i)}</div><div style="flex:1">${txt}</div>`;
-                btn.addEventListener("click", () => onPlayerPick(i));
-                choicesEl.appendChild(btn);
-            });
+    shuffledIndexes.forEach((origIdx, i)=>{
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.setAttribute("data-index", i);
+        btn.disabled = false;
+        btn.style.pointerEvents = "auto";
+        btn.innerHTML = `<div class="letter">${String.fromCharCode(65+i)}</div><div style="flex:1">${q.a[origIdx]}</div>`;
+        btn.addEventListener("click", ()=>onPlayerPick(i));
+        choicesEl.appendChild(btn);
+    });
 
-            const botChoice = (Math.random() < (state.skill / 100)) ? q.correct : randomWrong(q.correct, q.a.length);
-            const botDelay = computeBotDelay(state.speed);
-            state.botChoice = botChoice;
+    // Compute bot's choice according to shuffled indexes
+    let botOriginal = (Math.random() < (state.skill/100)) ? q.correct : randomWrong(q.correct, q.a.length);
+    state.botChoice = Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]==botOriginal);
 
-            // After botDelay, reveal bot choice and correct answer; enable Next button (no auto-skip)
-            state.timer = setTimeout(() => {
-                // if bot was stopped by player, skip bot reveal
-                if (state.botStoppedByPlayer) return;
+    const botDelay = computeBotDelay(state.speed);
+    state.timer = setTimeout(()=>{
+        if (state.botStoppedByPlayer) return;
 
-                const botBtn = choicesEl.querySelector(`button[data-index="${botChoice}"]`);
-                if (botBtn) botBtn.classList.add("bot");
-                state.botAnswered = true;
+        const botBtn = choicesEl.querySelector(`button[data-index="${state.botChoice}"]`);
+        if (botBtn) botBtn.classList.add("bot");
+        state.botAnswered = true;
 
-                const correctBtn = choicesEl.querySelector(`button[data-index="${q.correct}"]`);
-                if (correctBtn) correctBtn.classList.add("correct");
+        const correctBtnIndex = Object.keys(state.currentAnswerMap).find(k=>state.currentAnswerMap[k]==q.correct);
+        const correctBtn = choicesEl.querySelector(`button[data-index="${correctBtnIndex}"]`);
+        if (correctBtn) correctBtn.classList.add("correct");
 
-                // update session stats
-                if (botChoice === q.correct) {
-                    state.session.botCorrect++;
-                } else {
-                    state.session.botWrong++;
-                }
-                updateSessionStatsUI();
+        if (parseInt(state.botChoice) === parseInt(correctBtnIndex)) state.session.botCorrect++;
+        else state.session.botWrong++;
+        updateSessionStatsUI();
 
-                // disable further clicks after bot answered
-                choicesEl.querySelectorAll("button").forEach(b => { b.disabled = true; b.style.pointerEvents = "none"; b.setAttribute("data-clickable", "0"); });
+        choicesEl.querySelectorAll("button").forEach(b=>{ b.disabled=true; b.style.pointerEvents="none"; });
 
-                // show modal "Bot war schneller"
-                showModal("bot");
-
-                // enable Next for manual advance
-                disableNext(false);
-
-                // do NOT auto-advance; host/user clicks Next
-            }, botDelay);
-        }
+        showModal("bot");
+        disableNext(false);
+    }, botDelay);
+}
 
         function onPlayerPick(i) {
             // If user already picked or bot already answered, ignore
