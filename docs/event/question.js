@@ -1,40 +1,97 @@
-// questions.js
-// Kompletter Fragenpool 150 Fragen mit Themen
-const QUESTIONS = [
-    // --- Mathe 50 ---
-    {q:"5 + 7 = ?", a:["10","11","12","13"], correct:2, topic:"Mathe"},
-    {q:"9 - 4 = ?", a:["3","5","6","7"], correct:1, topic:"Mathe"},
-    {q:"2 * 6 = ?", a:["12","10","14","16"], correct:0, topic:"Mathe"},
-    {q:"20 ÷ 5 = ?", a:["2","3","4","5"], correct:3, topic:"Mathe"},
-    {q:"15 + 9 - 4 = ?", a:["18","20","21","19"], correct:2, topic:"Mathe"},
-    {q:"3² = ?", a:["6","9","12","8"], correct:1, topic:"Mathe"},
-    {q:"√49 = ?", a:["6","7","8","9"], correct:1, topic:"Mathe"},
-    {q:"50% von 80 = ?", a:["40","50","60","45"], correct:0, topic:"Mathe"},
-    {q:"0,25 als Bruch = ?", a:["1/2","1/4","1/5","1/3"], correct:1, topic:"Mathe"},
-    {q:"5³ = ?", a:["15","25","125","75"], correct:2, topic:"Mathe"},
-    // ... weitere Mathe-Fragen bis 50
+        // --------------- Fragenpool 150 ----------------
+        const QUESTIONS=[
+            // --- Mathe 50 ---
+            {q:"5 + 7 = ?", a:["10","11","12","13"], correct:2},
+            {q:"9 - 4 = ?", a:["3","5","6","7"], correct:1},
+            {q:"2 * 6 = ?", a:["12","10","14","16"], correct:0},
+            {q:"20 ÷ 5 = ?", a:["2","3","4","5"], correct:3},
+            {q:"15 + 9 - 4 = ?", a:["18","20","21","19"], correct:2},
+            {q:"3² = ?", a:["6","9","12","8"], correct:1},
+            {q:"√49 = ?", a:["6","7","8","9"], correct:1},
+            {q:"50% von 80 = ?", a:["40","50","60","45"], correct:0},
+            {q:"0,25 als Bruch = ?", a:["1/2","1/4","1/5","1/3"], correct:1},
+            {q:"5³ = ?", a:["15","25","125","75"], correct:2},
+            {q:"8 + 12 - 5 = ?", a:["15","18","20","17"], correct:3},
+            {q:"6 * 7 = ?", a:["42","36","48","40"], correct:0},
+            {q:"49 ÷ 7 = ?", a:["5","6","7","8"], correct:2},
+            {q:"9² = ?", a:["81","72","91","69"], correct:0},
+            {q:"√64 = ?", a:["6","8","7","9"], correct:1},
+            {q:"25% von 200 = ?", a:["40","50","45","60"], correct:1},
+            {q:"7³ = ?", a:["343","341","327","360"], correct:0},
+            {q:"12 + 15 ÷ 3 = ?", a:["17","19","20","25"], correct:1},
+            {q:"0,5 als Prozent = ?", a:["25%","50%","5%","75%"], correct:1},
+            {q:"36 ÷ 6 + 4 = ?", a:["10","12","9","8"], correct:0},
+            {q:"7 * 8 = ?", a:["54","56","58","60"], correct:1},
+            {q:"√121 = ?", a:["10","11","12","13"], correct:1},
+            {q:"15 * 2 - 5 = ?", a:["25","30","20","35"], correct:0},
+            {q:"18 ÷ 3 + 7 = ?", a:["12","13","15","14"], correct:3},
+            {q:"9 + 6 ÷ 2 = ?", a:["12","15","14","11"], correct:0},
+            {q:"4² + 3² = ?", a:["25","24","20","23"], correct:0},
+            {q:"√81 - 5 = ?", a:["4","6","7","9"], correct:2},
+            {q:"60% von 50 = ?", a:["25","30","20","35"], correct:1},
+            {q:"11 * 3 = ?", a:["33","31","34","30"], correct:0},
+            {q:"45 ÷ 9 = ?", a:["4","5","6","7"], correct:1},
+            {q:"8² = ?", a:["64","56","60","68"], correct:0},
+            {q:"√100 + 2 = ?", a:["12","10","14","11"], correct:0},
+            {q:"7 * 5 - 10 = ?", a:["25","30","35","20"], correct:0},
+            {q:"6³ = ?", a:["216","126","196","256"], correct:0},
+            {q:"12 ÷ 4 + 7 = ?", a:["10","12","13","11"], correct:2},
+            {q:"0,2 als Prozent = ?", a:["2%","20%","0,2%","10%"], correct:1},
+            {q:"30 - 12 ÷ 3 = ?", a:["26","24","28","25"], correct:1},
+            {q:"5² + 6 = ?", a:["31","35","30","29"], correct:0},
+            {q:"√144 = ?", a:["10","11","12","13"], correct:2},
+            {q:"50 ÷ 5 + 6 = ?", a:["16","15","17","14"], correct:0},
+            {q:"9 * 6 = ?", a:["54","56","52","58"], correct:0},
+            {q:"36 ÷ 4 - 5 = ?", a:["4","9","8","7"], correct:3},
+            {q:"8² ÷ 4 = ?", a:["16","18","14","20"], correct:0},
+            {q:"7³ - 20 = ?", a:["323","343","333","327"], correct:2},
+            {q:"√169 = ?", a:["12","13","14","15"], correct:1},
+            {q:"5 * 12 - 10 = ?", a:["50","60","45","55"], correct:3},
+            {q:"14 ÷ 2 + 9 = ?", a:["16","17","15","18"], correct:1},
+            {q:"6² + 8 = ?", a:["44","42","40","46"], correct:0},
+            {q:"√196 = ?", a:["12","13","14","15"], correct:2},
+            {q:"20% von 150 = ?", a:["30","25","40","35"], correct:0},
+            {q:"11 + 7 * 2 = ?", a:["24","25","26","27"], correct:2},
+            {q:"18 ÷ 2 - 5 = ?", a:["4","5","3","6"], correct:0},
+            {q:"3³ + 6 = ?", a:["33","27","30","29"], correct:2},
+            {q:"√225 = ?", a:["14","15","16","13"], correct:1},
 
-    // --- Deutsch 50 ---
-    {q:"Synonym für schnell?", a:["langsam","zügig","träge","faul"], correct:1, topic:"Deutsch"},
-    {q:"Antonym von groß?", a:["klein","riesig","weit","hoch"], correct:0, topic:"Deutsch"},
-    {q:"Was ist ein Nomen?", a:["Wortart","Satz","Verb","Adjektiv"], correct:0, topic:"Deutsch"},
-    {q:"Plural von 'Haus'?", a:["Hause","Häuser","Hauser","Häusen"], correct:1, topic:"Deutsch"},
-    {q:"Richtig oder falsch: 'der Apfel' ist maskulin?", a:["Richtig","Falsch","Beides","Keine Angabe"], correct:0, topic:"Deutsch"},
-    // ... weitere Deutsch-Fragen bis 50
+            // --- Deutsch 50 Fragen ---
+            {q:"Synonym für schnell?", a:["langsam","zügig","träge","faul"], correct:1},
+            {q:"Antonym von groß?", a:["klein","riesig","weit","hoch"], correct:0},
+            {q:"Was ist ein Nomen?", a:["Wortart","Satz","Verb","Adjektiv"], correct:0},
+            {q:"Plural von 'Haus'?", a:["Hause","Häuser","Hauser","Häusen"], correct:1},
+            {q:"Richtig oder falsch: 'der Apfel' ist maskulin?", a:["Richtig","Falsch","Beides","Keine Angabe"], correct:0},
+            {q:"Welcher Satz ist korrekt?", a:["Ich gehe morgen.","Ich geh morgen.","Ich geht morgen.","Mich gehe morgen."], correct:0},
+            {q:"Synonym für traurig?", a:["fröhlich","betrübt","lustig","heiter"], correct:1},
+            {q:"Was ist ein Verb?", a:["Tunwort","Namenwort","Eigenschaftswort","Satzzeichen"], correct:0},
+            {q:"Richtig oder falsch: 'die Sonne' ist feminin?", a:["Richtig","Falsch","Beides","Keine Angabe"], correct:0},
+            {q:"Antonym von leicht?", a:["dunkel","schwer","klein","hoch"], correct:1},
+            // 40 weitere Deutsch-Fragen hier...
+            
+            // --- Englisch 25 Fragen ---
+            {q:"'cat' auf Deutsch?", a:["Katze","Hund","Vogel","Maus"], correct:0},
+            {q:"'apple' auf Deutsch?", a:["Apfel","Birne","Traube","Pfirsich"], correct:0},
+            {q:"'house' auf Deutsch?", a:["Haus","Baum","Auto","Garten"], correct:0},
+            {q:"'book' auf Deutsch?", a:["Buch","Heft","Seite","Stift"], correct:0},
+            {q:"'blue' auf Deutsch?", a:["Blau","Grün","Rot","Gelb"], correct:0},
+            {q:"'sun' auf Deutsch?", a:["Sonne","Mond","Stern","Wolke"], correct:0},
+            {q:"'water' auf Deutsch?", a:["Wasser","Feuer","Luft","Erde"], correct:0},
+            {q:"'school' auf Deutsch?", a:["Schule","Haus","Kindergarten","Universität"], correct:0},
+            {q:"'friend' auf Deutsch?", a:["Freund","Feind","Bekannter","Kollege"], correct:0},
+            {q:"'dog' auf Deutsch?", a:["Hund","Katze","Maus","Vogel"], correct:0},
+            // 15 weitere Englisch-Fragen hier...
 
-    // --- Englisch 25 ---
-    {q:"'cat' auf Deutsch?", a:["Katze","Hund","Vogel","Maus"], correct:0, topic:"Englisch"},
-    {q:"'apple' auf Deutsch?", a:["Apfel","Birne","Traube","Pfirsich"], correct:0, topic:"Englisch"},
-    {q:"'house' auf Deutsch?", a:["Haus","Baum","Auto","Garten"], correct:0, topic:"Englisch"},
-    {q:"'book' auf Deutsch?", a:["Buch","Heft","Seite","Stift"], correct:0, topic:"Englisch"},
-    {q:"'blue' auf Deutsch?", a:["Blau","Grün","Rot","Gelb"], correct:0, topic:"Englisch"},
-    // ... weitere Englisch-Fragen bis 25
-
-    // --- Sachkunde 25 ---
-    {q:"Hauptstadt von Deutschland?", a:["Berlin","Hamburg","München","Bremen"], correct:0, topic:"Sachkunde"},
-    {q:"Welche Farbe hat Wasser?", a:["Blau","Grün","Rot","Gelb"], correct:0, topic:"Sachkunde"},
-    {q:"Der Mond ist ein...", a:["Planet","Stern","Satellit","Komet"], correct:2, topic:"Sachkunde"},
-    {q:"Wie viele Kontinente gibt es?", a:["5","6","7","8"], correct:2, topic:"Sachkunde"},
-    {q:"Welches Tier legt Eier?", a:["Hund","Katze","Huhn","Kuh"], correct:2, topic:"Sachkunde"},
-    // ... weitere Sachkunde-Fragen bis 25
-];
+            // --- Sachkunde 25 Fragen ---
+            {q:"Hauptstadt von Deutschland?", a:["Berlin","Hamburg","München","Bremen"], correct:0},
+            {q:"Welche Farbe hat Wasser?", a:["Blau","Grün","Rot","Gelb"], correct:0},
+            {q:"Der Mond ist ein...", a:["Planet","Stern","Satellit","Komet"], correct:2},
+            {q:"Wie viele Kontinente gibt es?", a:["5","6","7","8"], correct:2},
+            {q:"Welches Tier legt Eier?", a:["Hund","Katze","Huhn","Kuh"], correct:2},
+            {q:"Welches Gas atmen wir zum Leben ein?", a:["Sauerstoff","Kohlendioxid","Stickstoff","Helium"], correct:0},
+            {q:"Welcher Planet ist der Sonne am nächsten?", a:["Erde","Venus","Merkur","Mars"], correct:2},
+            {q:"Wie viele Minuten hat eine Stunde?", a:["50","60","70","80"], correct:1},
+            {q:"Welches Land ist flächenmäßig das größte?", a:["China","USA","Russland","Kanada"], correct:2},
+            {q:"Welcher Kontinent liegt südlich von Europa?", a:["Afrika","Asien","Amerika","Antarktika"], correct:0},
+            // 15 weitere Sachkunde-Fragen hier...
+        ];
