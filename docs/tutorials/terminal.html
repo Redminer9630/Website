@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Terminal Trainer — Vollbild Terminal (Git / Node / PM2)</title>
+<style>
+  /* CSS9630 - kompakt */
+  :root { --bg:#0b1220; --panel:#071020; --muted:#9aa6b2; --accent:#0ea5ff; --ok:#22c55e; --danger:#ef4444; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,ui-sans-serif,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:#e6eef6; }
+  header { height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:linear-gradient(90deg,#02101a,#071727); border-bottom:1px solid rgba(255,255,255,0.03); }
+  header h1 { margin:0; font-size:15px; font-weight:600; }
+  .btn { background:transparent; color:var(--accent); border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; }
+  main { display:grid; grid-template-columns:340px 1fr; gap:16px; padding:16px; height:calc(100vh - 56px); }
+  .panel { background:var(--panel); padding:14px; border-radius:10px; overflow:auto; }
+  h2 { font-size:13px; margin:0 0 8px 0; color:#d8e6f2; }
+  p, li { color:var(--muted); font-size:13px; line-height:1.45; }
+  .builder .field { display:flex; gap:8px; align-items:center; margin:6px 0; }
+  .builder label { width:110px; color:var(--muted); font-size:13px; }
+  .builder input, .builder select { flex:1; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); color:#e8f8ff; }
+  .builder .actions { display:flex; gap:8px; margin-top:6px; }
+  .small { font-size:12px; color:var(--muted); }
+
+  /* Fullscreen terminal modal */
+  .overlay { display:none; position:fixed; inset:0; background:rgba(2,6,12,0.75); z-index:9999; align-items:stretch; justify-content:center; }
+  .terminalFull { background:#000; margin:20px; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; height:calc(100vh - 40px); border:1px solid rgba(255,255,255,0.04); }
+  .termHeader { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:linear-gradient(90deg,#071018,#051226); color:var(--muted); }
+  .termHeader .left { display:flex; align-items:center; gap:10px; }
+  .termHeader .dots { display:flex; gap:8px; }
+  .dot { width:12px; height:12px; border-radius:50%; opacity:0.95; }
+  .r { background:#ff5f56; } .y { background:#ffbd2e; } .g { background:#27c93f; }
+  .termBody { padding:14px; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Courier New",monospace; font-size:13px; color:#cfeeff; flex:1; overflow:auto; background:linear-gradient(180deg,#000,#061018 120%); }
+  .promptLine { display:flex; gap:8px; align-items:flex-start; margin-bottom:6px; }
+  .prompt { color:#66ffc2; font-weight:700; min-width:120px; }
+  .cmdText { white-space:pre-wrap; word-break:break-word; color:#e8f8ff; }
+  .termInputBar { display:flex; gap:8px; padding:10px; background:#061018; align-items:center; border-top:1px solid rgba(255,255,255,0.02); }
+  .cmdInput { flex:1; background:transparent; color:#e6f7ff; border:1px solid rgba(255,255,255,0.03); padding:10px 12px; border-radius:8px; outline:none; font-family:inherit; }
+  .cmdBtn { padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); cursor:pointer; background:transparent; color:var(--accent); font-weight:600; }
+
+  /* explanation area */
+  .explainBox { background:rgba(255,255,255,0.02); padding:12px; border-radius:8px; color:var(--muted); max-height:40vh; overflow:auto; }
+  .token { display:inline-block; background:rgba(255,255,255,0.02); padding:6px 8px; margin:6px 6px 6px 0; border-radius:8px; color:#bfe9ff; }
+  .tokName { display:block; font-weight:700; color:#fff; }
+  .tokDesc { font-size:13px; color:var(--muted); margin-top:4px; }
+  @media (max-width:900px) { main { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Trainer — Terminal Vollbild (Git / Node / PM2)</h1>
+  <div>
+    <button id="openFull" class="btn">🖥 Terminal Vollbild</button>
+    <button id="resetBtn" class="btn" title="Simulationszustand zurücksetzen">🔄 Reset</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Kurze Anleitung</h2>
+    <p>Drücke oben rechts <b>Terminal Vollbild</b> um das Terminal zu öffnen. Das Terminal simuliert ein echtes Terminal (Windows- und Unix-Pfade werden unterstützt). Du kannst normale Befehle eingeben (<code>cd</code>, <code>ls</code>, <code>git</code>, <code>node</code>, <code>pm2</code>, <code>mkdir</code>, <code>touch</code>, <code>cat</code>, <code>echo</code> usw.).</p>
+    <h2 style="margin-top:12px">Command-Builder (schnell)</h2>
+    <div class="builder">
+      <div style="font-weight:700;color:#dff6ff">Git</div>
+      <div class="field"><label>Repo-Name</label><input id="b_repo" placeholder="raspberry9630"></div>
+      <div class="field"><label>Commit-Nachricht</label><input id="b_commit" placeholder="first commit"></div>
+      <div class="field"><label>Remote URL</label><input id="b_remote" placeholder="https://github.com/user/repo.git"></div>
+      <div class="actions"><button id="btnInsertGit" class="btn">Befehl einfügen</button><button id="btnRunGit" class="btn">Direkt ausführen</button></div>
+
+      <div style="height:12px"></div>
+
+      <div style="font-weight:700;color:#dff6ff">Node</div>
+      <div class="field"><label>Datei</label><input id="b_node" placeholder="server.js"></div>
+      <div class="actions"><button id="btnInsertNode" class="btn">Befehl einfügen</button><button id="btnRunNode" class="btn">Direkt ausführen</button></div>
+
+      <div style="height:12px"></div>
+
+      <div style="font-weight:700;color:#dff6ff">PM2</div>
+      <div class="field"><label>Datei</label><input id="b_pm" placeholder="app.js"></div>
+      <div class="field"><label>Name</label><input id="b_pmname" placeholder="myapp"></div>
+      <div class="actions"><button id="btnInsertPm" class="btn">Befehl einfügen</button><button id="btnRunPm" class="btn">Direkt ausführen</button></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Erklärungen</h2>
+    <p class="small">Wenn du im Terminal einen Befehl ausführst, wird er tokenisiert und jeder Token erklärt. Drücke im Terminal die Schaltfläche <b>Erklären</b> oder gib <code>explain &lt;befehl&gt;</code> ein.</p>
+    <div class="explainBox" id="explainBox">
+      <div id="explainHeader" style="font-weight:700;color:#dff6ff">Aufschlüsselung erscheint hier</div>
+      <div id="tokensOut" style="margin-top:8px"></div>
+      <div id="simOut" style="margin-top:12px;color:var(--muted)"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Fullscreen Terminal Overlay -->
+<div class="overlay" id="overlay">
+  <div class="terminalFull" role="dialog" aria-modal="true" aria-label="Vollbild Terminal">
+    <div class="termHeader">
+      <div class="left"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><div style="margin-left:6px">VIRTUELLES TERMINAL — Simulation</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="small" id="termStatus">Status: <span style="color:var(--ok);font-weight:700">bereit</span></div>
+        <button id="closeFull" class="btn">✖ Schließen</button>
+      </div>
+    </div>
+
+    <div class="termBody" id="termBody" tabindex="0"></div>
+
+    <div class="termInputBar">
+      <div class="prompt" id="promptLabel">user@trainer:C:\Users\trainer$</div>
+      <input id="terminalInput" class="cmdInput" placeholder="z.B. git init" autocomplete="off" spellcheck="false">
+      <button id="explainBtn" class="cmdBtn">🔍 Erklären</button>
+      <button id="clearBtn" class="cmdBtn">🧹 Clear</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------------------
+  Tokenizer: erkennt "..." '...' und unquoted tokens
+--------------------------- */
+function tokenizeCmd(str) {
+  const re = /"([^"\\]*(\\.[^"\\]*)*)"|'([^'\\]*(\\.[^'\\]*)*)'|[^ \t]+/g;
+  const tokens = [];
+  let m;
+  while ((m = re.exec(str)) !== null) {
+    if (m[1] !== undefined) tokens.push(m[1].replace(/\\(["\\])/g,'$1'));
+    else if (m[3] !== undefined) tokens.push(m[3].replace(/\\(['\\])/g,'$1'));
+    else tokens.push(m[0]);
+  }
+  return tokens;
+}
+
+/* ---------------------------
+  Filesystem-Tree (einfach)
+  Repräsentation: tree-Objekte, keys -> dir/file; files are strings
+--------------------------- */
+function pathToArray(p) {
+  // akzeptiert C:\... oder /... oder relative
+  if (!p) return [];
+  p = p.replace(/\//g, '\\'); // unify separators
+  // handle C:\...
+  if (/^[A-Za-z]:\\/.test(p)) {
+    const drive = p[0].toUpperCase()+':';
+    const rest = p.slice(2);
+    const parts = rest.split('\\').filter(x=>x.length);
+    return [drive, ...parts];
+  }
+  // absolute unix / -> use root ''
+  if (p.startsWith('\\') || p.startsWith('/')) {
+    const parts = p.replace(/^[\\\/]+/,'').split(/[\\\/]/).filter(x=>x.length);
+    return ['\\', ...parts];
+  }
+  // relative
+  return p.split(/[\\\/]/).filter(x=>x.length);
+}
+
+function joinParts(parts) {
+  if (!parts || parts.length===0) return '';
+  if (parts[0].endsWith(':')) return parts.join('\\'); // Windows
+  if (parts[0] === '\\') return '\\' + parts.slice(1).join('\\');
+  return parts.join('\\');
+}
+
+function normalizePath(cur, target) {
+  // if target is absolute, return normalized version
+  target = String(target);
+  if (/^[A-Za-z]:[\\\/]/.test(target) || target.startsWith('\\') || target.startsWith('/')) {
+    const arr = pathToArray(target);
+    return joinParts(arr);
+  }
+  // else relative to cur
+  const curParts = pathToArray(cur);
+  const tParts = pathToArray(target);
+  const base = [...curParts];
+  for (const seg of tParts) {
+    if (seg === '.' || seg === '') continue;
+    if (seg === '..') base.pop();
+    else base.push(seg);
+  }
+  return joinParts(base);
+}
+
+function ensureNode(path) {
+  const parts = pathToArray(path);
+  let node = fsTree;
+  let i = 0;
+  // handle windows drive root if any
+  if (parts[0] && parts[0].endsWith(':')) {
+    // ensure drive object
+    if (!node[parts[0]]) node[parts[0]] = { __isDir:true };
+    node = node[parts[0]];
+    i = 1;
+  } else if (parts[0] === '\\') {
+    if (!node['\\']) node['\\'] = { __isDir:true };
+    node = node['\\'];
+    i = 1;
+  }
+  for (; i < parts.length; i++) {
+    const seg = parts[i];
+    if (!node[seg]) node[seg] = { __isDir:true };
+    node = node[seg];
+  }
+  return node;
+}
+
+function nodeExists(path) {
+  const parts = pathToArray(path);
+  let node = fsTree;
+  let i = 0;
+  if (parts[0] && parts[0].endsWith(':')) {
+    if (!node[parts[0]]) return null;
+    node = node[parts[0]]; i=1;
+  } else if (parts[0] === '\\') {
+    if (!node['\\']) return null;
+    node = node['\\']; i=1;
+  }
+  for (; i < parts.length; i++) {
+    const seg = parts[i];
+    if (!node[seg]) return null;
+    node = node[seg];
+  }
+  return node;
+}
+
+function listDir(path) {
+  const n = nodeExists(path);
+  if (!n) return null;
+  const out = [];
+  for (const k in n) { if (k === '__isDir') continue; out.push(k + (n[k].__isDir ? '\\' : '')); }
+  return out.sort();
+}
+
+function writeFile(path, content) {
+  const parts = pathToArray(path);
+  const name = parts.pop();
+  const parent = joinParts(parts);
+  const pnode = ensureNode(parent);
+  pnode[name] = content; // file (string)
+  pnode[name].__isDir = false;
+}
+
+function readFile(path) {
+  const n = nodeExists(path);
+  if (!n) return null;
+  if (n.__isDir) return null;
+  return n;
+}
+
+function makeDir(path) {
+  ensureNode(path);
+}
+
+function removePath(path) {
+  const parts = pathToArray(path);
+  const name = parts.pop();
+  const parent = joinParts(parts);
+  const pnode = nodeExists(parent);
+  if (!pnode || !pnode[name]) return false;
+  delete pnode[name];
+  return true;
+}
+
+/* ---------------------------
+  Initial FS + State
+--------------------------- */
+let fsTree = { 'C:': { __isDir:true, 'Users': { __isDir:true, 'trainer': { __isDir:true, 'README.md': '# demo\n', 'server.js': "console.log('hi')", 'app.js': "console.log('pm2')"}}}} };
+let state = {
+  cwd: 'C:\\Users\\trainer',
+  gitRepos: { /* path -> repo state */ },
+  processes: { node:[], pm2:[] },
+  lastCmd: ''
+};
+
+function resetSimulation() {
+  fsTree = { 'C:': { __isDir:true, 'Users': { __isDir:true, 'trainer': { __isDir:true, 'README.md': '# demo\n', 'server.js': "console.log('hi')", 'app.js': "console.log('pm2')"}}}} };
+  state.cwd = 'C:\\Users\\trainer';
+  state.gitRepos = {};
+  state.processes = { node:[], pm2:[] };
+  appendOutput('** Simulationszustand zurückgesetzt **');
+  updatePrompt();
+  clearExplanation();
+}
+
+/* ---------------------------
+  Terminal UI helpers
+--------------------------- */
+const overlay = document.getElementById('overlay');
+const openFull = document.getElementById('openFull');
+const closeFull = document.getElementById('closeFull');
+const termBody = document.getElementById('termBody');
+const terminalInput = document.getElementById('terminalInput');
+const promptLabel = document.getElementById('promptLabel');
+const explainBtn = document.getElementById('explainBtn');
+const clearBtn = document.getElementById('clearBtn');
+const explainBox = document.getElementById('explainBox');
+const tokensOut = document.getElementById('tokensOut');
+const simOut = document.getElementById('simOut');
+const termStatus = document.getElementById('termStatus');
+
+openFull.addEventListener('click', ()=>{ overlay.style.display='flex'; terminalInput.focus(); updatePrompt(); });
+
+closeFull.addEventListener('click', ()=>{ overlay.style.display='none'; });
+
+clearBtn.addEventListener('click', ()=>{ termBody.innerHTML=''; });
+
+document.getElementById('resetBtn').addEventListener('click', resetSimulation);
+
+/* builder buttons */
+document.getElementById('btnInsertGit').addEventListener('click', ()=>{
+  const repo = document.getElementById('b_repo').value || 'my-repo';
+  const cmd = `echo "# ${repo}" >> README.md && git init && git add README.md && git commit -m "first commit" && git branch -M main && git remote add origin https://github.com/${repo}.git`;
+  insertToInput(cmd);
+});
+document.getElementById('btnRunGit').addEventListener('click', ()=>{
+  const repo = document.getElementById('b_repo').value || 'my-repo';
+  const cmd = `echo "# ${repo}" >> README.md && git init && git add README.md && git commit -m "first commit" && git branch -M main && git remote add origin https://github.com/${repo}.git && git push -u origin main`;
+  runCommandLine(cmd);
+});
+document.getElementById('btnInsertNode').addEventListener('click', ()=>{ insertToInput('node ' + (document.getElementById('b_node').value || 'server.js')); });
+document.getElementById('btnRunNode').addEventListener('click', ()=>{ runCommandLine('node ' + (document.getElementById('b_node').value || 'server.js')); });
+document.getElementById('btnInsertPm').addEventListener('click', ()=>{ insertToInput('pm2 start ' + (document.getElementById('b_pm').value || 'app.js') + ' --name ' + (document.getElementById('b_pmname').value || 'myapp')); });
+document.getElementById('btnRunPm').addEventListener('click', ()=>{ runCommandLine('pm2 start ' + (document.getElementById('b_pm').value || 'app.js') + ' --name ' + (document.getElementById('b_pmname').value || 'myapp')); });
+
+function insertToInput(s) { terminalInput.value = s; terminalInput.focus(); }
+
+function appendOutput(text, cls) {
+  const line = document.createElement('div');
+  line.className = 'promptLine';
+  const p = document.createElement('div');
+  p.className = 'prompt';
+  p.textContent = promptLabel.textContent;
+  const t = document.createElement('div');
+  t.className = 'cmdText';
+  t.innerHTML = safeHtml(text);
+  line.appendChild(p); line.appendChild(t);
+  termBody.appendChild(line);
+  termBody.scrollTop = termBody.scrollHeight;
+}
+
+function safeHtml(s) { return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('\n','<br>'); }
+
+function updatePrompt() { promptLabel.textContent = `user@trainer:${state.cwd}$`; }
+
+/* ---------------------------
+  Command execution (simuliert)
+--------------------------- */
+function findGitRepoPath(path) {
+  // find nearest ancestor that has git repo
+  let parts = pathToArray(path);
+  while (parts.length>0) {
+    const p = joinParts(parts);
+    if (state.gitRepos[p]) return p;
+    parts.pop();
+  }
+  return null;
+}
+
+function runCommandLine(line) {
+  if (!line.trim()) return;
+  state.lastCmd = line;
+  appendOutput(line);
+  // support && to chain commands
+  const parts = line.split('&&').map(s=>s.trim());
+  (async ()=> {
+    for (const p of parts) {
+      await executeSingle(p);
+    }
+  })();
+}
+
+async function executeSingle(raw) {
+  const tokens = tokenizeCmd(raw);
+  if (tokens.length===0) return;
+  const cmd = tokens[0].toLowerCase();
+  // builtins
+  if (cmd === 'help') {
+    appendOutput('Unterstützte Befehle: cd, ls, mkdir, touch, rm, cat, echo, git, node, npm, pm2, pwd, clear, explain, help');
+    return;
+  }
+  if (cmd === 'clear' || cmd === 'cls') { termBody.innerHTML=''; return; }
+  if (cmd === 'pwd') { appendOutput(state.cwd); return; }
+  if (cmd === 'cd') {
+    const target = tokens[1] || (state.cwd.startsWith('C:')? 'C:\\Users\\trainer' : '/home/user');
+    const newp = normalizePath(state.cwd, target);
+    // check exists
+    const node = nodeExists(newp);
+    if (!node || !node.__isDir) { appendOutput(`cd: Pfad nicht gefunden: ${target}`); return; }
+    state.cwd = newp; updatePrompt(); return;
+  }
+  if (cmd === 'ls' || cmd === 'dir') {
+    const target = tokens[1] ? normalizePath(state.cwd, tokens[1]) : state.cwd;
+    const list = listDir(target);
+    if (list === null) { appendOutput('ls: Pfad nicht gefunden'); return; }
+    appendOutput(list.join('  '));
+    return;
+  }
+  if (cmd === 'mkdir') {
+    const target = tokens[1];
+    if (!target) { appendOutput('mkdir: fehlt Operand'); return; }
+    const p = normalizePath(state.cwd, target);
+    makeDir(p); appendOutput(`Verzeichnis erstellt: ${p}`); return;
+  }
+  if (cmd === 'touch') {
+    const target = tokens[1];
+    if (!target) { appendOutput('touch: fehlt Operand'); return; }
+    const p = normalizePath(state.cwd, target);
+    writeFile(p, ''); appendOutput(`Datei erstellt: ${p}`); return;
+  }
+  if (cmd === 'rm' || cmd === 'del') {
+    const target = tokens[1];
+    if (!target) { appendOutput('rm: fehlt Operand'); return; }
+    const p = normalizePath(state.cwd, target);
+    const ok = removePath(p);
+    appendOutput(ok ? `Entfernt: ${p}` : `rm: nicht gefunden: ${target}`); return;
+  }
+  if (cmd === 'cat' || cmd === 'type') {
+    const target = tokens[1];
+    if (!target) { appendOutput('cat: fehlt Operand'); return; }
+    const p = normalizePath(state.cwd, target);
+    const content = readFile(p);
+    if (content === null) { appendOutput(`cat: Datei nicht gefunden oder ist ein Verzeichnis: ${target}`); return; }
+    appendOutput(content);
+    return;
+  }
+  if (cmd === 'echo') {
+    // support echo "text" >> file  or > file
+    const gt = tokens.indexOf('>');
+    const ggt = tokens.indexOf('>>');
+    if (ggt !== -1 && tokens.length > ggt+1) {
+      const txt = tokens.slice(1,ggt).join(' ');
+      const file = normalizePath(state.cwd, tokens[ggt+1]);
+      const old = readFile(file) || '';
+      writeFile(file, old + txt + '\n');
+      appendOutput(`An Datei angehängt: ${file}`);
+      return;
+    } else if (gt !== -1 && tokens.length > gt+1) {
+      const txt = tokens.slice(1,gt).join(' ');
+      const file = normalizePath(state.cwd, tokens[gt+1]);
+      writeFile(file, txt + '\n');
+      appendOutput(`In Datei geschrieben: ${file}`);
+      return;
+    } else {
+      appendOutput(tokens.slice(1).join(' '));
+      return;
+    }
+  }
+
+  // Node
+  if (cmd === 'node') {
+    const file = tokens[1];
+    if (!file) { appendOutput('node: fehlt Dateiname'); return; }
+    const p = normalizePath(state.cwd, file);
+    const content = readFile(p);
+    if (content === null) { appendOutput(`node: Datei nicht gefunden: ${file}`); return; }
+    const pid = Date.now();
+    state.processes.node.push({ pid, file:p, started:new Date().toLocaleTimeString() });
+    appendOutput(`node: Prozess gestartet (pid ${pid}) - Datei: ${p}`);
+    return;
+  }
+
+  // npm (simuliert install)
+  if (cmd === 'npm') {
+    const sub = tokens[1];
+    if (!sub) { appendOutput('npm: fehlt Subcommand (z.B. install)'); return; }
+    if (sub === 'install' || sub === 'i') {
+      const pkg = tokens[2] || '';
+      appendOutput(pkg ? `npm: Paket installiert (simuliert): ${pkg}` : 'npm: keine Pakete angegeben');
+      return;
+    }
+    appendOutput(`npm ${sub} (simuliert)`); return;
+  }
+
+  // pm2
+  if (cmd === 'pm2') {
+    const sub = tokens[1];
+    if (!sub) { appendOutput('pm2: fehlt Subcommand'); return; }
+    if (sub === 'start') {
+      const file = tokens[2];
+      let name = null;
+      for (let i=3;i<tokens.length;i++) if (tokens[i]==='--name' && tokens[i+1]) { name = tokens[i+1]; break; }
+      const p = normalizePath(state.cwd, file);
+      if (!readFile(p)) { appendOutput(`pm2: Datei nicht gefunden: ${file}`); return; }
+      const id = state.processes.pm2.length+1;
+      state.processes.pm2.push({ id, file:p, name: name||('pm2-'+id), status:'online' });
+      appendOutput(`pm2: gestartet (${name||('pm2-'+id)}) id=${id}`);
+      return;
+    }
+    if (sub === 'list') {
+      if (state.processes.pm2.length===0) { appendOutput('pm2: keine Prozesse'); return; }
+      appendOutput(state.processes.pm2.map(p=>`${p.id} ${p.name} ${p.status} ${p.file}`).join('\n'));
+      return;
+    }
+    appendOutput(`pm2 ${sub} (simuliert)`); return;
+  }
+
+  // Git (Basis)
+  if (cmd === 'git') {
+    const sub = tokens[1];
+    if (!sub) { appendOutput('git: kein Subcommand'); return; }
+    if (sub === 'init') {
+      // create git repo at state.cwd
+      state.gitRepos[state.cwd] = { staged:[], commits:[], branch:'main', remote:null };
+      appendOutput(`Initialized empty Git repository in ${state.cwd}\\.git/ (simuliert)`);
+      return;
+    }
+    if (sub === 'status') {
+      const repoPath = findGitRepoPath(state.cwd);
+      if (!repoPath) { appendOutput('fatal: not a git repository (oder irgendein Elternverzeichnis)'); return; }
+      const repo = state.gitRepos[repoPath];
+      const staged = repo.staged.length ? repo.staged.join(', ') : '(keine)';
+      const commits = repo.commits.length ? repo.commits.length : 0;
+      appendOutput(`Auf Branch ${repo.branch}\nCommits: ${commits}\nStaged: ${staged}`);
+      return;
+    }
+    if (sub === 'add') {
+      const target = tokens[2];
+      if (!target) { appendOutput('git add: fehlt Datei'); return; }
+      const p = normalizePath(state.cwd, target);
+      if (!readFile(p) && !nodeExists(p)) { appendOutput(`git add: Datei nicht gefunden: ${target}`); return; }
+      const repoPath = findGitRepoPath(state.cwd);
+      if (!repoPath) { appendOutput('fatal: not a git repository'); return; }
+      const repo = state.gitRepos[repoPath];
+      if (!repo.staged.includes(p)) repo.staged.push(p);
+      appendOutput(`added ${target}`);
+      return;
+    }
+    if (sub === 'commit') {
+      // find -m
+      const mIndex = tokens.indexOf('-m');
+      let msg = 'commit';
+      if (mIndex !== -1 && tokens[mIndex+1]) msg = tokens[mIndex+1];
+      const repoPath = findGitRepoPath(state.cwd);
+      if (!repoPath) { appendOutput('fatal: not a git repository'); return; }
+      const repo = state.gitRepos[repoPath];
+      const commit = { msg, files: [...repo.staged], time: new Date().toISOString() };
+      repo.commits.push(commit);
+      repo.staged = [];
+      appendOutput(`[${repo.branch} ${repo.commits.length}] ${msg}\n ${commit.files.length} file(s) changed (simuliert)`);
+      return;
+    }
+    if (sub === 'branch' && tokens[2] === '-M') {
+      const name = tokens[3] || 'main';
+      const repoPath = findGitRepoPath(state.cwd);
+      if (!repoPath) { appendOutput('fatal: not a git repository'); return; }
+      state.gitRepos[repoPath].branch = name;
+      appendOutput(`Branch umbenannt zu ${name}`);
+      return;
+    }
+    if (sub === 'remote' && tokens[2] === 'add') {
+      const name = tokens[3], url = tokens[4];
+      if (!name || !url) { appendOutput('git remote add: usage: git remote add <name> <url>'); return; }
+      const repoPath = findGitRepoPath(state.cwd);
+      if (!repoPath) { appendOutput('fatal: not a git repository'); return; }
+      state.gitRepos[repoPath].remote = { name, url };
+      appendOutput(`Remote ${name} hinzugefügt (${url})`);
+      return;
+    }
+    if (sub === 'push') {
+      appendOutput('Pushing to remote... (simuliert)'); await sleep(600); appendOutput('Done (simuliert).');
+      return;
+    }
+    appendOutput('git ' + sub + ' (simuliert, noch nicht vollständig implementiert)');
+    return;
+  }
+
+  // explain command: show tokens and descriptions
+  if (cmd === 'explain') {
+    const rest = raw.slice(raw.indexOf(' ')+1) || state.lastCmd;
+    showExplanation(rest || raw);
+    return;
+  }
+
+  appendOutput(`Befehl nicht erkannt oder noch nicht implementiert: ${cmd}`);
+}
+
+/* small sleep */
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* explain function */
+function describeToken(token, position) {
+  if (position === 0) {
+    if (['git','node','pm2','npm','cd','ls','mkdir','touch','rm','cat','echo','pwd','help'].includes(token)) return {name:token,desc:'Hauptbefehl (Programm oder Shell built-in).'};
+    return {name:token,desc:'Auszuführendes Programm oder Befehl.'};
+  }
+  // heuristics
+  if (token === '-m' || token.startsWith('-')) return {name:token,desc:'Option/Flag, ändert das Verhalten des Befehls.'};
+  if (token.startsWith('http') || token.includes('github.com')) return {name:token,desc:'URL (Remote-Adresse oder Link zu einem Repository).'};
+  if (/^[A-Za-z]:\\/.test(token) || token.startsWith('\\') || token.startsWith('/')) return {name:token,desc:'Absoluter Pfad (Windows oder Unix).'};
+  if (token.endsWith('.js') || token.endsWith('.md') || token.endsWith('.json')) return {name:token,desc:'Dateiname (häufig als Argument an Programme übergeben).'};
+  if (token === 'start' || token === 'install' || token === 'status' || token === 'list') return {name:token,desc:'Sub-Command / Aktion für Programme wie npm/pm2/git.'};
+  return {name:token,desc:'Argument / Parameter.'};
+}
+
+function showExplanation(cmdStr) {
+  const tokens = tokenizeCmd(cmdStr);
+  tokensOut.innerHTML = '';
+  simOut.innerHTML = '';
+  document.getElementById('explainHeader').textContent = `Aufschlüsselung für: ${cmdStr}`;
+  tokens.forEach((t,i)=>{
+    const el = document.createElement('div');
+    el.className = 'token';
+    el.innerHTML = `<span class="tokName">${safeHtml(t)}</span><div class="tokDesc">${safeHtml(describeToken(t,i).desc)}</div>`;
+    tokensOut.appendChild(el);
+  });
+  simOut.textContent = 'Simulationshinweise: Token werden erklärt; ausführbare Befehle simulieren die erwartete Ausgabe.';
+  // scroll explain box into view
+  explainBox.scrollIntoView({behavior:'smooth'});
+}
+
+/* explain Btn and input handler */
+explainBtn.addEventListener('click', ()=>{ const txt = terminalInput.value || state.lastCmd; if (!txt) return; showExplanation(txt); });
+terminalInput.addEventListener('keydown', (e)=>{
+  if (e.key === 'Enter') {
+    const line = terminalInput.value;
+    terminalInput.value = '';
+    runCommandLine(line);
+  } else if (e.key === 'ArrowUp') {
+    // future: history
+  }
+});
+
+/* initial */
+resetSimulation();
+updatePrompt();
+
+function clearExplanation() { tokensOut.innerHTML=''; document.getElementById('explainHeader').textContent='Aufschlüsselung erscheint hier'; simOut.innerText=''; }
+
+/* expose runCommandLine to other buttons */
+window.runCommandLine = runCommandLine;
+window.showExplanation = showExplanation;
+</script>
+</body>
+</html>
