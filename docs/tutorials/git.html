@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Git Trainer</title>
+  <style>
+    body { font-family: monospace; background: #1e1e1e; color: #ddd; padding: 20px; }
+    #terminal { background: #000; padding: 15px; border-radius: 5px; height: 300px; overflow-y: auto; }
+    .line { margin: 2px 0; }
+    .input { color: #0f0; }
+    #userInput { width: 100%; padding: 8px; background: #111; color: #0f0; border: none; outline: none; }
+    #help { margin-top: 10px; font-size: 0.9em; color: #aaa; }
+  </style>
+</head>
+<body>
+  <h1>🖥 Git Command Trainer</h1>
+  <div id="terminal"></div>
+  <input type="text" id="userInput" placeholder="Gib einen Git-Befehl ein (z.B. git init)" autofocus>
+  <div id="help">Tipp: Probiere <code>git init</code>, <code>git status</code>, <code>git add</code>, <code>git commit</code>...</div>
+
+  <script>
+    const terminal = document.getElementById("terminal");
+    const input = document.getElementById("userInput");
+
+    const responses = {
+      "git init": "Repository initialisiert (neues .git-Verzeichnis erstellt).",
+      "git status": "Keine Commits, Arbeitsverzeichnis sauber.",
+      "git add readme.md": "readme.md wurde zur Staging-Area hinzugefügt.",
+      "git add .": "Alle Dateien wurden zur Staging-Area hinzugefügt.",
+      "git commit -m \"first commit\"": "[main (root-commit)] first commit\n 1 file changed, 1 insertion(+)\n create mode 100644 readme.md",
+      "git branch -M main": "Branch 'master' wurde in 'main' umbenannt.",
+      "git remote add origin": "Remote 'origin' wurde hinzugefügt (simuliert).",
+      "git push -u origin main": "Branch 'main' wurde zu origin hochgeladen (simuliert).",
+      "git pull": "Already up to date. (simuliert)"
+    };
+
+    function printLine(text, type="normal") {
+      const line = document.createElement("div");
+      line.className = "line " + type;
+      line.textContent = text;
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        const command = input.value.trim();
+        printLine("> " + command, "input");
+
+        let found = false;
+        for (let key in responses) {
+          if (command.startsWith(key)) {
+            printLine(responses[key]);
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          printLine("Unbekannter Befehl oder noch nicht implementiert.");
+        }
+
+        input.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
