@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Todo-Liste</title>
+</head>
+<body>
+<h1>Todo-Liste</h1>
+
+<div id="loginDiv">
+<input id="password" type="password" placeholder="Passwort">
+<button onclick="login()">Login</button>
+<p id="loginError" style="color:red"></p>
+</div>
+
+<div id="todoDiv" style="display:none">
+<ul id="list"></ul>
+<input id="newTodo" placeholder="Neues Todo">
+<button onclick="addTodo()">Hinzufügen</button>
+</div>
+
+<script>
+function login() {
+    const pw = document.getElementById('password').value;
+    fetch('/login', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({password: pw})
+    }).then(res => {
+        if(res.ok) {
+            document.getElementById('loginDiv').style.display='none';
+            document.getElementById('todoDiv').style.display='block';
+            loadTodos();
+        } else {
+            document.getElementById('loginError').textContent='Falsches Passwort';
+        }
+    });
+}
+
+function loadTodos() {
+  fetch('/api/todos')
+    .then(res=>res.json())
+    .then(todos=>{
+      const list = document.getElementById('list');
+      list.innerHTML='';
+      todos.forEach((t,i)=>{
+        const li = document.createElement('li');
+        li.textContent = t.text + (t.done?' ✅':'');
+        li.onclick = ()=>toggleTodo(i, !t.done);
+        const del = document.createElement('button');
+        del.textContent='❌';
+        del.onclick=e=>{e.stopPropagation(); deleteTodo(i)};
+        li.appendChild(del);
+        list.appendChild(li);
+      });
+    });
+}
+
+function addTodo() {
+  const text = document.getElementById('newTodo').value;
+  fetch('/api/todos', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({text}) })
+    .then(()=>{ document.getElementById('newTodo').value=''; loadTodos(); });
+}
+
+function deleteTodo(i) { fetch('/api/todos/'+i, { method:'DELETE' }).then(loadTodos); }
+function toggleTodo(i, done) { fetch('/api/todos/'+i, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({done}) }).then(loadTodos); }
+</script>
+</body>
+</html>
