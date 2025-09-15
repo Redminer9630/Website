@@ -1,0 +1,142 @@
+<!-- [Bearbeiten] -->
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Snake — Schnellere Bewegung pro Essen</title>
+  <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@74/docs/autoloader.js" defer></script>
+  <style>
+    /* Dark default */
+    :root{--bg:#071326;--panel:#0f2740;--accent:#61dafb;--text:#dff4ff;--muted:rgba(255,255,255,0.75);--panel-border:rgba(255,255,255,0.03)}
+    /* Explicit light theme when data-theme="light" */
+    :root[data-theme="light"]{--bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06)}
+    /* If no data-theme attribute, respect OS preference */
+    @media (prefers-color-scheme: light){ :root:not([data-theme]){ --bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06);} }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
+    .wrap{display:flex;align-items:center;justify-content:center;padding:28px;height:100%}
+    .panel{width:920px;max-width:calc(100% - 48px);display:grid;grid-template-columns:420px 1fr;gap:18px;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;border:1px solid var(--panel-border);box-shadow:0 8px 40px rgba(0,0,0,0.25)}
+    .left{display:flex;flex-direction:column;align-items:center;gap:12px}
+    canvas{width:420px;height:420px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);image-rendering:pixelated}
+    .hud{display:flex;gap:10px;align-items:center;width:100%;justify-content:space-between}
+    .info{display:flex;gap:10px;align-items:center}
+    .stat{background:transparent;border:1px solid var(--panel-border);padding:8px 10px;border-radius:8px;color:var(--text)}
+    .controls{display:flex;gap:8px}
+    .btn{background:transparent;border:1px solid var(--panel-border);padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--text)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.06));border:none;color:#fff}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Right column: scores & games */
+    .right{display:flex;flex-direction:column;gap:12px}
+    .panel-card{background:var(--panel);border-radius:10px;padding:12px;border:1px solid var(--panel-border)}
+    .title{font-weight:600;margin:0 0 6px 0}
+    .games{display:flex;gap:10px;flex-wrap:wrap}
+    .game-card{width:150px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:8px;padding:10px;border:1px solid var(--panel-border);display:flex;flex-direction:column;gap:8px;align-items:center}
+    .game-title{font-size:14px;font-weight:600;text-align:center}
+    .game-actions{display:flex;gap:6px}
+    .game-thumb{width:120px;height:68px;border-radius:6px;background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.06));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+
+    .controls-touch{display:flex;gap:8px;margin-top:8px}
+    .touch-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid var(--panel-border)}
+
+    footer{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+
+    @media (max-width:880px){ .panel{grid-template-columns:1fr;align-items:center} canvas{width:320px;height:320px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="left">
+        <div class="hud">
+          <div class="info">
+            <div class="stat">Punktestand: <strong id="score">0</strong></div>
+            <div class="stat">Highscore: <strong id="highscore">0</strong></div>
+            <div class="stat small">Geschwindigkeit: <strong id="spd">—</strong></div>
+          </div>
+          <div class="controls">
+            <button id="restart" class="btn">Neustart</button>
+            <button id="pause" class="btn">Pause</button>
+          </div>
+        </div>
+
+        <canvas id="c" width="420" height="420"></canvas>
+
+        <div class="controls-touch" id="touchControls" style="display:none;">
+          <div class="touch-btn" data-dir="up">▲</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:8px;justify-content:center;"><div class="touch-btn" data-dir="left">◀</div><div class="touch-btn" data-dir="right">▶</div></div>
+            <div style="display:flex;justify-content:center;margin-top:2px;"><div class="touch-btn" data-dir="down">▼</div></div>
+          </div>
+        </div>
+
+        <footer>Steuere mit Pfeiltasten oder WASD. Pro gegessenem Essen wird die Schlange etwas schneller.</footer>
+      </div>
+
+      <div class="right">
+        <div class="panel-card">
+          <h3 class="title">Spielübersicht</h3>
+          <p class="small">Hier kannst du weitere Mini-Spiele verwalten. Klicke auf <strong>Hinzufügen</strong>, um per Dialog ein Spiel einzutragen (kein Input-Feld in der UI).</p>
+          <div style="display:flex;gap:8px;margin-top:8px;"><button id="addGame" class="btn primary">Hinzufügen</button><button id="importDefaults" class="btn">Standardspiele</button></div>
+        </div>
+
+        <div class="panel-card">
+          <h4 class="title">Einstellungen</h4>
+          <div class="small">Theme: <code>data-theme="light"</code> auf &lt;html&gt; setzen für helles Design. Wenn kein Attribut vorhanden, nutzt die Seite dein System-Theme.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JS: Spiel-Logik (Bearbeitet für neues UI)
+    const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+    const scoreEl=document.getElementById('score'),spdEl=document.getElementById('spd');
+    const restartBtn=document.getElementById('restart'),pauseBtn=document.getElementById('pause');
+    const highscoreEl=document.getElementById('highscore');
+    const cols=20,rows=20;const pixel=canvas.width/cols;
+    let snake=[{x:10,y:10}];let dir={x:0,y:0};let food={x:5,y:5};let score=0;let running=true;
+    let delay=200;let minDelay=80;let loopId=null;let collidedIndex=null;
+
+    const headColor='#ffffff',lightBlue='#9be7ff',darkBlue='#0b4e8a',hitColor='#ff4d4d',foodColor='#ff6b6b';
+
+    function randPos(){return {x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)} }
+    function placeFood(){let p;do{p=randPos();}while(snake.some(s=>s.x===p.x&&s.y===p.y));food=p}
+
+    function hexToRgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
+    function rgbToHex(r,g,b){return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
+    function lerpColor(a,b,t){const A=hexToRgb(a),B=hexToRgb(b);return rgbToHex(Math.round(A[0]+(B[0]-A[0])*t),Math.round(A[1]+(B[1]-A[1])*t),Math.round(A[2]+(B[2]-A[2])*t))}
+
+    function draw(){ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--bg')||'#071326';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;for(let i=0;i<=cols;i++){ctx.beginPath();ctx.moveTo(i*pixel,0);ctx.lineTo(i*pixel,canvas.height);ctx.stroke()}for(let j=0;j<=rows;j++){ctx.beginPath();ctx.moveTo(0,j*pixel);ctx.lineTo(canvas.width,j*pixel);ctx.stroke()}
+      ctx.fillStyle=foodColor;ctx.fillRect(food.x*pixel+2,food.y*pixel+2,pixel-4,pixel-4);
+      for(let i=0;i<snake.length;i++){const s=snake[i];let color=headColor;if(i===0) color=headColor;else if(collidedIndex!==null && i===collidedIndex) color=hitColor;else {const t=(i)/(Math.max(1,snake.length-1));color=lerpColor(lightBlue,darkBlue,t)}ctx.fillStyle=color;ctx.fillRect(s.x*pixel+1,s.y*pixel+1,pixel-2,pixel-2)} }
+
+    function update(){if(dir.x===0&&dir.y===0) return;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0) head.x=cols-1;if(head.x>=cols) head.x=0;if(head.y<0) head.y=rows-1;if(head.y>=rows) head.y=0;const idx=snake.findIndex(s=>s.x===head.x&&s.y===head.y);if(idx!==-1){collidedIndex=idx;running=false;handleHighscore();return}snake.unshift(head);if(head.x===food.x&&head.y===food.y){score++;placeFood();increaseSpeed();updateHUD()}else snake.pop()}
+
+    function increaseSpeed(){delay=Math.max(minDelay,Math.round(delay*0.96))}
+    function getHighscore(){return Number(localStorage.getItem('snake_highscore')||0)}function setHighscore(v){localStorage.setItem('snake_highscore',String(v))}
+    function handleHighscore(){const hs=getHighscore();if(score>hs){setHighscore(score);highscoreEl.textContent=score;alert('Neuer Highscore: '+score)}}
+    function updateHUD(){scoreEl.textContent=score;spdEl.textContent=(1000/delay).toFixed(2)+' ticks/s';highscoreEl.textContent=getHighscore()}
+    function gameLoop(){if(!running){draw();clearTimeout(loopId);loopId=null;return}update();draw();clearTimeout(loopId);loopId=setTimeout(gameLoop,delay)}
+
+    window.addEventListener('keydown',e=>{const k=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(k)) e.preventDefault();let nx=dir.x,ny=dir.y;if(k==='ArrowUp'||k==='w'){nx=0;ny=-1}if(k==='ArrowDown'||k==='s'){nx=0;ny=1}if(k==='ArrowLeft'||k==='a'){nx=-1;ny=0}if(k==='ArrowRight'||k==='d'){nx=1;ny=0}if((nx===-dir.x&&ny===-dir.y)||(nx===dir.x&&ny===dir.y)) return;dir={x:nx,y:ny};if(running&&loopId===null){loopId=setTimeout(gameLoop,delay)}})
+
+    restartBtn.addEventListener('click',()=>{reset()});pauseBtn.addEventListener('click',()=>{running=!running;if(running){pauseBtn.textContent='Pause';loopId=setTimeout(gameLoop,delay)}else{pauseBtn.textContent='Weiter';clearTimeout(loopId);loopId=null}})
+    function reset(){snake=[{x:10,y:10}];dir={x:0,y:0};placeFood();score=0;delay=200;collidedIndex=null;running=true;updateHUD();clearTimeout(loopId);loopId=setTimeout(gameLoop,delay)}
+
+    // Spiele-Liste (als echte Div-Karten, kein Input)
+    function loadGames(){return JSON.parse(localStorage.getItem('snake_games')||'[]')}
+    function saveGames(list){localStorage.setItem('snake_games',JSON.stringify(list))}
+    function renderGames(){const list=loadGames();gamesWrap.innerHTML='';list.forEach((g,i)=>{const card=document.createElement('div');card.className='game-card';const thumb=document.createElement('div');thumb.className='game-thumb';thumb.textContent=g.slice(0,3).toUpperCase();const title=document.createElement('div');title.className='game-title';title.textContent=g;const actions=document.createElement('div');actions.className='game-actions';const play=document.createElement('button');play.className='btn primary';play.textContent='Spielen';play.addEventListener('click',()=>alert('Platzhalter: '+g+' — hier würde das Spiel geladen.'));const del=document.createElement('button');del.className='btn';del.textContent='✖';del.title='Entfernen';del.addEventListener('click',()=>{list.splice(i,1);saveGames(list);renderGames()});actions.appendChild(play);actions.appendChild(del);card.appendChild(thumb);card.appendChild(title);card.appendChild(actions);gamesWrap.appendChild(card)})}
+
+    function setupTouch(){const tc=document.getElementById('touchControls');if('ontouchstart' in window){tc.style.display='flex';tc.querySelectorAll('.touch-btn').forEach(b=>{b.addEventListener('click',()=>{const d=b.dataset.dir;const map={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};const [nx,ny]=map[d];if(nx===-dir.x&&ny===-dir.y) return;dir={x:nx,y:ny};if(loopId===null) loopId=setTimeout(gameLoop,delay)})})}}
+
+    // Start
+    placeFood();updateHUD();setupTouch();renderGames();loopId=setTimeout(gameLoop,delay);
+    window.addEventListener('blur',()=>{if(loopId) clearTimeout(loopId);loopId=null});
+  </script>
+</body>
+</html>
