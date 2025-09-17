@@ -6,9 +6,9 @@
   <title>Snake</title>
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@78/docs/autoloader.js" type="module" defer></script>
   <style>
-    :root{--bg:#071326;--panel:#0f2740;--accent:#61dafb;--text:#dff4ff;--muted:rgba(255,255,255,0.75);--panel-border:rgba(255,255,255,0.03)}
-    :root[data-theme="light"]{--bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06)}
-    @media (prefers-color-scheme: light){ :root:not([data-theme]){ --bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06);} }
+    :root{--bg:#071326;--panel:#0f2740;--accent:#61dafb;--text:#dff4ff;--muted:rgba(255,255,255,0.75);--panel-border:rgba(255,255,255,0.06)}
+    :root[data-theme="light"]{--bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.08)}
+    @media (prefers-color-scheme: light){ :root:not([data-theme]){--bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.08);} }
 
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
@@ -16,14 +16,43 @@
     .panel{width:920px;max-width:calc(100% - 48px);display:grid;grid-template-columns:420px 1fr;gap:18px;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;border:1px solid var(--panel-border);box-shadow:0 8px 40px rgba(0,0,0,0.25)}
     .left{display:flex;flex-direction:column;align-items:center;gap:12px}
     canvas{width:420px;height:420px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);image-rendering:pixelated}
+    
     .hud{display:flex;gap:10px;align-items:center;width:100%;justify-content:space-between}
     .info{display:flex;gap:10px;align-items:center}
-    .stat{background:transparent;border:1px solid var(--panel-border);padding:8px 10px;border-radius:8px;color:var(--text)}
+    
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--text);
+      font-weight: 500;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.25);
+    }
+    .stat.small{font-size:13px;color:var(--muted)}
+    
     .controls{display:flex;gap:8px}
-    .btn{background:transparent;border:1px solid var(--panel-border);padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--text)}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.06));border:none;color:#fff}
-    .small{font-size:13px;color:var(--muted)}
-
+    .btn {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 500;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:hover {background: rgba(255,255,255,0.06);}
+    .btn:active {transform: scale(0.96);}
+    .btn.primary {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .btn.primary:hover {background: linear-gradient(90deg, var(--accent), #4db9e8);}
+    
     .right{display:flex;flex-direction:column;gap:12px}
     .panel-card{background:var(--panel);border-radius:10px;padding:12px;border:1px solid var(--panel-border)}
     .title{font-weight:600;margin:0 0 6px 0}
@@ -33,12 +62,48 @@
     .game-actions{display:flex;gap:6px}
     .game-thumb{width:120px;height:68px;border-radius:6px;background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.06));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
 
-    .controls-touch{display:flex;gap:8px;margin-top:8px}
-    .touch-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:transparent;border:1px solid var(--panel-border)}
+    .controls-touch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      user-select: none;
+    }
+    .controls-touch-row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .touch-btn {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .touch-btn:hover {background: rgba(255,255,255,0.06);}
+    .touch-btn:active {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(0.94);
+    }
 
     footer{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
 
-    @media (max-width:880px){ .panel{grid-template-columns:1fr;align-items:center} canvas{width:320px;height:320px} }
+    @media (max-width:880px){
+      .panel{grid-template-columns:1fr;align-items:center}
+      canvas{width:320px;height:320px}
+    }
   </style>
 </head>
 <body>
@@ -52,7 +117,7 @@
             <div class="stat small">Geschwindigkeit: <strong id="spd">—</strong></div>
           </div>
           <div class="controls">
-            <button id="restart" class="btn">Neustart</button>
+            <button id="restart" class="btn primary">Neustart</button>
             <button id="pause" class="btn">Pause</button>
           </div>
         </div>
@@ -61,12 +126,11 @@
 
         <div class="controls-touch" id="touchControls" style="display:none;">
           <div class="touch-btn" data-dir="up">▲</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:8px;justify-content:center;"><div class="touch-btn" data-dir="left">◀</div>
-                <div class="touch-btn" data-dir="right">▶</div></div>
-            <div style="display:flex;justify-content:center;margin-top:2px;">
-                <div class="touch-btn" data-dir="down">▼</div></div>
+          <div class="controls-touch-row">
+            <div class="touch-btn" data-dir="left">◀</div>
+            <div class="touch-btn" data-dir="right">▶</div>
           </div>
+          <div class="touch-btn" data-dir="down">▼</div>
         </div>
       </div>
     </div>
@@ -90,31 +154,81 @@
     function rgbToHex(r,g,b){return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('')}
     function lerpColor(a,b,t){const A=hexToRgb(a),B=hexToRgb(b);return rgbToHex(Math.round(A[0]+(B[0]-A[0])*t),Math.round(A[1]+(B[1]-A[1])*t),Math.round(A[2]+(B[2]-A[2])*t))}
 
-    function draw(){ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--bg')||'#071326';ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;for(let i=0;i<=cols;i++){ctx.beginPath();ctx.moveTo(i*pixel,0);ctx.lineTo(i*pixel,canvas.height);ctx.stroke()}for(let j=0;j<=rows;j++){ctx.beginPath();ctx.moveTo(0,j*pixel);ctx.lineTo(canvas.width,j*pixel);ctx.stroke()}
+    function draw(){
+      ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--bg')||'#071326';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle='rgba(255,255,255,0.03)';ctx.lineWidth=1;
+      for(let i=0;i<=cols;i++){ctx.beginPath();ctx.moveTo(i*pixel,0);ctx.lineTo(i*pixel,canvas.height);ctx.stroke()}
+      for(let j=0;j<=rows;j++){ctx.beginPath();ctx.moveTo(0,j*pixel);ctx.lineTo(canvas.width,j*pixel);ctx.stroke()}
       ctx.fillStyle=foodColor;ctx.fillRect(food.x*pixel+2,food.y*pixel+2,pixel-4,pixel-4);
-      for(let i=0;i<snake.length;i++){const s=snake[i];let color=headColor;if(i===0) color=headColor;else if(collidedIndex!==null && i===collidedIndex) color=hitColor;else {const t=(i)/(Math.max(1,snake.length-1));color=lerpColor(lightBlue,darkBlue,t)}ctx.fillStyle=color;ctx.fillRect(s.x*pixel+1,s.y*pixel+1,pixel-2,pixel-2)} }
+      for(let i=0;i<snake.length;i++){
+        const s=snake[i];let color=headColor;
+        if(i===0) color=headColor;
+        else if(collidedIndex!==null && i===collidedIndex) color=hitColor;
+        else {
+          const t=(i)/(Math.max(1,snake.length-1));
+          color=lerpColor(lightBlue,darkBlue,t)
+        }
+        ctx.fillStyle=color;ctx.fillRect(s.x*pixel+1,s.y*pixel+1,pixel-2,pixel-2)
+      }
+    }
 
-    function update(){if(dir.x===0&&dir.y===0) return;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(head.x<0) head.x=cols-1;if(head.x>=cols) head.x=0;if(head.y<0) head.y=rows-1;if(head.y>=rows) head.y=0;const idx=snake.findIndex(s=>s.x===head.x&&s.y===head.y);if(idx!==-1){collidedIndex=idx;running=false;handleHighscore();return}snake.unshift(head);if(head.x===food.x&&head.y===food.y){score++;placeFood();increaseSpeed();updateHUD()}else snake.pop()}
+    function update(){
+      if(dir.x===0&&dir.y===0) return;
+      const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+      if(head.x<0) head.x=cols-1;if(head.x>=cols) head.x=0;if(head.y<0) head.y=rows-1;if(head.y>=rows) head.y=0;
+      const idx=snake.findIndex(s=>s.x===head.x&&s.y===head.y);
+      if(idx!==-1){collidedIndex=idx;running=false;handleHighscore();return}
+      snake.unshift(head);
+      if(head.x===food.x&&head.y===food.y){score++;placeFood();increaseSpeed();updateHUD()}
+      else snake.pop()
+    }
 
     function increaseSpeed(){delay=Math.max(minDelay,Math.round(delay*0.96))}
-    function getHighscore(){return Number(localStorage.getItem('snake_highscore')||0)}function setHighscore(v){localStorage.setItem('snake_highscore',String(v))}
+    function getHighscore(){return Number(localStorage.getItem('snake_highscore')||0)}
+    function setHighscore(v){localStorage.setItem('snake_highscore',String(v))}
     function handleHighscore(){const hs=getHighscore();if(score>hs){setHighscore(score);highscoreEl.textContent=score;alert('Neuer Highscore: '+score)}}
     function updateHUD(){scoreEl.textContent=score;spdEl.textContent=(1000/delay).toFixed(2)+' ticks/s';highscoreEl.textContent=getHighscore()}
     function gameLoop(){if(!running){draw();clearTimeout(loopId);loopId=null;return}update();draw();clearTimeout(loopId);loopId=setTimeout(gameLoop,delay)}
 
-    window.addEventListener('keydown',e=>{const k=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(k)) e.preventDefault();let nx=dir.x,ny=dir.y;if(k==='ArrowUp'||k==='w'){nx=0;ny=-1}if(k==='ArrowDown'||k==='s'){nx=0;ny=1}if(k==='ArrowLeft'||k==='a'){nx=-1;ny=0}if(k==='ArrowRight'||k==='d'){nx=1;ny=0}if((nx===-dir.x&&ny===-dir.y)||(nx===dir.x&&ny===dir.y)) return;dir={x:nx,y:ny};if(running&&loopId===null){loopId=setTimeout(gameLoop,delay)}})
+    window.addEventListener('keydown',e=>{
+      const k=e.key;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(k)) e.preventDefault();
+      let nx=dir.x,ny=dir.y;
+      if(k==='ArrowUp'||k==='w'){nx=0;ny=-1}
+      if(k==='ArrowDown'||k==='s'){nx=0;ny=1}
+      if(k==='ArrowLeft'||k==='a'){nx=-1;ny=0}
+      if(k==='ArrowRight'||k==='d'){nx=1;ny=0}
+      if((nx===-dir.x&&ny===-dir.y)||(nx===dir.x&&ny===dir.y)) return;
+      dir={x:nx,y:ny};
+      if(running&&loopId===null){loopId=setTimeout(gameLoop,delay)}
+    })
 
-    restartBtn.addEventListener('click',()=>{reset()});pauseBtn.addEventListener('click',()=>{running=!running;if(running){pauseBtn.textContent='Pause';loopId=setTimeout(gameLoop,delay)}else{pauseBtn.textContent='Weiter';clearTimeout(loopId);loopId=null}})
+    restartBtn.addEventListener('click',()=>{reset()});
+    pauseBtn.addEventListener('click',()=>{
+      running=!running;
+      if(running){pauseBtn.textContent='Pause';loopId=setTimeout(gameLoop,delay)}
+      else{pauseBtn.textContent='Weiter';clearTimeout(loopId);loopId=null}
+    })
     function reset(){snake=[{x:10,y:10}];dir={x:0,y:0};placeFood();score=0;delay=200;collidedIndex=null;running=true;updateHUD();clearTimeout(loopId);loopId=setTimeout(gameLoop,delay)}
 
-    function loadGames(){return JSON.parse(localStorage.getItem('snake_games')||'[]')}
-    function saveGames(list){localStorage.setItem('snake_games',JSON.stringify(list))}
-    function renderGames(){const list=loadGames();gamesWrap.innerHTML='';list.forEach((g,i)=>{const card=document.createElement('div');card.className='game-card';const thumb=document.createElement('div');thumb.className='game-thumb';thumb.textContent=g.slice(0,3).toUpperCase();const title=document.createElement('div');title.className='game-title';title.textContent=g;const actions=document.createElement('div');actions.className='game-actions';const play=document.createElement('button');play.className='btn primary';play.textContent='Spielen';play.addEventListener('click',()=>alert('Platzhalter: '+g+' — hier würde das Spiel geladen.'));const del=document.createElement('button');del.className='btn';del.textContent='✖';del.title='Entfernen';del.addEventListener('click',()=>{list.splice(i,1);saveGames(list);renderGames()});actions.appendChild(play);actions.appendChild(del);card.appendChild(thumb);card.appendChild(title);card.appendChild(actions);gamesWrap.appendChild(card)})}
+    function setupTouch(){
+      const tc=document.getElementById('touchControls');
+      if('ontouchstart' in window){
+        tc.style.display='flex';
+        tc.querySelectorAll('.touch-btn').forEach(b=>{
+          b.addEventListener('click',()=>{
+            const d=b.dataset.dir;
+            const map={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
+            const [nx,ny]=map[d];
+            if(nx===-dir.x&&ny===-dir.y) return;
+            dir={x:nx,y:ny};
+            if(loopId===null) loopId=setTimeout(gameLoop,delay)
+          })
+        })
+      }
+    }
 
-    function setupTouch(){const tc=document.getElementById('touchControls');if('ontouchstart' in window){tc.style.display='flex';tc.querySelectorAll('.touch-btn').forEach(b=>{b.addEventListener('click',()=>{const d=b.dataset.dir;const map={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};const [nx,ny]=map[d];if(nx===-dir.x&&ny===-dir.y) return;dir={x:nx,y:ny};if(loopId===null) loopId=setTimeout(gameLoop,delay)})})}}
-
-    placeFood();updateHUD();setupTouch();renderGames();loopId=setTimeout(gameLoop,delay);
+    placeFood();updateHUD();setupTouch();loopId=setTimeout(gameLoop,delay);
     window.addEventListener('blur',()=>{if(loopId) clearTimeout(loopId);loopId=null});
   </script>
 </body>
