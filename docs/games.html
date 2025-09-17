@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Snake Upgrades</title>
+  <style>
+    body {margin:0;font-family:sans-serif;background:#111;color:#eee;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;}
+    .panel {background:#222;padding:20px;border-radius:10px;border:1px solid #444;max-width:400px;width:100%;}
+    h1 {margin:0 0 10px 0;text-align:center;}
+    .stat {margin:6px 0;padding:6px 10px;background:#333;border-radius:6px;}
+    .upgrade {display:flex;justify-content:space-between;align-items:center;background:#222;border:1px solid #444;padding:8px 12px;margin:6px 0;border-radius:6px;}
+    .btn {background:#09f;color:#fff;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;}
+    .btn:disabled {background:#555;cursor:not-allowed;}
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>Snake Upgrades</h1>
+    <div class="stat">Coins: <strong id="coins">0</strong></div>
+    <div class="stat">Level: <strong id="level">1</strong></div>
+    <div class="upgrade">
+      <span>Spielfeld +2 Felder</span>
+      <button class="btn" onclick="buy('field')">Kosten: 5</button>
+    </div>
+    <div class="upgrade">
+      <span>Schnellerer Start</span>
+      <button class="btn" onclick="buy('speed')">Kosten: 8</button>
+    </div>
+    <div class="upgrade">
+      <span>Booster „Extra Life“</span>
+      <button class="btn" onclick="buy('life')">Kosten: 10</button>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <a href="index.html" class="btn">Zurück zum Spiel</a>
+    </div>
+  </div>
+<script>
+let coins=parseInt(localStorage.getItem("coins")||"0");
+let level=parseInt(localStorage.getItem("level")||"1");
+let upgrades=JSON.parse(localStorage.getItem("upgrades")||"{}");
+document.getElementById("coins").textContent=coins;
+document.getElementById("level").textContent=level;
+function save(){localStorage.setItem("coins",coins);localStorage.setItem("level",level);localStorage.setItem("upgrades",JSON.stringify(upgrades));document.getElementById("coins").textContent=coins;}
+function buy(type){
+  if(type==="field"&&coins>=5){coins-=5;upgrades.field=(upgrades.field||0)+1;save();}
+  if(type==="speed"&&coins>=8){coins-=8;upgrades.speed=true;save();}
+  if(type==="life"&&coins>=10){coins-=10;upgrades.life=true;save();}
+}
+</script>
+</body>
+</html>
