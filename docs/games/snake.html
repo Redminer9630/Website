@@ -1,17 +1,13 @@
-<!-- [Bearbeiten] -->
 <!doctype html>
 <html lang="de">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Snake — Schnellere Bewegung pro Essen</title>
+  <title>Snake</title>
   <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@78/docs/autoloader.js" type="module" defer></script>
   <style>
-    /* Dark default */
     :root{--bg:#071326;--panel:#0f2740;--accent:#61dafb;--text:#dff4ff;--muted:rgba(255,255,255,0.75);--panel-border:rgba(255,255,255,0.03)}
-    /* Explicit light theme when data-theme="light" */
     :root[data-theme="light"]{--bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06)}
-    /* If no data-theme attribute, respect OS preference */
     @media (prefers-color-scheme: light){ :root:not([data-theme]){ --bg:#f6fbff;--panel:#ffffff;--accent:#0066cc;--text:#072033;--muted:rgba(0,0,0,0.75);--panel-border:rgba(0,0,0,0.06);} }
 
     *{box-sizing:border-box}
@@ -28,7 +24,6 @@
     .btn.primary{background:linear-gradient(90deg,var(--accent),rgba(0,0,0,0.06));border:none;color:#fff}
     .small{font-size:13px;color:var(--muted)}
 
-    /* Right column: scores & games */
     .right{display:flex;flex-direction:column;gap:12px}
     .panel-card{background:var(--panel);border-radius:10px;padding:12px;border:1px solid var(--panel-border)}
     .title{font-weight:600;margin:0 0 6px 0}
@@ -67,31 +62,17 @@
         <div class="controls-touch" id="touchControls" style="display:none;">
           <div class="touch-btn" data-dir="up">▲</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:8px;justify-content:center;"><div class="touch-btn" data-dir="left">◀</div><div class="touch-btn" data-dir="right">▶</div></div>
-            <div style="display:flex;justify-content:center;margin-top:2px;"><div class="touch-btn" data-dir="down">▼</div></div>
+            <div style="display:flex;gap:8px;justify-content:center;"><div class="touch-btn" data-dir="left">◀</div>
+                <div class="touch-btn" data-dir="right">▶</div></div>
+            <div style="display:flex;justify-content:center;margin-top:2px;">
+                <div class="touch-btn" data-dir="down">▼</div></div>
           </div>
-        </div>
-
-        <footer>Steuere mit Pfeiltasten oder WASD. Pro gegessenem Essen wird die Schlange etwas schneller.</footer>
-      </div>
-
-      <div class="right">
-        <div class="panel-card">
-          <h3 class="title">Spielübersicht</h3>
-          <p class="small">Hier kannst du weitere Mini-Spiele verwalten. Klicke auf <strong>Hinzufügen</strong>, um per Dialog ein Spiel einzutragen (kein Input-Feld in der UI).</p>
-          <div style="display:flex;gap:8px;margin-top:8px;"><button id="addGame" class="btn primary">Hinzufügen</button><button id="importDefaults" class="btn">Standardspiele</button></div>
-        </div>
-
-        <div class="panel-card">
-          <h4 class="title">Einstellungen</h4>
-          <div class="small">Theme: <code>data-theme="light"</code> auf &lt;html&gt; setzen für helles Design. Wenn kein Attribut vorhanden, nutzt die Seite dein System-Theme.</div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // JS: Spiel-Logik (Bearbeitet für neues UI)
     const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
     const scoreEl=document.getElementById('score'),spdEl=document.getElementById('spd');
     const restartBtn=document.getElementById('restart'),pauseBtn=document.getElementById('pause');
@@ -127,14 +108,12 @@
     restartBtn.addEventListener('click',()=>{reset()});pauseBtn.addEventListener('click',()=>{running=!running;if(running){pauseBtn.textContent='Pause';loopId=setTimeout(gameLoop,delay)}else{pauseBtn.textContent='Weiter';clearTimeout(loopId);loopId=null}})
     function reset(){snake=[{x:10,y:10}];dir={x:0,y:0};placeFood();score=0;delay=200;collidedIndex=null;running=true;updateHUD();clearTimeout(loopId);loopId=setTimeout(gameLoop,delay)}
 
-    // Spiele-Liste (als echte Div-Karten, kein Input)
     function loadGames(){return JSON.parse(localStorage.getItem('snake_games')||'[]')}
     function saveGames(list){localStorage.setItem('snake_games',JSON.stringify(list))}
     function renderGames(){const list=loadGames();gamesWrap.innerHTML='';list.forEach((g,i)=>{const card=document.createElement('div');card.className='game-card';const thumb=document.createElement('div');thumb.className='game-thumb';thumb.textContent=g.slice(0,3).toUpperCase();const title=document.createElement('div');title.className='game-title';title.textContent=g;const actions=document.createElement('div');actions.className='game-actions';const play=document.createElement('button');play.className='btn primary';play.textContent='Spielen';play.addEventListener('click',()=>alert('Platzhalter: '+g+' — hier würde das Spiel geladen.'));const del=document.createElement('button');del.className='btn';del.textContent='✖';del.title='Entfernen';del.addEventListener('click',()=>{list.splice(i,1);saveGames(list);renderGames()});actions.appendChild(play);actions.appendChild(del);card.appendChild(thumb);card.appendChild(title);card.appendChild(actions);gamesWrap.appendChild(card)})}
 
     function setupTouch(){const tc=document.getElementById('touchControls');if('ontouchstart' in window){tc.style.display='flex';tc.querySelectorAll('.touch-btn').forEach(b=>{b.addEventListener('click',()=>{const d=b.dataset.dir;const map={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};const [nx,ny]=map[d];if(nx===-dir.x&&ny===-dir.y) return;dir={x:nx,y:ny};if(loopId===null) loopId=setTimeout(gameLoop,delay)})})}}
 
-    // Start
     placeFood();updateHUD();setupTouch();renderGames();loopId=setTimeout(gameLoop,delay);
     window.addEventListener('blur',()=>{if(loopId) clearTimeout(loopId);loopId=null});
   </script>
