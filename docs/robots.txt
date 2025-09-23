@@ -2,3 +2,6 @@ User-agent: *
 Disallow: /CNAME
 Disallow: /test/*
 Sitemap: https://redminer9630.ddns.net/sitemap.xml
+
+User-agent: ia_archiver
+Disallow: /*.js$
