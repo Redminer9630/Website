@@ -1,0 +1,28 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>iPad 7 — Escape</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="wrap">
+  <div class="header"><div class="logo card">Geheimes Labor — iPad 7</div></div>
+  <div class="grid">
+    <div class="card puz" id="main">
+      <h2 id="pageTitle">iPad</h2><p class="muted" id="instrText">Lade...</p>
+      <div id="lockArea" style="margin-top:10px">
+        <div class="small">Gib den eingehenden Code ein:</div>
+        <div class="row" style="margin-top:8px"><div class="field"><input id="inCode" placeholder=""></div><button class="btn" id="checkBtn">Prüfen</button></div>
+        <div style="margin-top:8px"><span id="requiredLabel" class="muted"></span></div>
+        <div id="status" style="margin-top:8px" class="muted"></div>
+        <div style="margin-top:8px"><button id="teacherUnlock" class="btn secondary">Lehrer: sofort freigeben</button></div>
+      </div>
+      <div id="unlockArea" style="display:none;margin-top:12px">
+        <h3>Rätsel</h3><div id="pQuestion" style="font-weight:700;margin-bottom:8px"></div>
+        <div class="row"><div class="field" style="flex:1"><input id="answer" placeholder="Antwort"></div><button class="btn" id="solveBtn">Antwort prüfen</button><button class="btn secondary" id="hintBtn">Tipp</button></div>
+        <div id="hintBox" class="hint" style="display:none;margin-top:8px"></div><div id="ansStatus" style="margin-top:10px"></div>
+        <div style="margin-top:10px"><div class="small">Unlock-Code: <span id="showUnlock" class="ok"></span> <button class="copy" id="copyUnlock">Kopieren</button></div></div>
+        <div style="margin-top:8px"><div id="nextInfo" class="muted"></div></div>
+      </div>
+    </div>
+    <aside class="card"><div class="small">Kurz-Anleitung</div><ol style="margin:8px 0 0 18px" class="muted"><li>Gib den Code vom vorherigen iPad ein.</li><li>Löse das Rätsel.</li></ol></aside>
+  </div>
+  <div class="footer">iPad 7</div>
+</div>
+<script>window.PUZZLE_ID = 7</script>
+<script src="global.js"></script>
+</body></html>
