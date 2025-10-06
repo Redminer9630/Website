@@ -1,8 +1,7 @@
-/* global.js — gemeinsame Logik & Puzzles (einfach anpassen) */
 const puzzles = [
   { id:1, title:"Zahlrätsel", required:"START-000", question:"12 + ? = 16 → Welche Zahl fehlt?", hint:"Differenz zwischen 16 und 12", answer:"4", unlock:"UNL-1", next:2 },
   { id:2, title:"Buchstaben", required:"UNL-1", question:"Nimm die ersten Buchstaben: Katze, Elefant, Maus → Was ist die Zeichenfolge?", hint:"Schau dir die Anfangsbuchstaben an", answer:"KEM", unlock:"UNL-2", next:3 },
-  { id:3, title:"Logik", required:"UNL-2", question:"Wenn A links von B steht und B links von C, wer ist in der Mitte?", hint:"Reihe A B C", answer:"B", unlock:"UNL-3", next:4 },
+  { id:3, title:"Logik", required:"KEM", question:"Wenn A links von B steht und B links von C, wer ist in der Mitte?", hint:"Reihe A B C", answer:"B", unlock:"UNL-3", next:4 },
   { id:4, title:"Rückwärts", required:"UNL-3", question:"Welches Wort entsteht, wenn du 'NEBEL' rückwärts liest?", hint:"Denk rückwärts", answer:"LEBEN", unlock:"UNL-4", next:5 },
   { id:5, title:"Binary", required:"UNL-4", question:"Was ist die Dezimalzahl von 1010 (Binär)?", hint:"1010 binär = 8+2", answer:"10", unlock:"UNL-5", next:6 },
   { id:6, title:"Morse", required:"UNL-5", question:"Morse: '.-' entspricht welchem Buchstaben?", hint:".- ist der erste Buchstabe", answer:"A", unlock:"UNL-6", next:7 },
