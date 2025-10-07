@@ -1,5 +1,5 @@
 const puzzles = [
-  { id:1, title:"Zahlrätsel", required:"", question:"12 + ? = 16 → Welche Zahl fehlt?", hint:"Differenz zwischen 16 und 12", answer:"4", unlock:"UNL-1", next:2 },
+  { id:1, title:"Zahlrätsel", required:"START", question:"12 + ? = 16 → Welche Zahl fehlt?", hint:"Differenz zwischen 16 und 12", answer:"4", unlock:"UNL-1", next:2 },
   { id:2, title:"Buchstaben", required:"4", question:"Nimm die ersten Buchstaben: Katze, Elefant, Maus → Was ist die Zeichenfolge?", hint:"Schau dir die Anfangsbuchstaben an", answer:"KEM", unlock:"UNL-2", next:3 },
   { id:3, title:"Logik", required:"KEM", question:"Wenn A links von B steht und B links von C, wer ist in der Mitte?", hint:"Reihe A B C", answer:"B", unlock:"UNL-3", next:4 },
   { id:4, title:"Rückwärts", required:"B", question:"Welches Wort entsteht, wenn du 'NEBEL' rückwärts liest?", hint:"Denk rückwärts", answer:"LEBEN", unlock:"UNL-4", next:5 },
