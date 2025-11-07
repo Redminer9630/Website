@@ -1,129 +1,216 @@
 <h2>Kalender</h2>
 
-<div class="kalender-container">
-  <div class="kalender-controls">
-    <button id="kal-prev" class="kal-btn">&lt;</button>
-    <div class="kal-label" id="kal-label">Monat Jahr</div>
-    <button id="kal-next" class="kal-btn">&gt;</button>
-    <button id="kal-today" class="kal-btn">Heute</button>
+<div class="kal-wrapper">
+  <div class="kal-topbar">
+    <button class="kal-btn" id="kal-today">Heute</button>
+    <button class="kal-btn" id="kal-prev">&lt;</button>
+    <div id="kal-label" class="kal-label"></div>
+    <button class="kal-btn" id="kal-next">&gt;</button>
+    <select id="kal-view" class="kal-select">
+      <option value="month">Monat</option>
+      <option value="week">Woche</option>
+      <option value="year">Jahr</option>
+    </select>
+    <input id="kal-search" class="kal-input" placeholder="Suche Events..." />
   </div>
 
-  <div class="kal-card">
-    <div class="kal-weekdays" id="kal-weekdays"></div>
-    <div class="kal-grid" id="kal-grid"></div>
-    <div class="kal-footer">
-      <div id="kal-info">Kein Datum ausgewählt</div>
+  <div id="kal-container"></div>
+
+  <div class="kal-modal" id="kal-modal">
+    <div class="kal-modal-content">
+      <h3 id="kal-modal-title">Event hinzufügen</h3>
+      <label>Titel:</label>
+      <input id="kal-event-title" class="kal-input" />
+      <label>Datum:</label>
+      <input id="kal-event-date" type="date" class="kal-input" />
+      <label>Farbe:</label>
+      <input id="kal-event-color" type="color" class="kal-input" value="#2b6cb0" />
+      <div class="kal-modal-buttons">
+        <button id="kal-save" class="kal-btn">Speichern</button>
+        <button id="kal-delete" class="kal-btn kal-red">Löschen</button>
+        <button id="kal-cancel" class="kal-btn">Abbrechen</button>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-.kalender-container{font-family:Inter,Arial,sans-serif;background:#f7f7fb;padding:10px;border-radius:12px}
-.kalender-controls{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.kal-label{flex:1;text-align:center;font-weight:600}
+.kal-wrapper{font-family:Inter,Arial,sans-serif;background:#fafafa;border:1px solid #ddd;border-radius:12px;padding:10px;}
+.kal-topbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
 .kal-btn{background:#fff;border:1px solid #ccc;border-radius:8px;padding:6px 10px;cursor:pointer}
-.kal-btn:active{transform:translateY(1px)}
-.kal-card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px}
-.kal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;font-size:.85rem;color:#666}
+.kal-btn:hover{background:#eee}
+.kal-red{background:#e74c3c;color:#fff;border-color:#c0392b}
+.kal-label{flex:1;text-align:center;font-weight:600}
+.kal-select,.kal-input{border:1px solid #ccc;border-radius:6px;padding:5px;font-size:.9rem}
+.kal-container{display:grid;gap:4px}
 .kal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.kal-day{min-height:70px;padding:6px;border-radius:8px;border:1px dashed transparent;cursor:default}
-.kal-day.inactive{color:#bbb}
-.kal-day.today{background:rgba(255,213,79,.2);border:1px solid rgba(255,213,79,.4)}
+.kal-day{min-height:90px;padding:6px;border:1px solid #e1e1e1;border-radius:8px;background:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;position:relative}
+.kal-day.today{background:#fffae0;border-color:#f7d44c}
+.kal-day.inactive{opacity:.5}
 .kal-date{font-weight:600}
-.kal-event{background:#2b6cb0;color:#fff;border-radius:6px;padding:3px 4px;margin-top:4px;font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kal-footer{margin-top:8px;font-size:.85rem;color:#555}
+.kal-event{border-radius:4px;padding:2px 4px;font-size:.75rem;margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kal-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);align-items:center;justify-content:center;z-index:999}
+.kal-modal-content{background:#fff;border-radius:12px;padding:15px;min-width:280px;max-width:340px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.kal-modal-buttons{display:flex;justify-content:space-between;margin-top:10px}
+.kal-year{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.kal-month-box{border:1px solid #ddd;border-radius:8px;padding:6px;background:#fff;text-align:center}
+.kal-month-title{font-weight:600;margin-bottom:4px}
+.kal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.kal-week-day{border:1px solid #ddd;border-radius:8px;padding:10px;background:#fff;text-align:center}
 </style>
 
 <script>
-const kal_EVENTS=[
-  {date:"2025-11-10",title:"Projekttreffen"},
-  {date:"2025-11-15",title:"Abgabe Aufgabe"},
-  {date:"2025-11-25",title:"Geburtstag"},
-];
-const kal_WEEKDAYS=["Mo","Di","Mi","Do","Fr","Sa","So"];
 const kal_MONTHS=["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
-
+const kal_WEEKDAYS=["Mo","Di","Mi","Do","Fr","Sa","So"];
 let kal_viewDate=new Date();
-let kal_selected=null;
+let kal_viewMode="month";
+let kal_selectedDate=null;
+let kal_events=JSON.parse(localStorage.getItem("kal_events")||"[]");
 
-const kal_grid=document.getElementById("kal-grid");
-const kal_weekdays=document.getElementById("kal-weekdays");
 const kal_label=document.getElementById("kal-label");
-const kal_prev=document.getElementById("kal-prev");
-const kal_next=document.getElementById("kal-next");
-const kal_today=document.getElementById("kal-today");
-const kal_info=document.getElementById("kal-info");
+const kal_container=document.getElementById("kal-container");
+const kal_modal=document.getElementById("kal-modal");
+const kal_inputTitle=document.getElementById("kal-event-title");
+const kal_inputDate=document.getElementById("kal-event-date");
+const kal_inputColor=document.getElementById("kal-event-color");
+const kal_search=document.getElementById("kal-search");
 
-function kal_startOfWeek(date){
-  const d=new Date(date);
-  const day=d.getDay()||7;
-  d.setDate(d.getDate()-(day-1));
-  d.setHours(0,0,0,0);
-  return d;
-}
-function kal_iso(d){return d.toISOString().slice(0,10);}
-function kal_renderWeekdays(){
-  kal_weekdays.innerHTML="";
-  kal_WEEKDAYS.forEach(w=>{
-    const el=document.createElement("div");
-    el.textContent=w;
-    kal_weekdays.appendChild(el);
-  });
-}
+function kal_saveEvents(){localStorage.setItem("kal_events",JSON.stringify(kal_events));}
+function kal_iso(d){return d.toISOString().split("T")[0];}
+function kal_startOfWeek(d){const x=new Date(d);const day=x.getDay()||7;x.setDate(x.getDate()-(day-1));return x;}
+function kal_addDays(d,days){const x=new Date(d);x.setDate(x.getDate()+days);return x;}
+
 function kal_render(){
-  kal_grid.innerHTML="";
-  const y=kal_viewDate.getFullYear();
-  const m=kal_viewDate.getMonth();
-  kal_label.textContent=kal_MONTHS[m]+" "+y;
+  kal_container.innerHTML="";
+  if(kal_viewMode==="month") kal_renderMonth();
+  else if(kal_viewMode==="week") kal_renderWeek();
+  else kal_renderYear();
+}
 
+function kal_renderMonth(){
+  const y=kal_viewDate.getFullYear(), m=kal_viewDate.getMonth();
+  kal_label.textContent=kal_MONTHS[m]+" "+y;
   const first=new Date(y,m,1);
   const start=kal_startOfWeek(first);
   const todayISO=kal_iso(new Date());
+  const grid=document.createElement("div");grid.className="kal-grid";
 
   for(let i=0;i<42;i++){
-    const d=new Date(start);
-    d.setDate(start.getDate()+i);
-    const iso=kal_iso(d);
+    const d=kal_addDays(start,i), iso=kal_iso(d);
     const el=document.createElement("div");
     el.className="kal-day";
-    if(d.getMonth()!==m)el.classList.add("inactive");
-    if(iso===todayISO)el.classList.add("today");
-
-    const dateDiv=document.createElement("div");
-    dateDiv.className="kal-date";
-    dateDiv.textContent=d.getDate();
-    el.appendChild(dateDiv);
-
-    const dayEvents=kal_EVENTS.filter(e=>e.date===iso);
-    dayEvents.forEach(ev=>{
-      const e=document.createElement("div");
-      e.className="kal-event";
-      e.textContent=ev.title;
-      el.appendChild(e);
-    });
-
-    el.addEventListener("click",()=>kal_select(d));
-    kal_grid.appendChild(el);
+    if(d.getMonth()!==m) el.classList.add("inactive");
+    if(iso===todayISO) el.classList.add("today");
+    el.innerHTML=`<div class="kal-date">${d.getDate()}</div>`;
+    const evs=kal_events.filter(e=>e.date===iso);
+    for(const ev of evs){
+      const div=document.createElement("div");
+      div.className="kal-event";div.textContent=ev.title;div.style.background=ev.color;
+      el.appendChild(div);
+    }
+    el.onclick=()=>kal_openModal(d,evs[0]);
+    grid.appendChild(el);
   }
-  kal_updateInfo();
+  kal_container.appendChild(grid);
 }
-function kal_select(d){
-  kal_selected=d;
-  kal_updateInfo();
-  const iso=kal_iso(d);
-  const evs=kal_EVENTS.filter(e=>e.date===iso);
-  let msg=`${d.getDate()}. ${kal_MONTHS[d.getMonth()]} ${d.getFullYear()}\n`;
-  msg+=evs.length?evs.map(e=>"- "+e.title).join("\n"):"Keine Events.";
-  alert(msg);
-}
-function kal_updateInfo(){
-  if(!kal_selected){kal_info.textContent="Kein Datum ausgewählt";return;}
-  kal_info.textContent=`${kal_selected.getDate()}. ${kal_MONTHS[kal_selected.getMonth()]} ${kal_selected.getFullYear()}`;
-}
-kal_prev.onclick=()=>{kal_viewDate.setMonth(kal_viewDate.getMonth()-1);kal_render();};
-kal_next.onclick=()=>{kal_viewDate.setMonth(kal_viewDate.getMonth()+1);kal_render();};
-kal_today.onclick=()=>{kal_viewDate=new Date();kal_selected=new Date();kal_render();};
 
-kal_renderWeekdays();
+function kal_renderWeek(){
+  const start=kal_startOfWeek(kal_viewDate);
+  kal_label.textContent=`Woche ab ${start.getDate()}. ${kal_MONTHS[start.getMonth()]}`;
+  const week=document.createElement("div");week.className="kal-week";
+  for(let i=0;i<7;i++){
+    const d=kal_addDays(start,i), iso=kal_iso(d);
+    const cell=document.createElement("div");
+    cell.className="kal-week-day";
+    cell.innerHTML=`<strong>${kal_WEEKDAYS[i]}</strong><br>${d.getDate()}.${d.getMonth()+1}.`;
+    const evs=kal_events.filter(e=>e.date===iso);
+    for(const ev of evs){
+      const e=document.createElement("div");
+      e.className="kal-event";e.textContent=ev.title;e.style.background=ev.color;
+      cell.appendChild(e);
+    }
+    cell.onclick=()=>kal_openModal(d,evs[0]);
+    week.appendChild(cell);
+  }
+  kal_container.appendChild(week);
+}
+
+function kal_renderYear(){
+  const y=kal_viewDate.getFullYear();
+  kal_label.textContent="Jahr "+y;
+  const div=document.createElement("div");div.className="kal-year";
+  for(let m=0;m<12;m++){
+    const box=document.createElement("div");
+    box.className="kal-month-box";
+    box.innerHTML=`<div class="kal-month-title">${kal_MONTHS[m]}</div>`;
+    const c=kal_events.filter(e=>new Date(e.date).getMonth()===m&&new Date(e.date).getFullYear()===y).length;
+    if(c>0) box.innerHTML+=`<div>${c} Ereignis(se)</div>`;
+    box.onclick=()=>{kal_viewMode="month";kal_viewDate=new Date(y,m,1);kal_render();}
+    div.appendChild(box);
+  }
+  kal_container.appendChild(div);
+}
+
+function kal_openModal(date,event){
+  kal_modal.style.display="flex";
+  kal_selectedDate=date;
+  if(event){
+    document.getElementById("kal-modal-title").textContent="Event bearbeiten";
+    kal_inputTitle.value=event.title;
+    kal_inputDate.value=event.date;
+    kal_inputColor.value=event.color;
+    document.getElementById("kal-delete").style.display="inline-block";
+    document.getElementById("kal-save").onclick=()=>kal_updateEvent(event);
+  }else{
+    document.getElementById("kal-modal-title").textContent="Event hinzufügen";
+    kal_inputTitle.value="";
+    kal_inputDate.value=kal_iso(date);
+    kal_inputColor.value="#2b6cb0";
+    document.getElementById("kal-delete").style.display="none";
+    document.getElementById("kal-save").onclick=kal_createEvent;
+  }
+}
+function kal_closeModal(){kal_modal.style.display="none";}
+function kal_createEvent(){
+  const e={title:kal_inputTitle.value.trim(),date:kal_inputDate.value,color:kal_inputColor.value};
+  if(!e.title)return alert("Titel fehlt!");
+  kal_events.push(e);kal_saveEvents();kal_closeModal();kal_render();
+}
+function kal_updateEvent(old){
+  old.title=kal_inputTitle.value.trim();
+  old.date=kal_inputDate.value;
+  old.color=kal_inputColor.value;
+  kal_saveEvents();kal_closeModal();kal_render();
+}
+document.getElementById("kal-delete").onclick=()=>{
+  kal_events=kal_events.filter(e=>e.date!==kal_inputDate.value||e.title!==kal_inputTitle.value);
+  kal_saveEvents();kal_closeModal();kal_render();
+};
+document.getElementById("kal-cancel").onclick=kal_closeModal;
+document.getElementById("kal-today").onclick=()=>{kal_viewDate=new Date();kal_render();}
+document.getElementById("kal-prev").onclick=()=>{
+  if(kal_viewMode==="month")kal_viewDate.setMonth(kal_viewDate.getMonth()-1);
+  else if(kal_viewMode==="week")kal_viewDate.setDate(kal_viewDate.getDate()-7);
+  else kal_viewDate.setFullYear(kal_viewDate.getFullYear()-1);
+  kal_render();
+};
+document.getElementById("kal-next").onclick=()=>{
+  if(kal_viewMode==="month")kal_viewDate.setMonth(kal_viewDate.getMonth()+1);
+  else if(kal_viewMode==="week")kal_viewDate.setDate(kal_viewDate.getDate()+7);
+  else kal_viewDate.setFullYear(kal_viewDate.getFullYear()+1);
+  kal_render();
+};
+document.getElementById("kal-view").onchange=e=>{kal_viewMode=e.target.value;kal_render();}
+kal_search.oninput=()=>{
+  const q=kal_search.value.toLowerCase();
+  const results=kal_events.filter(e=>e.title.toLowerCase().includes(q));
+  kal_container.innerHTML="";
+  if(!q){kal_render();return;}
+  const div=document.createElement("div");
+  div.innerHTML=`<strong>${results.length} Treffer:</strong><br>`;
+  results.forEach(r=>div.innerHTML+=`<div>${r.date}: ${r.title}</div>`);
+  kal_container.appendChild(div);
+};
+
 kal_render();
 </script>
