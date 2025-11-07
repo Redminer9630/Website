@@ -1,0 +1,129 @@
+<h2>Kalender</h2>
+
+<div class="kalender-container">
+  <div class="kalender-controls">
+    <button id="kal-prev" class="kal-btn">&lt;</button>
+    <div class="kal-label" id="kal-label">Monat Jahr</div>
+    <button id="kal-next" class="kal-btn">&gt;</button>
+    <button id="kal-today" class="kal-btn">Heute</button>
+  </div>
+
+  <div class="kal-card">
+    <div class="kal-weekdays" id="kal-weekdays"></div>
+    <div class="kal-grid" id="kal-grid"></div>
+    <div class="kal-footer">
+      <div id="kal-info">Kein Datum ausgewählt</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.kalender-container{font-family:Inter,Arial,sans-serif;background:#f7f7fb;padding:10px;border-radius:12px}
+.kalender-controls{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.kal-label{flex:1;text-align:center;font-weight:600}
+.kal-btn{background:#fff;border:1px solid #ccc;border-radius:8px;padding:6px 10px;cursor:pointer}
+.kal-btn:active{transform:translateY(1px)}
+.kal-card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px}
+.kal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px;font-size:.85rem;color:#666}
+.kal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.kal-day{min-height:70px;padding:6px;border-radius:8px;border:1px dashed transparent;cursor:default}
+.kal-day.inactive{color:#bbb}
+.kal-day.today{background:rgba(255,213,79,.2);border:1px solid rgba(255,213,79,.4)}
+.kal-date{font-weight:600}
+.kal-event{background:#2b6cb0;color:#fff;border-radius:6px;padding:3px 4px;margin-top:4px;font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kal-footer{margin-top:8px;font-size:.85rem;color:#555}
+</style>
+
+<script>
+const kal_EVENTS=[
+  {date:"2025-11-10",title:"Projekttreffen"},
+  {date:"2025-11-15",title:"Abgabe Aufgabe"},
+  {date:"2025-11-25",title:"Geburtstag"},
+];
+const kal_WEEKDAYS=["Mo","Di","Mi","Do","Fr","Sa","So"];
+const kal_MONTHS=["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+
+let kal_viewDate=new Date();
+let kal_selected=null;
+
+const kal_grid=document.getElementById("kal-grid");
+const kal_weekdays=document.getElementById("kal-weekdays");
+const kal_label=document.getElementById("kal-label");
+const kal_prev=document.getElementById("kal-prev");
+const kal_next=document.getElementById("kal-next");
+const kal_today=document.getElementById("kal-today");
+const kal_info=document.getElementById("kal-info");
+
+function kal_startOfWeek(date){
+  const d=new Date(date);
+  const day=d.getDay()||7;
+  d.setDate(d.getDate()-(day-1));
+  d.setHours(0,0,0,0);
+  return d;
+}
+function kal_iso(d){return d.toISOString().slice(0,10);}
+function kal_renderWeekdays(){
+  kal_weekdays.innerHTML="";
+  kal_WEEKDAYS.forEach(w=>{
+    const el=document.createElement("div");
+    el.textContent=w;
+    kal_weekdays.appendChild(el);
+  });
+}
+function kal_render(){
+  kal_grid.innerHTML="";
+  const y=kal_viewDate.getFullYear();
+  const m=kal_viewDate.getMonth();
+  kal_label.textContent=kal_MONTHS[m]+" "+y;
+
+  const first=new Date(y,m,1);
+  const start=kal_startOfWeek(first);
+  const todayISO=kal_iso(new Date());
+
+  for(let i=0;i<42;i++){
+    const d=new Date(start);
+    d.setDate(start.getDate()+i);
+    const iso=kal_iso(d);
+    const el=document.createElement("div");
+    el.className="kal-day";
+    if(d.getMonth()!==m)el.classList.add("inactive");
+    if(iso===todayISO)el.classList.add("today");
+
+    const dateDiv=document.createElement("div");
+    dateDiv.className="kal-date";
+    dateDiv.textContent=d.getDate();
+    el.appendChild(dateDiv);
+
+    const dayEvents=kal_EVENTS.filter(e=>e.date===iso);
+    dayEvents.forEach(ev=>{
+      const e=document.createElement("div");
+      e.className="kal-event";
+      e.textContent=ev.title;
+      el.appendChild(e);
+    });
+
+    el.addEventListener("click",()=>kal_select(d));
+    kal_grid.appendChild(el);
+  }
+  kal_updateInfo();
+}
+function kal_select(d){
+  kal_selected=d;
+  kal_updateInfo();
+  const iso=kal_iso(d);
+  const evs=kal_EVENTS.filter(e=>e.date===iso);
+  let msg=`${d.getDate()}. ${kal_MONTHS[d.getMonth()]} ${d.getFullYear()}\n`;
+  msg+=evs.length?evs.map(e=>"- "+e.title).join("\n"):"Keine Events.";
+  alert(msg);
+}
+function kal_updateInfo(){
+  if(!kal_selected){kal_info.textContent="Kein Datum ausgewählt";return;}
+  kal_info.textContent=`${kal_selected.getDate()}. ${kal_MONTHS[kal_selected.getMonth()]} ${kal_selected.getFullYear()}`;
+}
+kal_prev.onclick=()=>{kal_viewDate.setMonth(kal_viewDate.getMonth()-1);kal_render();};
+kal_next.onclick=()=>{kal_viewDate.setMonth(kal_viewDate.getMonth()+1);kal_render();};
+kal_today.onclick=()=>{kal_viewDate=new Date();kal_selected=new Date();kal_render();};
+
+kal_renderWeekdays();
+kal_render();
+</script>
