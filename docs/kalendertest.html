@@ -35,28 +35,49 @@
 </div>
 
 <style>
-.kal-wrapper{font-family:Inter,Arial,sans-serif;background:#fafafa;border:1px solid #ddd;border-radius:12px;padding:10px;}
-.kal-topbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.kal-btn{background:#fff;border:1px solid #ccc;border-radius:8px;padding:6px 10px;cursor:pointer}
-.kal-btn:hover{background:#eee}
+/* Wrapper */
+.kal-wrapper{font-family:Inter,Arial,sans-serif;background:#f9f9fb;border-radius:12px;padding:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);max-width:1000px;margin:0 auto;}
+/* Topbar */
+.kal-topbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.kal-label{flex:1;text-align:center;font-weight:600;font-size:1.1rem;color:#333}
+.kal-btn{background:#fff;border:1px solid #ccc;border-radius:8px;padding:6px 10px;cursor:pointer;transition:all .2s;font-size:.9rem}
+.kal-btn:hover{background:#f0f0f0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
 .kal-red{background:#e74c3c;color:#fff;border-color:#c0392b}
-.kal-label{flex:1;text-align:center;font-weight:600}
-.kal-select,.kal-input{border:1px solid #ccc;border-radius:6px;padding:5px;font-size:.9rem}
+.kal-select,.kal-input{border:1px solid #ccc;border-radius:6px;padding:5px;font-size:.9rem;transition:all .2s}
+.kal-select:focus,.kal-input:focus{border-color:#2b6cb0;outline:none;box-shadow:0 0 4px rgba(43,108,176,.3)}
+/* Container */
 .kal-container{display:grid;gap:4px}
-.kal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.kal-day{min-height:90px;padding:6px;border:1px solid #e1e1e1;border-radius:8px;background:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;position:relative}
-.kal-day.today{background:#fffae0;border-color:#f7d44c}
+/* Monat/Tag */
+.kal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.kal-day{min-height:90px;padding:6px;border-radius:8px;background:#fff;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;position:relative;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.kal-day:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.kal-day.today{background:#fff9e6;border:1px solid #f7d44c;box-shadow:0 2px 6px rgba(255,213,79,.3)}
 .kal-day.inactive{opacity:.5}
-.kal-date{font-weight:600}
-.kal-event{border-radius:4px;padding:2px 4px;font-size:.75rem;margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kal-date{font-weight:600;margin-bottom:4px;color:#333}
+/* Event */
+.kal-event{border-radius:6px;padding:3px 6px;font-size:.75rem;margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .2s}
+.kal-event:hover{opacity:.85;transform:scale(1.02)}
+/* Modal */
 .kal-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);align-items:center;justify-content:center;z-index:999}
-.kal-modal-content{background:#fff;border-radius:12px;padding:15px;min-width:280px;max-width:340px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-.kal-modal-buttons{display:flex;justify-content:space-between;margin-top:10px}
-.kal-year{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
-.kal-month-box{border:1px solid #ddd;border-radius:8px;padding:6px;background:#fff;text-align:center}
-.kal-month-title{font-weight:600;margin-bottom:4px}
-.kal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.kal-week-day{border:1px solid #ddd;border-radius:8px;padding:10px;background:#fff;text-align:center}
+.kal-modal-content{background:#fff;border-radius:12px;padding:20px;min-width:300px;max-width:380px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.kal-modal-content h3{margin-top:0;color:#2b6cb0}
+.kal-modal-buttons{display:flex;justify-content:space-between;margin-top:12px}
+/* Jahr/Monat/Week */
+.kal-year{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kal-month-box{border-radius:8px;padding:10px;background:#fff;text-align:center;cursor:pointer;transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.kal-month-box:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.kal-month-title{font-weight:600;margin-bottom:6px;color:#333}
+.kal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.kal-week-day{border-radius:8px;padding:12px;background:#fff;text-align:center;cursor:pointer;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.kal-week-day:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+/* Responsive */
+@media (max-width:600px){
+  .kal-topbar{flex-direction:column;align-items:flex-start}
+  .kal-label{text-align:left}
+  .kal-grid{grid-template-columns:repeat(7,1fr)}
+  .kal-week{grid-template-columns:repeat(7,1fr)}
+  .kal-year{grid-template-columns:repeat(auto-fit,minmax(100px,1fr))}
+}
 </style>
 
 <script>
