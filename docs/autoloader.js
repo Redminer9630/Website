@@ -53,52 +53,98 @@ document.addEventListener("DOMContentLoaded", () => {
     footer.id = "main-footer";
     footer.className = "fixed-footer";
 
-    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}</a>`;
+    footer.innerHTML = `
+        <div id="footer-main">
+            © ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten.
+            <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">
+                ${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}
+            </a>
+        </div>
 
-    footer.innerHTML = `<span class="footer-text">${footerText}</span>`;
+        <div id="footer-extra">
+            <div class="footer-column">
+                <span>Text 1</span><span>Text 2</span><span>Text 3</span>
+            </div>
+            <div class="footer-column">
+                <span>Text 4</span><span>Text 5</span><span>Text 6</span>
+            </div>
+            <div class="footer-column">
+                <span>Text 7</span><span>Text 8</span><span>Text 9</span>
+            </div>
+        </div>
+    `;
+
     document.body.appendChild(footer);
-    function adjustFooterPadding() {const footerHeight = footer.offsetHeight;document.body.style.paddingBottom = footerHeight + "px";}
+
+    function adjustFooterPadding() {
+        document.body.style.paddingBottom = footer.offsetHeight + "px";
+    }
     adjustFooterPadding();
     window.addEventListener("resize", adjustFooterPadding);
 
+    // ---------- REVEAL LOGIK ----------
+    window.addEventListener("scroll", () => {
+        const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
+        if (atBottom) footer.classList.add("reveal");
+        else footer.classList.remove("reveal");
+        adjustFooterPadding();
+    });
+
+    // ---------- CSS ----------
     const css = document.createElement("style");
     css.textContent = `
-        #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
-        @media(max-width: 480px) { 
-            #main-footer .footer-text {font-size: 11px;}
-            #main-footer .footer-text {display: inline-block;}
-            #main-footer .footer-text:before {content: "";}
-            #main-footer .footer-text {white-space: normal;}
-            #main-footer .footer-text {display: block;text-align: center;}
-            #main-footer .footer-text {font-size: 11px;display: block;text-align: center;white-space: normal;}
-        }
-        #main-footer {position: fixed;left: 0;right: 0;bottom: 0;z-index: 1000;}
-        #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
-        .fixed-footer {
+        #main-footer {
             position: fixed;
             bottom: 0;
+            left: 0;
+            right: 0;
             width: 100%;
             background: #1a1a1a;
             color: #fff;
             text-align: center;
-            padding: 5px 0;
-        }`;
+            z-index: 1000;
+            overflow: hidden;
+            padding: 6px 0;
+            transition: padding 0.3s ease, height 0.3s ease;
+        }
+
+        #footer-main {
+            font-size: 13px;
+            padding-bottom: 5px;
+        }
+
+        #footer-extra {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            text-align: center;
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        #footer-extra .footer-column {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        #footer-extra span {
+            white-space: nowrap;
+        }
+
+        #main-footer.reveal #footer-extra {
+            max-height: 300px; /* passt sich automatisch an */
+        }
+
+        @media (max-width: 480px) {
+            #footer-extra {
+                grid-template-columns: 1fr;
+            }
+        }
+    `;
     document.head.appendChild(css);
-    const fontPreload = document.createElement("link");fontPreload.rel = "preload";fontPreload.as = "font";fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t79/docs/minecraft_font.woff2";fontPreload.type = "font/woff2";fontPreload.crossOrigin = "anonymous";document.head.appendChild(fontPreload);
-
-    const fontCSS = document.createElement("style");
-    fontCSS.textContent = `@font-face {font-family: 'Mojangles';src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t79/docs/minecraft_font.woff2') format('woff2');font-display: swap;}html[data-font="Mojangles"] body {font-family: 'Mojangles', Arial;}html[data-font="Arial"] body {font-family: Arial, sans-serif;}html[data-font="Sans Serif"] body {font-family: sans-serif;}`;
-    document.head.appendChild(fontCSS);
-
-    const savedTheme = localStorage.getItem("theme");if (savedTheme === "light" || savedTheme === "dark") {document.documentElement.setAttribute("data-theme", savedTheme);} else {document.documentElement.removeAttribute("data-theme");}
-
-    const savedFont = localStorage.getItem("font") || "Mojangles";document.documentElement.setAttribute("data-font", savedFont);
-
-    if (typeof window.mctip?.initMinecraftTooltips === "function") {window.mctip.initMinecraftTooltips();}
-
-    document.querySelectorAll('[data-modal-open]').forEach(btn =>btn.addEventListener('click', () => {const id = btn.getAttribute('data-modal-open');if (typeof window.Modal?.open === 'function') {window.Modal.open(id);} else {window.noti("error", "Modal.open nicht verfügbar");}}));
-
-    if (window.debug) {document.querySelectorAll("img").forEach(img => {if (!img.src.endsWith(".webp")) {window.noti("warn", "Bild sollte WebP sein:", img.src);}if (img.naturalWidth > 800) {window.noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");}});}
 });
 
 window.applyTheme = function(theme) {
