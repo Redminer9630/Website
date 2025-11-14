@@ -73,8 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </div>
     `;
-
     document.body.appendChild(footer);
+
+    const footerExtra = document.getElementById("footer-extra");
+    const footerMain = document.getElementById("footer-main");
+
+    // Höhe des erweiterten Footers messen
+    const extraHeight = footerExtra.scrollHeight;
 
     function adjustFooterPadding() {
         document.body.style.paddingBottom = footer.offsetHeight + "px";
@@ -82,11 +87,16 @@ document.addEventListener("DOMContentLoaded", () => {
     adjustFooterPadding();
     window.addEventListener("resize", adjustFooterPadding);
 
-    // ---------- REVEAL LOGIK ----------
+    // Scroll-Push Logik
     window.addEventListener("scroll", () => {
-        const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 5;
-        if (atBottom) footer.classList.add("reveal");
-        else footer.classList.remove("reveal");
+        const scrollBottom = window.scrollY + window.innerHeight;
+        const pageHeight = document.body.scrollHeight;
+        const overscroll = Math.max(0, scrollBottom - pageHeight); // wie weit über Ende gescrollt
+
+        // Footer Extra entsprechend Höhe zeigen
+        footerExtra.style.maxHeight = Math.min(extraHeight, overscroll) + "px";
+
+        // Padding anpassen
         adjustFooterPadding();
     });
 
@@ -105,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
             z-index: 1000;
             overflow: hidden;
             padding: 6px 0;
-            transition: padding 0.3s ease, height 0.3s ease;
         }
 
         #footer-main {
@@ -121,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
             padding: 0 15px;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.35s ease;
+            transition: max-height 0.15s linear;
         }
 
         #footer-extra .footer-column {
@@ -132,10 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         #footer-extra span {
             white-space: nowrap;
-        }
-
-        #main-footer.reveal #footer-extra {
-            max-height: 300px; /* passt sich automatisch an */
         }
 
         @media (max-width: 480px) {
