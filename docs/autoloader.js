@@ -53,103 +53,52 @@ document.addEventListener("DOMContentLoaded", () => {
     footer.id = "main-footer";
     footer.className = "fixed-footer";
 
-    footer.innerHTML = `
-        <div id="footer-main">
-            © ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten.
-            <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">
-                ${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}
-            </a>
-        </div>
+    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}</a>`;
 
-        <div id="footer-extra">
-            <div class="footer-column">
-                <span>Text 1</span><span>Text 2</span><span>Text 3</span>
-            </div>
-            <div class="footer-column">
-                <span>Text 4</span><span>Text 5</span><span>Text 6</span>
-            </div>
-            <div class="footer-column">
-                <span>Text 7</span><span>Text 8</span><span>Text 9</span>
-            </div>
-        </div>
-    `;
+    footer.innerHTML = `<span class="footer-text">${footerText}</span>`;
     document.body.appendChild(footer);
-
-    const footerExtra = document.getElementById("footer-extra");
-    const footerMain = document.getElementById("footer-main");
-
-    // Höhe des erweiterten Footers messen
-    const extraHeight = footerExtra.scrollHeight;
-
-    function adjustFooterPadding() {
-        document.body.style.paddingBottom = footer.offsetHeight + "px";
-    }
+    function adjustFooterPadding() {const footerHeight = footer.offsetHeight;document.body.style.paddingBottom = footerHeight + "px";}
     adjustFooterPadding();
     window.addEventListener("resize", adjustFooterPadding);
 
-    // Scroll-Push Logik
-    window.addEventListener("scroll", () => {
-        const scrollBottom = window.scrollY + window.innerHeight;
-        const pageHeight = document.body.scrollHeight;
-        const overscroll = Math.max(0, scrollBottom - pageHeight); // wie weit über Ende gescrollt
-
-        // Footer Extra entsprechend Höhe zeigen
-        footerExtra.style.maxHeight = Math.min(extraHeight, overscroll) + "px";
-
-        // Padding anpassen
-        adjustFooterPadding();
-    });
-
-    // ---------- CSS ----------
     const css = document.createElement("style");
     css.textContent = `
-        #main-footer {
+        #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
+        @media(max-width: 480px) { 
+            #main-footer .footer-text {font-size: 11px;}
+            #main-footer .footer-text {display: inline-block;}
+            #main-footer .footer-text:before {content: "";}
+            #main-footer .footer-text {white-space: normal;}
+            #main-footer .footer-text {display: block;text-align: center;}
+            #main-footer .footer-text {font-size: 11px;display: block;text-align: center;white-space: normal;}
+        }
+        #main-footer {position: fixed;left: 0;right: 0;bottom: 0;z-index: 1000;}
+        #main-footer .footer-text { font-size: 14px; padding: 0 10px; }
+        .fixed-footer {
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
             width: 100%;
             background: #1a1a1a;
             color: #fff;
             text-align: center;
-            z-index: 1000;
-            overflow: hidden;
-            padding: 6px 0;
-        }
-
-        #footer-main {
-            font-size: 13px;
-            padding-bottom: 5px;
-        }
-
-        #footer-extra {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            text-align: center;
-            padding: 0 15px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.15s linear;
-        }
-
-        #footer-extra .footer-column {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        #footer-extra span {
-            white-space: nowrap;
-        }
-
-        @media (max-width: 480px) {
-            #footer-extra {
-                grid-template-columns: 1fr;
-            }
-        }
-    `;
+            padding: 5px 0;
+        }`;
     document.head.appendChild(css);
+    const fontPreload = document.createElement("link");fontPreload.rel = "preload";fontPreload.as = "font";fontPreload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t79/docs/minecraft_font.woff2";fontPreload.type = "font/woff2";fontPreload.crossOrigin = "anonymous";document.head.appendChild(fontPreload);
+
+    const fontCSS = document.createElement("style");
+    fontCSS.textContent = `@font-face {font-family: 'Mojangles';src: url('https://cdn.jsdelivr.net/gh/Redminer9630/Website@t79/docs/minecraft_font.woff2') format('woff2');font-display: swap;}html[data-font="Mojangles"] body {font-family: 'Mojangles', Arial;}html[data-font="Arial"] body {font-family: Arial, sans-serif;}html[data-font="Sans Serif"] body {font-family: sans-serif;}`;
+    document.head.appendChild(fontCSS);
+
+    const savedTheme = localStorage.getItem("theme");if (savedTheme === "light" || savedTheme === "dark") {document.documentElement.setAttribute("data-theme", savedTheme);} else {document.documentElement.removeAttribute("data-theme");}
+
+    const savedFont = localStorage.getItem("font") || "Mojangles";document.documentElement.setAttribute("data-font", savedFont);
+
+    if (typeof window.mctip?.initMinecraftTooltips === "function") {window.mctip.initMinecraftTooltips();}
+
+    document.querySelectorAll('[data-modal-open]').forEach(btn =>btn.addEventListener('click', () => {const id = btn.getAttribute('data-modal-open');if (typeof window.Modal?.open === 'function') {window.Modal.open(id);} else {window.noti("error", "Modal.open nicht verfügbar");}}));
+
+    if (window.debug) {document.querySelectorAll("img").forEach(img => {if (!img.src.endsWith(".webp")) {window.noti("warn", "Bild sollte WebP sein:", img.src);}if (img.naturalWidth > 800) {window.noti("warn", "Bild evtl. zu groß:", img.src, img.naturalWidth + "px");}});}
 });
 
 window.applyTheme = function(theme) {
