@@ -8,50 +8,55 @@
     <style>
         body { font-family: 'Mojangles'; background: #eaeaea; line-height: 1.6; }
         h1 { color: #000; }
-        .story { background: eaeaea; }
+        .story { background: eaeaea; margin-bottom: 2em; padding: 1em; }
         .dialog { color: #000; }
-        .info { font-size: 0.9em; color: #000; margin-bottom; }
+        .info { font-size: 0.9em; color: #000; margin-bottom: 1em; }
         .name { font-weight: bold; color: #000; }
+        a { text-decoration: none; color: #0078ff; }
         :root[data-theme="dark"] h1, :root[data-theme="dark"] p, :root[data-theme="dark"] .dialog, :root[data-theme="dark"] .name { color: white;}
         :root[data-theme="dark"] body, :root[data-theme="dark"] .story { background: #1a1a1a;}
     </style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t83/docs/autoloader.js" type="module" defer></script>
 </head>
 <body>
+    <!-- Inhaltsverzeichnis -->
     <div class="story">
-        <h1>Schreck um Mitternacht - Minecraft Freunde Fanstory</h1>
+        <h1>Schreck um Mitternacht - Inhaltsverzeichnis</h1>
+        <ul>
+            <li><a href="#kapitel1">Kapitel 1: Schreck um Mitternacht</a></li>
+            <li><a href="#kapitel2">Kapitel 2: Die Schnecken-Folge</a></li>
+        </ul>
+    </div>
+
+    <!-- Kapitel 1 -->
+    <div class="story" id="kapitel1">
+        <h1>Kapitel 1: Schreck um Mitternacht</h1>
         <p class="info">Eine "unheimliche" Geschichte, inspiriert von Minecraft Freunde<br>Von: Redminer9630</p>
         <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
-        <!-- Bild von den Freunden beim vorbereiten des Zeltes -->
         <p>Plötzlich wurde Gambo wach. Ein leises Rascheln drang an sein Ohr.</p>
         <div class="dialog"><span class="name gambo">Gambo:</span> Habt ihr das gehört?</div>
         <p>Er weckte die anderen, und gemeinsam krochen sie aus dem Zelt.</p>
         <p>Ryan starrte in die Ferne.</p>
         <div class="dialog"><span class="name ryan">Ryan:</span> Da ist ein Licht... es pulsiert!</div>
-        <!-- Bild von den Freunden und Ryan der in die Ferne start zu einem Licht -->
         <p>Neugierig gingen sie dem Licht entgegen und entdeckten einen hohen Turm.</p>
         <div class="dialog"><span class="name flo">Flo:</span> Das könnte ein Leuchtturm sein. Ich suche einen Eingang.</div>
         <p>Als er zurückkam, sagte Flo:</p>
         <div class="dialog"><span class="name flo">Flo:</span> Ich hab ein offenes Fenster gefunden.</div>
-        <!-- Bild von Flo wie er auf ein Fenster deutet -->
         <p>Sie kletterten nacheinander hinein – Flo, Ryan und Gambo. Doch Gambo blieb stecken.</p>
         <div class="dialog"><span class="name gambo">Gambo:</span> Ich bleib draußen und halte Schmiere.</div>
         <p>Drinnen teilten sie sich auf. Ryan fand Proviant, Logo legte sich im Keller zur Ruhe, Flo entdeckte eine Karte auf dem Balkon.</p>
         <div class="dialog"><span class="name flo">Flo:</span> Hier ist eine Karte! Ein Kreuz ist markiert.</div>
-        <!-- Bild von Flo und Ryan wie sie sich die Karte anschauen -->
         <p>Sie liefen zurück zu Gambo. Der zeigte ihnen eine Taschenuhr: 23:36.</p>
         <p>Gemeinsam machten sie sich auf den Weg zum Kreuz. In der Ferne sahen sie eine verlassene Fabrik mit dem Schriftzug „Dr. Binty“.</p>
         <p>Gambo öffnete die Tür, und sie traten ein. Logo griff zu einer Flasche mit der Aufschrift „Dr. Binty“ und trank.</p>
         <div class="dialog"><span class="name logo">Logo:</span> Mich... dreht's.</div>
         <p>Er fiel um. Flo eilte zu ihm.</p>
         <div class="dialog"><span class="name flo">Flo:</span> Logo! Alles okay?</div>
-        <!-- Bild von den Freunden wie sie in der Fabrik stehen und Logo bewustlos an einen Kasten gelehnt, Ryan hält eine Flasche und Flo hockt neben Logo -->
         <p>Ryan las die Zutaten:</p>
         <div class="dialog"><span class="name ryan">Ryan:</span> Alkohol, Zucker, Cola, Kaffee... das ist ja eine Zuckerbombe!</div>
         <p>Flo rannte los und fand ein Büro – darin saß Dr. Benx.</p>
         <div class="dialog"><span class="name flo">Flo:</span> Wir zelten im Wald, haben einen Leuchtturm entdeckt und sind dann hier gelandet.</div>
         <div class="dialog"><span class="name benx">Dr. Benx:</span> Ich war früher Leuchtturmwächter. Die Karte brachte mich hierher.</div>
-        <!-- Bild von Benx und Flo im Büro -->
         <p>Ryan stürmte herein.</p>
         <div class="dialog"><span class="name flo">Flo:</span> Dr. Benx, Logo hat Dr. Binty getrunken!</div>
         <div class="dialog"><span class="name benx">Dr. Benx:</span> Oh nein! Die sind nicht zum Trinken gedacht! Ihr braucht heißes Hühnchen und Minze.</div>
@@ -59,14 +64,97 @@
         <div class="dialog"><span class="name gambo">Gambo:</span> Ich hab Hühnchen – ich mach's heiß.</div>
         <p>Später kamen sie zurück. Ryan mit Minze, Gambo mit dampfendem Hühnchen. Flo schnitt es, Gambo klebte Minze darum, Ryan gab es Logo.</p>
         <p>Logo begann zu husten – dann öffnete er die Augen.</p>
-        <!-- Bild von Logo wie er aufwacht -->
         <div class="dialog"><span class="name logo">Logo:</span> Wo bin ich?</div>
         <div class="dialog"><span class="name flo">Flo:</span> In der Dr. Binty Fabrik.</div>
         <div class="dialog"><span class="name benx">Dr. Benx:</span> Ihr dürft eine Flasche als Andenken mitnehmen.</div>
         <p>Zurück am Zelt zeigte Gambo Flo die Uhr: 03:47. Ryan streckte sich und sagte:</p>
         <div class="dialog"><span class="name ryan">Ryan:</span> Jetzt können wir endlich schlafen.</div>
+    </div>
 
-        <p><strong>ENDE</strong></p>
+    <!-- Kapitel 2 -->
+    <div class="story" id="kapitel2">
+        <h1>Kapitel 2: Die Schnecken-Folge PREVIEW</h1>
+        <p class="info">Eine chaotische Podcast-Folge von Flo und Logo<br>Von: Redminer9630</p>
+
+        <div class="dialog"><span class="name flo">Flo:</span> Soll ich dir auch einen Milchshake machen, Logo?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ja, gern.</div>
+
+        <p>Logo ist bei Flo zu Besuch, um gemeinsam eine Spezialfolge ihres Podcasts „Muskulös und Mental am Ende“ aufzunehmen. Dabei wollen sie über den zweiten Minecraft-Film sprechen und alte Vorhersagen diskutieren.</p>
+
+        <div class="dialog"><span class="name flo">Flo:</span> Worüber wollen wir heute quatschen?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Über den zweiten Minecraft-Film – und ich freu mich schon, deine Meinung und deine Vorhersagen zu hören.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Hahaha, die haben wirklich in der Oberwelt geheiratet… Gott, nein!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Willst du vorher noch kurz ins Gym?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ne, sonst krieg ich direkt nen Mental Breakdown.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Okay, dann lass uns gleich starten.</div>
+
+        <p>Etwas später:</p>
+        <div class="dialog"><span class="name logo">Logo:</span> Folge 31.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Ja, Logo sitzt gerade neben mir.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Worüber reden wir heute?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Flo, wir haben doch schon vorhin drüber geredet.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Ja, ich wollte dich nur ins Gym schleppen.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Mental wäre ich eh zu Boden geschlittert.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Hahaha.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Also reden wir über den zweiten Minecraft-Film.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Genau, ich hab die Hochzeit 1:1 gecalled.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Krank… was ist die Chance, dass du das zweimal richtig callst?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Keine Ahnung, möglich ist’s trotzdem nicht mehr.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Ich freu mich schon auf den dritten Film, da calle ich wieder, hahah.</div>
+
+        <div class="dialog"><span class="name logo">Logo:</span> Hast du das gehört?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Was? Nein, du bist im Singleplayer.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Wo ist der Lüfter?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Nein, der ist nicht an.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ich hab aber was gehört…</div>
+
+        <div class="dialog"><span class="name logo">Logo:</span> Oh mein Gott…</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Was?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Da ist eine riesige Schnecke!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Hahaha… die ist mindestens fünf Meter groß!</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Wir müssen die Folge abbrechen und die Schnecke zu einer „Brief-Schnecke“ machen.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Nein, sonst haben wir keinen Podcast-Content!</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Was machen wir mit der Schnecke?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Einfach mitnehmen.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> …Reiten?</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Klar, du kommst mit.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ich fall save runter, auf keinen Fall!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Doch, komm schon.</div>
+
+        <p>Auf der Schnecke:</p>
+        <div class="dialog"><span class="name logo">Logo:</span> AHHHHHHHHHH!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Chill, alles gut.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ich fall gleich runter, schlimmste Podcast-Folge ever!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Erst wenn wir sterben, ist es die schlechteste Folge.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Stimmt…</div>
+
+        <div class="dialog"><span class="name flo">Flo:</span> Was machen wir jetzt?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Lass uns mit der Schnecke ’ne Bank ausrauben.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Sicher? Irgendein Polizist ballert die doch ab. Außerdem gibt’s keine coole Bank, die wir ausrauben könnten.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Dann parken wir sie bei dir.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Hä? Wo?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Auf dem Dach!</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Wie soll die da hochkommen?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Dann lassen wir sie einfach hier stehen.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Okay.</div>
+
+        <p>Sie stiegen von der Schnecke ab. Flo versuchte, die Schnecke zu heben – sie kippte nur leicht um, blieb dann liegen. Beide gingen zurück ins Haus und ins Zimmer.</p>
+
+        <div class="dialog"><span class="name logo">Logo:</span> Junge, ich hab fast nen Mental bekommen, als die umgefallen ist.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Es hat so gewackelt, ich bin fast mit umgefallen.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Gambo hat sich bestimmt in der Schnecke versteckt.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Würde passen.</div>
+
+        <div class="dialog"><span class="name logo">Logo:</span> Das war’s mit der Folge. Lasst wie immer 5 Sterne da, trinkt kein Dr. Binty und wir sehen uns wieder bei der nächsten Folge von…</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Muskulös.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Und Mental am Ende.</div>
+
+        <div class="dialog"><span class="name flo">Flo:</span> Willst du nach Hause oder dich hier hinlegen und ein Teppich sein?</div>
+        <div class="dialog"><span class="name logo">Logo:</span> Ich will der Teppich sein. Bin schon genug Mental am Ende.</div>
+        <div class="dialog"><span class="name flo">Flo:</span> Warte, ich hol meinen Hammer.</div>
+        <div class="dialog"><span class="name logo">Logo:</span> War nicht ernst gemeint, steck den wieder weg.</div>
+
+        <p>Logo fuhr nach Hause</p>
     </div>
 </body>
 </html>
