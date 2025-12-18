@@ -131,6 +131,32 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
     if(v) loadVersion(v, false);
     else renderVersionList();
   });
+function replaceLivTags() {
+  document.querySelectorAll("liv").forEach(liv => {
+    let text = liv.textContent.trim();
+    let urlPart, displayText;
+
+    if (text.includes(" ")) {
+      const parts = text.split(" ");
+      urlPart = parts.slice(1).join("");
+      displayText = parts.join("");
+    } else {
+      urlPart = text;
+      displayText = text;
+    }
+
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "?v=" + encodeURIComponent(urlPart);
+    a.textContent = displayText;
+    li.appendChild(a);
+
+    liv.replaceWith(li);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", replaceLivTags);
+
 })();
 </script>
 </body>
