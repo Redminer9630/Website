@@ -1,1 +1,7 @@
-
+{
+  "version": "t84",
+  "date": "2025-12-18",
+  "changes": [
+    "G-Tag von Google Analytics wurde aktiviert"
+  ]
+}
