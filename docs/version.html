@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="UTF-8">
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Website-Versionen - Redminer9630</title>
 <meta name="theme-color" content="#eaeaea">
@@ -22,10 +19,7 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
 :root[data-theme="dark"] .back-button:hover { background:#2277cc; }
 </style>
 <script type="module" defer src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/autoloader.js"></script>
-</head>
-<body>
-<div id="content">Läd...</div>
-<script>
+</head><body><div id="content">Läd...</div><script>
 (function(){
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
   function getParam(name){ return new URL(window.location.href).searchParams.get(name); }
@@ -35,7 +29,7 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
     <h2>Website-Versionen</h2>
     <div id="currentVersionBox"></div>
     <ul class="version-list" id="versionList">
-      <liv>t84</liv>
+      <li><a hrer="?v=t84b">t84</a></li>
       <li><a href="?v=2.1">v2.1</a></li>
       <li><a href="?v=2.0">v2.0</a></li>
       <li><a href="?v=1.pre2">v1.pre2</a></li>
@@ -49,16 +43,6 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
       <li><a href="?v=1.0.1">v1.0.1</a></li>
       <li><a href="?v=1.0.0">v1.0.0</a></li>
     </ul>
-    <h3>Info</h3>
-    <p>
-      Versionen Zeitstrahl:<br>
-      <span>Indev v1.8.4</span><br>
-      <span>Alpha v1.4.2</span><br>
-      <span>Beta v1.6.7</span><br>
-      <span>Pre Release v1.0.3</span><br>
-      <span>Release v1.pre2</span><br>
-      <span style='color:yellow;'>Full Release v2.1</span>
-    </p>
   `;
 
   async function loadVersion(version, pushState = true){
@@ -70,16 +54,9 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
       if(!res.ok) throw new Error("Version nicht gefunden.");
       const data = await res.json();
       let changesHTML = "";
-      if(Array.isArray(data.changes) && data.changes.length){
-        changesHTML = "<h3>Änderungen</h3><ul>" + data.changes.map(c => `<li>${escapeHtml(c)}</li>`).join("") + "</ul>";
-      }
+      if(Array.isArray(data.changes) && data.changes.length){changesHTML = "<h3>Änderungen</h3><ul>" + data.changes.map(c => `<li>${escapeHtml(c)}</li>`).join("") + "</ul>";}
       const backHref = window.location.pathname;
-      contentEl.innerHTML = `
-        <h2>Version: ${escapeHtml(data.version)}</h2>
-        <p><strong>Veröffentlicht:</strong> ${escapeHtml(data.date)}</p>
-        ${changesHTML}
-        <a href="${backHref}" class="back-button">Alle Versionen</a>
-      `;
+      contentEl.innerHTML = `<h2>Version: ${escapeHtml(data.version)}</h2><p><strong>Veröffentlicht:</strong> ${escapeHtml(data.date)}</p>${changesHTML}<a href="${backHref}" class="back-button">Alle Versionen</a>`;
       if(pushState) history.pushState({v:version}, "", "?v=" + encodeURIComponent(version));
     } catch(err) {
       const backHref = window.location.pathname;
@@ -88,77 +65,10 @@ body { font-family:'Mojangles'; background:#f4f4f4; color:#333; margin:0; paddin
     }
   }
 
-  function renderVersionList(){
-    const contentEl = createContent();
-    contentEl.innerHTML = versionListHTML;
-    if(window.CommonVersion && document.getElementById("currentVersionBox")){
-      const box = document.getElementById("currentVersionBox");
-      box.innerHTML = `
-        <div style="padding:10px;background:#e0ffe0;border:1px solid #0a0;border-radius:5px;margin-bottom:15px;">
-          <strong>Aktuelle Version:</strong> ${escapeHtml(window.CommonVersion.version)}<br>
-          <em>Veröffentlicht:</em> ${escapeHtml(window.CommonVersion.date)}
-        </div>
-      `;
-    }
-  }
-
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest && e.target.closest("a");
-    if(!a) return;
-    const href = a.getAttribute("href") || "";
-    if(href.startsWith("?v=")){
-      e.preventDefault();
-      const params = new URLSearchParams(href.replace(/^\?/, ""));
-      const v = params.get("v");
-      if(v) loadVersion(v);
-      return;
-    }
-    if(a.classList.contains("back-button")){
-      e.preventDefault();
-      history.pushState({}, "", window.location.pathname);
-      renderVersionList();
-      return;
-    }
-  });
-
-  window.addEventListener("popstate", () => {
-    const v = getParam("v");
-    if(v) loadVersion(v, false);
-    else renderVersionList();
-  });
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const v = getParam("v");
-    if(v) loadVersion(v, false);
-    else renderVersionList();
-  });
-function replaceLivTags() {
-  document.querySelectorAll("liv").forEach(liv => {
-    let text = liv.textContent.trim();
-    let urlPart, displayText;
-
-    if (text.includes(" ")) {
-      const parts = text.split(" ");
-      urlPart = parts.slice(1).join("");
-      displayText = parts.join("");
-    } else {
-      urlPart = text;
-      displayText = text;
-    }
-
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    a.href = "?v=" + encodeURIComponent(urlPart);
-    a.textContent = displayText;
-    li.appendChild(a);
-
-    liv.replaceWith(li);
-  });
+  function renderVersionList(){const contentEl = createContent();contentEl.innerHTML = versionListHTML;if(window.CommonVersion && document.getElementById("currentVersionBox")){const box = document.getElementById("currentVersionBox");box.innerHTML = `<div style="padding:10px;background:#e0ffe0;border:1px solid #0a0;border-radius:5px;margin-bottom:15px;"><strong>Aktuelle Version:</strong> ${escapeHtml(window.CommonVersion.version)}<br><em>Veröffentlicht:</em> ${escapeHtml(window.CommonVersion.date)}</div>`;}}
+  document.addEventListener("click", (e) => {const a = e.target.closest && e.target.closest("a");if(!a) return;const href = a.getAttribute("href") || "";if(href.startsWith("?v=")){e.preventDefault();const params = new URLSearchParams(href.replace(/^\?/, ""));const v = params.get("v");if(v) loadVersion(v);return;}if(a.classList.contains("back-button")){e.preventDefault();history.pushState({}, "", window.location.pathname);renderVersionList();return;}});
+  window.addEventListener("popstate", () => { const v = getParam("v");if(v) loadVersion(v, false);else renderVersionList();});
+  document.addEventListener("DOMContentLoaded", () => {const v = getParam("v");if(v) loadVersion(v, false);else renderVersionList();});
 }
-
 document.addEventListener("DOMContentLoaded", replaceLivTags);
-
-})();
-</script>
-</body>
-</html>
+})();</script></body></html>
