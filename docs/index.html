@@ -249,35 +249,10 @@ function updateNavigation() {
   hamburger.addEventListener("keydown", (e) => {if (e.key === "Enter" || e.key === " ") {e.preventDefault();dropdown.classList.toggle("hidden");}});
 });
 </script>
-<script> // news
-document.addEventListener("DOMContentLoaded", async () => {
-  const newsContainer = document.getElementById("news-container");
-  try {
-    const res = await fetch("news.json");
-    const newsData = await res.json();
-
-    const now = new Date();
-    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-
-    // nur News max. 1 Monat alt
-    const recentNews = newsData.filter(n => new Date(n.date) >= oneMonthAgo);
-
-    if (recentNews.length === 0) {
-      newsContainer.innerHTML = "<p>Keine aktuellen Neuigkeiten.</p>";
-      return;
-    }
-
-    newsContainer.innerHTML = recentNews.map(n => `
-      <article date="${n.date}">
-        <h3>${n.title}</h3>
-        <p>${n.content}</p>
-      </article>
-    `).join("");
-  } catch (e) {
-    newsContainer.innerHTML = "<p>News konnten nicht geladen werden.</p>";
-    console.error(e);
-  }
-});
-</script>
+<script> document.addEventListener("DOMContentLoaded", async () => {
+  const newsContainer = document.getElementById("news-container"); try {const res = await fetch("news.json");const newsData = await res.json();const now = new Date();const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());const recentNews = newsData.filter(n => new Date(n.date) >= oneMonthAgo);    
+    if (recentNews.length === 0) {newsContainer.innerHTML = "<p>Keine aktuellen Neuigkeiten.</p>";return;}
+    newsContainer.innerHTML = recentNews.map(n => `<article date="${n.date}"><h3>${n.title}</h3><p>${n.content}</p></article>`).join("");
+  } catch (e) {newsContainer.innerHTML = "<p>News konnten nicht geladen werden.</p>";console.error(e);}});</script>
 </body>
 </html>
