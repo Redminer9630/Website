@@ -7,13 +7,12 @@
     <meta name="theme-color" content="#eaeaea">
     <style>
         body { font-family: 'Mojangles'; background: #eaeaea; line-height: 1.6; }
-        h1 { color: #000; }
+        h1, .dialog, .info, .name { color: #000; }
         .story { background: eaeaea; margin-bottom: 2em; padding: 1em; }
-        .dialog { color: #000; }
-        .info { font-size: 0.9em; color: #000; margin-bottom: 1em; }
-        .name { font-weight: bold; color: #000; } .logo{color: pink;} .ryan{color: brown;} .benx{color: red;} .flo{color: green;} .gambo{color: blue;}
+        .info { font-size: 0.9em; margin-bottom: 1em; }
+        .name { font-weight: bold; } .logo{color: pink;} .ryan{color: brown;} .benx{color: red;} .flo{color: green;} .gambo{color: blue;}
         a { text-decoration: none; color: #0078ff; }
-        :root[data-theme="dark"] h1, :root[data-theme="dark"] p, :root[data-theme="dark"] .dialog, :root[data-theme="dark"] .name { color: white;}
+        :root[data-theme="dark"] h1, :root[data-theme="dark"] p, :root[data-theme="dark"] .dialog, :root[data-theme="dark"] .name, :root[data-theme="dark"] .iv { color: white;}
         :root[data-theme="dark"] body, :root[data-theme="dark"] .story { background: #1a1a1a;}
     </style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/autoloader.js" type="module" defer></script>
@@ -21,17 +20,17 @@
 <body>
     <!-- Inhaltsverzeichnis -->
     <div class="story">
-        <h1>Schreck um Mitternacht - Inhaltsverzeichnis</h1>
+        <h1>Minecraft Freunde Fanstory - Inhaltsverzeichnis</h1>
         <ul>
-            <li><a href="#kapitel1">Kapitel 1: Schreck um Mitternacht</a></li>
-            <li><a href="#kapitel2">Kapitel 2: Die Schnecken-Folge</a></li>
+            <li><a class="iv" href="#kapitel1">Kapitel 1: Schreck um Mitternacht</a></li>
+            <li><a class="iv" href="#kapitel2">Kapitel 2: Die Schnecken-Folge</a></li>
         </ul>
     </div>
 
     <!-- Kapitel 1 -->
     <div class="story" id="kapitel1">
         <h1>Kapitel 1: Schreck um Mitternacht</h1>
-        <p class="info">Eine "unheimliche" Geschichte, inspiriert von Minecraft Freunde</p>
+        <p class="info">Eine Abenteuerliche Übernachtung</p>
         <p>Es war eine stille Nacht im Wald. Vier Freunde – Flo, Gambo, Logo und Ryan – hatten ihr Zelt aufgebaut und sich schlafen gelegt.</p>
         <p>Plötzlich wurde Gambo wach. Ein leises Rascheln drang an sein Ohr.</p>
         <div class="dialog"><span class="name gambo">Gambo:</span> Habt ihr das gehört?</div>
@@ -74,7 +73,7 @@
     <!-- Kapitel 2 -->
     <div class="story" id="kapitel2">
         <h1>Kapitel 2: Die Schnecken-Folge</h1>
-        <p class="info">Eine chaotische Podcast-Folge von Flo und Logo</p>
+        <p class="info">Eine chaotische Podcast-Folge <b>Muskulös und Mental am Ende</b></p>
 
         <div class="dialog"><span class="name flo">Flo:</span> Soll ich dir auch einen Milchshake machen, Logo?</div>
         <div class="dialog"><span class="name logo">Logo:</span> Ja, gern.</div>
