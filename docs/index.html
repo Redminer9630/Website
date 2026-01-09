@@ -112,29 +112,7 @@
 
     <section class="news-section">
       <h2>Neuigkeiten</h2>
-          <!--<article>
-              <h3>Wir machen Coole Wallpaper</h3>
-              <p>Wir machen grad ein cooles Wallpaper, ein Youtube Intro und ein paar Easter Eggs, voraussichtlich noch 18 Stunden Arbeitszeit<br>
-                  <a href="/files/wallpaper9630/p1.png">Prototyp 1</a>
-              </p>
-          </article>-->
-          <article date="12.12.25">
-              <h3>Schreck um Mitternacht wird Fortgesetzt</h3>
-              <p>Nach einer ganzen Weile bin ich zum Schluss gekommen SuM Fortzusetzten und neue "<i>Bücher</i>" zu schreiben. Das Nächste Kapitel kommt in wenigen Tagen bis Wochen</p>
-          </article>
-          <article date="17.10.25">
-              <h3>Mutation zum Full Stack Dev</h3>
-              <p>Auch wegen des Raspberry Pi's mache ich immer mehr Backend, <br>Frontend + Backend = Full Stack<br>Wird nicht sehr viel ändern, nur wie man mich nennt; Full Stack Developer [FSD]</p>
-          </article>
-          <article date="28.08.25">
-              <h3>Website Vollversion</h3>
-              <p>Die Website wurde aufgrund des Zufalls das die Website ein Jahr Alt(28.8) wird als Fertig erklärt</p>
-          </article>
-          <article date="21.08.25">
-              <h3>Ich hab Windows 11 Installiert</h3>
-              <p>Nach langen 17 Stunden hab ich endlich Windows 11 installiert dank Universal MediaCreationTool(TPM Bypass)</p>
-          </article>
-      </div>
+      <div id="news-container"></div>
     </section>
 </main>
 <script> // search
@@ -299,6 +277,36 @@ function updateNavigation() {
   hamburger.setAttribute("role", "button");
   hamburger.setAttribute("aria-label", "Menü anzeigen");
   hamburger.addEventListener("keydown", (e) => {if (e.key === "Enter" || e.key === " ") {e.preventDefault();dropdown.classList.toggle("hidden");}});
+});
+</script>
+<script> // news
+document.addEventListener("DOMContentLoaded", async () => {
+  const newsContainer = document.getElementById("news-container");
+  try {
+    const res = await fetch("news.json");
+    const newsData = await res.json();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+
+    // nur News max. 1 Monat alt
+    const recentNews = newsData.filter(n => new Date(n.date) >= oneMonthAgo);
+
+    if (recentNews.length === 0) {
+      newsContainer.innerHTML = "<p>Keine aktuellen Neuigkeiten.</p>";
+      return;
+    }
+
+    newsContainer.innerHTML = recentNews.map(n => `
+      <article date="${n.date}">
+        <h3>${n.title}</h3>
+        <p>${n.content}</p>
+      </article>
+    `).join("");
+  } catch (e) {
+    newsContainer.innerHTML = "<p>News konnten nicht geladen werden.</p>";
+    console.error(e);
+  }
 });
 </script>
 </body>
