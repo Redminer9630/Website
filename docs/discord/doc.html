@@ -42,3 +42,37 @@
     </div>
   </body>
 </html>
+
+Allgemeine Argumente:
+titel: Definiert den Titel eines Giveaways. Wird bei jedem Giveaway Command benötigt.
+
+<h4>/giveaway start</h4>
+<p>Startet ein Giveaway im jetztigen Kanal. Argumente:  
+dauer: Dauer des Giveaways. Kann in s|m|h|d angegeben werden.
+gewinner: Ganze Zahl.
+codes: Definiert die Gewinne, wird in DM so gesendet: "Du hast im Giveaway TITEL mit TEILNEHMER Teilnehmern gewonnen! Dein Gewinn: CODE".
+</p>
+<h4>/giveaway stop</h4>
+<p>Stopt den Timer vom Giveaway und wählt sofort Gewinner aus.</p>
+
+<h4>/giveaway list</h4>
+<p>Listet alle Giveaways auf. Grün = Giveaway Läuft, Blau = Giveaway Pausiert, Rot = Giveaway Beendet.</p>
+
+<h4>/giveaway pause</h4>
+<p>Pausiert den Timer des Giveaways.
+
+<h4>/giveaway resume</h4>
+<p>Setzt den Timer des Giveaways fort.
+
+<h4>/giveaway reroll</h4>
+<p>Lost die Gewinner des Giveaways neu aus.
+
+<h4>/giveaway extend</h4>
+<p>Verlängert die Dauer des Giveaways. Argumente:
+dauer: Zeit um die das Giveaway verlängert werden soll. Kann in s|m|h|d angegeben werden.
+</p>
+<h4>/giveaway delete</h4>
+<p>Löscht das gefilterte Giveaway aus der Datenbank. Argumente(Mindestens eins erforderlich):
+titel: Titel des Giveaways.
+older: Wie alt das Giveaway sein soll um gelöscht zu werden. Kann in s|m|h|d angegeben werden.
+</p>
