@@ -5,12 +5,14 @@
     <style>
       :root[data-theme="light"] {
         --body-bg: #fff;
-        --div-bg: #fefefe;
+        --cat-bg: #fefefe;
+        --cmd-bg: #eaeaea;
         --text: #000;
       }
       :root {
         --body-bg: #000;
-        --div-bg: #020202;
+        --cat-bg: #020202;
+        --cmd-bg: #121212;
         --text: #fff;
       }
       body {
@@ -24,56 +26,67 @@
         display: inline-block;
         border-radius: 5px;
       }
-      div {
+      .category {
         padding: 10px;
         border-radius: 11px;
-        background: var(--div-bg);
+        background: var(--cat-bg);
+      }
+      .cmd {
+        padding: 6px;
+        border-radius:7px;
+        background: var(--cmd-bg);
       }
     </style>
     <script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/autoloader.js" type="module" defer></script>
   </head>
   <body>
     <h1>Dokumentation Bot9630</h1>
-    <div><h3>Giveaways</h3>
+    <div class="category"><h3>Giveaways</h3>
 Allgemeine Argumente:
 titel: Definiert den Titel eines Giveaways. Wird bei jedem Giveaway Command benötigt.
-<div id="cmd">
-<h4>/giveaway start</h4>
-<p>Startet ein Giveaway im jetztigen Kanal. Argumente:  
+<div class="cmd">
+<h4>/giveaway start</h4><p>Startet ein Giveaway im jetztigen Kanal. Argumente:  
 dauer: Dauer des Giveaways. Kann in s|m|h|d angegeben werden.
 gewinner: Ganze Zahl.
 codes: Definiert die Gewinne, wird in DM so gesendet: "Du hast im Giveaway TITEL mit TEILNEHMER Teilnehmern gewonnen! Dein Gewinn: CODE".
 </p>
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway stop</h4>
 <p>Stopt den Timer vom Giveaway und wählt sofort Gewinner aus.</p>
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway list</h4>
 <p>Listet alle Giveaways auf. Grün = Giveaway Läuft, Blau = Giveaway Pausiert, Rot = Giveaway Beendet.</p>
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway pause</h4>
 <p>Pausiert den Timer des Giveaways.
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway resume</h4>
 <p>Setzt den Timer des Giveaways fort.
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway reroll</h4>
 <p>Lost die Gewinner des Giveaways neu aus.
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway extend</h4>
 <p>Verlängert die Dauer des Giveaways. Argumente:
 dauer: Zeit um die das Giveaway verlängert werden soll. Kann in s|m|h|d angegeben werden.
 </p>
-</div><div id="cmd">
+
+</div><div class="cmd">
 <h4>/giveaway delete</h4>
 <p>Löscht das gefilterte Giveaway aus der Datenbank. Argumente(Mindestens eins erforderlich):
 titel: Titel des Giveaways.
 older: Wie alt das Giveaway sein soll um gelöscht zu werden. Kann in s|m|h|d angegeben werden.
 </p>
-</div></div id="cmd">
+</div>
 
     </div>
-    <div><h3>Tickets</h3>
+    <div class="category"><h3>Tickets</h3>
       <h4>/ticketmessage</h4>
       <p>Erstellt die Ticket-Erstellungs-Nachricht im Tickets Kanal. Muss nur ausgeführt werden wenn die Ticket-Erstellungs-Nachricht gelöscht wurde/nicht mehr exsistiert.</p>
     </div>
