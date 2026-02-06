@@ -17,13 +17,13 @@
       }
       body {font-family: arial;color: var(--text);left: 8px;background: var(--body-bg);}
       h4 {background: rgba(10, 10, 240, 0.87);display: inline-block;border-radius: 5px;padding-left: 3px;padding-right: 3px;}
-      .category {padding: 10px;border-radius: 11px;background: var(--cat-bg);margin-bottom: 10px;}
+      .cat {padding: 10px;border-radius: 11px;background: var(--cat-bg);margin-bottom: 10px;}
       .cmd {padding: 6px;padding-right: 8px;padding-top: 3px;border-radius:7px;background: var(--cmd-bg);margin-bottom: 10px;}
     </style><script src="https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/autoloader.js" type="module" defer></script>
   </head>
   <body>
     <h1>Dokumentation Bot9630</h1>
-    <div class="category"><h3>Giveaways</h3>
+    <div class="cat"><h3>Giveaways</h3>
 Allgemeine Argumente:<br>titel: Definiert den Titel eines Giveaways. Wird bei jedem Giveaway Command benötigt.
 <br>
   
@@ -67,8 +67,19 @@ titel: Titel des Giveaways.<br>
 older: Wie alt das Giveaway sein soll um gelöscht zu werden. Kann in s|m|h|d angegeben werden.<br>
 </p>
 </div>
-
+</div>
+    <div class="cat"><h3>Server Icon</h3>
+      <div class="cmd"><h4>/servericon set</h4><p>Setzt das Server Icon auf die genannte Datei(auf dem Server) oder URL.</p></div>
+      <div class="cmd"><h4>/servericon auto</h4><p>Wenn true, ändert das Servericon automatisch, zB wenn Weinachten nahe ist wird das Servericon automatisch auf die Weinachtsversion geändert.</p></div>
     </div>
-    <div class="category"><h3>Tickets</h3><div class="cmd"><h4>/ticketmessage</h4><p>Erstellt die Ticket-Erstellungs-Nachricht im Tickets Kanal. Muss nur ausgeführt werden wenn die Ticket-Erstellungs-Nachricht gelöscht wurde/nicht mehr exsistiert.</p></div></div>
+    <div class="cat"><h3>Bot Status</h3>
+      <div class="cmd"><h4>/botstatus set</h4><p>Setzt denn Status vom Bot auf den Wert.</p></div>
+      <div class="cmd"><h4>/botstatus reset</h4><p>Setzt denn Status vom Bot zurück(Indef since idk)</p></div>
+    </div>
+    <div class="cat"><h3>Einzel Commands</h3>
+      <div class="cmd"><h4>/help</h4><p>Zeigt Nützliche Links an.</p></div>
+      <div class="cmd"><h4>/ping</h4><p>Zeigt Latenzen und Serverzeit.</p></div>
+      <div class="cmd"><h4>/ticketmessage</h4><p>Erstellt die Ticket-Erstellungs-Nachricht im Tickets Kanal. Muss nur ausgeführt werden wenn die Ticket-Erstellungs-Nachricht gelöscht wurde/nicht mehr exsistiert.</p></div>
+    </div>
   </body>
 </html>
