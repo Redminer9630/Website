@@ -16,8 +16,6 @@ window.CommonVersion = { version: "v2.1", key: "2.1", date: " 25.12.18", time: "
 const cdnBase = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/js_components/";["back_button.js","mctooltip.js","theme.js","overrides.js"].forEach(file => import(cdnBase + file).catch(e => console.error("Fehler beim Laden:", file, e)));
 const link = document.createElement("link");link.rel = "stylesheet";link.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/js_components/framework.css";document.head.appendChild(link);
 
-(function () {if (window._gaLoaded) return;window._gaLoaded = true;const s1 = document.createElement("script");s1.async = true;s1.src = "https://www.googletagmanager.com/gtag/js?id=G-GQQ91TTTRB";document.head.appendChild(s1);const s2 = document.createElement("script");s2.textContent = `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GQQ91TTTRB');`;document.head.appendChild(s2);})();
-
 (function() {const preload = document.createElement("link");preload.rel = "preload";preload.href = "https://cdn.jsdelivr.net/gh/Redminer9630/Website@t84b/docs/js_components/framework.css";preload.as = "style";preload.onload = () => { preload.rel = "stylesheet"; };document.head.appendChild(preload);})();
 (function() {
     function ensureThemeMeta() {
