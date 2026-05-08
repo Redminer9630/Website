@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeilen Kombinierer</title>
+
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      background: #1e1e1e;
+      color: white;
+      border: 1px solid #444;
+      padding: 10px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    .controls {
+      margin: 15px 0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    input, button {
+      background: #1e1e1e;
+      color: white;
+      border: 1px solid #444;
+      padding: 8px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2d2d2d;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Zeilen Kombinierer</h1>
+
+  <textarea id="input">
+Adam
+Fabian
+Lehrkraft
+
+Adnane
+Imane
+Lehrkraft
+
+Ahmad
+Sosin
+Lehrkraft
+  </textarea>
+
+  <div class="controls">
+    <div class="control">
+      <label>Wiederhohlt alle # Zeilen</label>
+      <input type="number" id="repeat" value="3" min="1">
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="convert()">Umwandeln</button>
+    <button onclick="copyResult()">Kopieren</button>
+  </div>
+
+  <h2>Ergebnis</h2>
+
+  <textarea id="output"></textarea>
+
+  <script>
+    function convert() {
+      const repeat = parseInt(document.getElementById("repeat").value);
+      
+      const lines = document
+        .getElementById("input")
+        .value
+        .split("\n")
+        .map(v => v.trim())
+        .filter(v => v !== "");
+
+      const result = [];
+
+      for (let i = 0; i < lines.length; i += repeat) {
+        const chunk = lines.slice(i, i + repeat);
+        result.push(chunk.join(", "));
+      }
+
+      document.getElementById("output").value = result.join("\n");
+    }
+
+    function copyResult() {
+      const output = document.getElementById("output");
+
+      output.select();
+      document.execCommand("copy");
+    }
+
+    convert();
+  </script>
+
+</body>
+</html>
