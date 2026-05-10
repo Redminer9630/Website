@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Injector</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {background-color: #0056b3;}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>HTML Code Injector</h1>
+        <p>Füge hier deinen HTML-Code ein. Beim Klick wird diese Seite komplett ersetzt.</p>
+        <textarea id="htmlInput" placeholder="<html>...</html>"></textarea>
+        <br>
+        <button onclick="renderHTML()">Seite ersetzen</button>
+    </div>
+
+    <script>
+        function renderHTML() {
+            const code = document.getElementById('htmlInput').value;
+            if (!code.trim()) {alert("Bitte gib zuerst etwas HTML-Code ein!");return;}
+            document.open();
+            document.write(code);
+            document.close();
+        }
+    </script>
+</body>
+</html>
