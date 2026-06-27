@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     footer.id = "main-footer";
     footer.className = "fixed-footer";
 
-    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}</a>`;
+    const footerText = `© ${year} Offizielle Website von Redminer9630 – Alle Rechte vorbehalten. <a style="color: #fff;" href="/version?v=${window.CommonVersion.key}">${window.CommonVersion.version}${window.CommonVersion.date}${window.CommonVersion.time}</a><br>Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder damit verbunden.`;
 
     footer.innerHTML = `<span class="footer-text">${footerText}</span>`;
     document.body.appendChild(footer);
