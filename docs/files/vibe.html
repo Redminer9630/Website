@@ -6,71 +6,71 @@
     <title>Ent-Viber</title>
 </head>
 <body>
-<p id="output"></p>
+    <p id="output"></p>
     <script>
         function console(text) {document.getElementById(output).innerHTML += '<br><br>' + text;}
 
       
         const name = "Red";
-        console.log(name);
+        console(name);
 
 
         let points = 0;
-        console.log(points);
+        console(points);
         for (let i = 0; i < 3; i++) {
             points++;
-            console.log(points);
+            console(points);
         }
 
 
-        console.log(typeof 42);
-        console.log(typeof "Hallo");
-        console.log(typeof false);
+        console(typeof 42);
+        console(typeof "Hallo");
+        console(typeof false);
         
         const number = 42;
         if (number > 100) {
-            console.log("Die Zahl ist größer als 100");
+            console("Die Zahl ist größer als 100");
         } else {
-            console.log("Die Zahl ist kleiner oder gleich 100");
+            console("Die Zahl ist kleiner oder gleich 100");
         }
 
         const value = "red";
         switch(value) {
             case "red":
-                console.log("Die Farbe ist rot");
+                console("Die Farbe ist rot");
                 break;
             case "blue":
-                console.log("Die Farbe ist blau");
+                console("Die Farbe ist blau");
                 break;
             case "green":
-                console.log("Die Farbe ist grün");
+                console("Die Farbe ist grün");
                 break;
             default:
-                console.log("Die Farbe ist unbekannt");
+                console("Die Farbe ist unbekannt");
         }
 
         const somenum = 17;
-        console.log(somenum % 2 === 0 ? "Gerade" : "Ungerade");
+        console(somenum % 2 === 0 ? "Gerade" : "Ungerade");
 
 
         for (let i = 1; i < 21; i++) {
-            console.log(i);
+            console(i);
         }
 
 
         let i = 5;
         while (i > -1) {
-            console.log(i);
+            console(i);
             i--;
         }
 
         function multiply(a, b) {
             return a * b;
         }
-        console.log(multiply(3, 4));
+        console(multiply(3, 4));
 
         const multiplyArrow = (a, b) => a * b;
-        console.log(multiplyArrow(5, 6));
+        console(multiplyArrow(5, 6));
     </script>
 </body>
 </html>
