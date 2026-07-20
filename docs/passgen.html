@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Generator</title>
+</head>
+<body style="background:#ececec;margin:0;padding:20px">
+
+<div style="font-family:sans-serif;max-width:440px;margin:20px auto;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.15);background:#f9f9f9">
+
+<h3 style="text-align:center">Password Generator</h3>
+
+<label>Länge <input id="len" type="number" value="16" min="1" max="4096" style="width:70px"></label>
+<label>Wiederholungen <input id="rep" type="number" value="32" min="1" max="1000000" style="width:90px"></label><br><br>
+
+<label><input type="checkbox" id="lower" checked>az</label>
+<label><input type="checkbox" id="upper" checked>AZ</label>
+<label><input type="checkbox" id="numbers" checked>09</label>
+<label><input type="checkbox" id="symbols">Sonderzeichen</label><br><br>
+
+<button id="genBtn" style="position:relative;width:100%;padding:10px;background:#4caf50;color:#fff;border:none;border-radius:6px;overflow:hidden;cursor:pointer">
+  <span id="btnText" style="position:relative;z-index:2">Generieren</span>
+  <div id="btnProgress" style="position:absolute;left:0;top:0;height:100%;width:0%;background:rgba(255,255,255,0.25);z-index:1;transition:width .03s linear"></div>
+</button>
+
+<div style="margin-top:15px">
+
+<div style="display:flex;gap:6px">
+<input id="out" type="password" readonly style="flex:1;padding:10px;background:#eee;border:none;border-radius:6px">
+
+<button onclick="togglePw()" style="background:none;border:none;cursor:pointer">
+<svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round">
+<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+<circle cx="12" cy="12" r="3"/>
+</svg>
+</button>
+
+<button onclick="copyPw()" style="padding:6px 7px;background:#2196f3;color:white;border:none;border-radius:6px;cursor:pointer">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaUlEQVR4nGNgGE7Am4GB4QkDA8N/MvBhYix4TKbh/xkYGA4RYwFMMc3Af3pb4E1mnICC2pMYCyiJk0fEWEBukP3HpW/UAhgYtWAkW3AYrVSkugXoYOhb8JjahR068CTTEpDhHmT4fJACAPSIpb+GxiBpAAAAAElFTkSuQmCC">
+</button>
+</div>
+
+<p>Entropie: <span id="entropy"></span></p>
+
+<p>Strength: <span id="strength"></span></p>
+
+<div style="height:8px;background:#ddd;border-radius:6px;overflow:hidden">
+<div id="strengthBar" style="height:100%;width:0%"></div>
+</div>
+
+<p id="copyMsg" style="font-size:13px"></p>
+
+</div>
+</div>
+
+<script>
+(function(){
+
+function randomIndex(max){
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  return arr[0] % max;
+}
+
+function charset(o){
+  let c="";
+  if(o.lower)c+="abcdefghijklmnopqrstuvwxyz";
+  if(o.upper)c+="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if(o.numbers)c+="0123456789";
+  if(o.symbols)c+="!@#$%^&*()_+-=[]{}|;:,.<>?/&≠~";
+  return c;
+}
+
+// massiv optimiert
+window.securePassword = async function(o, progressCb){
+
+  const cs = charset(o);
+  const csLen = cs.length;
+
+  if(!csLen) throw new Error("Leerer Charset");
+
+  // statt gigantischem splice-pool:
+  // direkte fixed-size buffer generation
+  const result = new Array(o.length);
+
+  // große random batches
+  const rand = new Uint32Array(Math.max(o.length * 2, 4096));
+
+  let ptr = 0;
+
+  const chunk = Math.max(1, Math.floor(o.repeat / 100));
+
+  for(let r=0;r<o.repeat;r++){
+
+    crypto.getRandomValues(rand);
+
+    for(let i=0;i<o.length;i++){
+      result[i] = cs[rand[(ptr+i)%rand.length] % csLen];
+    }
+
+    ptr++;
+
+    if(r % chunk === 0 || r === o.repeat-1){
+      progressCb && progressCb(r+1, o.repeat);
+      await new Promise(req=>requestAnimationFrame(req));
+    }
+  }
+
+  return {
+    pw: result.join(""),
+    size: csLen
+  };
+}
+
+})();
+
+function strengthData(bits){
+  if(bits<20) return ["sehr schwach","#b71c1c"];
+  if(bits<40) return ["schwach","#e65100"];
+  if(bits<60) return ["normal","#f9a825"];
+  if(bits<80) return ["gut","#43a047"];
+  if(bits<110) return ["stark","#2e7d32"];
+  if(bits<140) return ["sehr stark","#1565c0"];
+  if(bits<180) return ["extrem stark","#6a1b9a"];
+  return ["unknackbar","#000"];
+}
+
+async function runGen(){
+
+  genBtn.disabled = true;
+  btnText.textContent = "Generiere...";
+  btnProgress.style.width = "0%";
+
+  const res = await securePassword({
+    length:+len.value,
+    repeat:+rep.value,
+    lower:lower.checked,
+    upper:upper.checked,
+    numbers:numbers.checked,
+    symbols:symbols.checked
+  }, (i,total)=>{
+    btnProgress.style.width = ((i/total)*100) + "%";
+  });
+
+  out.value = res.pw;
+
+  const bits = res.pw.length * Math.log2(res.size);
+
+  entropy.textContent = bits.toFixed(2) + " bits";
+
+  const [txt,color] = strengthData(bits);
+
+  strength.textContent = txt;
+  strength.style.color = color;
+
+  // echte entropy-progressbar
+  const entropyPct = Math.min((bits / 256) * 100, 100);
+
+  strengthBar.style.width = entropyPct + "%";
+  strengthBar.style.background = color;
+
+  btnText.textContent = "Generieren";
+  genBtn.disabled = false;
+}
+
+function togglePw(){
+
+  if(out.type === "password"){
+
+    out.type = "text";
+
+    eyeIcon.innerHTML = `
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+      <circle cx="12" cy="12" r="3"/>
+      <line x1="3" y1="3" x2="21" y2="21"/>
+    `;
+
+  } else {
+
+    out.type = "password";
+
+    eyeIcon.innerHTML = `
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+      <circle cx="12" cy="12" r="3"/>
+    `;
+  }
+}
+
+function copyPw(){
+  navigator.clipboard.writeText(out.value);
+  copyMsg.textContent = "Kopiert!";
+  setTimeout(()=>copyMsg.textContent="",1200);
+}
+
+genBtn.onclick = runGen;
+</script>
+
+</body>
+</html>
