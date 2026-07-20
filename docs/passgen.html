@@ -2,199 +2,106 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Password Generator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Passwortgenerator</title>
+<style>
+body{margin:0;padding:16px;background:#eceff3;font-family:Inter,Arial,sans-serif}
+.card{max-width:420px;margin:auto;background:#fff;border-radius:16px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+#charset{display:flex;gap:6px;flex-wrap:nowrap;margin-bottom:14px}
+.chip{height:36px;display:flex;align-items:center;justify-content:center;padding:0 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:.8rem;font-weight:600;cursor:pointer}
+.chip.active{background:#2563eb;color:#fff;border-color:#2563eb}
+#genBtn{position:relative;width:100%;padding:11px;border:none;border-radius:12px;background:#2563eb;color:#fff;font-weight:600;overflow:hidden;cursor:pointer}
+#btnProgress{position:absolute;left:0;top:0;height:100%;width:0;background:rgba(255,255,255,.18)}
+#out{width:100%;box-sizing:border-box;padding:12px 82px 12px 12px;overflow-x:auto;white-space:nowrap;border:1px solid #cbd5e1;border-radius:12px;background:#f8fafc;font:14px Consolas,monospace;letter-spacing:.03em}
+.wrap{position:relative}
+.icons{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;gap:4px}
+.icons button{width:32px;height:32px;border:none;background:transparent;border-radius:8px;cursor:pointer}
+.icons button:hover{background:#e2e8f0}
+.small{font-size:.72rem;color:#64748b}
+.value{font-weight:700}
+ .error{background:#fee2e2!important;border-color:#dc2626!important}</style>
 </head>
-<body style="background:#ececec;margin:0;padding:20px">
+<body>
+<div class="card">
+<h2 style="margin:0 0 12px">Passwortgenerator</h2>
 
-<div style="font-family:sans-serif;max-width:440px;margin:20px auto;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.15);background:#f9f9f9">
+<div class="row"><label>Länge</label><input id="len" type="number" value="16" min="4" max="4096" style="width:84px"></div>
 
-<h3 style="text-align:center">Password Generator</h3>
+<div id="charset">
+<button class="chip active" data-id="lower">a-z</button>
+<button class="chip active" data-id="upper">A-Z</button>
+<button class="chip active" data-id="numbers">0-9</button>
+<button class="chip" data-id="symbols">!@#</button>
+</div>
 
-<label>Länge <input id="len" type="number" value="16" min="1" max="4096" style="width:70px"></label>
-<label>Wiederholungen <input id="rep" type="number" value="32" min="1" max="1000000" style="width:90px"></label><br><br>
+<input id="lower" type="checkbox" checked hidden>
+<input id="upper" type="checkbox" checked hidden>
+<input id="numbers" type="checkbox" checked hidden>
+<input id="symbols" type="checkbox" hidden>
 
-<label><input type="checkbox" id="lower" checked>az</label>
-<label><input type="checkbox" id="upper" checked>AZ</label>
-<label><input type="checkbox" id="numbers" checked>09</label>
-<label><input type="checkbox" id="symbols">Sonderzeichen</label><br><br>
+<button id="genBtn"><span style="position:relative;z-index:2">Generieren</span><div id="btnProgress"></div></button>
 
-<button id="genBtn" style="position:relative;width:100%;padding:10px;background:#4caf50;color:#fff;border:none;border-radius:6px;overflow:hidden;cursor:pointer">
-  <span id="btnText" style="position:relative;z-index:2">Generieren</span>
-  <div id="btnProgress" style="position:absolute;left:0;top:0;height:100%;width:0%;background:rgba(255,255,255,0.25);z-index:1;transition:width .03s linear"></div>
+<div class="wrap" style="margin-top:14px">
+<input id="out" type="password" readonly>
+
+<div class="icons">
+<button onclick="togglePw()">
+<svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
 </button>
 
-<div style="margin-top:15px">
-
-<div style="display:flex;gap:6px">
-<input id="out" type="password" readonly style="flex:1;padding:10px;background:#eee;border:none;border-radius:6px">
-
-<button onclick="togglePw()" style="background:none;border:none;cursor:pointer">
-<svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round">
-<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-<circle cx="12" cy="12" r="3"/>
+<button onclick="copyPw()">
+<svg id="copyIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2">
+<rect x="7" y="3" width="11" height="11" rx="2" fill="white"/><rect x="3" y="7" width="11" height="11" rx="2" fill="white"/>
 </svg>
 </button>
-
-<button onclick="copyPw()" style="padding:6px 7px;background:#2196f3;color:white;border:none;border-radius:6px;cursor:pointer">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAaUlEQVR4nGNgGE7Am4GB4QkDA8N/MvBhYix4TKbh/xkYGA4RYwFMMc3Af3pb4E1mnICC2pMYCyiJk0fEWEBukP3HpW/UAhgYtWAkW3AYrVSkugXoYOhb8JjahR068CTTEpDhHmT4fJACAPSIpb+GxiBpAAAAAElFTkSuQmCC">
-</button>
+</div>
 </div>
 
-<p>Entropie: <span id="entropy"></span></p>
-
-<p>Strength: <span id="strength"></span></p>
-
-<div style="height:8px;background:#ddd;border-radius:6px;overflow:hidden">
-<div id="strengthBar" style="height:100%;width:0%"></div>
+<div class="row" style="margin-top:12px">
+<div><div class="small">Entropie</div><div id="entropy" class="value">—</div></div>
+<div style="text-align:right"><div class="small">Stärke</div><div id="strength" class="value">—</div></div>
 </div>
 
-<p id="copyMsg" style="font-size:13px"></p>
-
-</div>
 </div>
 
 <script>
-(function(){
+const rounds=32;
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{const i=document.getElementById(c.dataset.id);i.checked=!i.checked;c.classList.toggle("active",i.checked);});
 
-function randomIndex(max){
-  const arr = new Uint32Array(1);
-  crypto.getRandomValues(arr);
-  return arr[0] % max;
-}
+function cs(){let s="";if(lower.checked)s+="abcdefghijklmnopqrstuvwxyz";if(upper.checked)s+="ABCDEFGHIJKLMNOPQRSTUVWXYZ";if(numbers.checked)s+="0123456789";if(symbols.checked)s+="!@#$%^&*()_+-=[]{}|;:,.<>?/&≠~";return s;}
+function rand(n){const a=new Uint32Array(n);crypto.getRandomValues(a);return a;}
+function lvl(b){if(b<40)return["Sehr schwach","#dc2626"];if(b<60)return["Schwach","#ea580c"];if(b<80)return["Mittel","#ca8a04"];if(b<100)return["Gut","#16a34a"];if(b<128)return["Stark","#2563eb"];if(b<160)return["Sehr stark","#7c3aed"];return["Außergewöhnlich","#111827"];}
 
-function charset(o){
-  let c="";
-  if(o.lower)c+="abcdefghijklmnopqrstuvwxyz";
-  if(o.upper)c+="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  if(o.numbers)c+="0123456789";
-  if(o.symbols)c+="!@#$%^&*()_+-=[]{}|;:,.<>?/&≠~";
-  return c;
-}
-
-// massiv optimiert
-window.securePassword = async function(o, progressCb){
-
-  const cs = charset(o);
-  const csLen = cs.length;
-
-  if(!csLen) throw new Error("Leerer Charset");
-
-  // statt gigantischem splice-pool:
-  // direkte fixed-size buffer generation
-  const result = new Array(o.length);
-
-  // große random batches
-  const rand = new Uint32Array(Math.max(o.length * 2, 4096));
-
-  let ptr = 0;
-
-  const chunk = Math.max(1, Math.floor(o.repeat / 100));
-
-  for(let r=0;r<o.repeat;r++){
-
-    crypto.getRandomValues(rand);
-
-    for(let i=0;i<o.length;i++){
-      result[i] = cs[rand[(ptr+i)%rand.length] % csLen];
-    }
-
-    ptr++;
-
-    if(r % chunk === 0 || r === o.repeat-1){
-      progressCb && progressCb(r+1, o.repeat);
-      await new Promise(req=>requestAnimationFrame(req));
-    }
-  }
-
-  return {
-    pw: result.join(""),
-    size: csLen
-  };
-}
-
-})();
-
-function strengthData(bits){
-  if(bits<20) return ["sehr schwach","#b71c1c"];
-  if(bits<40) return ["schwach","#e65100"];
-  if(bits<60) return ["normal","#f9a825"];
-  if(bits<80) return ["gut","#43a047"];
-  if(bits<110) return ["stark","#2e7d32"];
-  if(bits<140) return ["sehr stark","#1565c0"];
-  if(bits<180) return ["extrem stark","#6a1b9a"];
-  return ["unknackbar","#000"];
-}
-
-async function runGen(){
-
-  genBtn.disabled = true;
-  btnText.textContent = "Generiere...";
-  btnProgress.style.width = "0%";
-
-  const res = await securePassword({
-    length:+len.value,
-    repeat:+rep.value,
-    lower:lower.checked,
-    upper:upper.checked,
-    numbers:numbers.checked,
-    symbols:symbols.checked
-  }, (i,total)=>{
-    btnProgress.style.width = ((i/total)*100) + "%";
-  });
-
-  out.value = res.pw;
-
-  const bits = res.pw.length * Math.log2(res.size);
-
-  entropy.textContent = bits.toFixed(2) + " bits";
-
-  const [txt,color] = strengthData(bits);
-
-  strength.textContent = txt;
-  strength.style.color = color;
-
-  // echte entropy-progressbar
-  const entropyPct = Math.min((bits / 256) * 100, 100);
-
-  strengthBar.style.width = entropyPct + "%";
-  strengthBar.style.background = color;
-
-  btnText.textContent = "Generieren";
-  genBtn.disabled = false;
-}
-
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();genBtn.click();}});
+genBtn.onclick=async()=>{
+ len.classList.remove('error');document.querySelectorAll('.chip').forEach(c=>c.classList.remove('error'));
+ const L=Math.max(4,+len.value||0);
+ if(!Number.isInteger(+len.value)||+len.value<4){len.classList.add('error');return;}
+ const chars=cs(); if(!chars){document.querySelectorAll('.chip').forEach(c=>c.classList.add('error'));return;}
+ btnProgress.style.width="0%";
+ let outv=new Array(L);
+ for(let r=0;r<rounds;r++){
+  const x=rand(L);
+  for(let i=0;i<L;i++) outv[i]=chars[x[i]%chars.length];
+  btnProgress.style.width=((r+1)/rounds*100)+"%";
+  await new Promise(f=>requestAnimationFrame(f));
+ }
+ out.value=outv.join("");
+ const bits=L*Math.log2(chars.length);
+ entropy.textContent=bits.toFixed(0)+" bit";
+ const [t,c]=lvl(bits); strength.textContent=t; strength.style.color=c;
+ btnProgress.style.width="0%";
+};
 function togglePw(){
-
-  if(out.type === "password"){
-
-    out.type = "text";
-
-    eyeIcon.innerHTML = `
-      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-      <circle cx="12" cy="12" r="3"/>
-      <line x1="3" y1="3" x2="21" y2="21"/>
-    `;
-
-  } else {
-
-    out.type = "password";
-
-    eyeIcon.innerHTML = `
-      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
-      <circle cx="12" cy="12" r="3"/>
-    `;
-  }
+ if(out.type==="password"){out.type="text";eyeIcon.innerHTML='<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/>';}
+ else{out.type="password";eyeIcon.innerHTML='<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>';}
 }
-
 function copyPw(){
-  navigator.clipboard.writeText(out.value);
-  copyMsg.textContent = "Kopiert!";
-  setTimeout(()=>copyMsg.textContent="",1200);
+ if(!out.value)return;
+ navigator.clipboard.writeText(out.value);
+ copyIcon.innerHTML='<path d="M20 6L9 17l-5-5"/>';
+ setTimeout(()=>copyIcon.innerHTML='<rect x="7" y="3" width="11" height="11" rx="2" fill="white"/><rect x="3" y="7" width="11" height="11" rx="2" fill="white"/>',1000);
 }
-
-genBtn.onclick = runGen;
 </script>
-
-</body>
-</html>
+</body></html>
