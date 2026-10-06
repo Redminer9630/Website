@@ -35,82 +35,85 @@
       </div>
     </section>
 
-    <section id="lab" class="section lab-section"><div class="lab">
-  <div class="lab-panel">
-    <div class="panel-top">
-      <div class="panel-title">
-        <span class="dot"></span>
-        <span>Prompt</span>
+ <section id="lab" class="section lab-section">
+  <div class="lab-chat">
+    <div class="chat-heading">
+      <div>
+        <div class="section-label">02 · VIBE CODING LAB</div>
+        <h2>Deine Idee. Deine Vorschau.</h2>
       </div>
-      <span class="panel-hint">KI-Generator</span>
+      <span class="lab-status"><i></i> KI-Generator</span>
     </div>
 
-    <textarea id="prompt" placeholder="Beschreibe, was du erstellen möchtest..."></textarea>
-
-    <div class="examples">
-      <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">Taschenrechner</button>
-      <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
-      <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">Stoppuhr</button>
+<div class="preview-panel">
+  <div class="panel-top">
+    <div class="panel-title">
+      <span class="browser-dot"></span>
+      <span>Live Preview</span>
     </div>
-
-    <button id="run" class="run-button">
-      <span>Erstellen</span>
-      <span>→</span>
-    </button>
-
-    <div class="process">
-      <div class="process-line"></div>
-      <div class="process-step active" id="step1">
-        <span>01</span>
-        <div>
-          <b>Prompt analysieren</b>
-          <small>Warte auf Anfrage</small>
-        </div>
-      </div>
-      <div class="process-step" id="step2">
-        <span>02</span>
-        <div>
-          <b>Code generieren</b>
-          <small>Gemini erstellt HTML</small>
-        </div>
-      </div>
-      <div class="process-step" id="step3">
-        <span>03</span>
-        <div>
-          <b>Vorschau</b>
-          <small>Ergebnis wird geladen</small>
-        </div>
-      </div>
-    </div>
+    <a id="open-preview" target="_blank" rel="noopener" hidden>In neuem Tab öffnen ↗</a>
   </div>
 
-  <div class="preview-panel">
-    <div class="panel-top">
-      <div class="panel-title">
-        <span class="browser-dot"></span>
-        <span>Live Preview</span>
-      </div>
-      <a id="open-preview" target="_blank" hidden>Öffnen ↗</a>
+  <div class="browser">
+    <div class="browser-bar">
+      <span></span>
+      <span></span>
+      <span></span>
+      <div>vibe-coding / preview</div>
     </div>
 
-    <div class="browser">
-      <div class="browser-bar">
-        <span></span>
-        <span></span>
-        <span></span>
-        <div>vibe-coding / preview</div>
+    <iframe id="preview" sandbox="allow-scripts"></iframe>
+
+    <div class="preview-empty" id="preview-empty">
+      <div class="empty-icon">✳</div>
+      <strong>Was möchtest du bauen?</strong>
+      <span>Beschreibe deine Idee unten. Deine Anwendung erscheint hier.</span>
+    </div>
+  </div>
+</div>
+
+<div class="chat-composer">
+  <div class="examples">
+    <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">Taschenrechner</button>
+    <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
+    <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">Stoppuhr</button>
+  </div>
+
+  <div class="prompt-box">
+    <textarea id="prompt" rows="2" maxlength="2000" placeholder="Beschreibe, was du erstellen möchtest …"></textarea>
+    <button id="run" class="run-button" type="button" aria-label="Anwendung erstellen">
+      <span>Erstellen</span>
+      <span>↑</span>
+    </button>
+  </div>
+
+  <div class="generation-status" aria-live="polite">
+    <div class="status-heading">
+      <span>GENERIERUNGSSTATUS</span>
+      <span class="status-caption" id="generation-label">Bereit für deine Idee</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="process">
+      <div class="process-step" id="step1">
+        <span>1</span>
+        <div><b>Analysieren</b><small>Wartet auf Anfrage</small></div>
       </div>
-
-      <iframe id="preview" sandbox="allow-scripts"></iframe>
-
-      <div class="preview-empty" id="preview-empty">
-        <strong>Noch keine Vorschau</strong>
-        <span>Beschreibe eine Idee und klicke auf „Erstellen“.</span>
+      <div class="process-step" id="step2">
+        <span>2</span>
+        <div><b>Generieren</b><small>HTML erstellen</small></div>
+      </div>
+      <div class="process-step" id="step3">
+        <span>3</span>
+        <div><b>Vorschau</b><small>Ergebnis laden</small></div>
       </div>
     </div>
   </div>
 </div>
-    </section>
+
+  </div>
+</section>
 
     <section id="about" class="section about">
       <div class="section-label">03 · MEIN PROJEKT</div>
