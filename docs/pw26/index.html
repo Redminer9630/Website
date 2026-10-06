@@ -35,25 +35,81 @@
       </div>
     </section>
 
-    <section id="lab" class="section lab-section">
-      <div class="section-label">02 · VIBE CODING LAB</div>
-      <div class="lab-head">
+    <section id="lab" class="section lab-section"><div class="lab">
+  <div class="lab-panel">
+    <div class="panel-top">
+      <div class="panel-title">
+        <span class="dot"></span>
+        <span>Prompt</span>
+      </div>
+      <span class="panel-hint">KI-Generator</span>
+    </div>
+
+    <textarea id="prompt" placeholder="Beschreibe, was du erstellen möchtest..."></textarea>
+
+    <div class="examples">
+      <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">Taschenrechner</button>
+      <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
+      <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">Stoppuhr</button>
+    </div>
+
+    <button id="run" class="run-button">
+      <span>Erstellen</span>
+      <span>→</span>
+    </button>
+
+    <div class="process">
+      <div class="process-line"></div>
+      <div class="process-step active" id="step1">
+        <span>01</span>
         <div>
-          <h2>Probier es selbst aus.</h2>
-          <p>Beschreibe eine kleine Website oder Anwendung. In der echten Version wird dein Prompt an das Backend geschickt und dort von einer Coding-KI verarbeitet.</p>
+          <b>Prompt analysieren</b>
+          <small>Warte auf Anfrage</small>
         </div>
-        <div class="status"><i></i><span id="statusText">Demo-Modus</span></div>
+      </div>
+      <div class="process-step" id="step2">
+        <span>02</span>
+        <div>
+          <b>Code generieren</b>
+          <small>Gemini erstellt HTML</small>
+        </div>
+      </div>
+      <div class="process-step" id="step3">
+        <span>03</span>
+        <div>
+          <b>Vorschau</b>
+          <small>Ergebnis wird geladen</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-panel">
+    <div class="panel-top">
+      <div class="panel-title">
+        <span class="browser-dot"></span>
+        <span>Live Preview</span>
+      </div>
+      <a id="open-preview" target="_blank" hidden>Öffnen ↗</a>
+    </div>
+
+    <div class="browser">
+      <div class="browser-bar">
+        <span></span>
+        <span></span>
+        <span></span>
+        <div>vibe-coding / preview</div>
       </div>
 
-      <div class="lab"><textarea id="prompt" placeholder="Was möchtest du erstellen?"></textarea>
+      <iframe id="preview" sandbox="allow-scripts"></iframe>
 
-<button id="run">Erstellen</button>
-
-<div id="status"></div>
-
-<iframe id="preview" sandbox="allow-scripts"></iframe>
-
-<a id="open-preview" target="_blank" hidden>HTML direkt öffnen</a>
+      <div class="preview-empty" id="preview-empty">
+        <strong>Noch keine Vorschau</strong>
+        <span>Beschreibe eine Idee und klicke auf „Erstellen“.</span>
+      </div>
+    </div>
+  </div>
+</div>
     </section>
 
     <section id="about" class="section about">
