@@ -1,67 +1,43 @@
-const prompt = document.querySelector("#prompt");
-const run = document.querySelector("#run");
-const previewStatus = document.querySelector("#previewStatus");
-const statusText = document.querySelector("#statusText");
+const API_URL = "http://127.0.0.1:3003";
+
+const promptInput = document.querySelector("#prompt");
+const runButton = document.querySelector("#run");
 const preview = document.querySelector("#preview");
+const openButton = document.querySelector("#open-preview");
+const status = document.querySelector("#status");
 
-document.querySelectorAll(".examples button").forEach(button => {
-  button.addEventListener("click", () => {
-    prompt.value = button.dataset.prompt;
-    prompt.focus();
-  });
-});
+runButton.addEventListener("click", async () => {
+  const prompt = promptInput.value.trim();
 
-document.querySelector("#demoButton").addEventListener("click", event => {
-  const page = event.target.closest(".demo-page");
-  page.style.background = page.style.background ? "" : "#dfffa8";
-});
+  if (!prompt) return;
 
-run.addEventListener("click", async () => {
-  const value = prompt.value.trim();
-  if (!value) return;
+  runButton.disabled = true;
+  openButton.hidden = true;
+  status.textContent = "KI prüft die Anfrage...";
 
-  // Später ersetzen durch:
-  // const response = await fetch("https://DEIN-BACKEND/api/vibe", {
-  //   method: "POST",
-  //   headers: {"Content-Type":"application/json"},
-  //   body: JSON.stringify({prompt:value})
-  // });
-  // const result = await response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/vibe`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prompt })
+    });
 
-  run.disabled = true;
-  previewStatus.textContent = "KI arbeitet …";
-  statusText.textContent = "Demo läuft";
+    const data = await response.json();
 
-  const stages = [
-    ["Prompt analysieren …", 700],
-    ["Projekt planen …", 800],
-    ["Code generieren …", 1100],
-    ["Vorschau vorbereiten …", 700]
-  ];
+    preview.srcdoc = data.html;
 
-  for (const [text, delay] of stages) {
-    previewStatus.textContent = text;
-    await new Promise(resolve => setTimeout(resolve, delay));
+    if (data.previewId) {
+      openButton.href = `${API_URL}/api/preview/${data.previewId}`;
+      openButton.hidden = false;
+    }
+
+    status.textContent = "Fertig.";
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Verbindung zum Vibe-Coding-Server fehlgeschlagen.";
+  } finally {
+    runButton.disabled = false;
   }
-
-  const title = value.match(/["„]([^"”]+)["”]/)?.[1] || "Deine Website";
-  preview.innerHTML = `
-    <div class="demo-page">
-      <div class="demo-dot"></div>
-      <h3>${escapeHtml(title)}</h3>
-      <p>Diese Vorschau wurde aus deinem Prompt erzeugt.</p>
-      <button onclick="alert('Das ist die Demo-Vorschau. Später kommt hier dein echtes KI-generiertes Projekt hin.')">Ausprobieren</button>
-      <small>Vibe Coding · Demo</small>
-    </div>
-  `;
-
-  previewStatus.textContent = "Fertig";
-  statusText.textContent = "Demo-Modus";
-  run.disabled = false;
 });
-
-function escapeHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
-}
