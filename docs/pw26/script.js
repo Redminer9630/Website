@@ -4,23 +4,40 @@ const promptInput=document.querySelector("#prompt");
 const runButton=document.querySelector("#run");
 const preview=document.querySelector("#preview");
 const openButton=document.querySelector("#open-preview");
-const statusText=document.querySelector("#statusText");
+const emptyPreview=document.querySelector("#preview-empty");
+const step1=document.querySelector("#step1");
+const step2=document.querySelector("#step2");
+const step3=document.querySelector("#step3");
+
+document.querySelectorAll(".examples button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    promptInput.value=button.dataset.prompt;
+  });
+});
 
 runButton.addEventListener("click",async()=>{
-  console.log("BUTTON CLICK");
-
   const prompt=promptInput.value.trim();
 
-  if(!prompt){
-    statusText.textContent="Bitte zuerst einen Prompt eingeben.";
-    return;
-  }
+  if(!prompt)return;
 
   runButton.disabled=true;
-  statusText.textContent="KI generiert...";
+
+  step1.classList.add("active");
+  step1.classList.remove("done");
+  step2.classList.remove("active","done");
+  step3.classList.remove("active","done");
+
+  step1.querySelector("small").textContent="Anfrage wird verarbeitet...";
 
   try{
-    console.log("SENDING REQUEST");
+    await new Promise(resolve=>setTimeout(resolve,300));
+
+    step1.classList.remove("active");
+    step1.classList.add("done");
+    step1.querySelector("small").textContent="Prompt analysiert";
+
+    step2.classList.add("active");
+    step2.querySelector("small").textContent="Gemini generiert HTML...";
 
     const response=await fetch(API_URL+"/api/vibe",{
       method:"POST",
@@ -28,26 +45,43 @@ runButton.addEventListener("click",async()=>{
       body:JSON.stringify({prompt})
     });
 
-    console.log("RESPONSE:",response.status);
-
     if(!response.ok){
       throw new Error(`HTTP ${response.status}`);
     }
 
     const data=await response.json();
 
-    console.log("DATA:",data);
+    if(!data.html){
+      throw new Error("Keine HTML-Vorschau erhalten");
+    }
+
+    step2.classList.remove("active");
+    step2.classList.add("done");
+    step2.querySelector("small").textContent="HTML generiert";
+
+    step3.classList.add("active");
+    step3.querySelector("small").textContent="Vorschau wird geladen...";
 
     preview.srcdoc=data.html;
-    statusText.textContent="Vorschau bereit";
+    emptyPreview.hidden=true;
 
     if(data.previewId){
       openButton.href=API_URL+"/api/preview/"+data.previewId;
       openButton.hidden=false;
     }
+
+    preview.onload=()=>{
+      step3.classList.remove("active");
+      step3.classList.add("done");
+      step3.querySelector("small").textContent="Vorschau bereit";
+    };
   }catch(error){
     console.error("VIBE ERROR:",error);
-    statusText.textContent="Fehler: "+error.message;
+
+    step2.classList.remove("active");
+    step2.querySelector("small").textContent="Fehler: "+error.message;
+
+    step3.classList.remove("active");
   }finally{
     runButton.disabled=false;
   }
