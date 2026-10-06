@@ -1,1 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vibe Coding Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#">VIBE<span>CODING</span></a>
+    <nav>
+      <a href="#how">Wie funktioniert's?</a>
+      <a href="#lab">Ausprobieren</a>
+      <a href="#about">Über das Projekt</a>
+    </nav>
+  </header>
 
+  <main>
+    <section class="hero">
+      <div class="badge">PROJEKTWOCHE · JAHRGANG 9</div>
+      <h1>Programmieren,<br><span>ohne den Code zu schreiben.</span></h1>
+      <p>Vibe Coding bedeutet: Du beschreibst einer KI, was du bauen möchtest. Die KI schreibt und verändert den Code für dich.</p>
+      <a class="button" href="#lab">Jetzt ausprobieren ↓</a>
+    </section>
+
+    <section id="how" class="section">
+      <div class="section-label">01 · DAS PRINZIP</div>
+      <h2>Wie funktioniert Vibe Coding?</h2>
+      <div class="steps">
+        <article><b>01</b><h3>Beschreiben</h3><p>Du erklärst in normaler Sprache, was deine Anwendung können soll.</p></article>
+        <article><b>02</b><h3>Generieren</h3><p>Eine KI erstellt daraus HTML, CSS, JavaScript oder andere Dateien.</p></article>
+        <article><b>03</b><h3>Testen</h3><p>Du probierst das Ergebnis aus und beschreibst, was geändert werden soll.</p></article>
+        <article><b>04</b><h3>Iterieren</h3><p>Die KI verändert das Projekt Schritt für Schritt, bis das Ergebnis passt.</p></article>
+      </div>
+    </section>
+
+    <section id="lab" class="section lab-section">
+      <div class="section-label">02 · VIBE CODING LAB</div>
+      <div class="lab-head">
+        <div>
+          <h2>Probier es selbst aus.</h2>
+          <p>Beschreibe eine kleine Website oder Anwendung. In der echten Version wird dein Prompt an das Backend geschickt und dort von einer Coding-KI verarbeitet.</p>
+        </div>
+        <div class="status"><i></i><span id="statusText">Demo-Modus</span></div>
+      </div>
+
+      <div class="lab">
+        <div class="prompt-panel">
+          <label for="prompt">DEIN PROMPT</label>
+          <textarea id="prompt" placeholder="z. B. Erstelle eine Website für ein Café mit einer Speisekarte und einem Button, der das Design wechselt.">Erstelle eine kleine Website mit einer großen Überschrift "Meine Zukunft", einem kurzen Text und einem Button, der beim Klicken die Hintergrundfarbe ändert.</textarea>
+          <div class="examples">
+            <button data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
+            <button data-prompt="Erstelle ein kleines Zahl-Erraten-Spiel von 1 bis 100.">Zahlenspiel</button>
+            <button data-prompt="Erstelle eine moderne Website für ein Café mit Speisekarte.">Café-Website</button>
+          </div>
+          <button id="run" class="run-button">Vibe Coding starten <span>→</span></button>
+          <p class="hint">Demo: Die Vorschau wird lokal aus deinem Prompt simuliert. Später ersetzt du die Demo-Funktion durch deinen API-Aufruf.</p>
+        </div>
+
+        <div class="preview-panel">
+          <div class="preview-bar">
+            <span>PREVIEW</span>
+            <span id="previewStatus">Bereit</span>
+          </div>
+          <div id="preview" class="preview">
+            <div class="demo-page">
+              <div class="demo-dot"></div>
+              <h3>Meine Zukunft</h3>
+              <p>Eine kleine Website, erstellt durch eine natürliche Beschreibung.</p>
+              <button id="demoButton">Hintergrund ändern</button>
+              <small>Beispiel einer Vibe-Coding-Vorschau</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <div class="section-label">03 · MEIN PROJEKT</div>
+      <h2>Was untersuche ich?</h2>
+      <p>Meine Forscherfrage lautet:</p>
+      <blockquote>„Wie funktioniert Vibe Coding?“</blockquote>
+      <div class="columns">
+        <div><h3>Ich untersuche</h3><p>wie aus natürlichen Anweisungen funktionierender Code entsteht, wie viele Schritte dafür nötig sind und welche Aufgaben weiterhin vom Menschen übernommen werden.</p></div>
+        <div><h3>Ich dokumentiere</h3><p>Prompts, Versionen, Fehler, Verbesserungen und die Grenzen des Systems. So wird aus der Demo eine eigene Untersuchung.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>VIBE CODING · Projektwoche 2026</span>
+    <span>Informatik · Meine Zukunft</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
