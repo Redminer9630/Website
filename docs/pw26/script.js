@@ -1,3 +1,5 @@
+console.log("VIBE SCRIPT LOADED");
+
 const API_URL="https://each-organ-selling-fraser.trycloudflare.com";
 
 const promptInput=document.querySelector("#prompt");
@@ -6,14 +8,12 @@ const preview=document.querySelector("#preview");
 const openButton=document.querySelector("#open-preview");
 const status=document.querySelector("#status");
 
-document.querySelectorAll(".examples button").forEach(button=>{
-  button.addEventListener("click",()=>{
-    promptInput.value=button.dataset.prompt;
-    promptInput.focus();
-  });
-});
+console.log("BUTTON:",runButton);
+console.log("PROMPT:",promptInput);
 
 runButton.addEventListener("click",async()=>{
+  console.log("BUTTON CLICK");
+
   const prompt=promptInput.value.trim();
 
   if(!prompt){
@@ -22,34 +22,33 @@ runButton.addEventListener("click",async()=>{
   }
 
   runButton.disabled=true;
-  status.textContent="KI generiert deine Anwendung...";
-  openButton.hidden=true;
+  status.textContent="KI generiert...";
 
   try{
-    const response=await fetch(`${API_URL}/api/vibe`,{
+    console.log("SENDING REQUEST");
+
+    const response=await fetch(API_URL+"/api/vibe",{
       method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({prompt})
     });
 
-    if(!response.ok){
-      throw new Error(`HTTP ${response.status}`);
-    }
+    console.log("RESPONSE:",response.status);
 
     const data=await response.json();
+
+    console.log("DATA:",data);
 
     preview.srcdoc=data.html;
     status.textContent="Vorschau bereit";
 
     if(data.previewId){
-      openButton.href=`${API_URL}/api/preview/${data.previewId}`;
+      openButton.href=API_URL+"/api/preview/"+data.previewId;
       openButton.hidden=false;
     }
   }catch(error){
-    console.error(error);
-    status.textContent="Fehler bei der Generierung";
+    console.error("VIBE ERROR:",error);
+    status.textContent="Fehler: "+error.message;
   }finally{
     runButton.disabled=false;
   }
