@@ -45,35 +45,15 @@
         <div class="status"><i></i><span id="statusText">Demo-Modus</span></div>
       </div>
 
-      <div class="lab">
-        <div class="prompt-panel">
-          <label for="prompt">DEIN PROMPT</label>
-          <textarea id="prompt" placeholder="z. B. Erstelle eine Website für ein Café mit einer Speisekarte und einem Button, der das Design wechselt.">Erstelle eine kleine Website mit einer großen Überschrift "Meine Zukunft", einem kurzen Text und einem Button, der beim Klicken die Hintergrundfarbe ändert.</textarea>
-          <div class="examples">
-            <button data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
-            <button data-prompt="Erstelle ein kleines Zahl-Erraten-Spiel von 1 bis 100.">Zahlenspiel</button>
-            <button data-prompt="Erstelle eine moderne Website für ein Café mit Speisekarte.">Café-Website</button>
-          </div>
-          <button id="run" class="run-button">Vibe Coding starten <span>→</span></button>
-          <p class="hint">Demo: Die Vorschau wird lokal aus deinem Prompt simuliert. Später ersetzt du die Demo-Funktion durch deinen API-Aufruf.</p>
-        </div>
+      <div class="lab"><textarea id="prompt" placeholder="Was möchtest du erstellen?"></textarea>
 
-        <div class="preview-panel">
-          <div class="preview-bar">
-            <span>PREVIEW</span>
-            <span id="previewStatus">Bereit</span>
-          </div>
-          <div id="preview" class="preview">
-            <div class="demo-page">
-              <div class="demo-dot"></div>
-              <h3>Meine Zukunft</h3>
-              <p>Eine kleine Website, erstellt durch eine natürliche Beschreibung.</p>
-              <button id="demoButton">Hintergrund ändern</button>
-              <small>Beispiel einer Vibe-Coding-Vorschau</small>
-            </div>
-          </div>
-        </div>
-      </div>
+<button id="run">Erstellen</button>
+
+<div id="status"></div>
+
+<iframe id="preview" sandbox="allow-scripts"></iframe>
+
+<a id="open-preview" target="_blank" hidden>HTML direkt öffnen</a>
     </section>
 
     <section id="about" class="section about">
