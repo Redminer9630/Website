@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:3003";
+const API_URL = "https://each-organ-selling-fraser.trycloudflare.com";
 
 const promptInput = document.querySelector("#prompt");
 const runButton = document.querySelector("#run");
@@ -9,7 +9,10 @@ const status = document.querySelector("#status");
 runButton.addEventListener("click", async () => {
   const prompt = promptInput.value.trim();
 
-  if (!prompt) return;
+  if (!prompt) {
+    status.textContent = "Bitte beschreibe zuerst, was erstellt werden soll.";
+    return;
+  }
 
   runButton.disabled = true;
   openButton.hidden = true;
@@ -23,6 +26,10 @@ runButton.addEventListener("click", async () => {
       },
       body: JSON.stringify({ prompt })
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
 
     const data = await response.json();
 
