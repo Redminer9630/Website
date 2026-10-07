@@ -3,7 +3,6 @@ const API_URL="https://each-organ-selling-fraser.trycloudflare.com";
 const promptInput=document.querySelector("#prompt");
 const runButton=document.querySelector("#run");
 const preview=document.querySelector("#preview");
-const openButton=document.querySelector("#open-preview");
 const emptyPreview=document.querySelector("#preview-empty");
 
 const step1=document.querySelector("#step1");
@@ -13,6 +12,7 @@ const step3=document.querySelector("#step3");
 const expiry=document.querySelector("#expiry");
 const extendButton=document.querySelector("#extend");
 const shareButton=document.querySelector("#share");
+const openButton=document.querySelector("#open-preview");
 
 const idInput=document.querySelector("#preview-id-input");
 const loadButton=document.querySelector("#load-preview");
@@ -20,58 +20,62 @@ const loadButton=document.querySelector("#load-preview");
 const themeToggle=document.querySelector("#theme-toggle");
 const themeIcon=document.querySelector("#theme-icon");
 
-let currentPreviewId="";
+let currentId="";
 let expiresAt=0;
 
-const savedTheme=localStorage.getItem("vibe-theme");
-
-if(savedTheme!=="dark"){
-  document.body.classList.add("light");
-  themeIcon.textContent="☀";
-}else{
-  themeIcon.textContent="☾";
+function setTheme(light){
+  document.body.classList.toggle("light",light);
+  themeIcon.textContent=light?"☀":"☾";
+  localStorage.setItem("vibe-theme",light?"light":"dark");
 }
 
-themeToggle.addEventListener("click",()=>{
-  const light=document.body.classList.toggle("light");
+setTheme(localStorage.getItem("vibe-theme")!=="dark");
 
-  localStorage.setItem("vibe-theme",light?"light":"dark");
-  themeIcon.textContent=light?"☀":"☾";
+themeToggle.addEventListener("click",()=>{
+  setTheme(!document.body.classList.contains("light"));
 });
 
 document.querySelectorAll(".examples button").forEach(button=>{
   button.addEventListener("click",()=>{
     promptInput.value=button.dataset.prompt;
     promptInput.focus();
+    autoResize();
   });
 });
 
-function setStep(step,state,text){
-  const element=[null,step1,step2,step3][step];
+function autoResize(){
+  promptInput.style.height="auto";
+  promptInput.style.height=Math.min(promptInput.scrollHeight,130)+"px";
+}
 
-  if(!element)return;
+promptInput.addEventListener("input",autoResize);
 
-  element.classList.toggle("active",state==="active");
-  element.classList.toggle("done",state==="done");
+promptInput.addEventListener("keydown",event=>{
+  if(event.key==="Enter"&&!event.shiftKey){
+    event.preventDefault();
+    runButton.click();
+  }
+});
 
-  const small=element.querySelector("small");
+function setStep(element,state,text){
+  element.classList.remove("active","done");
 
-  if(small&&text){
-    small.textContent=text;
+  if(state){
+    element.classList.add(state);
+  }
+
+  if(text){
+    element.querySelector("small").textContent=text;
   }
 }
 
 function resetSteps(){
-  setStep(1,"");
-  setStep(2,"");
-  setStep(3,"");
-
-  step1.querySelector("small").textContent="Wartet auf Anfrage";
-  step2.querySelector("small").textContent="HTML erstellen";
-  step3.querySelector("small").textContent="Ergebnis laden";
+  setStep(step1,"","Wartet auf Anfrage");
+  setStep(step2,"","HTML erstellen");
+  setStep(step3,"","Ergebnis laden");
 }
 
-function updateExpiry(){
+function showExpiry(){
   if(!expiresAt){
     expiry.textContent="Noch nicht erstellt";
     extendButton.hidden=true;
@@ -88,30 +92,16 @@ function updateExpiry(){
 
   const date=new Date(expiresAt);
 
-  expiry.textContent=`Läuft bis ${date.toLocaleTimeString("de-DE",{
+  expiry.textContent="Läuft bis "+date.toLocaleTimeString("de-DE",{
     hour:"2-digit",
     minute:"2-digit"
-  })}`;
+  });
 
   extendButton.hidden=remaining>=5*60*1000;
 }
 
-async function loadPreview(id){
-  if(!/^[A-Za-z0-9]{6}$/.test(id)){
-    expiry.textContent="Ungültige ID";
-    return;
-  }
-
-  const response=await fetch(`${API_URL}/api/preview/${id}`);
-
-  if(!response.ok){
-    expiry.textContent="Preview nicht gefunden";
-    return;
-  }
-
-  currentPreviewId=id;
-
-  const url=`${API_URL}/api/preview/${id}`;
+function showPreview(id){
+  const url=API_URL+"/api/preview/"+id;
 
   preview.src=url;
   emptyPreview.hidden=true;
@@ -121,18 +111,33 @@ async function loadPreview(id){
 
   shareButton.hidden=false;
 
+  currentId=id;
   idInput.value=id;
+}
 
-  try{
-    const head=await fetch(url,{method:"HEAD"});
-    const expires=head.headers.get("x-preview-expires");
+async function loadPreview(id){
+  id=id.trim();
 
-    if(expires){
-      expiresAt=Number(expires);
-    }
-  }catch{}
+  if(!/^[A-Za-z0-9]{6}$/.test(id)){
+    expiry.textContent="ID muss 6 Zeichen haben";
+    return;
+  }
 
-  updateExpiry();
+  const response=await fetch(
+    API_URL+"/api/preview-info/"+id
+  );
+
+  if(!response.ok){
+    expiry.textContent="Preview nicht gefunden";
+    return;
+  }
+
+  const data=await response.json();
+
+  expiresAt=data.expiresAt;
+
+  showPreview(id);
+  showExpiry();
 }
 
 runButton.addEventListener("click",async()=>{
@@ -143,38 +148,70 @@ runButton.addEventListener("click",async()=>{
   runButton.disabled=true;
   resetSteps();
 
-  setStep(1,"active","Anfrage wird verarbeitet...");
+  setStep(
+    step1,
+    "active",
+    "Anfrage wird verarbeitet..."
+  );
 
   try{
-    await new Promise(resolve=>setTimeout(resolve,300));
 
-    setStep(1,"done","Prompt analysiert");
-    setStep(2,"active","Gemini generiert HTML...");
+    await new Promise(resolve=>setTimeout(resolve,250));
 
-    const response=await fetch(API_URL+"/api/vibe",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({prompt})
-    });
+    setStep(
+      step1,
+      "done",
+      "Prompt analysiert"
+    );
 
-    if(!response.ok){
-      throw new Error(`HTTP ${response.status}`);
-    }
+    setStep(
+      step2,
+      "active",
+      "Gemini generiert HTML..."
+    );
+
+    const response=await fetch(
+      API_URL+"/api/vibe",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({prompt})
+      }
+    );
 
     const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(
+        data.error||`HTTP ${response.status}`
+      );
+    }
 
     if(!data.html){
       throw new Error("Keine HTML-Vorschau erhalten");
     }
 
-    setStep(2,"done","HTML generiert");
-    setStep(3,"active","Vorschau wird geladen...");
+    setStep(
+      step2,
+      "done",
+      "HTML generiert"
+    );
+
+    setStep(
+      step3,
+      "active",
+      "Vorschau wird geladen..."
+    );
 
     preview.srcdoc=data.html;
     emptyPreview.hidden=true;
 
     if(data.previewId){
-      currentPreviewId=data.previewId;
+      currentId=data.previewId;
+      expiresAt=data.expiresAt;
+
       idInput.value=data.previewId;
 
       const url=API_URL+"/api/preview/"+data.previewId;
@@ -183,44 +220,55 @@ runButton.addEventListener("click",async()=>{
       openButton.hidden=false;
       shareButton.hidden=false;
 
-      expiresAt=data.expiresAt||Date.now()+15*60*1000;
-
-      updateExpiry();
+      showExpiry();
     }
 
     preview.onload=()=>{
-      setStep(3,"done","Vorschau bereit");
+      setStep(
+        step3,
+        "done",
+        "Vorschau bereit"
+      );
     };
 
   }catch(error){
+
     console.error("VIBE ERROR:",error);
 
-    setStep(2,"","Fehler: "+error.message);
-    setStep(3,"","");
+    setStep(
+      step2,
+      "",
+      error.message
+    );
+
+    setStep(
+      step3,
+      "",
+      "Nicht geladen"
+    );
+
   }finally{
     runButton.disabled=false;
   }
 });
 
 loadButton.addEventListener("click",async()=>{
-  const id=idInput.value.trim();
-
-  if(!id)return;
-
   loadButton.disabled=true;
 
   try{
-    await loadPreview(id);
+    await loadPreview(idInput.value);
   }catch(error){
     console.error(error);
     expiry.textContent="Fehler beim Laden";
-  }finally{
-    loadButton.disabled=false;
   }
+
+  loadButton.disabled=false;
 });
 
 idInput.addEventListener("input",()=>{
-  idInput.value=idInput.value.replace(/[^A-Za-z0-9]/g,"").slice(0,6);
+  idInput.value=idInput.value
+    .replace(/[^A-Za-z0-9]/g,"")
+    .slice(0,6);
 });
 
 idInput.addEventListener("keydown",event=>{
@@ -230,9 +278,9 @@ idInput.addEventListener("keydown",event=>{
 });
 
 shareButton.addEventListener("click",async()=>{
-  if(!currentPreviewId)return;
+  if(!currentId)return;
 
-  const url=API_URL+"/api/preview/"+currentPreviewId;
+  const url=API_URL+"/api/preview/"+currentId;
 
   try{
     await navigator.clipboard.writeText(url);
@@ -242,39 +290,44 @@ shareButton.addEventListener("click",async()=>{
 
     setTimeout(()=>{
       shareButton.textContent=old;
-    },1500);
+    },1400);
+
   }catch{
-    prompt("Preview-Link:",url);
+    window.prompt("Preview-Link:",url);
   }
 });
 
 extendButton.addEventListener("click",async()=>{
-  if(!currentPreviewId)return;
+  if(!currentId)return;
 
   extendButton.disabled=true;
 
   try{
-    const response=await fetch(
-      `${API_URL}/api/preview/${currentPreviewId}/extend`,
-      {method:"POST"}
-    );
 
-    if(!response.ok){
-      throw new Error("Verlängerung fehlgeschlagen");
-    }
+    const response=await fetch(
+      API_URL+"/api/preview/"+currentId+"/extend",
+      {
+        method:"POST"
+      }
+    );
 
     const data=await response.json();
 
-    expiresAt=data.expiresAt;
-    updateExpiry();
+    if(!response.ok){
+      throw new Error(data.error||"Fehler");
+    }
 
-    extendButton.textContent="+5 Min.";
+    expiresAt=data.expiresAt;
+    showExpiry();
+
   }catch(error){
-    console.error(error);
-  }finally{
-    extendButton.disabled=false;
+    console.error("EXTEND ERROR:",error);
   }
+
+  extendButton.disabled=false;
 });
 
-setInterval(updateExpiry,1000);
-updateExpiry();
+setInterval(showExpiry,1000);
+
+resetSteps();
+showExpiry();
