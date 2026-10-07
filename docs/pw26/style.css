@@ -231,13 +231,13 @@ main{
   font-size:12px;
   font-weight:600;
 }
-
 /* PREVIEW */
 
 .browser{
   position:relative;
   height:650px;
   background:#f5f6f8;
+  overflow:hidden;
 }
 
 .browser-bar{
@@ -245,7 +245,7 @@ main{
   top:0;
   left:0;
   right:0;
-  z-index:3;
+  z-index:2;
   height:32px;
   padding:0 11px;
   display:flex;
@@ -274,6 +274,7 @@ main{
 
 #preview{
   position:absolute;
+  z-index:1;
   top:32px;
   left:0;
   width:100%;
@@ -284,6 +285,7 @@ main{
 
 .preview-empty{
   position:absolute;
+  z-index:2;
   top:32px;
   left:0;
   right:0;
@@ -320,15 +322,15 @@ main{
 
 .chat-composer{
   position:absolute;
+  z-index:10;
   left:14px;
   right:14px;
   bottom:14px;
-  z-index:5;
   padding:10px;
-  background:rgba(18,20,25,.96);
+  background:rgba(18,20,25,.97);
   border:1px solid #343943;
   border-radius:12px;
-  box-shadow:0 8px 30px rgba(0,0,0,.22);
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
 }
 
 .examples{
@@ -366,9 +368,9 @@ main{
   height:48px;
   min-height:48px;
   max-height:100px;
-  resize:none;
   margin:0;
   padding:10px 11px;
+  resize:none;
   background:#0b0c0f;
   border:1px solid #30343d;
   border-radius:9px;
@@ -384,10 +386,21 @@ main{
 }
 
 .run-button{
+  width:auto;
   height:48px;
+  margin:0;
   padding:0 15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   gap:9px;
+  border:0;
+  border-radius:9px;
+  background:var(--accent);
+  color:#0b0c0f;
   font-size:12px;
+  font-weight:700;
+  cursor:pointer;
 }
 
 .run-button:disabled{
@@ -395,6 +408,68 @@ main{
   cursor:wait;
 }
 
+/* GENERATION STATUS */
+
+.generation-status{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #282c34;
+}
+
+.process{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+
+.process-step{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 8px;
+  border:1px solid #282c34;
+  border-radius:7px;
+  color:#707782;
+}
+
+.process-step>span{
+  width:20px;
+  height:20px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#1b1e24;
+  color:#707782;
+  font-size:10px;
+}
+
+.process-step b{
+  display:block;
+  color:#aeb4bd;
+  font-size:10px;
+}
+
+.process-step small{
+  display:block;
+  margin-top:1px;
+  color:#666d77;
+  font-size:9px;
+}
+
+.process-step.active{
+  border-color:#5d7135;
+}
+
+.process-step.active>span{
+  background:var(--accent);
+  color:#0b0c0f;
+}
+
+.process-step.done>span{
+  background:#687f3b;
+  color:#fff;
+}
 /* GENERATION STATUS */
 
 .generation-status{
