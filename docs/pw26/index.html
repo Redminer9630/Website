@@ -9,6 +9,7 @@
 <body>
   <header class="topbar">
     <a class="logo" href="#">VIBE<span>CODING</span></a>
+
     <nav>
       <a href="#how">Wie funktioniert's?</a>
       <a href="#who">Wer benutzt es?</a>
@@ -16,13 +17,26 @@
       <a href="#lab">Ausprobieren</a>
       <a href="#about">Über das Projekt</a>
     </nav>
+
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Farbschema wechseln">
+      <span id="theme-icon">☾</span>
+    </button>
   </header>
 
   <main>
     <section class="hero">
       <div class="badge">PROJEKTWOCHE · JAHRGANG 9</div>
-      <h1>Programmieren,<br><span>ohne den Code zu schreiben.</span></h1>
-      <p>Vibe Coding bedeutet: Du beschreibst einer KI, was du bauen möchtest. Die KI schreibt und verändert den Code für dich.</p>
+
+      <h1>
+        Programmieren,<br>
+        <span>ohne den Code zu schreiben.</span>
+      </h1>
+
+      <p>
+        Vibe Coding bedeutet: Du beschreibst einer KI, was du bauen möchtest.
+        Die KI schreibt und verändert den Code für dich.
+      </p>
+
       <a class="button" href="#lab">Jetzt ausprobieren ↓</a>
     </section>
 
@@ -121,12 +135,7 @@
                 placeholder="Beschreibe, was du erstellen möchtest …"
               ></textarea>
 
-              <button
-                id="run"
-                class="run-button"
-                type="button"
-                aria-label="Anwendung erstellen"
-              >
+              <button id="run" class="run-button" type="button">
                 <span>Erstellen</span>
                 <span>↑</span>
               </button>
@@ -198,6 +207,6 @@
     <span>Informatik · Meine Zukunft</span>
   </footer>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>
