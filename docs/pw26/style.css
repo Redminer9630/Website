@@ -564,11 +564,8 @@ footer{
 }
 
 /* MOBILE */
-
 @media(max-width:800px){
-  nav{
-    display:none;
-  }
+  nav{display:none}
 
   .hero{
     padding-top:90px;
@@ -610,10 +607,6 @@ footer{
     left:8px;
     right:8px;
     bottom:8px;
-  }
-
-  .prompt-box{
-    align-items:stretch;
   }
 
   .run-button{
