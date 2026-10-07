@@ -1,91 +1,301 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Vibe Coding Lab</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vibe Coding Lab</title>
+<link rel="stylesheet" href="style.css?v=6">
 </head>
-<body>
-  <header class="topbar">
-    <a class="logo" href="#">VIBE<span>CODING</span></a>
 
-    <nav>
-      <a href="#how">Wie funktioniert's?</a>
-      <a href="#who">Wer benutzt es?</a>
-      <a href="#dangers">Gefahren</a>
-      <a href="#lab">Ausprobieren</a>
-      <a href="#about">Über das Projekt</a>
-    </nav>
+<body class="light">
 
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Farbschema wechseln">
-      <span id="theme-icon">☾</span>
-    </button>
-  </header>
+<header class="topbar">
+  <a class="logo" href="#">VIBE<span>.</span></a>
 
-  <main>
-    <section class="hero">
-      <div class="badge">PROJEKTWOCHE · JAHRGANG 9</div>
+  <nav>
+    <a href="#how">How it works</a>
+    <a href="#lab">Lab</a>
+    <a href="#products">Was du bauen kannst</a>
+  </nav>
 
-      <h1>
-        Programmieren,<br>
-        <span>ohne den Code zu schreiben.</span>
-      </h1>
+  <button id="theme-toggle" class="theme-toggle" type="button">
+    <span id="theme-icon">☀</span>
+  </button>
+</header>
 
-      <p>
-        Vibe Coding bedeutet: Du beschreibst einer KI, was du bauen möchtest.
-        Die KI schreibt und verändert den Code für dich.
-      </p>
+<main>
 
-      <a class="button" href="#lab">Jetzt ausprobieren ↓</a>
-    </section>
+<section class="hero">
+  <span class="eyebrow">VIBE CODING LAB</span>
 
-    <section id="how" class="section">
-      <div class="section-label">01 · DAS PRINZIP</div>
-      <h2>Wie funktioniert Vibe Coding?</h2>
+  <h1>
+    Eine Idee.<br>
+    Ein Prompt.<br>
+    <span>Ein Produkt.</span>
+  </h1>
 
-      <div class="steps">
-        <article>
-          <b>01</b>
-          <h3>Beschreiben</h3>
-          <p>Du erklärst in normaler Sprache, was deine Anwendung können soll.</p>
-        </article>
+  <p>
+    Beschreibe einfach, was du bauen möchtest.
+    Gemini erstellt daraus eine funktionierende Webanwendung,
+    die du direkt ausprobieren kannst.
+  </p>
 
-        <article>
-          <b>02</b>
-          <h3>Generieren</h3>
-          <p>Eine KI erstellt daraus HTML, CSS, JavaScript oder andere Dateien.</p>
-        </article>
+  <a class="hero-button" href="#lab">
+    Lab öffnen
+  </a>
+</section>
 
-        <article>
-          <b>03</b>
-          <h3>Testen</h3>
-          <p>Du probierst das Ergebnis aus und beschreibst, was geändert werden soll.</p>
-        </article>
+<section class="section" id="how">
+  <span class="eyebrow">SO FUNKTIONIERT ES</span>
 
-        <article>
-          <b>04</b>
-          <h3>Iterieren</h3>
-          <p>Die KI verändert das Projekt Schritt für Schritt, bis das Ergebnis passt.</p>
-        </article>
+  <h2>Vom Gedanken<br>zur Anwendung.</h2>
+
+  <div class="steps-info">
+    <article>
+      <b>01</b>
+      <h3>Beschreiben</h3>
+      <p>Schreibe in normalen Worten, was du erstellen möchtest.</p>
+    </article>
+
+    <article>
+      <b>02</b>
+      <h3>Generieren</h3>
+      <p>Gemini übersetzt deine Beschreibung in HTML, CSS und JavaScript.</p>
+    </article>
+
+    <article>
+      <b>03</b>
+      <h3>Ausprobieren</h3>
+      <p>Das fertige Produkt erscheint direkt in der Live Preview.</p>
+    </article>
+
+    <article>
+      <b>04</b>
+      <h3>Teilen</h3>
+      <p>Jede Preview bekommt eine kurze ID und kann weitergegeben werden.</p>
+    </article>
+  </div>
+</section>
+
+<section class="section lab-section" id="lab">
+
+  <div class="section-heading">
+    <div>
+      <span class="eyebrow">LIVE LAB</span>
+      <h2>Was möchtest du bauen?</h2>
+    </div>
+
+    <div class="online">
+      <i></i>
+      Gemini online
+    </div>
+  </div>
+
+  <div class="lab-window">
+
+    <div class="window-bar">
+
+      <div class="window-left">
+        <div class="window-dots">
+          <i></i>
+          <i></i>
+          <i></i>
+        </div>
+
+        <span>Live Preview</span>
       </div>
-    </section>
 
-<section class="section product-section">
-  <span class="section-label">WAS DU BAUEN KANNST</span>
+      <div class="window-actions">
 
-  <h2>Von einer Idee<br>zum fertigen Produkt.</h2>
+        <span id="expiry">Noch nicht erstellt</span>
+
+        <button id="extend" hidden type="button">
+          +5 Min.
+        </button>
+
+        <button id="share" hidden type="button">
+          Teilen
+        </button>
+
+        <a id="open-preview" hidden target="_blank">
+          ↗
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="preview-area">
+
+      <iframe
+        id="preview"
+        title="Generierte Preview"
+      ></iframe>
+
+      <div id="preview-empty" class="preview-empty">
+        <div class="empty-icon">✦</div>
+        <h3>Dein Produkt erscheint hier.</h3>
+        <p>Beschreibe unten, was du erstellen möchtest.</p>
+      </div>
+
+      <div class="composer">
+
+        <div class="example-row">
+          <span>BEISPIELE</span>
+
+          <div class="examples">
+
+            <button data-prompt="Erstelle eine moderne To-do-Liste mit Kategorien, Prioritäten, Filtern und einem Fortschrittsbalken.">
+              To-do
+            </button>
+
+            <button data-prompt="Erstelle einen modernen Taschenrechner mit großen Buttons, Rechenverlauf und Tastatursteuerung.">
+              Rechner
+            </button>
+
+            <button data-prompt="Erstelle eine Stoppuhr mit Start, Pause, Reset und Rundenzeiten.">
+              Stoppuhr
+            </button>
+
+            <button data-prompt="Erstelle einen Countdown mit Startdatum, Enddatum und einer großen animierten Zeitanzeige.">
+              Countdown
+            </button>
+
+            <button data-prompt="Erstelle eine Wetter-App mit Stadtsuche, Temperatur, Wetterzustand und einer 5-Tage-Vorschau.">
+              Wetter
+            </button>
+
+            <button data-prompt="Erstelle ein Quiz mit Fragen, Antwortmöglichkeiten, Punktestand und Ergebnisbildschirm.">
+              Quiz
+            </button>
+
+            <button data-prompt="Erstelle einen Pomodoro-Timer mit Arbeitsphasen, Pausen und Fortschrittsanzeige.">
+              Pomodoro
+            </button>
+
+            <button data-prompt="Erstelle einen Budget-Tracker mit Einnahmen, Ausgaben, Kategorien und Diagrammen.">
+              Budget
+            </button>
+
+            <button data-prompt="Erstelle einen Musikplayer mit Play, Pause, Fortschrittsbalken, Lautstärke und Playlist.">
+              Musik
+            </button>
+
+            <button data-prompt="Erstelle ein Kanban-Board mit den Spalten Offen, In Arbeit und Erledigt. Karten sollen verschiebbar sein.">
+              Kanban
+            </button>
+
+            <button data-prompt="Erstelle ein Dashboard mit Uhrzeit, Datum, Wetter, Statistiken und frei konfigurierbaren Karten.">
+              Dashboard
+            </button>
+
+            <button data-prompt="Erstelle eine Rezept-App mit Suche, Zutaten, Zubereitung, Kategorien und Favoriten.">
+              Rezepte
+            </button>
+
+            <button data-prompt="Erstelle einen Einheiten-Konverter für Länge, Gewicht, Temperatur und Geschwindigkeit.">
+              Konverter
+            </button>
+
+            <button data-prompt="Erstelle eine moderne Notizen-App mit mehreren Notizen, Suche und automatischem Speichern.">
+              Notizen
+            </button>
+
+            <button data-prompt="Erstelle ein Memory-Spiel mit Karten, Zähler, Timer und Gewinnanzeige.">
+              Memory
+            </button>
+
+            <button data-prompt="Erstelle eine interaktive Timeline zu einem historischen Ereignis mit Jahreszahlen und Informationen.">
+              Timeline
+            </button>
+
+          </div>
+        </div>
+
+        <div class="prompt-row">
+
+          <textarea
+            id="prompt"
+            rows="1"
+            placeholder="Beschreibe, was du erstellen möchtest ..."
+          ></textarea>
+
+          <button id="run" class="create-button" type="button">
+            Erstellen
+            <span>→</span>
+          </button>
+
+        </div>
+
+        <div class="generation-steps">
+
+          <div id="step1">
+            <b>01</b>
+            <div>
+              <strong>Analysieren</strong>
+              <small>Wartet auf Anfrage</small>
+            </div>
+          </div>
+
+          <div id="step2">
+            <b>02</b>
+            <div>
+              <strong>Generieren</strong>
+              <small>HTML erstellen</small>
+            </div>
+          </div>
+
+          <div id="step3">
+            <b>03</b>
+            <div>
+              <strong>Vorschau</strong>
+              <small>Ergebnis laden</small>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="preview-loader">
+
+          <span>PREVIEW-ID</span>
+
+          <input
+            id="preview-id-input"
+            maxlength="6"
+            placeholder="ABC123"
+            autocomplete="off"
+            spellcheck="false"
+          >
+
+          <button id="load-preview" type="button">
+            Öffnen
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section product-section" id="products">
+
+  <span class="eyebrow">MÖGLICHKEITEN</span>
+
+  <h2>Du bestimmst,<br>was daraus wird.</h2>
 
   <div class="product-grid">
 
-    <article class="product-card product-large">
+    <article class="product-card large">
       <span>01</span>
       <h3>Websites</h3>
       <p>
         Landingpages, Portfolios, Informationsseiten und komplette
-        Weboberflächen aus einer einfachen Beschreibung.
+        Weboberflächen.
       </p>
-      <div class="product-preview website-preview">
+
+      <div class="mock-browser">
         <div></div>
         <div></div>
         <div></div>
@@ -96,10 +306,10 @@
       <span>02</span>
       <h3>Tools</h3>
       <p>
-        Rechner, Timer, Konverter, Dashboards und kleine
-        Produktivitäts-Tools.
+        Rechner, Timer, Konverter und Produktivitäts-Tools.
       </p>
-      <div class="mini-ui">
+
+      <div class="mock-tool">
         <strong>12:42</strong>
         <small>Timer</small>
       </div>
@@ -109,13 +319,13 @@
       <span>03</span>
       <h3>Apps</h3>
       <p>
-        Interaktive Anwendungen mit Buttons, Formularen,
-        Filtern und Zuständen.
+        Interaktive Anwendungen mit Formularen, Filtern und Zuständen.
       </p>
-      <div class="mini-ui">
-        <div class="fake-row"></div>
-        <div class="fake-row"></div>
-        <div class="fake-row"></div>
+
+      <div class="mock-list">
+        <i></i>
+        <i></i>
+        <i></i>
       </div>
     </article>
 
@@ -123,10 +333,10 @@
       <span>04</span>
       <h3>Experimente</h3>
       <p>
-        Animationen, Spiele und ungewöhnliche Ideen lassen sich
-        direkt ausprobieren.
+        Spiele, Animationen und ungewöhnliche Ideen.
       </p>
-      <div class="experiment-ui">
+
+      <div class="mock-circles">
         <i></i>
         <i></i>
         <i></i>
@@ -135,201 +345,14 @@
 
   </div>
 </section>
-      
-<section class="section lab-section" id="lab">
-  <div class="lab-head">
-    <div>
-      <span class="section-label">VIBE CODING LAB</span>
-      <h2>Beschreiben.<br>Generieren.<br>Fertig.</h2>
-    </div>
 
-    <div class="lab-head-right">
-      <div class="status">
-        <i></i>
-        Gemini online
-      </div>
+</main>
 
-      <button id="theme-toggle" class="theme-toggle" type="button">
-        <span id="theme-icon">☀</span>
-      </button>
-    </div>
-  </div>
+<footer>
+  <span>VIBE CODING LAB</span>
+  <span>PW26</span>
+</footer>
 
-  <div class="lab">
-    <div class="browser">
-      <div class="browser-bar">
-        <div class="browser-dots">
-          <i></i><i></i><i></i>
-        </div>
-
-        <span>Live Preview</span>
-
-        <div class="preview-actions">
-          <span id="expiry">Noch nicht erstellt</span>
-
-          <button id="extend" hidden type="button">
-            +5 Min.
-          </button>
-
-          <button id="share" hidden type="button">
-            Teilen
-          </button>
-
-          <a id="open-preview" hidden target="_blank">
-            ↗
-          </a>
-        </div>
-      </div>
-
-      <div class="preview">
-        <iframe id="preview" title="Live Preview"></iframe>
-
-        <div id="preview-empty" class="preview-empty">
-          <strong>Dein Produkt erscheint hier.</strong>
-          <span>Beschreibe unten, was du bauen möchtest.</span>
-        </div>
-
-        <div class="chat-composer">
-
-          <div class="examples">
-            <span>Beispiele</span>
-
-            <button data-prompt="Erstelle eine moderne To-do-Liste mit Kategorien, Prioritäten und einem Fortschrittsbalken.">
-              To-do-Liste
-            </button>
-
-            <button data-prompt="Erstelle einen Taschenrechner mit großen Buttons, Rechenverlauf und einer modernen Benutzeroberfläche.">
-              Taschenrechner
-            </button>
-
-            <button data-prompt="Erstelle eine Stoppuhr mit Start, Pause, Reset und Rundenzeiten.">
-              Stoppuhr
-            </button>
-
-            <button data-prompt="Erstelle einen Countdown mit Startdatum, Enddatum und einer großen verbleibenden Zeit.">
-              Countdown
-            </button>
-
-            <button data-prompt="Erstelle eine Wetter-App mit Suche nach Städten, Temperatur, Wetterzustand und einer 5-Tage-Vorschau.">
-              Wetter-App
-            </button>
-
-            <button data-prompt="Erstelle ein Quiz mit mehreren Fragen, Antwortbuttons, Punktestand und Ergebnisanzeige.">
-              Quiz
-            </button>
-
-            <button data-prompt="Erstelle einen Pomodoro-Timer mit Arbeits- und Pausenphasen sowie einer Fortschrittsanzeige.">
-              Pomodoro
-            </button>
-
-            <button data-prompt="Erstelle einen Budget-Tracker mit Einnahmen, Ausgaben, Kategorien und einer Übersicht.">
-              Budget
-            </button>
-
-            <button data-prompt="Erstelle eine Musik-Player-Oberfläche mit Play, Pause, Fortschrittsbalken, Lautstärke und Playlist.">
-              Musikplayer
-            </button>
-
-            <button data-prompt="Erstelle ein Kanban-Board mit Spalten für Offen, In Arbeit und Erledigt. Karten sollen verschiebbar sein.">
-              Kanban
-            </button>
-
-            <button data-prompt="Erstelle eine moderne persönliche Startseite mit Uhrzeit, Datum, Wetter und frei konfigurierbaren Links.">
-              Dashboard
-            </button>
-
-            <button data-prompt="Erstelle eine Rezept-App mit Suchfeld, Zutatenliste, Zubereitung und Favoritenfunktion.">
-              Rezepte
-            </button>
-          </div>
-
-          <div class="prompt-row">
-            <textarea
-              id="prompt"
-              placeholder="Beschreibe, was du erstellen möchtest ..."
-              rows="1"
-            ></textarea>
-
-            <button id="run" class="run-button" type="button">
-              Erstellen
-            </button>
-          </div>
-
-          <div class="progress-steps">
-            <div id="step1">
-              <b>01</b>
-              <span>Analysieren</span>
-              <small>Wartet auf Anfrage</small>
-            </div>
-
-            <div id="step2">
-              <b>02</b>
-              <span>Generieren</span>
-              <small>HTML erstellen</small>
-            </div>
-
-            <div id="step3">
-              <b>03</b>
-              <span>Vorschau</span>
-              <small>Ergebnis laden</small>
-            </div>
-          </div>
-
-          <div class="preview-id">
-            <span>Preview-ID</span>
-
-            <input
-              id="preview-id-input"
-              maxlength="6"
-              autocomplete="off"
-              spellcheck="false"
-              placeholder="ABC123"
-            >
-
-            <button id="load-preview" type="button">
-              Öffnen
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-    <section id="about" class="section about">
-      <div class="section-label">03 · MEIN PROJEKT</div>
-      <h2>Was untersuche ich?</h2>
-
-      <p>Meine Forscherfrage lautet:</p>
-
-      <blockquote>„Wie funktioniert Vibe Coding?“</blockquote>
-
-      <div class="columns">
-        <div>
-          <h3>Ich untersuche</h3>
-          <p>
-            wie aus natürlichen Anweisungen funktionierender Code entsteht,
-            wie viele Schritte dafür nötig sind und welche Aufgaben weiterhin
-            vom Menschen übernommen werden.
-          </p>
-        </div>
-
-        <div>
-          <h3>Ich dokumentiere</h3>
-          <p>
-            Prompts, Versionen, Fehler, Verbesserungen und die Grenzen des
-            Systems. So wird aus der Demo eine eigene Untersuchung.
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <span>VIBE CODING · Projektwoche 2026</span>
-    <span>Informatik · Meine Zukunft</span>
-  </footer>
-
-  <script src="script.js?v=5"></script>
+<script src="script.js?v=6"></script>
 </body>
 </html>
