@@ -3,308 +3,69 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vibe Coding Lab</title>
-<link rel="stylesheet" href="style.css?v=8">
+<title>Vibe Coding</title>
+<meta name="description" content="Vibe Coding verständlich erklärt – mit interaktivem Vibe Coding Lab.">
+<link rel="stylesheet" href="style.css?v=10">
 </head>
-
 <body class="light">
-
 <header class="topbar">
-  <a href="#lab" class="brand">Vibe Coding</a>
-
+  <div class="brand-area"><a href="#start" class="brand">Vibe Coding</a><a href="#entdecken" class="discover-button">Entdecken</a></div>
   <nav>
-    <a href="#how">How it works</a>
-    <a href="#lab">Lab</a>
-    <a href="#product">Product</a>
+    <a href="#wie-es-funktioniert">Wie es funktioniert</a><a href="#wer-es-benutzt">Wer es benutzt</a><a href="#gefahren">Gefahren</a><a href="#lab">Lab</a><a href="#ueber-das-projekt">Über das Projekt</a>
   </nav>
-
-  <div class="top-actions">
-    <button id="discover" class="discover-button">Entdecken</button>
-    <button id="theme" class="icon-button" aria-label="Theme wechseln">☾</button>
-  </div>
+  <button id="theme" class="icon-button" aria-label="Darstellung wechseln">☾</button>
 </header>
-
 <main>
-
-<section class="hero">
-  <div class="hero-content">
-    <span class="eyebrow">VIBE CODING LAB</span>
-    <h1>Build with<br><span>words.</span></h1>
-    <p>
-      Beschreibe, was du bauen möchtest.
-      Gemini verwandelt deine Idee direkt in eine funktionierende Website.
-    </p>
-    <a href="#lab" class="primary-button">Lab öffnen</a>
-  </div>
+<section id="start" class="hero">
+  <div class="hero-content"><span class="eyebrow">PROGRAMMIEREN MIT GENERATIVER KI</span><h1>Mit Worten<br><span>programmieren.</span></h1><p>Vibe Coding beschreibt einen Entwicklungsstil, bei dem du einer KI in natürlicher Sprache sagst, was eine Anwendung tun und wie sie aussehen soll. Die KI erzeugt daraus den Code.</p><a href="#lab" class="primary-button">Lab öffnen</a></div>
 </section>
-
-<section id="how" class="section how-section">
-  <div class="section-heading">
-    <span class="eyebrow">01</span>
-    <h2>How it works</h2>
-  </div>
-
-  <div class="how-grid">
-    <article>
-      <strong>01</strong>
-      <h3>Beschreiben</h3>
-      <p>Schreibe einfach, was deine Website können und wie sie aussehen soll.</p>
-    </article>
-
-    <article>
-      <strong>02</strong>
-      <h3>Generieren</h3>
-      <p>Gemini erzeugt daraus eine komplette standalone HTML-Anwendung.</p>
-    </article>
-
-    <article>
-      <strong>03</strong>
-      <h3>Ausprobieren</h3>
-      <p>Die fertige Website erscheint direkt in der Live-Vorschau.</p>
-    </article>
-  </div>
+<section id="wie-es-funktioniert" class="section">
+  <div class="section-heading"><div><span class="eyebrow">01 — GRUNDLAGE</span><h2>Wie es funktioniert</h2></div><p>Der Ablauf ist eher ein Dialog als klassisches Programmieren Zeile für Zeile.</p></div>
+  <div class="info-grid four"><article><strong>01</strong><h3>Beschreiben</h3><p>Du formulierst dein Ziel: zum Beispiel eine Portfolio-Seite, ein Spiel oder ein Dashboard.</p></article><article><strong>02</strong><h3>Generieren</h3><p>Ein Sprachmodell übersetzt die Beschreibung in HTML, CSS, JavaScript oder andere passende Bestandteile.</p></article><article><strong>03</strong><h3>Prüfen</h3><p>Du testest das Ergebnis, beschreibst Änderungen und lässt den Code weiterentwickeln.</p></article><article><strong>04</strong><h3>Verbessern</h3><p>Durch weitere Prompts entsteht schrittweise eine Anwendung, die genauer deinen Vorstellungen entspricht.</p></article></div>
 </section>
-
+<section id="wer-es-benutzt" class="section alt">
+  <div class="section-heading"><div><span class="eyebrow">02 — ANWENDUNG</span><h2>Wer es benutzt</h2></div><p>Vibe Coding kann unterschiedliche Rollen unterstützen – nicht nur klassische Softwareentwickler.</p></div>
+  <div class="info-grid four"><article><h3>Schüler & Einsteiger</h3><p>Ideen können schnell als funktionierende Prototypen ausprobiert werden, auch wenn noch wenig Programmiererfahrung vorhanden ist.</p></article><article><h3>Entwickler</h3><p>KI kann beim Erstellen von Code, beim Debugging und bei wiederkehrenden Aufgaben unterstützen.</p></article><article><h3>Designer</h3><p>Oberflächen und Interaktionen lassen sich direkt aus visuellen und funktionalen Beschreibungen entwickeln.</p></article><article><h3>Teams & Lehrkräfte</h3><p>Prototypen und Lernprojekte können schneller erstellt und anschließend gemeinsam untersucht werden.</p></article></div>
+</section>
+<section id="gefahren" class="section">
+  <div class="section-heading"><div><span class="eyebrow">03 — KRITISCHE SEITE</span><h2>Gefahren</h2></div><p>Generierter Code ist nicht automatisch richtig, sicher oder für den konkreten Zweck geeignet.</p></div>
+  <div class="info-grid four"><article><strong>01</strong><h3>Fehler & Halluzinationen</h3><p>KI kann Code erzeugen, der plausibel aussieht, aber nicht korrekt funktioniert oder auf falschen Annahmen beruht.</p></article><article><strong>02</strong><h3>Sicherheitslücken</h3><p>Generierter Code kann unsichere Praktiken enthalten. Bei echten Anwendungen müssen Ergebnisse geprüft und getestet werden.</p></article><article><strong>03</strong><h3>Datenschutz</h3><p>Prompts und Quellcode können sensible Informationen enthalten. Vor dem Hochladen sollte geprüft werden, welche Daten übertragen werden.</p></article><article><strong>04</strong><h3>Zu viel Vertrauen</h3><p>Wer nur akzeptiert, was die KI ausgibt, kann Fehler übersehen. Menschliche Kontrolle bleibt wichtig.</p></article></div>
+</section>
 <section id="lab" class="section lab-section">
-
-  <div class="section-heading lab-heading">
-    <div>
-      <span class="eyebrow">02</span>
-      <h2>Vibe Coding Lab</h2>
-    </div>
-
-    <button id="discover-top" class="secondary-button">
-      Entdecken
-    </button>
-  </div>
-
+  <div class="section-heading"><div><span class="eyebrow">04 — INTERAKTIV</span><h2>Vibe Coding Lab</h2><p>Beschreibe eine Website. Das System lässt daraus eine HTML-Vorschau erzeugen.</p></div></div>
   <div class="lab-window">
-
-    <div class="lab-top">
-
-      <div class="lab-title">
-        <span class="status-dot"></span>
-        <span>Live Preview</span>
-      </div>
-
-      <div class="preview-meta">
-
-        <div class="preview-code">
-          Code:
-          <strong id="preview-id">—</strong>
-        </div>
-
-        <div id="expiry" class="expiry">
-          Läuft ab in <strong>--:--</strong>
-        </div>
-
-        <button id="extend" class="small-button" hidden>
-          +5 Min.
-        </button>
-
-        <button id="publish" class="publish-button" hidden>
-          Veröffentlichen
-        </button>
-
-        <button id="share" class="small-button" hidden>
-          Teilen
-        </button>
-
-        <a id="open-preview"
-           class="small-button"
-           target="_blank"
-           rel="noopener"
-           hidden>
-          Öffnen
-        </a>
-
-      </div>
-
-    </div>
-
-    <div class="preview-area">
-
-      <div id="preview-empty" class="preview-empty">
-        <div class="empty-icon">✦</div>
-        <h3>Deine Website erscheint hier</h3>
-        <p>
-          Beschreibe unten, was du bauen möchtest.
-        </p>
-      </div>
-
-      <iframe
-        id="preview"
-        title="Live Preview"
-        sandbox="allow-scripts"
-      ></iframe>
-
-    </div>
-
+    <div class="lab-top"><div class="lab-title"><span class="status-dot"></span><span>Live-Vorschau</span></div><div class="preview-meta"><div class="preview-code">Code: <strong id="preview-id">—</strong></div><div id="expiry" class="expiry">Läuft ab in <strong>--:--</strong></div><button id="extend" class="small-button" hidden>+5 Min.</button><button id="publish" class="publish-button" hidden>Veröffentlichen</button><button id="share" class="small-button" hidden>Teilen</button><a id="open-preview" class="small-button" target="_blank" rel="noopener" hidden>Öffnen</a></div></div>
+    <div class="preview-area"><div id="preview-empty" class="preview-empty"><div class="empty-icon">✦</div><h3>Deine Website erscheint hier</h3><p>Beschreibe unten, was du bauen möchtest.</p></div><iframe id="preview" title="Generierte Website" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe></div>
     <div class="lab-controls">
-
-      <div class="control-row">
-
-        <div class="status-panel">
-
-          <div class="control-label">
-            <span>Status</span>
-          </div>
-
-          <div id="status" class="status-main">
-            <span class="status-spinner"></span>
-            <span id="status-text">Bereit</span>
-          </div>
-
-        </div>
-
-        <div class="examples-panel">
-
-          <button id="examples-toggle" class="examples-toggle">
-            <span>Beispiele</span>
-            <span>⌄</span>
-          </button>
-
-          <div id="examples-menu" class="examples-menu">
-
-            <button data-prompt="Erstelle eine moderne Portfolio-Website für einen Fotografen mit großen Bildern, Projekten und Kontaktbereich.">
-              Fotograf Portfolio
-            </button>
-
-            <button data-prompt="Erstelle ein modernes Dashboard für einen Raspberry Pi mit CPU, RAM, Temperatur und Netzwerkstatus.">
-              Raspberry Pi Dashboard
-            </button>
-
-            <button data-prompt="Erstelle einen interaktiven Taschenrechner mit modernem Design und Tastatursteuerung.">
-              Taschenrechner
-            </button>
-
-            <button data-prompt="Erstelle ein minimalistisches Wetter-Dashboard mit aktuellen Wetterdaten für mehrere Städte.">
-              Wetter Dashboard
-            </button>
-
-            <button data-prompt="Erstelle eine Landingpage für eine fiktive KI-App mit Hero-Bereich, Features, Preisen und Call-to-Action.">
-              KI Landingpage
-            </button>
-
-            <button data-prompt="Erstelle ein kleines Browser-Spiel mit Startbildschirm, Punktestand und Neustartfunktion.">
-              Browser Game
-            </button>
-
-            <button data-prompt="Erstelle eine moderne Musik-Player-Oberfläche mit Play, Pause, Fortschrittsbalken und Playlist.">
-              Musik Player
-            </button>
-
-            <button data-prompt="Erstelle eine interaktive To-do-App mit Hinzufügen, Abhaken, Löschen und Filterung.">
-              To-do App
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="composer">
-
-        <textarea
-          id="prompt"
-          rows="1"
-          maxlength="2000"
-          placeholder="Beschreibe, was du bauen möchtest..."
-        ></textarea>
-
-        <button id="run" class="create-button">
-          <span>Create</span>
-          <span>→</span>
-        </button>
-
-      </div>
-
-      <div class="direct-load">
-
-        <input
-          id="preview-id-input"
-          maxlength="12"
-          placeholder="Code eingeben..."
-        >
-
-        <button id="load-preview" class="small-button">
-          Öffnen
-        </button>
-
-      </div>
-
+      <div class="control-row"><div class="status-panel"><div class="control-label">Status</div><div id="status" class="status-main"><span class="status-spinner"></span><span id="status-text">Bereit</span></div></div>
+      <div class="examples-panel"><label for="examples">Beispiele</label><select id="examples"><option value="">Beispiel auswählen …</option>
+        <option value="Erstelle eine moderne Portfolio-Website für einen Fotografen. Zeige ein großes Titelbild, eine Galerie mit Kategorien, eine Über-mich-Sektion und ein Kontaktformular.">Fotografen-Portfolio</option>
+        <option value="Erstelle ein übersichtliches Raspberry-Pi-Dashboard mit CPU-Auslastung, Temperatur, RAM, Speicherplatz und Netzwerkstatus.">Raspberry-Pi-Dashboard</option>
+        <option value="Erstelle einen modernen Taschenrechner mit großen Tasten, Grundrechenarten und Dezimalzahlen.">Taschenrechner</option>
+        <option value="Erstelle ein Wetter-Dashboard mit aktuellem Wetter, Temperatur, Luftfeuchtigkeit, Wind und Vorhersage.">Wetter-Dashboard</option>
+        <option value="Erstelle eine moderne Landingpage für ein KI-Produkt mit Hero-Bereich, Vorteilen, Funktionsübersicht und Call-to-Action.">KI-Landingpage</option>
+        <option value="Erstelle ein kleines Browser-Spiel mit Startbildschirm, Punktestand, Tastatursteuerung und Neustart-Button.">Browser-Spiel</option>
+        <option value="Erstelle einen Musik-Player mit Songliste, Fortschrittsbalken, Play/Pause, nächstem Titel und Lautstärke.">Musik-Player</option>
+        <option value="Erstelle eine To-do-App mit Aufgaben hinzufügen, abhaken, löschen, filtern und einer Anzeige für offene Aufgaben.">To-do-App</option>
+        <option value="Erstelle eine Schul-Website mit Stundenplan, Neuigkeiten, Terminen, Kontaktinformationen und klarer Navigation.">Schul-Website</option>
+        <option value="Erstelle eine interaktive Lernseite über das Sonnensystem mit Planeten und kurzen Fakten.">Lernseite</option>
+        <option value="Erstelle eine Rezeptseite mit Zutatenliste, Zubereitungsschritten, Portionsauswahl und modernem Layout.">Rezeptseite</option>
+        <option value="Erstelle eine Finanzübersicht mit Einnahmen, Ausgaben, Kategorien und einer grafischen Monatsübersicht.">Finanz-Dashboard</option>
+      </select></div></div>
+      <div class="composer"><textarea id="prompt" maxlength="2000" placeholder="Beschreibe, was du bauen möchtest …"></textarea><div class="composer-footer"><span>Maximal 2000 Zeichen</span><button id="run" class="create-button">Erstellen <span>→</span></button></div></div>
     </div>
-
   </div>
 </section>
-
-<section id="discover-section" class="section discover-section" hidden>
-
-  <div class="section-heading">
-    <div>
-      <span class="eyebrow">03</span>
-      <h2>Entdecken</h2>
-    </div>
-
-    <button id="back-to-lab" class="secondary-button">
-      Zurück zum Lab
-    </button>
-  </div>
-
-  <p class="discover-intro">
-    Öffentlich veröffentlichte Vibe-Coding-Projekte.
-  </p>
-
-  <div id="discover-list" class="discover-list">
-    <div class="discover-loading">Lade Projekte...</div>
-  </div>
-
+<section id="ueber-das-projekt" class="section alt">
+  <div class="section-heading"><div><span class="eyebrow">05 — PROJEKT</span><h2>Über das Projekt</h2></div><p>Diese Website verbindet Erklärung und Experiment: Erst wird Vibe Coding erklärt, danach kann der Ablauf selbst ausprobiert werden.</p></div>
+  <div class="info-grid four"><article><strong>01</strong><h3>Frontend</h3><p>Die Oberfläche läuft als statische Website und enthält Erklärungen, Lab und Vorschau.</p></article><article><strong>02</strong><h3>Server</h3><p>Der Backend-Server nimmt den Prompt entgegen und fordert beim KI-Modell eine HTML-Anwendung an.</p></article><article><strong>03</strong><h3>Vorschau</h3><p>Das erzeugte HTML wird in einer isolierten Vorschau angezeigt. Temporäre Projekte haben eine begrenzte Laufzeit.</p></article><article><strong>04</strong><h3>Veröffentlichen</h3><p>Ein Projekt kann bewusst veröffentlicht werden und bleibt dann über einen öffentlichen Code erreichbar.</p></article></div>
 </section>
-
-<section id="product" class="section product-section">
-
-  <div class="section-heading">
-    <span class="eyebrow">04</span>
-    <h2>What you can build</h2>
-  </div>
-
-  <div class="product-grid">
-
-    <article class="product-card">
-      <span>01</span>
-      <h3>Websites</h3>
-      <p>Landingpages, Portfolios, Präsentationen und komplette Interfaces.</p>
-    </article>
-
-    <article class="product-card">
-      <span>02</span>
-      <h3>Dashboards</h3>
-      <p>Informationen, Statistiken und interaktive Bedienoberflächen.</p>
-    </article>
-
-    <article class="product-card">
-      <span>03</span>
-      <h3>Experiments</h3>
-      <p>Animationen, kleine Spiele und interaktive Web-Experimente.</p>
-    </article>
-
-    <article class="product-card">
-      <span>04</span>
-      <h3>Prototypes</h3>
-      <p>Ideen schnell visualisieren und direkt im Browser testen.</p>
-    </article>
-
-  </div>
-
+<section id="entdecken" class="section">
+  <div class="section-heading"><div><span class="eyebrow">ENTDECKEN</span><h2>Veröffentlichte Projekte</h2></div><p>Hier erscheinen Projekte, die im Lab bewusst veröffentlicht wurden.</p></div>
+  <div id="discover-list" class="discover-list"><div class="discover-loading">Veröffentlichte Projekte werden geladen …</div></div>
 </section>
-
 </main>
-
-<footer>
-  Vibe Coding Lab
-</footer>
-
-<script src="script.js?v=8"></script>
+<footer><span>Vibe Coding</span><span>Generative KI · Softwareentwicklung · Lernen</span></footer>
+<script src="script.js?v=10"></script>
 </body>
 </html>
