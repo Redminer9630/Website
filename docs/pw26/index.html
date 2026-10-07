@@ -9,7 +9,7 @@
 </head>
 <body class="light">
 <header class="topbar">
-  <div class="brand-area"><a href="#start" class="brand">Vibe Coding</a><a href="#entdecken" class="discover-button">Entdecken</a></div>
+  <div class="brand-area"><a href="#start" class="brand">Vibe Coding</a></div>
   <nav>
     <a href="#wie-es-funktioniert">Wie es funktioniert</a><a href="#wer-es-benutzt">Wer es benutzt</a><a href="#gefahren">Gefahren</a><a href="#lab">Lab</a><a href="#ueber-das-projekt">Über das Projekt</a>
   </nav>
@@ -34,7 +34,7 @@
 <section id="lab" class="section lab-section">
   <div class="section-heading"><div><span class="eyebrow">04 — INTERAKTIV</span><h2>Vibe Coding Lab</h2><p>Beschreibe eine Website. Das System lässt daraus eine HTML-Vorschau erzeugen.</p></div></div>
   <div class="lab-window">
-    <div class="lab-top"><div class="lab-title"><span class="status-dot"></span><span>Live-Vorschau</span></div><div class="preview-meta"><div class="preview-code">Code: <strong id="preview-id">—</strong></div><div id="expiry" class="expiry">Läuft ab in <strong>--:--</strong></div><button id="extend" class="small-button" hidden>+5 Min.</button><button id="publish" class="publish-button" hidden>Veröffentlichen</button><button id="share" class="small-button" hidden>Teilen</button><a id="open-preview" class="small-button" target="_blank" rel="noopener" hidden>Öffnen</a></div></div>
+    <div class="lab-top"><div class="lab-title"><span class="status-dot"></span><span>Live-Vorschau</span></div><div class="preview-meta"><button id="discover" class="small-button">Entdecken</button><div class="preview-code">Code: <strong id="preview-id">—</strong></div><div id="expiry" class="expiry">Läuft ab in <strong>--:--</strong></div><button id="extend" class="small-button" hidden>+5 Min.</button><button id="publish" class="publish-button" hidden>Veröffentlichen</button><button id="share" class="small-button" hidden>Teilen</button><a id="open-preview" class="small-button" target="_blank" rel="noopener" hidden>Öffnen</a></div></div>
     <div class="preview-area"><div id="preview-empty" class="preview-empty"><div class="empty-icon">✦</div><h3>Deine Website erscheint hier</h3><p>Beschreibe unten, was du bauen möchtest.</p></div><iframe id="preview" title="Generierte Website" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe></div>
     <div class="lab-controls">
       <div class="control-row"><div class="status-panel"><div class="control-label">Status</div><div id="status" class="status-main"><span class="status-spinner"></span><span id="status-text">Bereit</span></div></div>
@@ -60,10 +60,7 @@
   <div class="section-heading"><div><span class="eyebrow">05 — PROJEKT</span><h2>Über das Projekt</h2></div><p>Diese Website verbindet Erklärung und Experiment: Erst wird Vibe Coding erklärt, danach kann der Ablauf selbst ausprobiert werden.</p></div>
   <div class="info-grid four"><article><strong>01</strong><h3>Frontend</h3><p>Die Oberfläche läuft als statische Website und enthält Erklärungen, Lab und Vorschau.</p></article><article><strong>02</strong><h3>Server</h3><p>Der Backend-Server nimmt den Prompt entgegen und fordert beim KI-Modell eine HTML-Anwendung an.</p></article><article><strong>03</strong><h3>Vorschau</h3><p>Das erzeugte HTML wird in einer isolierten Vorschau angezeigt. Temporäre Projekte haben eine begrenzte Laufzeit.</p></article><article><strong>04</strong><h3>Veröffentlichen</h3><p>Ein Projekt kann bewusst veröffentlicht werden und bleibt dann über einen öffentlichen Code erreichbar.</p></article></div>
 </section>
-<section id="entdecken" class="section">
-  <div class="section-heading"><div><span class="eyebrow">ENTDECKEN</span><h2>Veröffentlichte Projekte</h2></div><p>Hier erscheinen Projekte, die im Lab bewusst veröffentlicht wurden.</p></div>
-  <div id="discover-list" class="discover-list"><div class="discover-loading">Veröffentlichte Projekte werden geladen …</div></div>
-</section>
+
 </main>
 <footer><span>Vibe Coding</span><span>Generative KI · Softwareentwicklung · Lernen</span></footer>
 <script src="script.js?v=10"></script>
