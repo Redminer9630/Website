@@ -71,109 +71,166 @@
       </div>
     </section>
 
-    <section id="lab" class="section lab-section">
-      <div class="lab-heading">
-        <div>
-          <div class="section-label">02 · VIBE CODING LAB</div>
-          <h2>Deine Idee. Deine Vorschau.</h2>
-        </div>
+<section class="section lab-section" id="lab">
+  <div class="lab-head">
+    <div>
+      <span class="section-label">VIBE CODING LAB</span>
+      <h2>Beschreiben.<br>Generieren.<br>Fertig.</h2>
+    </div>
 
-        <div class="lab-status">
-          <i></i>
-          KI-Generator
-        </div>
+    <div class="lab-head-right">
+      <div class="status">
+        <i></i>
+        Gemini online
       </div>
 
-      <div class="preview-panel">
-        <div class="panel-top">
-          <div class="panel-title">
-            <span class="browser-dot"></span>
-            <span>Live Preview</span>
-          </div>
+      <button id="theme-toggle" class="theme-toggle" type="button">
+        <span id="theme-icon">☀</span>
+      </button>
+    </div>
+  </div>
 
-          <a id="open-preview" target="_blank" rel="noopener" hidden>
-            In neuem Tab öffnen ↗
+  <div class="lab">
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <i></i><i></i><i></i>
+        </div>
+
+        <span>Live Preview</span>
+
+        <div class="preview-actions">
+          <span id="expiry">Noch nicht erstellt</span>
+
+          <button id="extend" hidden type="button">
+            +5 Min.
+          </button>
+
+          <button id="share" hidden type="button">
+            Teilen
+          </button>
+
+          <a id="open-preview" hidden target="_blank">
+            ↗
           </a>
         </div>
+      </div>
 
-        <div class="browser">
-          <div class="browser-bar">
-            <span></span>
-            <span></span>
-            <span></span>
-            <div>vibe-coding / preview</div>
+      <div class="preview">
+        <iframe id="preview" title="Live Preview"></iframe>
+
+        <div id="preview-empty" class="preview-empty">
+          <strong>Dein Produkt erscheint hier.</strong>
+          <span>Beschreibe unten, was du bauen möchtest.</span>
+        </div>
+
+        <div class="chat-composer">
+
+          <div class="examples">
+            <span>Beispiele</span>
+
+            <button data-prompt="Erstelle eine moderne To-do-Liste mit Kategorien, Prioritäten und einem Fortschrittsbalken.">
+              To-do-Liste
+            </button>
+
+            <button data-prompt="Erstelle einen Taschenrechner mit großen Buttons, Rechenverlauf und einer modernen Benutzeroberfläche.">
+              Taschenrechner
+            </button>
+
+            <button data-prompt="Erstelle eine Stoppuhr mit Start, Pause, Reset und Rundenzeiten.">
+              Stoppuhr
+            </button>
+
+            <button data-prompt="Erstelle einen Countdown mit Startdatum, Enddatum und einer großen verbleibenden Zeit.">
+              Countdown
+            </button>
+
+            <button data-prompt="Erstelle eine Wetter-App mit Suche nach Städten, Temperatur, Wetterzustand und einer 5-Tage-Vorschau.">
+              Wetter-App
+            </button>
+
+            <button data-prompt="Erstelle ein Quiz mit mehreren Fragen, Antwortbuttons, Punktestand und Ergebnisanzeige.">
+              Quiz
+            </button>
+
+            <button data-prompt="Erstelle einen Pomodoro-Timer mit Arbeits- und Pausenphasen sowie einer Fortschrittsanzeige.">
+              Pomodoro
+            </button>
+
+            <button data-prompt="Erstelle einen Budget-Tracker mit Einnahmen, Ausgaben, Kategorien und einer Übersicht.">
+              Budget
+            </button>
+
+            <button data-prompt="Erstelle eine Musik-Player-Oberfläche mit Play, Pause, Fortschrittsbalken, Lautstärke und Playlist.">
+              Musikplayer
+            </button>
+
+            <button data-prompt="Erstelle ein Kanban-Board mit Spalten für Offen, In Arbeit und Erledigt. Karten sollen verschiebbar sein.">
+              Kanban
+            </button>
+
+            <button data-prompt="Erstelle eine moderne persönliche Startseite mit Uhrzeit, Datum, Wetter und frei konfigurierbaren Links.">
+              Dashboard
+            </button>
+
+            <button data-prompt="Erstelle eine Rezept-App mit Suchfeld, Zutatenliste, Zubereitung und Favoritenfunktion.">
+              Rezepte
+            </button>
           </div>
 
-          <iframe id="preview" sandbox="allow-scripts"></iframe>
+          <div class="prompt-row">
+            <textarea
+              id="prompt"
+              placeholder="Beschreibe, was du erstellen möchtest ..."
+              rows="1"
+            ></textarea>
 
-          <div class="preview-empty" id="preview-empty">
-            <div class="empty-icon">✳</div>
-            <strong>Was möchtest du bauen?</strong>
-            <span>Beschreibe deine Idee unten. Deine Anwendung erscheint hier.</span><br>
-            <span>Die Erstellten Inhalte sind vollständig KI generiert und ich übernehme keine Verantwortung dafür.</span>
+            <button id="run" class="run-button" type="button">
+              Erstellen
+            </button>
           </div>
 
-          <div class="chat-composer">
-            <div class="examples">
-              <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">
-                Taschenrechner
-              </button>
-
-              <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">
-                To-do-Liste
-              </button>
-
-              <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">
-                Stoppuhr
-              </button>
+          <div class="progress-steps">
+            <div id="step1">
+              <b>01</b>
+              <span>Analysieren</span>
+              <small>Wartet auf Anfrage</small>
             </div>
 
-            <div class="prompt-box">
-              <textarea
-                id="prompt"
-                rows="2"
-                maxlength="2000"
-                placeholder="Beschreibe, was du erstellen möchtest …"
-              ></textarea>
-
-              <button id="run" class="run-button" type="button">
-                <span>Erstellen</span>
-                <span>↑</span>
-              </button>
+            <div id="step2">
+              <b>02</b>
+              <span>Generieren</span>
+              <small>HTML erstellen</small>
             </div>
 
-            <div class="generation-status">
-              <div class="process">
-                <div class="process-step" id="step1">
-                  <span>1</span>
-                  <div>
-                    <b>Analysieren</b>
-                    <small>Wartet auf Anfrage</small>
-                  </div>
-                </div>
-
-                <div class="process-step" id="step2">
-                  <span>2</span>
-                  <div>
-                    <b>Generieren</b>
-                    <small>HTML erstellen</small>
-                  </div>
-                </div>
-
-                <div class="process-step" id="step3">
-                  <span>3</span>
-                  <div>
-                    <b>Vorschau</b>
-                    <small>Ergebnis laden</small>
-                  </div>
-                </div>
-              </div>
+            <div id="step3">
+              <b>03</b>
+              <span>Vorschau</span>
+              <small>Ergebnis laden</small>
             </div>
           </div>
+
+          <div class="preview-id">
+            <span>Preview-ID</span>
+
+            <input
+              id="preview-id-input"
+              maxlength="6"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="ABC123"
+            >
+
+            <button id="load-preview" type="button">
+              Öffnen
+            </button>
+          </div>
+
         </div>
       </div>
-    </section>
-
+    </div>
+  </div>
+</section>
     <section id="about" class="section about">
       <div class="section-label">03 · MEIN PROJEKT</div>
       <h2>Was untersuche ich?</h2>
