@@ -56,9 +56,7 @@
 
   <div class="browser">
     <div class="browser-bar">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
       <div>vibe-coding / preview</div>
     </div>
 
@@ -69,47 +67,41 @@
       <strong>Was möchtest du bauen?</strong>
       <span>Beschreibe deine Idee unten. Deine Anwendung erscheint hier.</span>
     </div>
+
+    <div class="chat-composer">
+      <div class="examples">
+        <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">Taschenrechner</button>
+        <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
+        <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">Stoppuhr</button>
+      </div>
+
+      <div class="prompt-box">
+        <textarea id="prompt" rows="2" maxlength="2000" placeholder="Beschreibe, was du erstellen möchtest …"></textarea>
+        <button id="run" class="run-button" type="button" aria-label="Anwendung erstellen">
+          <span>Erstellen</span>
+          <span>↑</span>
+        </button>
+      </div>
+
+      <div class="generation-status">
+        <div class="process">
+          <div class="process-step" id="step1">
+            <span>1</span>
+            <div><b>Analysieren</b><small>Wartet auf Anfrage</small></div>
+          </div>
+          <div class="process-step" id="step2">
+            <span>2</span>
+            <div><b>Generieren</b><small>HTML erstellen</small></div>
+          </div>
+          <div class="process-step" id="step3">
+            <span>3</span>
+            <div><b>Vorschau</b><small>Ergebnis laden</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<div class="chat-composer">
-  <div class="examples">
-    <button type="button" data-prompt="Erstelle einen einfachen Taschenrechner mit den Grundrechenarten.">Taschenrechner</button>
-    <button type="button" data-prompt="Erstelle eine kleine To-do-Liste, bei der man Aufgaben hinzufügen und abhaken kann.">To-do-Liste</button>
-    <button type="button" data-prompt="Erstelle eine kleine Stoppuhr mit Start-, Pause- und Reset-Button.">Stoppuhr</button>
-  </div>
-
-  <div class="prompt-box">
-    <textarea id="prompt" rows="2" maxlength="2000" placeholder="Beschreibe, was du erstellen möchtest …"></textarea>
-    <button id="run" class="run-button" type="button" aria-label="Anwendung erstellen">
-      <span>Erstellen</span>
-      <span>↑</span>
-    </button>
-  </div>
-
-  <div class="generation-status" aria-live="polite">
-    <div class="status-heading">
-      <span>GENERIERUNGSSTATUS</span>
-      <span class="status-caption" id="generation-label">Bereit für deine Idee</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-    <div class="process">
-      <div class="process-step" id="step1">
-        <span>1</span>
-        <div><b>Analysieren</b><small>Wartet auf Anfrage</small></div>
-      </div>
-      <div class="process-step" id="step2">
-        <span>2</span>
-        <div><b>Generieren</b><small>HTML erstellen</small></div>
-      </div>
-      <div class="process-step" id="step3">
-        <span>3</span>
-        <div><b>Vorschau</b><small>Ergebnis laden</small></div>
-      </div>
-    </div>
-  </div>
 </div>
 
   </div>
