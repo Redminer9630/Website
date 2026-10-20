@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>π — Stellen-Quiz</title>
+<style>
+:root{color-scheme:dark;--bg:#171717;--panel:#202124;--line:#3c4043;--text:#e8eaed;--muted:#9aa0a6;--blue:#8ab4f8;--blue2:#4285f4;--red:#f28b82;--green:#81c995}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 Arial,Helvetica,sans-serif;min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;color:var(--text);background:#303134;border:1px solid var(--line);border-radius:5px;padding:10px 13px}
+button:hover{background:#3c4043}
+button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button.primary{background:var(--blue2);border-color:var(--blue2);color:#fff}
+button:disabled{opacity:.4;cursor:not-allowed}
+header{height:58px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100vw - 1050px)/2));gap:12px}
+.brand{font-size:18px;letter-spacing:.2px}.brand span{color:var(--blue);font-size:22px;margin-right:8px}
+nav{display:flex;gap:5px}nav button{border:0;background:transparent;color:var(--muted)}nav button.active{color:var(--blue);background:#283342}
+main{max-width:1050px;margin:28px auto;padding:0 18px}
+.page{display:none}.page.active{display:block}
+h1{font-size:25px;font-weight:500;margin:0 0 6px}h2{font-size:17px;font-weight:500;margin:0 0 12px}
+.sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:18px}
+.display{min-height:94px;background:#171717;border:1px solid var(--line);border-radius:5px;padding:12px 15px;margin-bottom:13px;display:flex;flex-direction:column;justify-content:center}
+.display .small{font-size:12px;color:var(--muted);margin-bottom:3px}.output{font-size:30px;letter-spacing:2px;overflow-wrap:anywhere;min-height:40px}
+.output .dot{color:var(--blue)}.output .pending{color:var(--muted)}
+.statusline{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:13px;margin:10px 1px 15px}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pad button{height:54px;font-size:20px;background:#303134;border-color:#45474a}
+.pad button.action{font-size:14px}.pad button.confirm{background:var(--blue2);border-color:var(--blue2)}
+.pad button.computer-flash{outline:2px solid var(--blue);outline-offset:1px;box-shadow:0 0 0 4px #8ab4f81c}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.controls button{font-size:13px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat{padding:13px;border:1px solid var(--line);border-radius:6px}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:23px;margin-top:3px}
+.mode-list{display:grid;gap:8px}.mode{display:flex;align-items:flex-start;gap:10px;padding:11px;border:1px solid var(--line);border-radius:6px;cursor:pointer}.mode:has(input:checked){border-color:var(--blue);background:#283342}.mode input{margin-top:4px;accent-color:var(--blue)}.mode b{display:block;font-size:14px;font-weight:500}.mode small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.message{min-height:22px;margin-top:12px;color:var(--muted);font-size:13px}.message.good{color:var(--green)}.message.bad{color:var(--red)}
+.pi-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.pi-tools input{background:#171717;color:var(--text);border:1px solid var(--line);border-radius:5px;padding:9px;width:100px}
+.pi-text{font:16px/2.1 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere;letter-spacing:.3px;word-break:break-all}
+.pi-text .integer{color:var(--text)}.pi-text .decimal{color:#c4c7c5}.pi-text .asked{background:#315b91;color:#fff;border-radius:3px;box-shadow:0 0 0 2px #315b91}
+.pi-text .decimal-point{color:var(--blue)}
+.legend{font-size:13px;color:var(--muted);margin:0 0 13px}.legend i{display:inline-block;width:10px;height:10px;background:#315b91;border-radius:2px;margin-right:6px}
+footer{color:var(--muted);font-size:12px;text-align:center;margin:30px 0}
+@media(max-width:760px){main{margin:20px auto}.layout{grid-template-columns:1fr}.side{order:-1}.panel{padding:14px}header{padding:0 12px}.brand{font-size:16px}nav button{padding:8px;font-size:13px}.output{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span>π</span>Stellen-Quiz</div>
+  <nav aria-label="Ansichten">
+    <button class="active" data-page="quiz">Quiz</button>
+    <button data-page="digits">Alle Stellen</button>
+  </nav>
+</header>
+<main>
+<section id="quiz" class="page active">
+  <h1>Wie weit kommst du?</h1>
+  <p class="sub">Gib die Nachkommastellen von π der Reihe nach ein.</p>
+  <div class="layout">
+    <div class="panel">
+      <div class="display">
+        <div class="small" id="display-label">Deine Eingabe</div>
+        <div class="output" id="output" aria-live="polite">3<span class="dot">.</span></div>
+      </div>
+      <div class="statusline"><span id="progress">Stelle 1 von 100</span><span>Zeit: <b id="timer">00:00.0</b></span></div>
+      <div class="pad" id="pad">
+        <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
+        <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
+        <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
+        <button data-key="clear" class="action">Löschen</button><button data-key="0">0</button><button data-key="enter" class="action confirm">Bestätigen</button>
+      </div>
+      <div class="message" id="message" aria-live="polite">Drücke eine Ziffer, um zu starten.</div>
+      <div class="controls">
+        <button id="restart">Neue Runde</button>
+        <button id="reset-score">Highscore zurücksetzen</button>
+      </div>
+    </div>
+    <aside class="panel side">
+      <h2>Statistik</h2>
+      <div class="stats">
+        <div class="stat"><div class="label">Aktuelle Runde</div><div class="value" id="round-score">0</div></div>
+        <div class="stat"><div class="label">Highscore</div><div class="value" id="highscore">0</div></div>
+        <div class="stat"><div class="label">Runden</div><div class="value" id="rounds">0</div></div>
+        <div class="stat"><div class="label">Bestzeit / Stelle</div><div class="value" id="best-time">—</div></div>
+      </div>
+      <h2>Modus</h2>
+      <div class="mode-list">
+        <label class="mode"><input type="radio" name="mode" value="reveal"><span><b>1 · Nächste Stelle zeigen</b><small>Nach einer richtigen Eingabe wird die nächste Ziffer angehängt und markiert. Nach 3 Sekunden wird die Anzeige geleert.</small></span></label>
+        <label class="mode"><input type="radio" name="mode" value="computer" checked><span><b>2 · Computer zeigt sie</b><small>Die nächste Ziffer wird kurz vom Computer eingegeben und nach 1 Sekunde wieder entfernt.</small></span></label>
+        <label class="mode"><input type="radio" name="mode" value="blind"><span><b>3 · Blind weitermachen</b><small>Die Eingabe bleibt stehen. Bei Computer-Aktionen wird das Zahlenfeld blau umrandet.</small></span></label>
+      </div>
+    </aside>
+  </div>
+</section>
+<section id="digits" class="page">
+  <h1>Die Nachkommastellen von π</h1>
+  <p class="sub">Die abgefragten Stellen sind blau markiert. Du kannst die angezeigte Länge ändern.</p>
+  <div class="panel">
+    <div class="pi-tools">
+      <label for="digit-count">Anzahl Stellen</label><input id="digit-count" type="number" min="50" max="10000" value="1000">
+      <button id="show-digits">Anzeigen</button>
+      <span id="digit-count-label" class="sub" style="margin:0">1.000 Stellen</span>
+    </div>
+    <p class="legend"><i></i>Bereits abgefragte oder aktuell abgefragte Stelle</p>
+    <div id="pi-text" class="pi-text"></div>
+  </div>
+</section>
+<footer>Alles läuft lokal im Browser. Highscore und Rundenanzahl werden auf diesem Gerät gespeichert.</footer>
+</main>
+<script>
+(() => {
+  // Die Ziffernfolge enthält 3 vor dem Komma und 1000 Nachkommastellen.
+  const PI = "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679" +
+  "8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196" +
+  "4428810975665933446128475648233786783165271201909145648566923460348610454326648213393607260249141273" +
+  "7245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094" +
+  "3305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194" +
+  "9129833673362440656643086021394946395224737190702179860943702770539217176293176752384674818467669405" +
+  "1320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589" +
+  "2354201995611212902196086403441815981362977477130996051870721134999999837297804995105973173281609631" +
+  "3287561791681468440901224953430146549585371050792279689258923542019956112129021960864034418159813629" +
+  "7747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850";
+  const $ = id => document.getElementById(id);
+  const pad = $("pad"), output = $("output"), message = $("message");
+  let entered = "", typed = "", nextIndex = 2, asked = new Set(), startedAt = 0, timerId = null;
+  let elapsedBefore = 0, running = false, locked = false, rounds = Number(localStorage.piQuizRounds || 0);
+  let highscore = Number(localStorage.piQuizHighscore || 0), bestPerDigit = Number(localStorage.piQuizBestTime || 0);
+  let mode = "computer", pendingTimer = null, totalCorrect = 0;
+
+  function fmtTime(ms) {
+    const t = Math.max(0, ms) / 1000, min = Math.floor(t / 60), sec = Math.floor(t % 60), tenth = Math.floor(t * 10) % 10;
+    return String(min).padStart(2,"0") + ":" + String(sec).padStart(2,"0") + "." + tenth;
+  }
+  function elapsed() { return elapsedBefore + (running ? Date.now() - startedAt : 0); }
+  function updateTimer() { $("timer").textContent = fmtTime(elapsed()); }
+  function startClock() { if (!running) { startedAt = Date.now(); running = true; timerId = setInterval(updateTimer,100); } }
+  function stopClock() { if (running) elapsedBefore += Date.now() - startedAt; running = false; clearInterval(timerId); updateTimer(); }
+  function setMessage(text, type="") { message.textContent = text; message.className = "message " + type; }
+  function renderOutput(extra="") {
+    output.replaceChildren();
+    const base = document.createTextNode("3");
+    output.append(base);
+    const dot = document.createElement("span"); dot.className = "dot"; dot.textContent = "."; output.append(dot);
+    const val = document.createElement("span"); val.textContent = entered + typed; output.append(val);
+    if (extra) { const pending = document.createElement("span"); pending.className = "pending"; pending.textContent = extra; output.append(pending); }
+  }
+  function updateProgress() {
+    $("progress").textContent = `Stelle ${Math.min(nextIndex-1, PI.length-2)+1} von ${Math.min(PI.length-2,1000)}`;
+    $("round-score").textContent = totalCorrect;
+    $("highscore").textContent = highscore;
+    $("rounds").textContent = rounds;
+    $("best-time").textContent = bestPerDigit ? (bestPerDigit/1000).toFixed(2)+" s" : "—";
+  }
+  function markAsked(index) { if (index >= 2) asked.add(index); }
+  function showComputerDigit(index, duration) {
+    if (index >= PI.length) return;
+    locked = true; markAsked(index);
+    const digit = PI[index];
+    renderOutput(digit);
+    pad.classList.add("computer-flash");
+    setMessage("Computer zeigt die nächste Ziffer …");
+    updateDigits();
+    clearTimeout(pendingTimer);
+    pendingTimer = setTimeout(() => {
+      pad.classList.remove("computer-flash");
+      if (mode === "reveal") entered = "";
+      renderOutput();
+      locked = false;
+      setMessage("Deine Eingabe.");
+      updateProgress();
+    }, duration);
+  }
+  function correctDigit(digit) {
+    if (digit !== PI[nextIndex]) {
+      stopClock();
+      rounds++; localStorage.piQuizRounds = rounds;
+      setMessage(`Falsch. Erwartet wurde ${PI[nextIndex]}. Runde beendet.`, "bad");
+      pad.querySelectorAll("button").forEach(b => b.disabled = true);
+      $("restart").textContent = "Nächste Runde";
+      return;
+    }
+    markAsked(nextIndex); entered += digit; nextIndex++; totalCorrect++;
+    if (totalCorrect > highscore) { highscore = totalCorrect; localStorage.piQuizHighscore = highscore; }
+    const spent = elapsed();
+    if (totalCorrect && (!bestPerDigit || spent/totalCorrect < bestPerDigit)) {
+      bestPerDigit = spent/totalCorrect; localStorage.piQuizBestTime = bestPerDigit;
+    }
+    updateProgress(); updateDigits();
+    setMessage("Richtig.", "good");
+    if (nextIndex >= PI.length || totalCorrect >= 1000) {
+      stopClock(); rounds++; localStorage.piQuizRounds = rounds;
+      setMessage("Geschafft! Du hast 1000 Nachkommastellen eingegeben.", "good");
+      return;
+    }
+    if (mode === "reveal") {
+      renderOutput(PI[nextIndex]);
+      markAsked(nextIndex); updateDigits(); locked = true;
+      clearTimeout(pendingTimer);
+      pendingTimer = setTimeout(() => { entered = ""; renderOutput(); locked = false; setMessage("Weiter geht’s."); }, 3000);
+    } else if (mode === "computer") {
+      entered = ""; renderOutput();
+      clearTimeout(pendingTimer);
+      pendingTimer = setTimeout(() => showComputerDigit(nextIndex,1000), 150);
+    } else {
+      renderOutput(); pad.classList.add("computer-flash");
+      clearTimeout(pendingTimer);
+      pendingTimer = setTimeout(() => { pad.classList.remove("computer-flash"); }, 500);
+    }
+  }
+  function key(k) {
+    if (locked) return;
+    if (k === "clear") { typed = typed.slice(0,-1); renderOutput(); return; }
+    if (k === "enter") {
+      if (!entered.length) { setMessage("Gib zuerst eine Ziffer ein."); return; }
+      // Im Quiz wird jede Ziffer einzeln bestätigt.
+      const digit = entered[entered.length-1];
+      entered = entered.slice(0,-1);
+      renderOutput();
+      if (!running) startClock();
+      correctDigit(digit);
+      return;
+    }
+    if (!/^\d$/.test(k)) return;
+    if (!running) startClock();
+    entered += k; renderOutput();
+    // Eine Ziffer pro Bestätigung; weitere Eingaben bleiben als kleine Eingabewarteschlange.
+    if (entered.length > 1) setMessage("Bestätige die letzte Ziffer oder lösche sie.");
+  }
+  function restart() {
+    clearTimeout(pendingTimer); stopClock(); elapsedBefore = 0; entered = ""; typed = ""; nextIndex = 2;
+    asked = new Set(); totalCorrect = 0; locked = false;
+    pad.classList.remove("computer-flash");
+    pad.querySelectorAll("button").forEach(b => b.disabled = false);
+    $("restart").textContent = "Neue Runde"; renderOutput(); updateProgress(); updateDigits();
+    setMessage("Drücke eine Ziffer, um zu starten.");
+  }
+  function updateDigits() {
+    const limit = Math.min(Number($("digit-count").value) || 1000, PI.length-2);
+    const container = $("pi-text"); container.replaceChildren();
+    const raw = PI.slice(0,limit+2);
+    for (let i=0;i<raw.length;i++) {
+      const span = document.createElement("span");
+      span.textContent = raw[i];
+      if (i === 1) span.className = "decimal-point";
+      else if (i >= 2) span.className = asked.has(i) ? "asked" : "decimal";
+      else span.className = "integer";
+      container.append(span);
+    }
+    $("digit-count-label").textContent = limit.toLocaleString("de-DE") + " Stellen";
+  }
+  pad.addEventListener("click", e => { const b = e.target.closest("button[data-key]"); if (b) key(b.dataset.key); });
+  $("restart").addEventListener("click", restart);
+  $("reset-score").addEventListener("click", () => {
+    if (!confirm("Highscore, Rundenanzahl und Bestzeit wirklich zurücksetzen?")) return;
+    highscore = 0; rounds = 0; bestPerDigit = 0;
+    localStorage.removeItem("piQuizHighscore"); localStorage.removeItem("piQuizRounds"); localStorage.removeItem("piQuizBestTime");
+    updateProgress();
+  });
+  document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener("change", () => {
+    mode = r.value; setMessage("Modus geändert: " + r.parentElement.querySelector("b").textContent);
+  }));
+  document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active",x===b));
+    document.querySelectorAll(".page").forEach(p => p.classList.toggle("active",p.id===b.dataset.page));
+    if (b.dataset.page === "digits") updateDigits();
+  }));
+  $("show-digits").addEventListener("click", updateDigits);
+  $("digit-count").addEventListener("change", updateDigits);
+  document.addEventListener("keydown", e => {
+    if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (/^\d$/.test(e.key)) key(e.key);
+    else if (e.key === "Backspace") key("clear");
+    else if (e.key === "Enter") key("enter");
+  });
+  updateProgress(); updateDigits(); renderOutput();
+})();
+</script>
+</body>
+</html>
